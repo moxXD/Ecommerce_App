@@ -177,27 +177,13 @@
                                         <table class="table user-table">
                                             <thead>
                                                 <tr>
-                                                    <th>ID <a
-                                                            href="userlist?page=${currentPage}&sort=id&order=${not sortOrder}"><i
-                                                                class="${sortIcon}"></i></a></th>
-                                                    <th>Full Name <a
-                                                            href="userlist?page=${currentPage}&sort=fullname&order=${not sortOrder}"><i
-                                                                class="${sortIcon}"></th>
-                                                    <th>Gender <a
-                                                            href="userlist?page=${currentPage}&sort=gender&order=${not sortOrder}"><i
-                                                                class="${sortIcon}"></th>
-                                                    <th>Email <a
-                                                            href="userlist?page=${currentPage}&sort=email&order=${not sortOrder}"><i
-                                                                class="${sortIcon}"></th>
-                                                    <th>Mobile <a
-                                                            href="userlist?page=${currentPage}&sort=phone&order=${not sortOrder}"><i
-                                                                class="${sortIcon}"></th>
-                                                    <th>Role <a
-                                                            href="userlist?page=${currentPage}&sort=roleid&order=${not sortOrder}"><i
-                                                                class="${sortIcon}"></th>
-                                                    <th>Status <a
-                                                            href="userlist?page=${currentPage}&sort=status&order=${not sortOrder}"><i
-                                                                class="${sortIcon}"></th>
+                                                    <th>ID <a href="userlist?page=${currentPage}&sort=id&order=${not sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}"><i class="${sortIcon}"></i></a></th>
+<th>Full Name <a href="userlist?page=${currentPage}&sort=fullname&order=${not sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}"><i class="${sortIcon}"></i></a></th>
+<th>Gender <a href="userlist?page=${currentPage}&sort=gender&order=${not sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}"><i class="${sortIcon}"></i></a></th>
+<th>Email <a href="userlist?page=${currentPage}&sort=email&order=${not sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}"><i class="${sortIcon}"></i></a></th>
+<th>Mobile <a href="userlist?page=${currentPage}&sort=phone&order=${not sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}"><i class="${sortIcon}"></i></a></th>
+<th>Role <a href="userlist?page=${currentPage}&sort=roleid&order=${not sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}"><i class="${sortIcon}"></i></a></th>
+<th>Status <a href="userlist?page=${currentPage}&sort=status&order=${not sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}"><i class="${sortIcon}"></i></a></th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -224,12 +210,11 @@
                                         <ul class="pagination">
                                             <c:if test="${currentPage > 1}">
                                                 <li>
-                                                    <a href="userlist?page=${currentPage - 1}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Previous">
-                                                        <span aria-hidden="true"><i
-                                                                class="fa fa-arrow-left"></i></a></span>
+                                                    <a href="userlist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}&sort=${param.sort}&order=${param.order}" aria-label="Previous">
+                                                        <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
                                                     </a>
                                                 </li>
-                                            </c:if>
+</c:if>
 
                                             <c:forEach begin="1" end="${noOfPage}" var="i">
                                                 <c:choose>
@@ -237,16 +222,15 @@
                                                         <li class="active"><span>${i}</span></li>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <li><a href="userlist?page=${i}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}">${i}</a></li>
+                                                        <li><a href="userlist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}">${i}</a></li>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </c:forEach>
 
                                             <c:if test="${currentPage < noOfPage}">
                                                 <li>
-                                                    <a href="userlist?page=${currentPage + 1}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Next">
-                                                        <span aria-hidden="true"><i
-                                                                class="fa fa-arrow-right"></i></span>
+                                                    <a href="userlist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}&sort=${param.sort}&order=${param.order}" aria-label="Next">
+                                                        <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
                                                     </a>
                                                 </li>
                                             </c:if>
