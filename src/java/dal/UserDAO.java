@@ -24,8 +24,10 @@ public class UserDAO {
     SettingDAO stDAO = new SettingDAO();
     private int noOfrecord;
 
-    // get list of user
-    public List<User> getUserListPagination(int offset, int limit, String sort, boolean order) {
+    // get list of user with search and filter
+    public List<User> getUserListPagination(int offset, int limit, String sortParam,
+            boolean order, String genderFilter, int roleFilter,
+            String statusFilter, String searchQuery) {
         List<User> list = new ArrayList<>();
         String sql = "SELECT \n"
                 + "    SQL_CALC_FOUND_ROWS\n"
@@ -37,15 +39,48 @@ public class UserDAO {
                 + "    user.phone,\n"
                 + "    user.status\n"
                 + " FROM swp391_g1.user \n"
-                + (sort != null ? " ORDER BY " + sort + (order ? " ASC" : " DESC") : "")
-                + " LIMIT ?, ?;";
+                + " WHERE 1=1 \n";
+        // add condition for filter
+        if (genderFilter != null && !genderFilter.isEmpty()) {
+            sql += " AND user.gender = ? ";
+        }
+        if (roleFilter != 0 ) {
+            sql += " AND user.roleid = ?";
+        }
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            sql += " AND user.status = ? ";
+        }
+        // add search query
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql += " AND (user.email LIKE ? OR user.fullname LIKE ? OR user.phone LIKE ?) ";
+        }
+        // add sort condition 
+        sql += (sortParam != null ? " ORDER BY " + sortParam + (order ? " ASC" : " DESC") : "")
+                + " LIMIT ?, ?;"; // pagination
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
+            int paramIndex = 1;
 
-            
-            stm.setInt(1, offset);
-            stm.setInt(2, limit);
+            if (genderFilter != null && !genderFilter.isEmpty()) {
+                stm.setString(paramIndex++, genderFilter);
+            }
+            if (roleFilter != 0) {
+//                System.out.println(roleFilter);
+                stm.setInt(paramIndex++, roleFilter);
+            }
+            if (statusFilter != null && !statusFilter.isEmpty()) {
+                stm.setString(paramIndex++, statusFilter);
+            }
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String likeParam = "%" + searchQuery + "%";
+                stm.setString(paramIndex++, likeParam);
+                stm.setString(paramIndex++, likeParam);
+                stm.setString(paramIndex++, likeParam);
+
+            }
+            stm.setInt(paramIndex++, offset);
+            stm.setInt(paramIndex++, limit);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -77,9 +112,16 @@ public class UserDAO {
         return noOfrecord;
     }
 
+    // get user with search and filter
+    public List<User> getUserWithSearchAndFilter(String searchQuery,
+            String genderFilter, String roleFilter, String statusFilter) {
+        User u = null;
+        return null;
+    }
+
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-        List<User> list = dao.getUserListPagination(0, 5, "email", true);
+        List<User> list = dao.getUserListPagination(0, 5, "email", true,"1", 2, null, null);
         for (User user : list) {
             System.out.println("id: " + user.getId());
             System.out.println("name: " + user.getFullname());
