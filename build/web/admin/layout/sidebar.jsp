@@ -56,35 +56,35 @@
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
-<!--                 search form 
-                <form action="#" method="get" class="sidebar-form">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                        <span class="input-group-btn">
-                            <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
-                </form>-->
+                <!--                 search form 
+                                <form action="#" method="get" class="sidebar-form">
+                                    <div class="input-group">
+                                        <input type="text" name="q" class="form-control" placeholder="Search..."/>
+                                        <span class="input-group-btn">
+                                            <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </form>-->
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
                     <li class="active">
-                        <a href="dashboard.jsp">
+                        <a href="dashboard">
                             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="userlist.jsp">
+                        <a href="userlist">
                             <i class="fa fa-users"></i> <span>User List</span>
                         </a>
                     </li>
-<!--                    <li>
-                        <a href="userdetail.jsp">
-                            <i class="fa fa-user"></i> <span>User Detail</span>
-                        </a>
-                    </li>-->
+                    <!--                    <li>
+                                            <a href="userdetail.jsp">
+                                                <i class="fa fa-user"></i> <span>User Detail</span>
+                                            </a>
+                                        </li>-->
                     <li>
-                        <a href="settinglist.jsp">
+                        <a href="/admin/settinglist.jsp">
                             <i class="fa fa-gear"></i> <span>Settings</span>
                         </a>
                     </li>
@@ -99,6 +99,10 @@
             </section>
             <!-- /.sidebar -->
         </aside>
+        <script>
+    var contextPath = '<%= request.getContextPath() %>';
+    console.log(contextPath);
+        </script>
 
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
@@ -130,18 +134,18 @@
 
         <!-- Director for demo purposes -->
         <script type="text/javascript">
-            $('input').on('ifChecked', function (event) {
-                // var element = $(this).parent().find('input:checkbox:first');
-                // element.parent().parent().parent().addClass('highlight');
-                $(this).parents('li').addClass("task-done");
-                console.log('ok');
-            });
-            $('input').on('ifUnchecked', function (event) {
-                // var element = $(this).parent().find('input:checkbox:first');
-                // element.parent().parent().parent().removeClass('highlight');
-                $(this).parents('li').removeClass("task-done");
-                console.log('not');
-            });
+    $('input').on('ifChecked', function (event) {
+        // var element = $(this).parent().find('input:checkbox:first');
+        // element.parent().parent().parent().addClass('highlight');
+        $(this).parents('li').addClass("task-done");
+        console.log('ok');
+    });
+    $('input').on('ifUnchecked', function (event) {
+        // var element = $(this).parent().find('input:checkbox:first');
+        // element.parent().parent().parent().removeClass('highlight');
+        $(this).parents('li').removeClass("task-done");
+        console.log('not');
+    });
 
         </script>
         <script>

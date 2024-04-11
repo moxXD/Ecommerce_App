@@ -41,7 +41,7 @@
     </head>
     <body>
         <div class="footer-main">
-            Copyright &copy Director, 2014
+            Copyright &copy Group1, 2024
         </div>
     </body>
 </html>
