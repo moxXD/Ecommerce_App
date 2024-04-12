@@ -48,9 +48,9 @@ public class SettingDAO {
         }
         return null;
     }
-   
+
     // get role id
-    public List<Setting> getRoleId(){
+    public List<Setting> getRoleId() {
         List<Setting> st = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1.setting\n"
                 + "WHERE setting.type='role' ORDER by `order` asc";
@@ -67,20 +67,26 @@ public class SettingDAO {
                 Setting s = new Setting(stId, value, type, status, order);
                 st.add(s);
             }
-            stm.close();
-            rs.close();
-            conn.close();
-            return st;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+
+                }
+            }
         }
         return st;
     }
+
     public static void main(String[] args) {
-        SettingDAO st=new SettingDAO();
-        List<Setting> list=st.getRoleId();
+        SettingDAO st = new SettingDAO();
+        List<Setting> list = st.getRoleId();
         for (Setting setting : list) {
-            System.out.println("id: "+setting.getId());
+            System.out.println("id: " + setting.getId());
         }
     }
 }

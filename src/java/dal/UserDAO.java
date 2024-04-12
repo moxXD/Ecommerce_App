@@ -44,7 +44,7 @@ public class UserDAO {
         if (genderFilter != null && !genderFilter.isEmpty()) {
             sql += " AND user.gender = ? ";
         }
-        if (roleFilter != 0 ) {
+        if (roleFilter != 0) {
             sql += " AND user.roleid = ?";
         }
         if (statusFilter != null && !statusFilter.isEmpty()) {
@@ -55,7 +55,7 @@ public class UserDAO {
             sql += " AND (user.email LIKE ? OR user.fullname LIKE ? OR user.phone LIKE ?) ";
         }
         // add sort condition 
-        sql += (sortParam != null ? " ORDER BY " + sortParam + (order ? " ASC" : " DESC") : "")
+        sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY " + sortParam + (order ? " ASC" : " DESC") : "")
                 + " LIMIT ?, ?;"; // pagination
         try {
             conn = context.getConnection();
@@ -81,6 +81,7 @@ public class UserDAO {
             }
             stm.setInt(paramIndex++, offset);
             stm.setInt(paramIndex++, limit);
+            
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -98,12 +99,18 @@ public class UserDAO {
             if (rs.next()) {
                 this.noOfrecord = rs.getInt(1);
             }
-            stm.close();
-            rs.close();
-            conn.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+
+                }
+            }
         }
         return list;
     }
@@ -121,7 +128,7 @@ public class UserDAO {
 
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-        List<User> list = dao.getUserListPagination(0, 5, "email", true,"1", 2, null, null);
+        List<User> list = dao.getUserListPagination(0, 10, null, false, null, 0, null, null);
         for (User user : list) {
             System.out.println("id: " + user.getId());
             System.out.println("name: " + user.getFullname());
