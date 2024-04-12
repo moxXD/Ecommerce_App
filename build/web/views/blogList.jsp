@@ -1,11 +1,10 @@
 <%-- 
-    Document   : list
-    Created on : Apr 11, 2024, 8:18:12 PM
+    Document   : blogList
+    Created on : Apr 11, 2024, 10:42:31 PM
     Author     : Admin
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <%@include file="../../../layout/header.jsp" %>
@@ -13,42 +12,33 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tech Mart</title>
         <style>
-            .styled-table {
-                border-collapse: collapse;
-                margin: 25px 0;
-                font-size: 0.9em;
-                min-width: 400px;
-                border: 1px solid #dddddd;
-                width: 100%;
-            }
-            .styled-table thead tr {
-                background-color: #009879;
-                color: #ffffff;
-                text-align: left;
-            }
-            .styled-table th,
-            .styled-table td {
-                padding: 12px 15px;
-            }
-            .styled-table tbody tr {
-                border-bottom: 1px solid #dddddd;
-            }
-            .styled-table tbody tr:nth-of-type(even) {
-                background-color: #f3f3f3;
-            }
-            .styled-table tbody tr:last-of-type {
-                border-bottom: 2px solid #009879;
-            }
-            .styled-table tbody tr.active-row {
-                font-weight: bold;
-                color: #009879;
-            }
-            .green {
-                color: green;
+            .blog-post {
+                background-color: white;
+                border: 1px solid #ddd;
+                padding: 15px;
+                margin-bottom: 15px;
+                height: 250px;
             }
 
-            .red {
-                color: red;
+            .blog-post img {
+                width: 200px;
+                height: 200px;
+                float: left;
+                margin-right: 15px;
+            }
+
+            .blog-post h3 {
+                margin: 0;
+                padding: 0;
+            }
+
+            .blog-post p {
+                margin: 0;
+            }
+
+            .blog-post button {
+                display: block;
+                margin-top: 10px;
             }
         </style>
     </head>
@@ -138,71 +128,34 @@
                     <div class="col-sm-9">
                         <div class="blog-post-area">
                             <h2 class="title text-center">Blog List</h2>
-                            <a class="btn btn-primary pull-right" href="">Add new blog</a>
-                            <div style="margin-top: 50px; margin-bottom: 40px; width: 100%">
-                                <table class="styled-table">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Thumbnail</th>
-                                            <th>Title</th>
-                                            <th>Category</th>
-                                            <th>Author</th>
-                                            <th>Description</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach items="${requestScope.blogList}" var="u">
-                                            <tr>
-                                                <td>${u.id}</td>
-                                                <td>${u.imgUrl}</td>
-                                                <td>${u.title}</td>
-                                                <td>${u.categoryName}</td>
-                                                <td>${u.authorName}</td>
-                                                <td>${u.detail}</td>
-                                                <td class="${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
-                                                <td><a href="">Edit</a><a href=""  style="margin-left: 20px">View</a></td>
-                                                
-                                            </tr>
-                                        </c:forEach>
-                                        <!-- Thêm nhiều hàng tại đây -->
-                                    </tbody>
-                                </table>
+                            <div class="blog-post">
+                                <img src="../images/home/iframe1.png" alt="">
+                                <h3>Tiêu đề bài viết 1</h3>
+                                <p>Mô tả ngắn gọn cho bài viết 1...</p>
+                                <button type="button">Read More</button>
                             </div>
-                            <nav aria-label="Page navigation">
-                                <div class="pagination-area">
-                                    <ul class="pagination">
-                                        <c:if test="${currentPage > 1}">
-                                            <li>
-                                                <a href="listBlogController?page=${currentPage - 1}" aria-label="Previous">
-                                                    <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
-                                                </a>
-                                            </li>
-                                        </c:if>
-                                        <c:forEach begin="1" end="${noOfPage}" var="i">
-                                            <c:choose>
-                                                <c:when test="${currentPage eq i}">
-                                                    <li class="active"><span>${i}</span></li>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                    <li><a href="listBlogController?page=${i}">${i}</a></li>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:forEach>
 
-                                        <c:if test="${currentPage < noOfPage}">
-                                            <li>
-                                                <a href="listBlogController?page=${currentPage + 1}" aria-label="Next">
-                                                    <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
-                                                </a>
-                                            </li>
-                                        </c:if>
-                                    </ul>
-                                </div>
-                            </nav>
+                            <div class="blog-post">
+                                <img src="../images/home/gallery1.jpg" alt="Thumbnail">
+                                <h3>Tiêu đề bài viết 2</h3>
+                                <p>Mô tả ngắn gọn cho bài viết 2...</p>
+                                <button type="button">Đọc thêm</button>
+                            </div>
 
+                            <div class="blog-post">
+                                <img src="thumbnail3.jpg" alt="Thumbnail">
+                                <h3>Tiêu đề bài viết 3</h3>
+                                <p>Mô tả ngắn gọn cho bài viết 3...</p>
+                                <button type="button">Đọc thêm</button>
+                            </div>
+                        </div>
+                        <div class="pagination-area">
+                            <ul class="pagination">
+                                <li><a href="" class="active">1</a></li>
+                                <li><a href="">2</a></li>
+                                <li><a href="">3</a></li>
+                                <li><a href=""><i class="fa fa-angle-double-right"></i></a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>

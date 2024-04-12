@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <%@include file="../../../layout/header.jsp" %>
@@ -41,6 +42,13 @@
             .styled-table tbody tr.active-row {
                 font-weight: bold;
                 color: #009879;
+            }
+            .green {
+                color: green;
+            }
+
+            .red {
+                color: red;
             }
         </style>
     </head>
@@ -146,68 +154,55 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><img src="images/home/iframe4.png" alt="" /></td>
-                                            <td>How to start coding</td>
-                                            <td>Programming</td>
-                                            <td>John Doe</td>
-                                            <td>This is a beginner's guide to coding</td>
-                                            <td>Hide</td>
-                                            <td><a href="#">Edit</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td><img src="images/home/iframe2.png" alt="" /></td>
-                                            <td>How to start coding</td>
-                                            <td>Technology</td>
-                                            <td>John Doe</td>
-                                            <td>This is a beginner's guide to coding</td>
-                                            <td>Show</td>
-                                            <td><a href="#">Edit</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td><img src="images/home/iframe3.png" alt="" /></td>
-                                            <td>How to start coding</td>
-                                            <td>Gaming Gear</td>
-                                            <td>John Doe</td>
-                                            <td>This is a beginner's guide to coding</td>
-                                            <td>Show</td>
-                                            <td><a href="#">Edit</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td><img src="images/home/iframe4.png" alt="" /></td>
-                                            <td>How to start coding</td>
-                                            <td>Programming</td>
-                                            <td>John Doe</td>
-                                            <td>This is a beginner's guide to coding</td>
-                                            <td>Hide</td>
-                                            <td><a href="#">Edit</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td><img src="images/home/iframe1.png" alt="" /></td>
-                                            <td>How to start coding</td>
-                                            <td>Technology</td>
-                                            <td>John Doe</td>
-                                            <td>This is a beginner's guide to coding</td>
-                                            <td>Show</td>
-                                            <td><a href="#">Edit</a></td>
-                                        </tr>
+                                        <c:forEach items="${requestScope.blogList}" var="u">
+                                            <tr>
+                                                <td>${u.id}</td>
+                                                <td>${u.imgUrl}</td>
+                                                <td>${u.title}</td>
+                                                <td>${u.categoryName}</td>
+                                                <td>${u.authorName}</td>
+                                                <td>${u.detail}</td>
+                                                <td class="${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
+                                                <td><a href="">Edit</a><a href=""  style="margin-left: 20px">View</a></td>
+                                                
+                                            </tr>
+                                        </c:forEach>
                                         <!-- Thêm nhiều hàng tại đây -->
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="pagination-area">
-                                <ul class="pagination">
-                                    <li><a href="" class="active">1</a></li>
-                                    <li><a href="">2</a></li>
-                                    <li><a href="">3</a></li>
-                                    <li><a href=""><i class="fa fa-angle-double-right"></i></a></li>
-                                </ul>
-                            </div>
+                            <nav aria-label="Page navigation">
+                                <div class="pagination-area">
+                                    <ul class="pagination">
+                                        <c:if test="${currentPage > 1}">
+                                            <li>
+                                                <a href="listBlogController?page=${currentPage - 1}" aria-label="Previous">
+                                                    <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                                </a>
+                                            </li>
+                                        </c:if>
+                                        <c:forEach begin="1" end="${noOfPage}" var="i">
+                                            <c:choose>
+                                                <c:when test="${currentPage eq i}">
+                                                    <li class="active"><span>${i}</span></li>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                    <li><a href="listBlogController?page=${i}">${i}</a></li>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+
+                                        <c:if test="${currentPage < noOfPage}">
+                                            <li>
+                                                <a href="listBlogController?page=${currentPage + 1}" aria-label="Next">
+                                                    <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                                </a>
+                                            </li>
+                                        </c:if>
+                                    </ul>
+                                </div>
+                            </nav>
+
                         </div>
                     </div>
                 </div>
