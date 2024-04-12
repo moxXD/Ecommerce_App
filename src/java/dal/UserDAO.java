@@ -50,7 +50,7 @@ public class UserDAO {
         if (statusFilter != null && !statusFilter.isEmpty()) {
             sql += " AND user.status = ? ";
         }
-        // add search query
+        // add search to query
         if (searchQuery != null && !searchQuery.isEmpty()) {
             sql += " AND (user.email LIKE ? OR user.fullname LIKE ? OR user.phone LIKE ?) ";
         }
@@ -108,7 +108,6 @@ public class UserDAO {
                     conn.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-
                 }
             }
         }
@@ -121,15 +120,15 @@ public class UserDAO {
 
     
 
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        List<User> list = dao.getUserListPagination(0, 10, null, false, null, 0, null, null);
-        for (User user : list) {
-            System.out.println("id: " + user.getId());
-            System.out.println("name: " + user.getFullname());
-            System.out.println("role: " + user.getSetting().getValue());
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("====================");
-        }
-    }
+//    public static void main(String[] args) {
+//        UserDAO dao = new UserDAO();
+//        List<User> list = dao.getUserListPagination(0, 10, null, false, null, 0, null, null);
+//        for (User user : list) {
+//            System.out.println("id: " + user.getId());
+//            System.out.println("name: " + user.getFullname());
+//            System.out.println("role: " + user.getSetting().getValue());
+//            System.out.println("Email: " + user.getEmail());
+//            System.out.println("====================");
+//        }
+//    }
 }

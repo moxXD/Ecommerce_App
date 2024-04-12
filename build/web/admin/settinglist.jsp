@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -68,54 +70,128 @@
                         </div>
                         <div class="pull-left info">
                             <p>Hello, Jane</p>
-
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
                     </div>
-                    <!--                 search form 
-                                    <form action="#" method="get" class="sidebar-form">
-                                        <div class="input-group">
-                                            <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                                            <span class="input-group-btn">
-                                                <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                                            </span>
-                                        </div>
-                                    </form>-->
-                    <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
-                        <li >
+                        <li>
                             <a href="dashboard">
                                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
                         </li>
-                        <li>
+                        <li >
                             <a href="userlist">
                                 <i class="fa fa-users"></i> <span>User List</span>
                             </a>
                         </li>
-                        <!--                    <li>
-                                                <a href="userdetail.jsp">
-                                                    <i class="fa fa-user"></i> <span>User Detail</span>
-                                                </a>
-                                            </li>-->
                         <li class="active">
                             <a href="settinglist">
                                 <i class="fa fa-gear"></i> <span>Settings</span>
                             </a>
                         </li>
-
                     </ul>
                 </section>
                 <!-- /.sidebar -->
             </aside>
-            
+
             <aside class="right-side">
                 <section class="content">
-                    <h1>setting list</h1>
+                    <form action="settinglist" method="get">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}" />
+                            <span class="input-group-btn">
+                                <button type='submit' id='search-btn' class="btn btn-flat" style="background-color: white;border: 1px solid grey;border-radius: 5px ">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="filter-row">
+                            <div class="form-group">
+                                <label for="filtype">Filter by type:</label>
+                                <select name="filtype" id="filtype" class="form-control">
+                                    <option value="">Select type</option>
+                                    <c:forEach items="${requestScope.typeData}" var="t">
+                                        <option value="${t}" ${param.filtype==t  ? "selected" : ""}>${t}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="filstatus">Filter by status:</label>
+                                <select name="filstatus" id="filstatus" class="form-control">
+                                    <option value="">Select status</option>
+                                    <option value="1" ${param.filstatus==1 ? "selected" : ""}>Active</option>
+                                    <option value="0" ${param.filstatus==0 ? "selected" : ""}>Inactive</option>
+                                    <!-- Add status options here -->
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Table for displaying user data -->
+                    <div class="table-responsive">
+                        <table class="table user-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                    <th>Order</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <c:forEach items="${requestScope.data}" var="s">
+                                    <tr>
+                                        <td>${s.id}</td>
+                                        <td>${s.type}</td>
+                                        <td>${s.value}</td>
+                                        <td>${s.isOrder()}</td>
+                                        <td>${s.status?"Active":"Inactive"}</td>
+                                        <td><a href="#">View</a>&nbsp&nbsp&nbsp&nbsp<a href="#">Edit</a></td>
+                                    </tr>
+                                </c:forEach>
+
+                            </tbody>
+                        </table>
+                        <!-- Diplay list of page -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <c:if test="${currentPage > 1}">
+                                    <li>
+                                        <a href="settinglist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+
+                                <c:forEach begin="1" end="${noOfPage}" var="i">
+                                    <c:choose>
+                                        <c:when test="${currentPage eq i}">
+                                            <li class="active"><span>${i}</span></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                            <li><a href="settinglist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">${i}</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+
+                                <c:if test="${currentPage < noOfPage}">
+                                    <li>
+                                        <a href="settinglist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
+                    </div>
                 </section>
             </aside>
         </div>
+
 
 
         <%@include file="layout/footer.jsp" %>

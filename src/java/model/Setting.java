@@ -9,20 +9,27 @@ package model;
  * @author Duc Le
  */
 public class Setting {
-    private int id;
+    private int id,order;
     private String value,type;
-    private boolean status,order;
+    private boolean status;
 
     public Setting() {
     }
 
-    public Setting(int id, String value, String type, boolean status, boolean order) {
+    public Setting(int id, int order, String value, String type, boolean status) {
         this.id = id;
+        this.order = order;
         this.value = value;
         this.type = type;
         this.status = status;
-        this.order = order;
     }
+
+    @Override
+    public String toString() {
+        return "Setting{" + "id=" + id + ", order=" + order + ", value=" + value + ", type=" + type + ", status=" + status + '}';
+    }
+
+    
 
     
 
@@ -54,11 +61,11 @@ public class Setting {
         return status;
     }
 
-    public boolean isOrder() {
+    public int isOrder() {
         return order;
     }
 
-    public void setOrder(boolean order) {
+    public void setOrder(int order) {
         this.order = order;
     }
 
