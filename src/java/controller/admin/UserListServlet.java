@@ -116,7 +116,7 @@ public class UserListServlet extends HttpServlet {
         UserDAO userDao = new UserDAO();
         // get pagination user list
 
-        list = userDao.getUserListPagination((page - 1) * recordPerPage,
+        list = userDao.getUserListWithFilter((page - 1) * recordPerPage,
                 recordPerPage, sortColumn, sortOrder, genderFilter, roleFilter, statusFilter, searchQuery   );
         // get number of record found
         int noOfrecord = userDao.getNumberOfRecord();

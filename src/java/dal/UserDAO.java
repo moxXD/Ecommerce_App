@@ -25,7 +25,7 @@ public class UserDAO {
     private int noOfrecord;
 
     // get list of user with search and filter
-    public List<User> getUserListPagination(int offset, int limit, String sortParam,
+    public List<User> getUserListWithFilter(int offset, int limit, String sortParam,
             boolean order, String genderFilter, int roleFilter,
             String statusFilter, String searchQuery) {
         List<User> list = new ArrayList<>();
@@ -119,12 +119,7 @@ public class UserDAO {
         return noOfrecord;
     }
 
-    // get user with search and filter
-    public List<User> getUserWithSearchAndFilter(String searchQuery,
-            String genderFilter, String roleFilter, String statusFilter) {
-        User u = null;
-        return null;
-    }
+    
 
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();

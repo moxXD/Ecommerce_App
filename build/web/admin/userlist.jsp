@@ -198,7 +198,7 @@
                                                         <td>${u.phone}</td>
                                                         <td>${u.setting.value}</td>
                                                         <td>${u.status?"Active":"Inactive"}</td>
-                                                        <td>EDIT VIEW</td>
+                                                        <td><a href="userdetail">View</a> <a href="#"></a></td>
                                                     </tr>
                                                 </c:forEach>
                                                 <!-- Add more rows here -->

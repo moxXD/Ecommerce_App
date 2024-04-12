@@ -48,7 +48,7 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="img/26115.jpg" class="img-circle" alt="User Image" />
+                        <img src="${pageContext.request.contextPath}/admin/img/26115.jpg" class="img-circle" alt="User Image" />
                     </div>
                     <div class="pull-left info">
                         <p>Hello, Jane</p>
@@ -99,10 +99,7 @@
             </section>
             <!-- /.sidebar -->
         </aside>
-        <script>
-    var contextPath = '<%= request.getContextPath() %>';
-    console.log(contextPath);
-        </script>
+        
 
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
