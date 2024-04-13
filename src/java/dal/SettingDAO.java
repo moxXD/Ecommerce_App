@@ -109,8 +109,8 @@ public class SettingDAO {
             sql += " AND `setting`.`value` LIKE ?  ";
         }
         // add sort condition to query
-        sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY " + sortParam
-                + (order ? " ASC" : " DESC") : "") + " LIMIT ?, ?;";
+        sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY `" + sortParam
+                + (order ? "` ASC" : "` DESC") : "") + " LIMIT ?, ?;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);

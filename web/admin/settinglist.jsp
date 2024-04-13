@@ -133,11 +133,31 @@
                         <table class="table user-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Type</th>
-                                    <th>Value</th>
-                                    <th>Order</th>
-                                    <th>Status</th>
+                                    <th>ID
+                                        <a href="settinglist?page=${currentPage}&sort=id&order=${not sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
+                                    <th>Type
+                                        <a href="settinglist?page=${currentPage}&sort=type&order=${not sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
+                                    <th>Value
+                                        <a href="settinglist?page=${currentPage}&sort=value&order=${not sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
+                                    <th>Order
+                                        <a href="settinglist?page=${currentPage}&sort=order&order=${not sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
+                                    <th>Status
+                                        <a href="settinglist?page=${currentPage}&sort=status&order=${not sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

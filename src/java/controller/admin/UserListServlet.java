@@ -77,8 +77,6 @@ public class UserListServlet extends HttpServlet {
         String searchQuery = request.getParameter("q");
         boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
 
-        request.setAttribute("sortOrder", sortOrder);
-        
         // maping filter
         if (genderFilter != null && !genderFilter.isEmpty()) {
             if (genderFilter.equalsIgnoreCase("male")) {
@@ -117,7 +115,7 @@ public class UserListServlet extends HttpServlet {
         // get pagination user list
 
         list = userDao.getUserListWithFilter((page - 1) * recordPerPage,
-                recordPerPage, sortColumn, sortOrder, genderFilter, roleFilter, statusFilter, searchQuery   );
+                recordPerPage, sortColumn, sortOrder, genderFilter, roleFilter, statusFilter, searchQuery);
         // get number of record found
         int noOfrecord = userDao.getNumberOfRecord();
 
@@ -128,7 +126,7 @@ public class UserListServlet extends HttpServlet {
         request.setAttribute("noOfPage", noOfPage);
         request.setAttribute("userList", list);
         request.setAttribute("roleList", st);
-      
+        request.setAttribute("sortOrder", sortOrder);
         request.getRequestDispatcher("admin/userlist.jsp").forward(request, response);
     }
 

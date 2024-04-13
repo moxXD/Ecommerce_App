@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import model.Setting;
 
 /**
@@ -78,10 +79,10 @@ public class SettingListServlet extends HttpServlet {
             try {
                 page = Integer.parseInt(page_raw);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                Logger.getLogger(e.getMessage());
             }
         }
-        System.out.println("Status: "+statusFilter);
+
         List<Setting> stList = setDAO.getAllSettingWithFilterAndSearch((page - 1) * recordPerPage, recordPerPage,
                 sortColumn, sortOrder, typeFilter, statusFilter, search);
         int noOfrecord = setDAO.getNumberOfRecord();
@@ -91,6 +92,8 @@ public class SettingListServlet extends HttpServlet {
         request.setAttribute("typeData", typeList);
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
+        request.setAttribute("sortOrder", sortOrder);
+        
         request.getRequestDispatcher("admin/settinglist.jsp").forward(request, response);
     }
 
