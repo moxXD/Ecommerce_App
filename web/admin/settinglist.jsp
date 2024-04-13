@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Tech Mart Admin</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="description" content="Developed By M Abdur Rokib Promy">
         <meta name="keywords" content="Admin, Bootstrap 3, Template, Theme, Responsive">
@@ -98,6 +98,7 @@
             <aside class="right-side">
                 <section class="content">
                     <form action="settinglist" method="get">
+                        <!--search input-->
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}" />
                             <span class="input-group-btn">
@@ -106,6 +107,7 @@
                                 </button>
                             </span>
                         </div>
+                            <!--select type-->
                         <div class="filter-row">
                             <div class="form-group">
                                 <label for="filtype">Filter by type:</label>
@@ -116,7 +118,7 @@
                                     </c:forEach>
                                 </select>
                             </div>
-
+                            <!--select  status-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
@@ -128,9 +130,12 @@
                             </div>
                         </div>
                     </form>
+
                     <!-- Table for displaying user data -->
+
                     <div class="table-responsive">
                         <table class="table user-table">
+                            <!--table head-->
                             <thead>
                                 <tr>
                                     <th>ID
@@ -161,7 +166,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-
+                            <!--table body-->
                             <tbody>
                                 <c:forEach items="${requestScope.data}" var="s">
                                     <tr>
@@ -170,7 +175,10 @@
                                         <td>${s.value}</td>
                                         <td>${s.isOrder()}</td>
                                         <td>${s.status?"Active":"Inactive"}</td>
-                                        <td><a href="#">View</a>&nbsp&nbsp&nbsp&nbsp<a href="#">Edit</a></td>
+                                        <td><a href="settingdetail?action=view&id=${s.id}">View</a>
+                                            &nbsp;
+                                            <a href="settingdetail?action=edit&id=${s.id}">Edit</a>
+                                        </td>
                                     </tr>
                                 </c:forEach>
 
@@ -179,6 +187,7 @@
                         <!-- Diplay list of page -->
                         <nav aria-label="Page navigation">
                             <ul class="pagination">
+                                <!--next page-->
                                 <c:if test="${currentPage > 1}">
                                     <li>
                                         <a href="settinglist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Previous">
@@ -186,7 +195,7 @@
                                         </a>
                                     </li>
                                 </c:if>
-
+                                <!--list of pages-->
                                 <c:forEach begin="1" end="${noOfPage}" var="i">
                                     <c:choose>
                                         <c:when test="${currentPage eq i}">
@@ -197,7 +206,7 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
-
+                                <!--prev page-->
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
                                         <a href="settinglist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Next">
@@ -208,6 +217,8 @@
                             </ul>
                         </nav>
                     </div>
+
+                    <button type="button" class="btn btn-primary btn-block " onclick="redirectToSettingDetail('add')">Add</button>
                 </section>
             </aside>
         </div>
@@ -215,7 +226,12 @@
 
 
         <%@include file="layout/footer.jsp" %>
-
+        <script>
+            function redirectToSettingDetail(action) {
+                // Chuyển hướng đến trang settingdetail với tham số action=add
+                window.location.href = 'settingdetail?action=' + action;
+            }
+        </script>
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/admin/js/jquery.min.js" type="text/javascript"></script>

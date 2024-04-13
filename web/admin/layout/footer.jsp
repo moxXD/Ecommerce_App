@@ -41,7 +41,7 @@
     </head>
     <body>
         <div class="footer-main">
-            Copyright &copy Group1, 2024
+            Copyright &copy Group 1, 2024
         </div>
     </body>
 </html>

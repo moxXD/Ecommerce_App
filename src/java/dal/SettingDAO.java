@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Setting;
 
 /**
@@ -21,6 +23,7 @@ public class SettingDAO {
     DBContext context = new DBContext();
     private Connection conn;
     private int noOfrecord;
+
     // get setting by id
     public Setting getSettingById(int id) {
         Setting st = null;
@@ -37,15 +40,21 @@ public class SettingDAO {
                 boolean status = rs.getBoolean("status");
                 int order = rs.getInt("order");
                 st = new Setting(id, order, value, type, status);
-                return st;
             }
-            stm.close();
-            rs.close();
-            conn.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+
+                }
+            }
         }
-        return null;
+        return st;
     }
 
     // get role id
@@ -67,13 +76,14 @@ public class SettingDAO {
                 st.add(s);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
 
                 }
             }
@@ -99,7 +109,7 @@ public class SettingDAO {
         if (typeFilter != null && !typeFilter.isEmpty()) {
             sql += " AND `setting`.`type`=? ";
         }
-        
+
         // status
         if (statusFilter != null && !statusFilter.isEmpty()) {
             sql += " AND `setting`.`status`=? ";
@@ -111,6 +121,7 @@ public class SettingDAO {
         // add sort condition to query
         sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY `" + sortParam
                 + (order ? "` ASC" : "` DESC") : "") + " LIMIT ?, ?;";
+
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
@@ -120,8 +131,6 @@ public class SettingDAO {
                 stm.setString(index++, typeFilter);
             }
 
-            
-
             if (statusFilter != null && !statusFilter.isEmpty()) {
                 stm.setString(index++, statusFilter);
             }
@@ -129,13 +138,13 @@ public class SettingDAO {
             if (search != null && !search.isEmpty()) {
                 String likeParam = "%" + search + "%";
                 stm.setString(index++, likeParam);
-                
+
             }
 
             stm.setInt(index++, offset);
             stm.setInt(index++, limit);
             ResultSet rs = stm.executeQuery();
-            System.out.println("sql query: "+sql);
+//            System.out.println("sql query: "+sql);
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String type = rs.getString("type");
@@ -150,13 +159,15 @@ public class SettingDAO {
                 this.noOfrecord = rs.getInt(1);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+//            e.printStackTrace();
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+
                 }
             }
         }
@@ -171,36 +182,101 @@ public class SettingDAO {
                 + "FROM `swp391_g1`.`setting`";
         try {
             conn = context.getConnection();
-            PreparedStatement stm=conn.prepareStatement(sql);
-            ResultSet rs=stm.executeQuery();
-            
-            while(rs.next()){
-                String type=rs.getString("type");
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String type = rs.getString("type");
                 lst.add(type);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }
         return lst;
     }
 
-    public int getNumberOfRecord(){
+    public int getNumberOfRecord() {
         return noOfrecord;
     }
+
+    // insert new setting
+    public void insertSetting(String type, String value, int order) {
+        String sql = "INSERT INTO `swp391_g1`.`setting`\n"
+                + "(\n"
+                + "`type`,\n"
+                + "`value`,\n"
+                + "`order`,\n"
+                + "`status`)\n"
+                + "VALUES\n"
+                + "(?,?,?,?);";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, type);
+            stm.setString(2, value);
+            stm.setInt(3, order);
+            stm.setBoolean(4, true);
+            stm.execute();
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
+    // update setting
+    public void updateSettingById(int id, String type,
+            String value, int order, boolean status) {
+        String sql = "UPDATE `swp391_g1`.`setting`\n"
+                + "SET\n"
+                + "`type` = ?,\n"
+                + "`value` = ?,\n"
+                + "`order` =?,\n"
+                + "`status` = ?\n"
+                + "WHERE `id` = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, type);
+            stm.setString(2, value);
+            stm.setInt(3, order);
+            stm.setBoolean(4, status);
+            stm.setInt(5, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         SettingDAO st = new SettingDAO();
-        List<Setting> list = st.getAllSettingWithFilterAndSearch(1, 6, null, true, null, null, null);
+        List<Setting> list = st.getAllSettingWithFilterAndSearch(1, 6, "order", true, null, null, null);
         for (Setting setting : list) {
             System.out.println("id: " + setting.getId());
-            System.out.println("order: "+setting.isOrder());
+            System.out.println("order: " + setting.isOrder());
         }
     }
 }

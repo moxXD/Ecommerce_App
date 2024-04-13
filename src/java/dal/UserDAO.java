@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Setting;
 import model.User;
 
@@ -81,7 +83,7 @@ public class UserDAO {
             }
             stm.setInt(paramIndex++, offset);
             stm.setInt(paramIndex++, limit);
-            
+
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -101,13 +103,13 @@ public class UserDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }
@@ -117,8 +119,6 @@ public class UserDAO {
     public int getNumberOfRecord() {
         return noOfrecord;
     }
-
-    
 
 //    public static void main(String[] args) {
 //        UserDAO dao = new UserDAO();

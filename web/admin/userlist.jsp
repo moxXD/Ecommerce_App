@@ -122,6 +122,7 @@
             <aside class="right-side">
                 <section class="content">
                     <form action="userlist" method="get">
+                        <!--search input-->
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
                             <span class="input-group-btn">
@@ -130,6 +131,7 @@
                                         class="fa fa-search"></i></button>
                             </span>
                         </div>
+                            <!--gender select-->
                         <div class="filter-row">
                             <div class="form-group">
                                 <label for="filgender">Filter by gender:</label>
@@ -139,6 +141,7 @@
                                     <option value="female" ${param.filgender != null && param.filgender.equals("female") ? "selected" : ""}>Female</option>
                                 </select>
                             </div>
+                                <!--role select-->
                             <div class="form-group">
                                 <label for="filrole">Filter by role:</label>
                                 <select name="filrole" id="filrole" class="form-control">
@@ -149,6 +152,7 @@
                                     </c:forEach>
                                 </select>
                             </div>
+                                <!--status select-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
@@ -156,7 +160,6 @@
                                     <option value="active" ${param.filstatus != null && param.filstatus.equals("active") ? "selected" : ""}>Active</option>
                                     <option value="inactive" ${param.filstatus != null && param.filstatus.equals("inactive") ? "selected" : ""}>Inactive</option>
 
-                                    <!-- Add status options here -->
                                 </select>
                             </div>
                         </div>
@@ -166,6 +169,7 @@
                     <div class="table-responsive">
 
                         <table class="table user-table">
+                            <!--table head-->
                             <thead>
                                 <tr>
                                     <th>ID 
@@ -205,6 +209,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
+                            <!--table body-->
                             <tbody>
                                 <c:forEach items="${requestScope.userList}" var="u">
 
@@ -216,7 +221,10 @@
                                         <td>${u.phone}</td>
                                         <td>${u.setting.value}</td>
                                         <td>${u.status?"Active":"Inactive"}</td>
-                                        <td><a href="userdetail">View</a> <a href="#"></a></td>
+                                        <td><a href="userdetail?action=view&id=${u.id}">View</a> <a href="#"></a>
+                                            &nbsp;
+                                            <a href="userdetail?action=edit&id=${u.id}">View</a> <a href="#"></a>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 <!-- Add more rows here -->
