@@ -5,10 +5,6 @@
         <group>
             <file>file:/C:/Users/Duc%20Le/Documents/g1/web/admin/settinglist.jsp</file>
             <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/SettingListServlet.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/model/Setting.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/dal/UserDAO.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/admin/userlist.jsp</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/UserListServlet.java</file>
             <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/dal/SettingDAO.java</file>
         </group>
     </open-files>

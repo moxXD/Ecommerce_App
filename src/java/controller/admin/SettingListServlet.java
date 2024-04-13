@@ -64,7 +64,6 @@ public class SettingListServlet extends HttpServlet {
         int page = 1;
         int recordPerPage = 3;
         
-
         String page_raw = request.getParameter("page");
         String sortColumn = request.getParameter("sort");
         boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
@@ -75,8 +74,6 @@ public class SettingListServlet extends HttpServlet {
         SettingDAO setDAO = new SettingDAO();
         List<String> typeList = setDAO.getAllSettingType();
      
-        
-        
         if (page_raw != null) {
             try {
                 page = Integer.parseInt(page_raw);
@@ -84,8 +81,7 @@ public class SettingListServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        
-//        System.out.println("search string: "+search);
+        System.out.println("Status: "+statusFilter);
         List<Setting> stList = setDAO.getAllSettingWithFilterAndSearch((page - 1) * recordPerPage, recordPerPage,
                 sortColumn, sortOrder, typeFilter, statusFilter, search);
         int noOfrecord = setDAO.getNumberOfRecord();

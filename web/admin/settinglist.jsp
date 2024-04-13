@@ -120,9 +120,9 @@
                             <div class="form-group">
                                 <label for="filstatus">Filter by status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
-                                    <option value="">Select status</option>
-                                    <option value="1" ${param.filstatus==1 ? "selected" : ""}>Active</option>
-                                    <option value="0" ${param.filstatus==0 ? "selected" : ""}>Inactive</option>
+                                    <option value="" >Select status</option>
+                                    <option value="1" ${param.filstatus.equals("1") ? "selected" : ""}>Active</option>
+                                    <option value="0" ${ param.filstatus.equals("0") ? "selected" : ""}>Inactive</option>
                                     <!-- Add status options here -->
                                 </select>
                             </div>

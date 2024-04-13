@@ -42,7 +42,7 @@
     <body class="skin-black">
         <!-- header logo: style can be found in header.less -->
         <header class="header">
-            <a href="index.html" class="logo">
+            <a href="dashboard" class="logo">
                 Admin
             </a>
             <!-- Header Navbar: style can be found in header.less -->
