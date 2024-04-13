@@ -76,7 +76,6 @@ public class ListBlogController extends HttpServlet {
                 e.printStackTrace();
             }
         }
-
         try {
             list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage);
         } catch (SQLException ex) {

@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <%@include file="../../../layout/header.jsp" %>
@@ -50,7 +51,7 @@
             .form-button:hover {
                 background-color: #45a049;
             }
-            #blog-id, #title, #category, #createtime, #updatetime, #author, #status{
+            #blog_id, #title, #category, #createtime, #updatetime, #author, #status{
                 width: 90%;
             }
             .form-left, .form-right{
@@ -59,7 +60,7 @@
             select, textarea{
                 background-color: white;
             }
-            #blog-id,#createtime, #updatetime{
+            #blog_id,#createtime, #updatetime{
                 background-color: rgb(240,240,233);
             }
         </style>
@@ -152,45 +153,49 @@
                             <h2 class="title text-center">Blog Details</h2>
 
                             <div class="form-container">
+                                <c:set var="c" value="${requestScope.blogdetails}" />
                                 <form action="/submit-blog" method="post">
                                     <div style="display: flex; justify-content: space-between">
                                         <div class="form-left">
                                             <div class="form-group">
                                                 <label for="blog-id">ID:</label>
-                                                <input type="text" id="blog-id" name="blog-id" readonly="true">
+                                                <input type="Text" readonly="true" id="blog_id" name="blog_id" value="${c.id}"/>
                                             </div>
                                             <div class="form-group">
                                                 <label for="title">Title:</label>
-                                                <input type="text" id="title" name="title">
+                                                <input type="text" id="title" name="title" value="${c.title}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="category">Category:</label>
                                                 <select id="category" name="category">
-                                                    <option value="technology">Technology</option>
-                                                    <option value="lifestyle">Lifestyle</option>
+<!--                                                    <option value="technology">Technology</option>
+                                                    <option value="lifestyle">Lifestyle</option>-->
+                                                    <c:forEach items="${requestScope.settingList}" var="s">
+                                                        <option ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
+                                                    </c:forEach>
                                                     <!-- Thêm các danh mục khác tại đây -->
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="author">Author:</label>
-                                                <input type="text" id="author" name="author">
+                                                <input type="text" id="author" name="author" value="${c.authorName}">
                                             </div>
                                         </div>
                                         <!---->
                                         <div class="form-right">
                                             <div class="form-group">
                                                 <label for="create_time">Create Time:</label>
-                                                <input type="text" id="createtime" name="createtime" readonly="true">
+                                                <input type="text" id="createtime" name="createtime" readonly="true" value="${c.createTime}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="update_time">Updated Time:</label>
-                                                <input type="text" id="updatetime" name="updatetime" readonly="true">
+                                                <input type="text" id="updatetime" name="updatetime" readonly="true" value="${c.updateTime}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="status">Status: </label>
                                                 <select id="status" name="status">
-                                                    <option value="Show">Show </option>
-                                                    <option value="Hide">Hide</option>
+                                                    <option value="Show" ${c.status == true ? "selected" : ""}>Show </option>
+                                                    <option value="Hide" ${c.status == false ? "selected" : ""}>Hide</option>
                                                     <!-- Thêm các danh mục khác tại đây -->
                                                 </select>
                                             </div>
@@ -203,7 +208,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="content">Content:</label>
-                                        <textarea id="content" name="content"></textarea>
+                                        <textarea id="content" name="content">${c.detail}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <input type="submit" value="Save" class="form-button">

@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import model.Blog;
+import model.Setting;
 import model.User;
 
 /**
@@ -128,39 +129,101 @@ public class BlogDAO extends DBContext {
         return noOfrecord;
     }
 
-    public String getAuthorNamebyId(int authorid) throws SQLException {
-        String fullname = null;
-        String sql = "SELECT fullname FROM swp391_g1.user WHERE id=?";
-
+    public Blog getBlogByID(int blogID) throws SQLException {
+//        List<Blog> list = new ArrayList<>();
+        Blog list = null;
+        String sql = "SELECT SQL_CALC_FOUND_ROWS "
+                + "t3.value, "
+                + "t2.fullname, "
+                + "t1.id, "
+                + "t1.categoryid, "
+                + "t1.authorid, "
+                + "t1.imageurl, "
+                + "t1.title, "
+                + "t1.detail, "
+                + "t1.status, "
+                + "t1.createdtime, "
+                + "t1.lastupdate \n"
+                + "FROM swp391_g1.blog AS t1\n"
+                + "INNER JOIN swp391_g1.user AS t2 ON t2.id = t1.authorid\n"
+                + "INNER JOIN swp391_g1.setting AS t3 ON t3.order = t1.categoryid\n"
+                + "WHERE t3.type='blog' AND t1.id=?;";
+//        
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
-            stm.setInt(1, authorid);
+            stm.setInt(1, blogID);
             ResultSet rs = stm.executeQuery();
-
-            if (rs.next()) {
-                fullname = rs.getString("fullname");
+            while (rs.next()) {
+                int categoryId = rs.getInt("categoryId");
+                int Id = rs.getInt("id");
+                int authorId = rs.getInt("authorId");
+                String imgUrl = rs.getString("imageUrl");
+                String title = rs.getString("title");
+                String detail = rs.getString("detail");
+                boolean status = rs.getBoolean("status");
+                Timestamp createTime = rs.getTimestamp("createdtime");
+                Timestamp updateTime = rs.getTimestamp("lastupdate");
+                String authorName = rs.getString("fullname");
+                String categoryName = rs.getString("value");
+//            Setting st = stDAO.getSettingById(roleId);
+                list = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName);
+                return list;
             }
-
-            rs.close();
-            stm.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (conn != null) {
-                conn.close();
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+
+                }
             }
+
         }
 
-        return fullname;
+        return null;
+    }
+
+    public List<Setting> getAllBlogSetting() throws SQLException {
+        List<Setting> list = new ArrayList<>();
+        String sql = "select * from swp391_g1.setting WHERE setting.type = 'blog';";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int order = rs.getInt("order");
+                String value = rs.getString("value");
+                String type = rs.getString("type");
+                boolean status = rs.getBoolean("status");
+//            Setting st = stDAO.getSettingById(roleId);
+                Setting u = new Setting(id, order, value, type, status);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+
+                }
+            }
+
+        }
+
+        return list;
     }
 
     public static void main(String[] args) throws SQLException {
         BlogDAO st = new BlogDAO();
-        List<Blog> list = st.getAllBlogPagination(1, 10);
-        for (Blog setting : list) {
-            System.out.println("author: " + setting.getAuthorName());
-        }
+        List<Setting> list = st.getAllBlogSetting();
+        System.out.println("list "+ list.size());
     }
-
 }

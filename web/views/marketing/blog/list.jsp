@@ -155,15 +155,16 @@
                                     </thead>
                                     <tbody>
                                         <c:forEach items="${requestScope.blogList}" var="u">
+                                            <c:set var="id" value="${u.id}" />
                                             <tr>
-                                                <td>${u.id}</td>
+                                                <td>${id}</td>
                                                 <td>${u.imgUrl}</td>
                                                 <td>${u.title}</td>
                                                 <td>${u.categoryName}</td>
                                                 <td>${u.authorName}</td>
                                                 <td>${u.detail}</td>
                                                 <td class="${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
-                                                <td><a href="">Edit</a><a href=""  style="margin-left: 20px">View</a></td>
+                                                <td><a href="blogDetailsController?ID=${id}">Edit</a><a href=""style="margin-left: 20px">View</a></td>
                                                 
                                             </tr>
                                         </c:forEach>
