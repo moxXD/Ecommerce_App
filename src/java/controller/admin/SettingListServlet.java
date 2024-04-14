@@ -73,7 +73,7 @@ public class SettingListServlet extends HttpServlet {
         String search = request.getParameter("q");
 
         SettingDAO setDAO = new SettingDAO();
-        List<String> typeList = setDAO.getAllSettingType();
+        List<String> lst = setDAO.getAllSettingType();
      
         if (page_raw != null) {
             try {
@@ -89,7 +89,7 @@ public class SettingListServlet extends HttpServlet {
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
         
         request.setAttribute("data", stList);
-        request.setAttribute("typeData", typeList);
+        request.setAttribute("settingData", lst);
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
         request.setAttribute("sortOrder", sortOrder);

@@ -174,23 +174,58 @@ public class SettingDAO {
         return list;
     }
 
-    // get setting type
+    // get all setting type
     public List<String> getAllSettingType() {
         List<String> lst = new ArrayList<>();
         String sql = "SELECT distinct\n"
                 + "    `setting`.`type`\n"
-                + "FROM `swp391_g1`.`setting`";
+                + "FROM `swp391_g1`.`setting`;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                String s=rs.getString("type");
+                lst.add(s);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return lst;
+    }
+
+    // get all setting 
+    public List<Setting> getAllSetting() {
+        List<Setting> lst = new ArrayList<>();
+        String sql = "SELECT `setting`.`id`,\n"
+                + "    `setting`.`type`,\n"
+                + "    `setting`.`value`,\n"
+                + "    `setting`.`order`,\n"
+                + "    `setting`.`status`\n"
+                + "FROM `swp391_g1`.`setting`\n"
+                + "";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                String type = rs.getString("type");
-                lst.add(type);
+                Setting s = new Setting(rs.getInt("id"),
+                        rs.getInt("order"),
+                        rs.getString("value"),
+                        rs.getString("type"),
+                        rs.getBoolean("status"));
+                lst.add(s);
             }
         } catch (SQLException e) {
-//            e.printStackTrace();
             Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             if (conn != null) {
@@ -273,10 +308,10 @@ public class SettingDAO {
 
     public static void main(String[] args) {
         SettingDAO st = new SettingDAO();
-        List<Setting> list = st.getAllSettingWithFilterAndSearch(1, 6, "order", true, null, null, null);
+        List<Setting> list = st.getAllSetting();
         for (Setting setting : list) {
             System.out.println("id: " + setting.getId());
-            System.out.println("order: " + setting.isOrder());
+            System.out.println("value: " + setting.getValue());
         }
     }
 }

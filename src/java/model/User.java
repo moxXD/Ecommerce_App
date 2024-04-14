@@ -11,10 +11,11 @@ import java.sql.Date;
  * @author Duc Le
  */
 public class User {
+
     private int id;
     private Setting setting;
-    private String email,password,fullname,imgUrl,phone,address;
-    private boolean confirmation,status,gender;
+    private String email, password, fullname, imgUrl, phone, address;
+    private boolean confirmation, status, gender;
     private Date dob;
 
     public User() {
@@ -45,7 +46,19 @@ public class User {
         this.gender = gender;
     }
 
-    
+    public User(int id, Setting setting, String email, String fullname, String imgUrl,
+            String phone, String address, boolean status, boolean gender) {
+        this.id = id;
+        this.setting = setting;
+        this.email = email;
+        this.fullname = fullname;
+        this.imgUrl = imgUrl;
+        this.phone = phone;
+        this.address = address;
+        this.status = status;
+        this.gender = gender;
+    }
+
     public int getId() {
         return id;
     }
@@ -142,5 +155,4 @@ public class User {
         this.dob = dob;
     }
 
-    
 }

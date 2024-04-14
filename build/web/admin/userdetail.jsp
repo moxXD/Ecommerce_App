@@ -4,7 +4,10 @@
     Author     : Duc Le
 --%>
 
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -121,195 +124,169 @@
             </aside>
             <aside class="right-side">
                 <section class="content">
-                    <div class="container" >
-                        <div class="row ">
-                            <div class="col">
-                                <div class="profile-content " >
-                                    <div class="row">
-                                        <div class="d-flex align-items-center ">
-                                            <div class="col-md-2">
-                                                <img src="${pageContext.request.contextPath}/admin/img/26115.jpg" alt="Avatar" class="avatar img-fluid rounded-circle">
-
+                    <div class="container mt-4">
+                        <c:set value="${requestScope.userData}" var="u"/>
+                        <!--heading-->
+                        <h2 class="mb-4">User Detail</h2>
+                        <div class="row">
+                            <form method="post" action="userdetail">
+                                <!--avatar-->
+                                <div class="col-md-4">
+                                    <img src="${u.imgUrl}" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                </div>
+                                <div class="col-md-8">
+                                    <!--full name-->
+                                    <div class="form-group">
+                                        <label for="fullname">Full Name:</label>
+                                        <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                    </div>
+                                    <!--gender-->
+                                    <div class="form-group">
+                                        <label for="gender">Gender:</label>
+                                        <select class="form-control" name="gender" id="gender" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                            <option value="true" ${u.gender?"selected":""}>Male</option>
+                                            <option value="false" ${!u.gender?"selected":""}>Female</option>
+                                        </select>
+                                    </div>
+                                    <!--email-->
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        <input type="email" class="form-control" name="email" id="email" value="${u.email}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                    </div>
+                                    <!--mobile -->
+                                    <div class="form-group">
+                                        <label for="mobile">Mobile:</label>
+                                        <input type="text" class="form-control" name="mobile" id="mobile" value="${u.phone}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                    </div>
+                                    <!--role-->
+                                    <div class="form-group">
+                                        <label for="role">Role</label>
+                                        <select class="form-control" name="role" id="role" ${param.action.equals("view")?"disabled":""}>
+                                            <c:forEach items="${requestScope.settingsData}" var="s">
+                                                <c:if test="${s.type.equals('role')}">
+                                                    <option value="${s.id}">${s.value}</option>
+                                                </c:if>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <!--adress-->
+                                    <div class="form-group">
+                                        <label for="address">Address:</label>
+                                        <input type="text" class="form-control" name="address" id="address" value="${u.address}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                    </div>
+                                    <!--status-->
+                                    <div class="form-group">
+                                        <label for="status-group"  class="form-check-label">Status</label>
+                                        <div class="form-check row"  id="status-group">
+                                            <div class="col-sm-6">
+                                                <input class="form-check-input" type="checkbox" onclick="toggleCheckbox(this)" 
+                                                       id="active" name="activecb" ${u.status?"checked":""} 
+                                                       ${param.action.equals("view")?"disabled":""}> Active
                                             </div>
-                                            <div class="col-md-10 infocontainer" >
-                                                <div class="name">Name</div>
-                                                <div class="email-role">
-                                                    <div class="email">Email</div>
-
-                                                </div>
+                                            <div class="col-sm-6">
+                                                <input class="form-check-input" type="checkbox" onclick="toggleCheckbox(this)" 
+                                                       id="deactive" name="deactivatecb" ${!u.status?"checked":""} 
+                                                       ${param.action.equals("view")?"disabled":""}> Deactivate
                                             </div>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="inputLabel1">Full Name</label>
-                                                <input type="text" class="form-control" id="inputLabel1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="gender">Gender</label>
-                                                <select name="gender" class="form-control">
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="address">Address</label>
-                                                <input type="text" class="form-control" id="address">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="role">Role</label>
-                                                <select name="role" class="form-control">
-                                                    <option value="admin">Admin</option>
-                                                    <option value="customer">Customer</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Status</label>
 
-                                                <input type="checkbox" id="active" value="ON"><span >Active</label>
-                                                    &nbsp &nbsp &nbsp &nbsp
-                                                    <input type="checkbox" id="inactive" value="ON"><span >Inactive</label>
-                                                        </div>
-                                                        </div>
+                                    <!--button group-->
+                                    <c:if test="${param.action.equals('add')}">
+                                        <input type="hidden" name="formAction" value="add">
+                                    </c:if>
+                                    <input type="hidden" name="userId" value="${param.id}">
+                                    <div class="row text-center">
+                                        <div class="col-sm-6 ">
+                                            <c:if test="${param.action.equals('view')}">
+                                                <button type="button" class="btn btn-primary btn-block" onclick="redirectToEdit(${param.id})">Edit</button>
+                                            </c:if>
+                                            <c:if test="${!param.action.equals('view')}">
+                                                <button type="submit" class="btn btn-primary btn-block" >Save</button>
+                                            </c:if>
+                                        </div>
+                                        <div class="col-sm-6 ">
+                                            <button type="button" class="btn btn-primary btn-block" onclick="redirectToAdd()">Add</button>
+                                        </div>
+                                        <div class="col-sm-12 " style="margin:1% 0 5% 0">
+                                            <button type="button" class="btn btn-danger btn-block " onclick="redirectToUserList()">Back</button>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </body>
 
-                                                        <!-- Add more label-input pairs as needed -->
-                                                        </div>
+    <%@include file="layout/footer.jsp" %>
+    <script type="text/javascript">
+        function redirectToUserList() {
+            window.location.href = 'userlist';
+        }
+        function redirectToAdd() {
+            window.location.href = 'userdetail?action=add';
+        }
+        function redirectToEdit(id) {
+            window.location.href = 'userdetail?action=edit&id=' + id;
+        }
+        function toggleCheckbox(checkbox) {
+            // Get the ID of the other checkbox
+            var otherCheckboxId = (checkbox.id === 'active') ? 'deactive' : 'active';
+            // Get the other checkbox element
+            var otherCheckbox = document.getElementById(otherCheckboxId);
 
-                                                        <div class="row" style="padding-bottom: 1%">
-                                                            <div class="col-md-3">
-                                                                <button type="button" class="btn btn-primary btn-block">Save</button>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <button type="button" class="btn btn-primary btn-block" >Add</button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-6">          
-                                                                <button type="button" class="btn btn-primary btn-block" id="backButton">Back</button>
-                                                            </div>
-                                                        </div>
+            // If the current checkbox is checked
+            if (checkbox.checked) {
+                // Uncheck the other checkbox
+                otherCheckbox.checked = false;
+            } else {
+                // If both checkboxes are unchecked
+                if (!otherCheckbox.checked) {
+                    // Perform the desired action when both checkboxes are unchecked
+                    console.log("Neither checkbox is checked");
+                    // Change the state of the current checkbox to checked
+                    checkbox.checked = true;
+                }
+            }
+        }
 
-                                                        </div>
-                                                        </div>
-                                                        </div>
-                                                        </div>
+    </script>
+    <script type="text/javascript">
+        document.getElementById("backButton").onclick = function () {
+            location.href = "userlist";
+        };
+    </script>
+    <!-- jQuery 2.0.2 -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/admin/js/jquery.min.js"
+    type="text/javascript"></script>
 
-                                                        </section>
-                                                        </aside>
-                                                        </div>
-                                                        </body>
+    <!-- jQuery UI 1.10.3 -->
+    <script src="${pageContext.request.contextPath}/admin/js/jquery-ui-1.10.3.min.js"
+    type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="${pageContext.request.contextPath}/admin/js/bootstrap.min.js"
+    type="text/javascript"></script>
+    <!-- daterangepicker -->
+    <script
+        src="${pageContext.request.contextPath}/admin/js/plugins/daterangepicker/daterangepicker.js"
+    type="text/javascript"></script>
 
-                                                        <%@include file="layout/footer.jsp" %>
-                                                        <script type="text/javascript">
-                                                            document.getElementById("backButton").onclick = function () {
-                                                                location.href = "userlist";
-                                                            };
-                                                        </script>
-                                                        <!-- jQuery 2.0.2 -->
-                                                        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-                                                        <script src="${pageContext.request.contextPath}/admin/js/jquery.min.js"
-                                                        type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/admin/js/plugins/chart.js"
+    type="text/javascript"></script>
 
-                                                        <!-- jQuery UI 1.10.3 -->
-                                                        <script src="${pageContext.request.contextPath}/admin/js/jquery-ui-1.10.3.min.js"
-                                                        type="text/javascript"></script>
-                                                        <!-- Bootstrap -->
-                                                        <script src="${pageContext.request.contextPath}/admin/js/bootstrap.min.js"
-                                                        type="text/javascript"></script>
-                                                        <!-- daterangepicker -->
-                                                        <script
-                                                            src="${pageContext.request.contextPath}/admin/js/plugins/daterangepicker/daterangepicker.js"
-                                                        type="text/javascript"></script>
+    <!-- Director App -->
+    <script src="${pageContext.request.contextPath}/admin/js/Director/app.js"
+    type="text/javascript"></script>
 
-                                                        <script src="${pageContext.request.contextPath}/admin/js/plugins/chart.js"
-                                                        type="text/javascript"></script>
+    <!-- Director dashboard demo (This is only for demo purposes) -->
+    <script src="${pageContext.request.contextPath}/admin/js/Director/dashboard.js"
+    type="text/javascript"></script>
 
-                                                        <!-- datepicker
-                                                                                                                                            <script src="js/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>-->
-                                                        <!-- Bootstrap WYSIHTML5
-                                                                                                                                            <script src="js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>-->
-                                                        <!-- iCheck -->
-                                                        <script src="${pageContext.request.contextPath}/admin/js/plugins/iCheck/icheck.min.js"
-                                                        type="text/javascript"></script>
-                                                        <!-- calendar -->
-                                                        <script src="${pageContext.request.contextPath}/admin/js/plugins/fullcalendar/fullcalendar.js"
-                                                        type="text/javascript"></script>
 
-                                                        <!-- Director App -->
-                                                        <script src="${pageContext.request.contextPath}/admin/js/Director/app.js"
-                                                        type="text/javascript"></script>
 
-                                                        <!-- Director dashboard demo (This is only for demo purposes) -->
-                                                        <script src="${pageContext.request.contextPath}/admin/js/Director/dashboard.js"
-                                                        type="text/javascript"></script>
-
-                                                        <!-- Director for demo purposes -->
-
-                                                        <script type="text/javascript">
-                                                            $('input').on('ifChecked', function (event) {
-                                                                // var element = $(this).parent().find('input:checkbox:first');
-                                                                // element.parent().parent().parent().addClass('highlight');
-                                                                $(this).parents('li').addClass("task-done");
-                                                                console.log('ok');
-                                                            });
-                                                            $('input').on('ifUnchecked', function (event) {
-                                                                // var element = $(this).parent().find('input:checkbox:first');
-                                                                // element.parent().parent().parent().removeClass('highlight');
-                                                                $(this).parents('li').removeClass("task-done");
-                                                                console.log('not');
-                                                            });
-
-                                                        </script>
-                                                        <script>
-                                                            $('#noti-box').slimScroll({
-                                                                height: '400px',
-                                                                size: '5px',
-                                                                BorderRadius: '5px'
-                                                            });
-
-                                                            $('input[type="checkbox"].flat-grey, input[type="radio"].flat-grey').iCheck({
-                                                                checkboxClass: 'icheckbox_flat-grey',
-                                                                radioClass: 'iradio_flat-grey'
-                                                            });
-                                                        </script>
-                                                        <script type="text/javascript">
-                                                            $(function () {
-                                                                "use strict";
-                                                                //BAR CHART
-                                                                var data = {
-                                                                    labels: ["January", "February", "March", "April", "May", "June", "July"],
-                                                                    datasets: [
-                                                                        {
-                                                                            label: "My First dataset",
-                                                                            fillColor: "rgba(220,220,220,0.2)",
-                                                                            strokeColor: "rgba(220,220,220,1)",
-                                                                            pointColor: "rgba(220,220,220,1)",
-                                                                            pointStrokeColor: "#fff",
-                                                                            pointHighlightFill: "#fff",
-                                                                            pointHighlightStroke: "rgba(220,220,220,1)",
-                                                                            data: [65, 59, 80, 81, 56, 55, 40]
-                                                                        },
-                                                                        {
-                                                                            label: "My Second dataset",
-                                                                            fillColor: "rgba(151,187,205,0.2)",
-                                                                            strokeColor: "rgba(151,187,205,1)",
-                                                                            pointColor: "rgba(151,187,205,1)",
-                                                                            pointStrokeColor: "#fff",
-                                                                            pointHighlightFill: "#fff",
-                                                                            pointHighlightStroke: "rgba(151,187,205,1)",
-                                                                            data: [28, 48, 40, 19, 86, 27, 90]
-                                                                        }
-                                                                    ]
-                                                                };
-                                                                new Chart(document.getElementById("linechart").getContext("2d")).Line(data, {
-                                                                    responsive: true,
-                                                                    maintainAspectRatio: false,
-                                                                });
-
-                                                            });
-                                                            // Chart.defaults.global.responsive = true;
-                                                        </script>
-                                                        </body>
-                                                        </html>
+</body>
+</html>

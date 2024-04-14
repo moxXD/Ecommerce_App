@@ -120,15 +120,91 @@ public class UserDAO {
         return noOfrecord;
     }
 
-//    public static void main(String[] args) {
-//        UserDAO dao = new UserDAO();
-//        List<User> list = dao.getUserListPagination(0, 10, null, false, null, 0, null, null);
-//        for (User user : list) {
-//            System.out.println("id: " + user.getId());
-//            System.out.println("name: " + user.getFullname());
-//            System.out.println("role: " + user.getSetting().getValue());
-//            System.out.println("Email: " + user.getEmail());
-//            System.out.println("====================");
-//        }
-//    }
+    // get user by id
+    public User getUserById(int id) {
+        User u = null;
+        String sql = "SELECT `user`.`id`,\n"
+                + "    `user`.`email`,\n"
+                + "    `user`.`password`,\n"
+                + "    `user`.`roleid`,\n"
+                + "    `user`.`confirmation`,\n"
+                + "    `user`.`status`,\n"
+                + "    `user`.`fullname`,\n"
+                + "    `user`.`gender`,\n"
+                + "    `user`.`imageurl`,\n"
+                + "    `user`.`dob`,\n"
+                + "    `user`.`phone`,\n"
+                + "    `user`.`address`\n"
+                + "FROM `swp391_g1`.`user`\n"
+                + "where `user`.`id`=?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Setting s = stDAO.getSettingById(rs.getInt("roleid"));
+                u = new User(id,
+                        s,
+                        rs.getString("email"),
+                        rs.getString("fullname"),
+                        rs.getString("imageurl"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getBoolean("status"),
+                        rs.getBoolean("gender"));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return u;
+    }
+
+    // update user status and role
+    public void updateUserStatusAndRole(int id, int stId,boolean status) {
+        String sql = "UPDATE `swp391_g1`.`user`\n"
+                + "SET\n"
+                + "`roleid` = ?,\n"
+                + "`status` = ?\n"
+                + "WHERE `id` = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, stId);
+            stm.setBoolean(2, status);
+            stm.setInt(3, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        UserDAO dao = new UserDAO();
+        User list = dao.getUserById(1);
+        if (list != null) {
+            System.out.println("id: " + list.getId());
+            System.out.println("name: " + list.getFullname());
+            System.out.println("role: " + list.getSetting().getValue());
+            System.out.println("Email: " + list.getEmail());
+            System.out.println("address: " + list.getAddress());
+            System.out.println("====================");
+        }
+    }
 }

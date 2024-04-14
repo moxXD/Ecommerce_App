@@ -113,8 +113,8 @@
                                 <label for="filtype">Filter by type:</label>
                                 <select name="filtype" id="filtype" class="form-control">
                                     <option value="">Select type</option>
-                                    <c:forEach items="${requestScope.typeData}" var="t">
-                                        <option value="${t}" ${param.filtype==t  ? "selected" : ""}>${t}</option>
+                                    <c:forEach items="${requestScope.settingData}" var="t">
+                                        <option value="${t}" ${param.filtype.equals(t)  ? "selected" : ""}>${t}</option>
                                     </c:forEach>
                                 </select>
                             </div>
