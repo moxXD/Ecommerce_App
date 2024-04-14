@@ -107,81 +107,83 @@
             <aside class="right-side">
                 <section class="content">
                     <div class="container" >
-                        <div class="row ">
-                            <div class="col">
-                                <div class="col-sm-12">
-                                    <div class="blog-post-area">
-                                        <h2 class="title text-center">Blog Details</h2>
-
-                                        <c:set var="c" value="${requestScope.blogdetails}" />
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="inputLabel1">ID: </label>
-                                                    <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.id}">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="inputLabel1">Title</label>
-                                                    <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.title}">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="gender">Category:</label>
-                                                    <select disabled="true" name="gender" class="form-control ">
-                                                        <c:forEach items="${requestScope.settingList}" var="s">
-                                                            <option ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-
-
-                                                <div class="form-group">
-                                                    <label for="inputLabel1">Author</label>
-                                                    <input type="text" class="form-control" id="inputLabel1" value="${c.authorName}" readonly="true">
-                                                </div>
-                                            </div>
-                                            <!---->
-                                            <div class="form-right">
+                        <form action="update" method="post">
+                            <div class="row ">
+                                <div class="col">
+                                    <div class="col-sm-12">
+                                        <div class="blog-post-area">
+                                            <h2 class="title text-center">Blog Details</h2>
+                                            <c:set var="c" value="${requestScope.blogdetails}" />
+                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="create_time">Create Time:</label>
-                                                        <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.createTime}">
+                                                        <label for="inputLabel1">ID: </label>
+                                                        <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.id}">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="update_time">Updated Time:</label>
-                                                        <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.updateTime}">
+                                                        <label for="inputLabel1">Title</label>
+                                                        <input type="text" class="form-control" id="inputLabel1" value="${c.title}">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="gender">Status:</label>
-                                                        <select disabled="true" name="gender" class="form-control">
-                                                            <option value="Show" ${c.status == true ? "selected" : ""}>Show </option>
-                                                            <option value="Hide" ${c.status == false ? "selected" : ""}>Hide</option>
+                                                        <label for="gender">Category:</label>
+                                                        <select name="gender" class="form-control ">
+                                                            <c:forEach items="${requestScope.settingList}" var="s">
+                                                                <option ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
+                                                            </c:forEach>
                                                         </select>
                                                     </div>
+                                                    <div class="form-group">
+                                                        <label for="inputLabel1">Author</label>
+                                                        <input type="text" class="form-control" id="inputLabel1" value="${c.authorName}" >
+                                                    </div>
+                                                </div>
+                                                <!---->
+                                                <div class="form-right">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="create_time">Create Time:</label>
+                                                            <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.createTime}">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="update_time">Updated Time:</label>
+                                                            <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.updateTime}">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="gender">Status:</label>
+                                                            <select name="gender" class="form-control">
+                                                                <option value="Show" ${c.status == true ? "selected" : ""}>Show </option>
+                                                                <option value="Hide" ${c.status == false ? "selected" : ""}>Hide</option>
+                                                            </select>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- -->
-                                        <div class="form-group">
-                                            <label for="thumbnail">Thumbnail: </label>
-                                            <img src="images/blog/blog-one.jpg" alt="" />
-                                        </div>
-                                        <div class="col-md-12" style="margin-bottom: 5%">
-                                            <label for="content">Content:</label>
-                                            <textarea style="height: 500px" class="form-control" readonly="true">${c.detail}</textarea>
-                                        </div>
-                                        <div class="row" style="margin-bottom: 5%">
-                                            <div class="col-md-3">
-                                                <button type="button" class="btn btn-primary btn-block" id="backButton" >Back</button>
+                                            <!-- -->
+                                            <div class="form-group">
+                                                <label for="thumbnail">Thumbnail: </label>
+                                                <img src="images/blog/blog-one.jpg" alt="" />
                                             </div>
+                                            <div class="col-md-12" style="margin-bottom: 5%">
+                                                <label for="content">Content:</label>
+                                                <textarea style="height: 500px" class="form-control" >${c.detail}</textarea>
+                                            </div>
+                                            <div class="row" style="margin-bottom: 5%">
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-primary btn-block">Save</button>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-primary btn-block" id="backButton" >Back</button>
+                                                </div>
+                                            </div>
+
+
+                                            </form>
                                         </div>
-
-
-                                        </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </section>
             </aside>

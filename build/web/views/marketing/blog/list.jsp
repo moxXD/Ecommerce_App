@@ -180,8 +180,7 @@
                                         <td>${u.authorName}</td>
                                         <td>${u.detail}</td>
                                         <td style="color: ${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
-                                        <td><a href="blogDetailsController?ID=${id}">Edit</a><a href=""style="margin-left: 20px">View</a></td>
-
+                                        <td><a href="blogDetailsController?viewID=${id}">View</a><a href="blogDetailsController?updateID=${id}"style="margin-left: 20px">Edit</a></td>
                                     </tr>
                                 </c:forEach>
                                 <!-- Thêm nhiều hàng tại đây -->

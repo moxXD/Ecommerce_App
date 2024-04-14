@@ -66,13 +66,19 @@ public class BlogDetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id_raw = request.getParameter("ID");
+        String id_view_raw = request.getParameter("viewID");
+        String id_update_raw = request.getParameter("updateID");
         int id;
         BlogDAO blogDAO = new BlogDAO();
         List<Setting> list = new ArrayList<>();
         Blog blog = null;
+        if(id_view_raw == null || id_view_raw.isEmpty()){
+            id = Integer.parseInt(id_update_raw);
+        }else{
+            id = Integer.parseInt(id_view_raw);
+        }
+        
         try {
-            id = Integer.parseInt(id_raw);
 //Blog Information
             int categoryId = blogDAO.getBlogByID(id).getCategoryId();
             int Id = blogDAO.getBlogByID(id).getId();
@@ -87,7 +93,7 @@ public class BlogDetailsController extends HttpServlet {
             String categoryName = blogDAO.getBlogByID(id).getCategoryName();
             blog = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName);
 //            -------------------------------
-//Setting information
+            //Setting information
             list = blogDAO.getAllBlogSetting();
 
         } catch (Exception e) {
@@ -95,7 +101,11 @@ public class BlogDetailsController extends HttpServlet {
         }
         request.setAttribute("settingList", list);
         request.setAttribute("blogdetails", blog);
-        request.getRequestDispatcher("views/marketing/blog/details.jsp").forward(request, response);
+        if(id_view_raw == null || id_view_raw.isEmpty()){
+            request.getRequestDispatcher("views/marketing/blog/update.jsp").forward(request, response);
+        }else{
+            request.getRequestDispatcher("views/marketing/blog/details.jsp").forward(request, response);
+        }
     }
 
     /**

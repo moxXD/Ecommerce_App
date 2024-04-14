@@ -122,11 +122,11 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputLabel1">Title</label>
-                                                    <input type="text" class="form-control" id="inputLabel1" value="${c.title}">
+                                                    <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.title}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="gender">Category:</label>
-                                                    <select name="gender" class="form-control">
+                                                    <select disabled="true" name="gender" class="form-control ">
                                                         <c:forEach items="${requestScope.settingList}" var="s">
                                                             <option ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
                                                         </c:forEach>
@@ -135,8 +135,8 @@
 
 
                                                 <div class="form-group">
-                                                    <label for="inputLabel1">ID</label>
-                                                    <input type="text" class="form-control" id="inputLabel1" value="${c.authorName}">
+                                                    <label for="inputLabel1">Author</label>
+                                                    <input type="text" class="form-control" id="inputLabel1" value="${c.authorName}" readonly="true">
                                                 </div>
                                             </div>
                                             <!---->
@@ -152,7 +152,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="gender">Status:</label>
-                                                        <select name="gender" class="form-control">
+                                                        <select disabled="true" name="gender" class="form-control">
                                                             <option value="Show" ${c.status == true ? "selected" : ""}>Show </option>
                                                             <option value="Hide" ${c.status == false ? "selected" : ""}>Hide</option>
                                                         </select>
@@ -168,12 +168,9 @@
                                         </div>
                                         <div class="col-md-12" style="margin-bottom: 5%">
                                             <label for="content">Content:</label>
-                                            <textarea style="height: 500px" class="form-control" placeholder="Enter text here">${c.detail}</textarea>
+                                            <textarea style="height: 500px" class="form-control" readonly="true">${c.detail}</textarea>
                                         </div>
                                         <div class="row" style="margin-bottom: 5%">
-                                            <div class="col-md-3">
-                                                <button type="button" class="btn btn-primary btn-block">Save</button>
-                                            </div>
                                             <div class="col-md-3">
                                                 <button type="button" class="btn btn-primary btn-block" id="backButton" >Back</button>
                                             </div>
