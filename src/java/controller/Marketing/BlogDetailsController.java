@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Blog;
 import model.Setting;
+import model.User;
 
 /**
  *
@@ -71,6 +72,7 @@ public class BlogDetailsController extends HttpServlet {
         int id;
         BlogDAO blogDAO = new BlogDAO();
         List<Setting> list = new ArrayList<>();
+        List<User> user = new ArrayList<>();
         Blog blog = null;
         if(id_view_raw == null || id_view_raw.isEmpty()){
             id = Integer.parseInt(id_update_raw);
@@ -95,10 +97,12 @@ public class BlogDetailsController extends HttpServlet {
 //            -------------------------------
             //Setting information
             list = blogDAO.getAllBlogSetting();
+            user = blogDAO.getAllBlogAuthor();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        request.setAttribute("blogAuthors", user);
         request.setAttribute("settingList", list);
         request.setAttribute("blogdetails", blog);
         if(id_view_raw == null || id_view_raw.isEmpty()){

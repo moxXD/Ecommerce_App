@@ -134,8 +134,13 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Author</label>
-                                                        <input type="text" class="form-control" id="inputLabel1" value="${c.authorName}" >
+                                                        <select name="gender" class="form-control ">
+                                                            <c:forEach items="${requestScope.blogAuthors}" var="a">
+                                                                <option ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
+                                                            </c:forEach>
+                                                        </select>
                                                     </div>
+                                                    
                                                 </div>
                                                 <!---->
                                                 <div class="form-right">
@@ -176,8 +181,6 @@
                                                     <button type="button" class="btn btn-primary btn-block" id="backButton" >Back</button>
                                                 </div>
                                             </div>
-
-
                                             </form>
                                         </div>
                                     </div>

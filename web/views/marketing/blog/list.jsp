@@ -178,7 +178,7 @@
                                         <td>${u.title}</td>
                                         <td>${u.categoryName}</td>
                                         <td>${u.authorName}</td>
-                                        <td>${u.detail}</td>
+                                        <td>${u.detail.substring(0, 25)}</td>
                                         <td style="color: ${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
                                         <td><a href="blogDetailsController?viewID=${id}">View</a><a href="blogDetailsController?updateID=${id}"style="margin-left: 20px">Edit</a></td>
                                     </tr>
@@ -218,6 +218,11 @@
                                 </c:if>
                             </ul>
                         </nav>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-primary btn-block" >Add New Blog</button>
+                            </div>
+                        </div>
                     </div>
 
                     </div>
