@@ -79,6 +79,8 @@ public class SettingDetailServlet extends HttpServlet {
                 request.setAttribute("setting", st);
                 if (action.equals("view")) {
                     request.setAttribute("disabled", true);
+                } else {
+                    request.setAttribute("disabled", false);
 
                 }
             }
@@ -109,20 +111,22 @@ public class SettingDetailServlet extends HttpServlet {
             int order;
 
             try {
-                order = Integer.parseInt(order_raw);
-                stDao.insertSetting(type_raw, value_raw, order);
-                response.sendRedirect("settinglist");
+                if (order_raw != null && !order_raw.isEmpty()) {
+                    order = Integer.parseInt(order_raw);
+                    stDao.insertSetting(type_raw, value_raw, order);
+                    response.sendRedirect("settinglist");
+                }
             } catch (NumberFormatException e) {
                 Logger.getLogger(SettingDetailServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         } else {
-            String id_raw=request.getParameter("settingId");
+            String id_raw = request.getParameter("settingId");
             String type_raw = request.getParameter("type");
             String value_raw = request.getParameter("value");
             String order_raw = request.getParameter("order");
             int order;
             int id;
-            boolean cb=false;
+            boolean cb = false;
             String active = request.getParameter("activecb");
             String deactive = request.getParameter("deactivecb");
             if (active != null && active.equals("on")) {
@@ -132,7 +136,7 @@ public class SettingDetailServlet extends HttpServlet {
                 cb = false;
             }
             try {
-                id=Integer.parseInt(id_raw);
+                id = Integer.parseInt(id_raw);
                 order = Integer.parseInt(order_raw);
                 stDao.updateSettingById(id, type_raw, value_raw, order, cb);
                 response.sendRedirect("settinglist");

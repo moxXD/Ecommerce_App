@@ -146,7 +146,16 @@
                             <div class="form-group row">
                                 <label for="type" class="col-sm-2 col-form-label">Type:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="type" name="type" value="${s.type}" ${d?'disabled="true"':""}>
+                                    <c:if test="${requestScope.disabled}">
+                                        <input type="text" class="form-control" 
+                                               id="type" name="type"  disabled>
+
+                                    </c:if>
+                                    <c:if test="${!requestScope.disabled}">
+                                        <input type="text" class="form-control" 
+                                               id="type" name="type" value="${s.type}" >
+
+                                    </c:if>
                                     <span id="typeError" class="error-msg"></span>
                                 </div>
                             </div>  
@@ -156,7 +165,16 @@
                             <div class="form-group row">
                                 <label for="value" class="col-sm-2 col-form-label">Value:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="value" name="value" value="${s.value}"${d?'disabled="true"':""}>
+                                    <c:if test="${requestScope.disabled}">
+                                        <input type="text" class="form-control" 
+                                               id="value" name="value"  disabled>
+
+                                    </c:if>
+                                    <c:if test="${!requestScope.disabled}">
+                                        <input type="text" class="form-control" 
+                                               id="value" name="value" value="${s.value}">
+
+                                    </c:if>
                                     <span id="valueError" class="error-msg"></span>
                                 </div>
                             </div>
@@ -166,7 +184,16 @@
                             <div class="form-group row">
                                 <label for="order" class="col-sm-2 col-form-label">Order:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="order" name="order" value="${s.isOrder()}"${d?'disabled="true"':""}>
+                                    <c:if test="${requestScope.disabled}">
+                                        <input type="text" class="form-control" 
+                                               id="order" name="order"  disabled>
+
+                                    </c:if>
+                                    <c:if test="${!requestScope.disabled}">
+                                        <input type="text" class="form-control" 
+                                               id="order" name="order" value="${s.isOrder()}" >
+
+                                    </c:if>
                                     <span id="orderError" class="error-msg"></span>
 
                                 </div>
@@ -181,32 +208,47 @@
                                     <div class="col-sm-10">
                                         <div class="row">
                                             <div class="col-sm-6">
+                                                <c:if test="${requestScope.disabled}">
+                                                    <input  type="checkbox" disabled=""  id="active" name="activecb" onclick="toggleCheckbox(this)" ${s.status == true ? 'checked="true"' : ''} > <span>Active</span>
 
-                                                <input  type="checkbox"  id="active" name="activecb" onclick="toggleCheckbox(this)" ${s.status == true ? 'checked="true"' : ''} ${d?'disabled="true"':""}> <span>Active</span>
+                                                </c:if>
+                                                <c:if test="${!requestScope.disabled}">
+                                                    <input  type="checkbox"  id="active" name="activecb" onclick="toggleCheckbox(this)" ${s.status == true ? 'checked="true"' : ''} > <span>Active</span>
+
+                                                </c:if>
                                             </div>
                                             <div class="col-sm-6">
-                                                <input  type="checkbox"  id="deactive" name="deactivecb" onclick="toggleCheckbox(this)" ${s.status == false ? 'checked="true"' : ''}${d?'disabled="true"':""}><span>Deactive</span>
+                                                <c:if test="${requestScope.disabled}">
+                                                    <input  type="checkbox"  id="deactive" name="deactivecb" onclick="toggleCheckbox(this)" ${s.status == false ? 'checked="true"' : ''} disabled><span>Deactive</span>
+
+                                                </c:if>
+                                                <c:if test="${!requestScope.disabled}">
+                                                    <input  type="checkbox"  id="deactive" name="deactivecb" onclick="toggleCheckbox(this)" ${s.status == false ? 'checked="true"' : ''} disabled><span>Deactive</span>
+
+                                                </c:if>
                                             </div>
+
                                         </div>
-                                        <span id="checkboxError" class="error-msg"></span>
                                     </div>
                                 </c:if>
+                                <span id="checkboxError" class="error-msg"></span>
+
                             </div>
 
                             <!-- Button -->
 
                             <div class="form-group row" style="padding: 0 15% 0 15%">
-                                <c:if test="${!d}">
+                                <c:if test="${!requestScope.disabled}">
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-primary btn-block">Save</button>
                                     </div>
                                 </c:if>
-                                <c:if test="${d}">
+                                <c:if test="${requestScope.disabled}">
                                     <div class="col-sm-6">
                                         <button type="button" class="btn btn-primary btn-block" onclick="redirectToEditSetting(${param.id})">Edit</button>
                                     </div>
                                 </c:if>
-                                <c:if test="${d}">
+                                <c:if test="${requestScope.disabled}">
                                     <div class="col-sm-6">
                                         <button type="button" class="btn btn-primary btn-block" onclick="redirectToSettingDetail('add')">Add</button>
                                     </div>
@@ -242,6 +284,7 @@
                 var type = document.getElementById("type").value;
                 var value = document.getElementById("value").value;
                 var order = document.getElementById("order").value;
+
                 var specialChars = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]/;
 
                 var typeError = document.getElementById("typeError");
@@ -312,13 +355,13 @@
         <script src="${pageContext.request.contextPath}/views/js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
         <!-- Bootstrap -->
         <script src="${pageContext.request.contextPath}/views/js/bootstrap.min.js" type="text/javascript"></script>
-        
+
         <!-- Director App -->
         <script src="${pageContext.request.contextPath}/views/js/Director/app.js" type="text/javascript"></script>
 
         <!-- Director dashboard demo (This is only for demo purposes) -->
         <script src="${pageContext.request.contextPath}/views/js/Director/dashboard.js" type="text/javascript"></script>
 
-        
+
     </body>
 </html>
