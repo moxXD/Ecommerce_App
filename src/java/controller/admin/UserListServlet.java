@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package controller.admin;
 
 import dal.SettingDAO;
@@ -15,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Setting;
 import model.User;
 
@@ -22,7 +21,7 @@ import model.User;
  *
  * @author Duc Le
  */
-@WebServlet(name = "UserListServlet", urlPatterns = {"/userlist"})
+@WebServlet(name = "UserListServlet", urlPatterns = {"/admin/userlist"})
 public class UserListServlet extends HttpServlet {
 
     /**
@@ -67,7 +66,13 @@ public class UserListServlet extends HttpServlet {
         int recordPerPage = 10;
         List<User> list = new ArrayList<>();
         SettingDAO setDAO = new SettingDAO();
-        List<Setting> st = setDAO.getRoleId();
+        List<Setting> st=new ArrayList<>();
+        try {
+            st = setDAO.getRoleId();
+        } catch (Exception e) {
+            Logger.getLogger(UserListServlet.class.getName()).log(Level.SEVERE, null, e);
+        
+        }
 
         String page_raw = request.getParameter("page");
         String sortColumn = request.getParameter("sort");
@@ -111,7 +116,7 @@ public class UserListServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        UserDAO userDao = new UserDAO();
+        UserDAO userDao=new UserDAO();
         // get pagination user list
 
         list = userDao.getUserListWithFilter((page - 1) * recordPerPage,
@@ -127,7 +132,7 @@ public class UserListServlet extends HttpServlet {
         request.setAttribute("userList", list);
         request.setAttribute("roleList", st);
         request.setAttribute("sortOrder", sortOrder);
-        request.getRequestDispatcher("admin/userlist.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/admin/userlist.jsp").forward(request, response);
     }
 
     /**

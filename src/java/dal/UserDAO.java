@@ -104,6 +104,7 @@ public class UserDAO {
 
         } catch (SQLException e) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+
         } finally {
             if (conn != null) {
                 try {

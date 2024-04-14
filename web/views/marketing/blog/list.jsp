@@ -18,37 +18,37 @@
         <meta name="keywords" content="Admin, Bootstrap 3, Template, Theme, Responsive">
         <!-- bootstrap 3.0.2 -->
 
-        <link href="${pageContext.request.contextPath}/views/marketing/css/bootstrap.min.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/bootstrap.min.css" rel="stylesheet"
               type="text/css" />
 
         <!-- font Awesome -->
-        <link href="${pageContext.request.contextPath}/views/marketing/css/font-awesome.min.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet"
               type="text/css" />
         <!-- Ionicons -->
-        <link href="${pageContext.request.contextPath}/views/marketing/css/ionicons.min.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/ionicons.min.css" rel="stylesheet"
               type="text/css" />
         <!-- Morris chart -->
-        <link href="${pageContext.request.contextPath}/views/marketing/css/morris/morris.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/morris/morris.css" rel="stylesheet"
               type="text/css" />
         <!-- jvectormap -->
-        <link href="${pageContext.request.contextPath}/views/marketing/css/jvectormap/jquery-jvectormap-1.2.2.css"
+        <link href="${pageContext.request.contextPath}/views/css/jvectormap/jquery-jvectormap-1.2.2.css"
               rel="stylesheet" type="text/css" />
         <!-- Date Picker -->
-        <link href="${pageContext.request.contextPath}/views/marketing/css/datepicker/datepicker3.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/datepicker/datepicker3.css" rel="stylesheet"
               type="text/css" />
         <!-- fullCalendar -->
         <!-- <link href="css/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" /> -->
         <!-- Daterange picker -->
-        <link href="${pageContext.request.contextPath}/views/marketing/css/daterangepicker/daterangepicker-bs3.css"
+        <link href="${pageContext.request.contextPath}/views/css/daterangepicker/daterangepicker-bs3.css"
               rel="stylesheet" type="text/css" />
         <!-- iCheck for checkboxes and radio inputs -->
-        <link href="${pageContext.request.contextPath}/views/marketing/css/iCheck/all.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/iCheck/all.css" rel="stylesheet"
               type="text/css" />
         <!-- bootstrap wysihtml5 - text editor -->
         <!-- <link href="css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" /> -->
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <!-- Theme style -->
-        <link href="${pageContext.request.contextPath}/views/marketing/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" type="text/css" />
 
 
 
@@ -64,7 +64,7 @@
     </head>
 
     <body>
-        <%@include file="../layout/header.jsp" %>
+        <%@include file="../../layout/header.jsp" %>
 
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
@@ -75,7 +75,7 @@
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="${pageContext.request.contextPath}/views/marketing/img/26115.jpg"
+                            <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
                                  class="img-circle" alt="User Image" />
                         </div>
                         <div class="pull-left info">
@@ -85,21 +85,21 @@
                         </div>
                     </div>  
                     <ul class="sidebar-menu">
-                        <li>
-                            <a href="dashboard">
+<!--                        <li>
+                            <a href="#">
                                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
-                        </li>
+                        </li>-->
                         <li class="active">
-                            <a href="userlist">
+                            <a href="bloglist">
                                 <i class="fa fa-users"></i> <span>Blog List</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="settinglist">
+<!--                        <li>
+                            <a href="#">
                                 <i class="fa fa-gear"></i> <span>Settings</span>
                             </a>
-                        </li>
+                        </li>-->
 
                     </ul>
                 </section>
@@ -108,7 +108,7 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="listBlogController" method="get">
+                    <form action="bloglist" method="get">
                         <!--search input-->
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
@@ -180,7 +180,7 @@
                                         <td>${u.authorName}</td>
                                         <td>${u.detail.substring(0, 25)}</td>
                                         <td style="color: ${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
-                                        <td><a href="blogDetailsController?viewID=${id}">View</a><a href="blogDetailsController?updateID=${id}"style="margin-left: 20px">Edit</a></td>
+                                        <td><a href="blogdetail?viewID=${id}">View</a><a href="blogdetail?updateID=${id}"style="margin-left: 20px">Edit</a></td>
                                     </tr>
                                 </c:forEach>
                                 <!-- Thêm nhiều hàng tại đây -->
@@ -192,7 +192,7 @@
                             <ul class="pagination">
                                 <c:if test="${currentPage > 1}">
                                     <li>
-                                        <a href="listBlogController?page=${currentPage - 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Previous">
+                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Previous">
                                             <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
                                         </a>
                                     </li>
@@ -204,14 +204,14 @@
                                             <li class="active"><span>${i}</span></li>
                                                 </c:when>
                                                 <c:otherwise>
-                                            <li><a href="listBlogController?page=${i}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}">${i}</a></li>
+                                            <li><a href="bloglist?page=${i}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}">${i}</a></li>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
 
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
-                                        <a href="listBlogController?page=${currentPage + 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Next">
+                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Next">
                                             <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
                                         </a>
                                     </li>
@@ -233,7 +233,7 @@
         </div>
 
 
-        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../../layout/footer.jsp" %>
 
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
@@ -339,6 +339,6 @@
             });
             // Chart.defaults.global.responsive = true;
         </script>
-    </body>
+    </body> 
 
 </html>

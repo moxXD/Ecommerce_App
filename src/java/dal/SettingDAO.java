@@ -308,7 +308,7 @@ public class SettingDAO {
 
     public static void main(String[] args) {
         SettingDAO st = new SettingDAO();
-        List<Setting> list = st.getAllSetting();
+        List<Setting> list = st.getRoleId();
         for (Setting setting : list) {
             System.out.println("id: " + setting.getId());
             System.out.println("value: " + setting.getValue());

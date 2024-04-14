@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin;
+package controller.Marketing;
 
-import dal.SettingDAO;
+import dal.BlogDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,17 +12,22 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Blog;
 import model.Setting;
+import model.User;
 
 /**
  *
- * @author Duc Le
+ * @author Admin
  */
-@WebServlet(name = "SettingListServlet", urlPatterns = {"/admin/settinglist"})
-public class SettingListServlet extends HttpServlet {
+@WebServlet(name = "BlogDetailsController", urlPatterns = {"/marketing/blogdetail"})
+public class BlogDetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +46,10 @@ public class SettingListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SettingListServlet</title>");
+            out.println("<title>Servlet BlogDetailsController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SettingListServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet BlogDetailsController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,39 +67,49 @@ public class SettingListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int page = 1;
-        int recordPerPage = 3;
-        
-        String page_raw = request.getParameter("page");
-        String sortColumn = request.getParameter("sort");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
-        String typeFilter = request.getParameter("filtype");
-        String statusFilter = request.getParameter("filstatus");
-        String search = request.getParameter("q");
-
-        SettingDAO setDAO = new SettingDAO();
-        List<String> lst = setDAO.getAllSettingType();
-     
-        if (page_raw != null) {
-            try {
-                page = Integer.parseInt(page_raw);
-            } catch (NumberFormatException e) {
-                Logger.getLogger(e.getMessage());
-            }
+        String id_view_raw = request.getParameter("viewID");
+        String id_update_raw = request.getParameter("updateID");
+        int id;
+        BlogDAO blogDAO = new BlogDAO();
+        List<Setting> list = new ArrayList<>();
+        List<User> user = new ArrayList<>();
+        Blog blog = null;
+        if(id_view_raw == null || id_view_raw.isEmpty()){
+            id = Integer.parseInt(id_update_raw);
+        }else{
+            id = Integer.parseInt(id_view_raw);
         }
+        
+        try {
+//Blog Information
+            int categoryId = blogDAO.getBlogByID(id).getCategoryId();
+            int Id = blogDAO.getBlogByID(id).getId();
+            int authorId = blogDAO.getBlogByID(id).getAuthorId();
+            String imgUrl = blogDAO.getBlogByID(id).getImgUrl();
+            String title = blogDAO.getBlogByID(id).getTitle();
+            String detail = blogDAO.getBlogByID(id).getDetail();
+            boolean status = blogDAO.getBlogByID(id).isStatus();
+            Timestamp createTime = blogDAO.getBlogByID(id).getCreateTime();
+            Timestamp updateTime = blogDAO.getBlogByID(id).getUpdateTime();
+            String authorName = blogDAO.getBlogByID(id).getAuthorName();
+            String categoryName = blogDAO.getBlogByID(id).getCategoryName();
+            blog = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName);
+//            -------------------------------
+            //Setting information
+            list = blogDAO.getAllBlogSetting();
+            user = blogDAO.getAllBlogAuthor();
 
-        List<Setting> stList = setDAO.getAllSettingWithFilterAndSearch((page - 1) * recordPerPage, recordPerPage,
-                sortColumn, sortOrder, typeFilter, statusFilter, search);
-        int noOfrecord = setDAO.getNumberOfRecord();
-        int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
-        
-        request.setAttribute("data", stList);
-        request.setAttribute("settingData", lst);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("noOfPage", noOfPage);
-        request.setAttribute("sortOrder", sortOrder);
-        
-        request.getRequestDispatcher("../views/admin/settinglist.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("blogAuthors", user);
+        request.setAttribute("settingList", list);
+        request.setAttribute("blogdetails", blog);
+        if(id_view_raw == null || id_view_raw.isEmpty()){
+            request.getRequestDispatcher("../views/marketing/blog/update.jsp").forward(request, response);
+        }else{
+            request.getRequestDispatcher("../views/marketing/blog/details.jsp").forward(request, response);
+        }
     }
 
     /**

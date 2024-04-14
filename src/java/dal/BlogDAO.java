@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Blog;
 import model.Setting;
 import model.User;
@@ -45,7 +47,7 @@ public class BlogDAO extends DBContext {
                 + "FROM swp391_g1.blog AS t1\n"
                 + "INNER JOIN swp391_g1.user AS t2 ON t2.id = t1.authorid\n"
                 + "INNER JOIN swp391_g1.setting AS t3 ON t3.order = t1.categoryid\n"
-                + "WHERE t3.type='blog'\n";
+                + "WHERE t3.type='category'\n";
 //        // add condition for filter
         if (cateFilter != null && !cateFilter.isEmpty()) {
             sql += " AND t3.value = ? ";
@@ -64,23 +66,24 @@ public class BlogDAO extends DBContext {
         sql += " ORDER BY t1.id ASC  LIMIT ?, ?;"; // pagination
         try {
             conn = context.getConnection();
+//            System.out.println(sql);
             PreparedStatement stm = conn.prepareStatement(sql);
             int paramIndex = 1;
-        if (cateFilter != null && !cateFilter.isEmpty()) {
-            stm.setString(paramIndex++, cateFilter);
-        }
-        if (authorFilter != null && !authorFilter.isEmpty()) {
-            stm.setString(paramIndex++, authorFilter);
-        }
-        if (statusFilter != null && !statusFilter.isEmpty()) {
-            stm.setString(paramIndex++, statusFilter);
-        }
-        if (searchQuery != null && !searchQuery.isEmpty()) {
-            String likeParam = "%" + searchQuery + "%";
-            stm.setString(paramIndex++, likeParam);
-            stm.setString(paramIndex++, likeParam);
-            stm.setString(paramIndex++, likeParam);
-        }
+            if (cateFilter != null && !cateFilter.isEmpty()) {
+                stm.setString(paramIndex++, cateFilter);
+            }
+            if (authorFilter != null && !authorFilter.isEmpty()) {
+                stm.setString(paramIndex++, authorFilter);
+            }
+            if (statusFilter != null && !statusFilter.isEmpty()) {
+                stm.setString(paramIndex++, statusFilter);
+            }
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String likeParam = "%" + searchQuery + "%";
+                stm.setString(paramIndex++, likeParam);
+                stm.setString(paramIndex++, likeParam);
+                stm.setString(paramIndex++, likeParam);
+            }
             stm.setInt(paramIndex++, offset);
             stm.setInt(paramIndex++, limit);
             ResultSet rs = stm.executeQuery();
@@ -105,14 +108,13 @@ public class BlogDAO extends DBContext {
                 this.noOfrecord = rs.getInt(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
-
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
 
@@ -143,7 +145,7 @@ public class BlogDAO extends DBContext {
                 + "FROM swp391_g1.blog AS t1\n"
                 + "INNER JOIN swp391_g1.user AS t2 ON t2.id = t1.authorid\n"
                 + "INNER JOIN swp391_g1.setting AS t3 ON t3.order = t1.categoryid\n"
-                + "WHERE t3.type='blog' AND t1.id=?;";
+                + "WHERE t3.type='category' AND t1.id=?;";
 //        
         try {
             conn = context.getConnection();
@@ -185,7 +187,7 @@ public class BlogDAO extends DBContext {
 
     public List<Setting> getAllBlogSetting() throws SQLException {
         List<Setting> list = new ArrayList<>();
-        String sql = "select * from swp391_g1.setting WHERE setting.type = 'blog';";
+        String sql = "select * from swp391_g1.setting WHERE setting.type = 'category';";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
@@ -229,11 +231,11 @@ public class BlogDAO extends DBContext {
                 String password = rs.getString("password");
                 String fullname = rs.getString("fullname");
                 String imgUrl = rs.getString("imageurl");
-                String phone =rs.getString("phone");
-                String address =rs.getString("address");
-                boolean confirmation  = rs.getBoolean("confirmation");
-                boolean status =rs.getBoolean("status");
-                boolean gender =rs.getBoolean("gender");
+                String phone = rs.getString("phone");
+                String address = rs.getString("address");
+                boolean confirmation = rs.getBoolean("confirmation");
+                boolean status = rs.getBoolean("status");
+                boolean gender = rs.getBoolean("gender");
                 Date dob = rs.getDate("dob");
                 User u = new User(id, email, password, fullname, imgUrl, phone, address, confirmation, status, gender, dob);
                 list.add(u);

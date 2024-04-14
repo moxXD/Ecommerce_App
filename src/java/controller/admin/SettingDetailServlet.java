@@ -20,7 +20,7 @@ import model.Setting;
  *
  * @author Duc Le
  */
-@WebServlet(name = "SettingDetailServlet", urlPatterns = {"/settingdetail"})
+@WebServlet(name = "SettingDetailServlet", urlPatterns = {"/admin/settingdetail"})
 public class SettingDetailServlet extends HttpServlet {
 
     /**
@@ -83,7 +83,7 @@ public class SettingDetailServlet extends HttpServlet {
                 }
             }
         }
-        request.getRequestDispatcher("admin/settingdetail.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/admin/settingdetail.jsp").forward(request, response);
     }
 
     /**

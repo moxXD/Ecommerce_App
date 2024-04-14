@@ -24,7 +24,7 @@ import model.User;
  *
  * @author Duc Le
  */
-@WebServlet(name = "UserDetailServlet", urlPatterns = {"/userdetail"})
+@WebServlet(name = "UserDetailServlet", urlPatterns = {"/admin/userdetail"})
 public class UserDetailServlet extends HttpServlet {
 
     /**
@@ -95,7 +95,7 @@ public class UserDetailServlet extends HttpServlet {
         request.setAttribute("settingsData", settings);
         request.setAttribute("userData", u);
 
-        request.getRequestDispatcher("admin/userdetail.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/admin/userdetail.jsp").forward(request, response);
     }
 
     /**

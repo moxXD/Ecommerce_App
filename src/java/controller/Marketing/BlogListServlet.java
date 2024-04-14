@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin;
+package controller.Marketing;
 
-import dal.SettingDAO;
+import dal.BlogDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,17 +12,21 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Blog;
 import model.Setting;
+import model.User;
 
 /**
  *
- * @author Duc Le
+ * @author Admin
  */
-@WebServlet(name = "SettingListServlet", urlPatterns = {"/admin/settinglist"})
-public class SettingListServlet extends HttpServlet {
+@WebServlet(name = "ListBlogController", urlPatterns = {"/marketing/bloglist"})
+public class BlogListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +45,10 @@ public class SettingListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SettingListServlet</title>");
+            out.println("<title>Servlet ListBlogController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SettingListServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ListBlogController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,38 +67,47 @@ public class SettingListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int page = 1;
-        int recordPerPage = 3;
-        
+        int recordPerPage = 10;
+        List<Blog> list = new ArrayList<>();
+        List<Setting> setting = new ArrayList<>();
+        List<User> user = new ArrayList<>();
+        BlogDAO blogDAO = new BlogDAO();
         String page_raw = request.getParameter("page");
-        String sortColumn = request.getParameter("sort");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
-        String typeFilter = request.getParameter("filtype");
         String statusFilter = request.getParameter("filstatus");
-        String search = request.getParameter("q");
-
-        SettingDAO setDAO = new SettingDAO();
-        List<String> lst = setDAO.getAllSettingType();
-     
-        if (page_raw != null) {
-            try {
-                page = Integer.parseInt(page_raw);
-            } catch (NumberFormatException e) {
-                Logger.getLogger(e.getMessage());
+        String categoryFilter = request.getParameter("filcate");
+        String authorFilter = request.getParameter("filauthor");
+        String searchQuery = request.getParameter("q");
+        //mapping filter
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            if (statusFilter.equalsIgnoreCase("show")) {
+                statusFilter = "1";
+            } else {
+                statusFilter = "0";
             }
         }
 
-        List<Setting> stList = setDAO.getAllSettingWithFilterAndSearch((page - 1) * recordPerPage, recordPerPage,
-                sortColumn, sortOrder, typeFilter, statusFilter, search);
-        int noOfrecord = setDAO.getNumberOfRecord();
+        if (page_raw != null) {
+            try {
+                page = Integer.parseInt(page_raw);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery);
+            setting = blogDAO.getAllBlogSetting();
+            user = blogDAO.getAllBlogAuthor();
+        } catch (SQLException ex) {
+            Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int noOfrecord = blogDAO.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
-        
-        request.setAttribute("data", stList);
-        request.setAttribute("settingData", lst);
+        request.setAttribute("blogAuthors", user);
+        request.setAttribute("blogList", list);
+        request.setAttribute("settingList", setting);
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
-        request.setAttribute("sortOrder", sortOrder);
-        
-        request.getRequestDispatcher("../views/admin/settinglist.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/marketing/blog/list.jsp").forward(request, response);
     }
 
     /**
