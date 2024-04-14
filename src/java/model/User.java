@@ -35,7 +35,20 @@ public class User {
         this.gender = gender;
         this.dob = dob;
     }
+public User(int id, String email, String password, String fullname, String imgUrl, String phone, String address, boolean confirmation, boolean status, boolean gender, Date dob) {
+        this.id = id;
 
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.imgUrl = imgUrl;
+        this.phone = phone;
+        this.address = address;
+        this.confirmation = confirmation;
+        this.status = status;
+        this.gender = gender;
+        this.dob = dob;
+    }
     public User(int id, Setting setting, String email, String fullname, String phone, boolean status, boolean gender) {
         this.id = id;
         this.setting = setting;
