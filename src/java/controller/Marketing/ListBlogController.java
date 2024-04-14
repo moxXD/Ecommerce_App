@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Blog;
+import model.Setting;
+import model.User;
 
 /**
  *
@@ -65,10 +67,25 @@ public class ListBlogController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int page = 1;
-        int recordPerPage = 8;
+        int recordPerPage = 10;
         List<Blog> list = new ArrayList<>();
+        List<Setting> setting = new ArrayList<>();
+        List<User> user = new ArrayList<>();
         BlogDAO blogDAO = new BlogDAO();
         String page_raw = request.getParameter("page");
+        String statusFilter = request.getParameter("filstatus");
+        String categoryFilter = request.getParameter("filcate");
+        String authorFilter = request.getParameter("filauthor");
+        String searchQuery = request.getParameter("q");
+        //mapping filter
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            if (statusFilter.equalsIgnoreCase("show")) {
+                statusFilter = "1";
+            } else {
+                statusFilter = "0";
+            }
+        }
+
         if (page_raw != null) {
             try {
                 page = Integer.parseInt(page_raw);
@@ -77,13 +94,17 @@ public class ListBlogController extends HttpServlet {
             }
         }
         try {
-            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage);
+            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery);
+            setting = blogDAO.getAllBlogSetting();
+            user = blogDAO.getAllBlogAuthor();
         } catch (SQLException ex) {
             Logger.getLogger(ListBlogController.class.getName()).log(Level.SEVERE, null, ex);
         }
         int noOfrecord = blogDAO.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
+        request.setAttribute("blogAuthors", user);
         request.setAttribute("blogList", list);
+        request.setAttribute("settingList", setting);
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
         request.getRequestDispatcher("views/marketing/blog/list.jsp").forward(request, response);

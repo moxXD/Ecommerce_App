@@ -79,7 +79,7 @@ public class BlogDetailsController extends HttpServlet {
             int authorId = blogDAO.getBlogByID(id).getAuthorId();
             String imgUrl = blogDAO.getBlogByID(id).getImgUrl();
             String title = blogDAO.getBlogByID(id).getTitle();
-            String detail = blogDAO.getBlogByID(id).getTitle();
+            String detail = blogDAO.getBlogByID(id).getDetail();
             boolean status = blogDAO.getBlogByID(id).isStatus();
             Timestamp createTime = blogDAO.getBlogByID(id).getCreateTime();
             Timestamp updateTime = blogDAO.getBlogByID(id).getUpdateTime();

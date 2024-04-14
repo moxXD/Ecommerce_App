@@ -28,7 +28,7 @@ public class BlogDAO extends DBContext {
     private int noOfrecord;
 
     // get list of user with search and filter
-    public List<Blog> getAllBlogPagination(int offset, int limit) throws SQLException {
+    public List<Blog> getAllBlogPagination(int offset, int limit, String cateFilter, String authorFilter, String statusFilter, String searchQuery) throws SQLException {
         List<Blog> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS "
                 + "t3.value, "
@@ -45,46 +45,42 @@ public class BlogDAO extends DBContext {
                 + "FROM swp391_g1.blog AS t1\n"
                 + "INNER JOIN swp391_g1.user AS t2 ON t2.id = t1.authorid\n"
                 + "INNER JOIN swp391_g1.setting AS t3 ON t3.order = t1.categoryid\n"
-                + "WHERE t3.type='blog'\n"
-                + "ORDER BY t1.id ASC \n"
-                + "LIMIT ?, ?;";
+                + "WHERE t3.type='blog'\n";
 //        // add condition for filter
-//        if (genderFilter != null && !genderFilter.isEmpty()) {
-//            sql += " AND user.gender = ? ";
-//        }
-//        if (roleFilter != 0) {
-//            sql += " AND user.roleid = ?";
-//        }
-//        if (statusFilter != null && !statusFilter.isEmpty()) {
-//            sql += " AND user.status = ? ";
-//        }
+        if (cateFilter != null && !cateFilter.isEmpty()) {
+            sql += " AND t3.value = ? ";
+        }
+        if (authorFilter != null && !authorFilter.isEmpty()) {
+            sql += " AND t2.fullname = ?";
+        }
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            sql += " AND t1.status = ? ";
+        }
 //        // add search query
-//        if (searchQuery != null && !searchQuery.isEmpty()) {
-//            sql += " AND (user.email LIKE ? OR user.fullname LIKE ? OR user.phone LIKE ?) ";
-//        }
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql += " AND t1.title LIKE ? OR t3.value LIKE ? OR t2.fullname LIKE ? ";
+        }
         // add sort condition 
-//        sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY " + sortParam + (order ? " ASC" : " DESC") : "")
-//                + " LIMIT ?, ?;"; // pagination
+        sql += " ORDER BY t1.id ASC  LIMIT ?, ?;"; // pagination
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             int paramIndex = 1;
-//        if (genderFilter != null && !genderFilter.isEmpty()) {
-//            stm.setString(paramIndex++, genderFilter);
-//        }
-//        if (roleFilter != 0) {
-//            stm.setInt(paramIndex++, roleFilter);
-//        }
-//        if (statusFilter != null && !statusFilter.isEmpty()) {
-//            stm.setString(paramIndex++, statusFilter);
-//        }
-//        if (searchQuery != null && !searchQuery.isEmpty()) {
-//            String likeParam = "%" + searchQuery + "%";
-//            stm.setString(paramIndex++, likeParam);
-//            stm.setString(paramIndex++, likeParam);
-//            stm.setString(paramIndex++, likeParam);
-//
-//        }
+        if (cateFilter != null && !cateFilter.isEmpty()) {
+            stm.setString(paramIndex++, cateFilter);
+        }
+        if (authorFilter != null && !authorFilter.isEmpty()) {
+            stm.setString(paramIndex++, authorFilter);
+        }
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            stm.setString(paramIndex++, statusFilter);
+        }
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            String likeParam = "%" + searchQuery + "%";
+            stm.setString(paramIndex++, likeParam);
+            stm.setString(paramIndex++, likeParam);
+            stm.setString(paramIndex++, likeParam);
+        }
             stm.setInt(paramIndex++, offset);
             stm.setInt(paramIndex++, limit);
             ResultSet rs = stm.executeQuery();
@@ -200,7 +196,6 @@ public class BlogDAO extends DBContext {
                 String value = rs.getString("value");
                 String type = rs.getString("type");
                 boolean status = rs.getBoolean("status");
-//            Setting st = stDAO.getSettingById(roleId);
                 Setting u = new Setting(id, order, value, type, status);
                 list.add(u);
             }
@@ -212,18 +207,54 @@ public class BlogDAO extends DBContext {
                     conn.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-
                 }
             }
-
         }
+        return list;
+    }
 
+    public List<User> getAllBlogAuthor() throws SQLException {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT SQL_CALC_FOUND_ROWS user.*\n"
+                + "FROM swp391_g1.user\n"
+                + "INNER JOIN swp391_g1.setting ON user.roleid = setting.order\n"
+                + "where setting.value = 'marketing';";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String fullname = rs.getString("fullname");
+                String imgUrl = rs.getString("imageurl");
+                String phone =rs.getString("phone");
+                String address =rs.getString("address");
+                boolean confirmation  = rs.getBoolean("confirmation");
+                boolean status =rs.getBoolean("status");
+                boolean gender =rs.getBoolean("gender");
+                Date dob = rs.getDate("dob");
+                User u = new User(id, email, password, fullname, imgUrl, phone, address, confirmation, status, gender, dob);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return list;
     }
 
     public static void main(String[] args) throws SQLException {
         BlogDAO st = new BlogDAO();
         List<Setting> list = st.getAllBlogSetting();
-        System.out.println("list "+ list.size());
+        System.out.println("list " + list.size());
     }
 }
