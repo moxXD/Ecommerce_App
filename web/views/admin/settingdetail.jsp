@@ -51,13 +51,13 @@
           <![endif]-->
 
         <style type="text/css">
-            .content-container{
-                padding: 0 20% 0 20%;
-            }
+
             .error-msg {
                 color: red;
                 font-size: 12px;
             }
+
+
         </style>
     </head>
     <body>
@@ -121,7 +121,7 @@
                     <c:set value="${requestScope.setting}" var="s"/>
                     <c:set value="${requestScope.disabled}" var="d"/>
 
-                    <div class="container content-container">
+                    <div class="container ">
 
                         <!-- content heading -->
 
@@ -147,14 +147,19 @@
                                 <label for="type" class="col-sm-2 col-form-label">Type:</label>
                                 <div class="col-sm-10">
                                     <c:if test="${requestScope.disabled}">
-                                        <input type="text" class="form-control" 
-                                               id="type" name="type"  disabled>
-
+                                        <select name="type" class="form-control" disabled="">
+                                            <option value="" >${s.type}</option>
+                                        </select>
                                     </c:if>
                                     <c:if test="${!requestScope.disabled}">
-                                        <input type="text" class="form-control" 
-                                               id="type" name="type" value="${s.type}" >
-
+                                        <!--                                        <input type="text" class="form-control" 
+                                                                                       id="type" name="type" value="${s.type}" >-->
+                                        <select name="type" class="form-control">
+                                            <option value="blog" ${s.type=="blog"?"selected":""}>Blog</option>
+                                            <option value="role" ${s.type=="role"?"selected":""}>Role</option>
+                                            <option value="product category" ${s.type.trim()=="product category".trim()?"selected":""}>Product Category</option>
+                                            <option value="brand" ${s.type=="brand"?"selected":""}>Brand</option>
+                                        </select>
                                     </c:if>
                                     <span id="typeError" class="error-msg"></span>
                                 </div>
@@ -167,10 +172,11 @@
                                 <div class="col-sm-10">
                                     <c:if test="${requestScope.disabled}">
                                         <input type="text" class="form-control" 
-                                               id="value" name="value"  disabled>
+                                               id="value" name="value"  disabled 
+                                               value="${s.value}">
 
                                     </c:if>
-                                    <c:if test="${!requestScope.disabled}">
+                                    <c:if test="${!requestScope.disabled }">
                                         <input type="text" class="form-control" 
                                                id="value" name="value" value="${s.value}">
 
@@ -182,16 +188,22 @@
                             <!-- order input -->
 
                             <div class="form-group row">
-                                <label for="order" class="col-sm-2 col-form-label">Order:</label>
+                                <c:if test="${requestScope.disabled}">
+                                    <label for="order" class="col-sm-2 col-form-label">Order:</label>
+                                </c:if>
+                                <c:if test="${!requestScope.disabled && param.action eq 'edit'}">
+                                    <label for="order" class="col-sm-2 col-form-label">Order:</label>
+                                </c:if>
                                 <div class="col-sm-10">
                                     <c:if test="${requestScope.disabled}">
                                         <input type="text" class="form-control" 
-                                               id="order" name="order"  disabled>
+                                               id="order" name="order"  disabled
+                                               value="${s.isOrder()}">
 
                                     </c:if>
-                                    <c:if test="${!requestScope.disabled}">
+                                    <c:if test="${!requestScope.disabled && param.action eq 'edit'}">
                                         <input type="text" class="form-control" 
-                                               id="order" name="order" value="${s.isOrder()}" >
+                                               id="order" name="order" value="${s.isOrder()}" disabled >
 
                                     </c:if>
                                     <span id="orderError" class="error-msg"></span>
@@ -209,7 +221,7 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <c:if test="${requestScope.disabled}">
-                                                    <input  type="checkbox" disabled=""  id="active" name="activecb" onclick="toggleCheckbox(this)" ${s.status == true ? 'checked="true"' : ''} > <span>Active</span>
+                                                    <input  type="checkbox"   id="active" name="activecb" onclick="toggleCheckbox(this)" ${s.status == true ? 'checked="true"' : ''} disabled> <span>Active</span>
 
                                                 </c:if>
                                                 <c:if test="${!requestScope.disabled}">
@@ -223,7 +235,7 @@
 
                                                 </c:if>
                                                 <c:if test="${!requestScope.disabled}">
-                                                    <input  type="checkbox"  id="deactive" name="deactivecb" onclick="toggleCheckbox(this)" ${s.status == false ? 'checked="true"' : ''} disabled><span>Deactive</span>
+                                                    <input  type="checkbox"  id="deactive" name="deactivecb" onclick="toggleCheckbox(this)" ${s.status == false ? 'checked="true"' : ''} ><span>Deactive</span>
 
                                                 </c:if>
                                             </div>
@@ -237,28 +249,35 @@
 
                             <!-- Button -->
 
-                            <div class="form-group row" style="padding: 0 15% 0 15%">
+                            <div class=" form-group row " style="padding: 0 15% 0 15%">
                                 <c:if test="${!requestScope.disabled}">
-                                    <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-primary btn-block">Save</button>
+                                    <div >
+                                        <button  type="submit" class="btn btn-primary btn-block">Save</button>
                                     </div>
                                 </c:if>
                                 <c:if test="${requestScope.disabled}">
-                                    <div class="col-sm-6">
-                                        <button type="button" class="btn btn-primary btn-block" onclick="redirectToEditSetting(${param.id})">Edit</button>
+                                    <div class="col-md-6">
+                                        <button  type="button" class="btn btn-primary btn-block" onclick="redirectToEditSetting(${param.id})">Edit</button>
                                     </div>
                                 </c:if>
                                 <c:if test="${requestScope.disabled}">
-                                    <div class="col-sm-6">
+                                    <div class="col-md-6">
                                         <button type="button" class="btn btn-primary btn-block" onclick="redirectToSettingDetail('add')">Add</button>
                                     </div>
                                 </c:if>
 
                             </div>
                             <div class="form-group row" style="padding: 0 15% 0 15%">
-                                <div class="col-sm-12">
-                                    <button type="button" class="btn btn-danger btn-block" onclick="redirectToSettingList()">Back</button>
-                                </div>
+                                <c:if test="${!requestScope.disabled}">
+                                    <div >
+                                        <button type="button" class="btn btn-danger btn-block" onclick="redirectToSettingList()">Back</button>
+                                    </div>
+                                </c:if>
+                                <c:if test="${requestScope.disabled}">
+                                    <div class="col-sm-12">
+                                        <button type="button" class="btn btn-danger btn-block" onclick="redirectToSettingList()">Back</button>
+                                    </div>
+                                </c:if>
                             </div>
                         </form>
                     </div>    
@@ -281,36 +300,36 @@
             }
             // validate input
             function validateForm() {
-                var type = document.getElementById("type").value;
+//                var type = document.getElementById("type").value;
                 var value = document.getElementById("value").value;
                 var order = document.getElementById("order").value;
 
                 var specialChars = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]/;
 
-                var typeError = document.getElementById("typeError");
+//                var typeError = document.getElementById("typeError");
                 var valueError = document.getElementById("valueError");
                 var orderError = document.getElementById("orderError");
 
                 // Reset previous error messages
-                typeError.innerHTML = '';
+//                typeError.innerHTML = '';
                 valueError.innerHTML = '';
                 orderError.innerHTML = '';
                 checkboxError.innerHTML = '';
 
-                if (specialChars.test(type)) {
-                    typeError.innerHTML = 'Type should not contain special characters.';
-                    return false; // Prevent form submission if type contains special characters
-                }
+//                if (specialChars.test(type)) {
+//                    typeError.innerHTML = 'Type should not contain special characters.';
+//                    return false; // Prevent form submission if type contains special characters
+//                }
 
                 if (specialChars.test(value)) {
                     valueError.innerHTML = 'Value should not contain special characters.';
                     return false; // Prevent form submission if value contains special characters
                 }
 
-                if (type.trim() === '') {
-                    typeError.innerHTML = 'Please enter type.';
-                    return false; // Prevent form submission if type is not entered
-                }
+//                if (type.trim() === '') {
+//                    typeError.innerHTML = 'Please enter type.';
+//                    return false; // Prevent form submission if type is not entered
+//                }
 
                 if (value.trim() === '') {
                     valueError.innerHTML = 'Please enter value.';

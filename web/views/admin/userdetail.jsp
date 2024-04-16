@@ -164,7 +164,8 @@
                                         <select class="form-control" name="role" id="role" ${param.action.equals("view")?"disabled":""}>
                                             <c:forEach items="${requestScope.settingsData}" var="s">
                                                 <c:if test="${s.type.equals('role')}">
-                                                    <option value="${s.id}">${s.value}</option>
+                                                    
+                                                    <option value="${s.id}"${u.setting.id==s.id?"selected":""}>${s.value}</option>
                                                 </c:if>
                                             </c:forEach>
                                         </select>

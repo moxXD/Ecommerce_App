@@ -63,7 +63,7 @@ public class SettingListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int page = 1;
-        int recordPerPage = 3;
+        int recordPerPage = 10;
         
         String page_raw = request.getParameter("page");
         String sortColumn = request.getParameter("sort");

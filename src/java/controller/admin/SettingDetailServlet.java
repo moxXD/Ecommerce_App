@@ -107,24 +107,15 @@ public class SettingDetailServlet extends HttpServlet {
             // add new setting
             String type_raw = request.getParameter("type");
             String value_raw = request.getParameter("value");
-            String order_raw = request.getParameter("order");
-            int order;
 
-            try {
-                if (order_raw != null && !order_raw.isEmpty()) {
-                    order = Integer.parseInt(order_raw);
-                    stDao.insertSetting(type_raw, value_raw, order);
-                    response.sendRedirect("settinglist");
-                }
-            } catch (NumberFormatException e) {
-                Logger.getLogger(SettingDetailServlet.class.getName()).log(Level.SEVERE, null, e);
-            }
+            stDao.insertSetting(type_raw.toLowerCase(), value_raw.toLowerCase());
+            response.sendRedirect("settinglist");
+
         } else {
             String id_raw = request.getParameter("settingId");
             String type_raw = request.getParameter("type");
             String value_raw = request.getParameter("value");
-            String order_raw = request.getParameter("order");
-            int order;
+           
             int id;
             boolean cb = false;
             String active = request.getParameter("activecb");
@@ -137,8 +128,7 @@ public class SettingDetailServlet extends HttpServlet {
             }
             try {
                 id = Integer.parseInt(id_raw);
-                order = Integer.parseInt(order_raw);
-                stDao.updateSettingById(id, type_raw, value_raw, order, cb);
+                stDao.updateSettingById(id, type_raw, value_raw.toLowerCase(), cb);
                 response.sendRedirect("settinglist");
             } catch (NumberFormatException e) {
                 Logger.getLogger(SettingDetailServlet.class.getName()).log(Level.SEVERE, null, e);

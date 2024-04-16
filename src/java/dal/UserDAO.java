@@ -21,6 +21,21 @@ import model.User;
  */
 public class UserDAO {
 
+    private final String USER_TABLE = "user";
+    private final String USER_ID = "id";
+    private final String USER_EMAIL = "email";
+    private final String USER_PASSWORD = "password";
+    private final String USER_SETTING_ID = "setting_id";
+//    private final String USER_SETTING_ID = "roleid";
+
+    private final String USER_STATUS = "status";
+    private final String USER_FULLNAME = "fullname";
+    private final String USER_GENDER = "gender";
+    private final String USER_IMAGE = "imageurl";
+    private final String USER_DOB = "dob";
+    private final String USER_PHONE = "phone";
+    private final String USER_ADDRESS = "address";
+
     DBContext context = new DBContext();
     private Connection conn;
     SettingDAO stDAO = new SettingDAO();
@@ -33,28 +48,28 @@ public class UserDAO {
         List<User> list = new ArrayList<>();
         String sql = "SELECT \n"
                 + "    SQL_CALC_FOUND_ROWS\n"
-                + "    user.id,\n"
-                + "    user.email,\n"
-                + "    user.fullname,\n"
-                + "    user.gender,\n"
-                + "    user.roleid,\n"
-                + "    user.phone,\n"
-                + "    user.status\n"
-                + " FROM swp391_g1.user \n"
+                + USER_ID + ",\n"
+                + USER_EMAIL + ",\n"
+                + USER_FULLNAME + ",\n"
+                + USER_GENDER + ",\n"
+                + USER_SETTING_ID + ",\n"
+                + USER_PHONE + ",\n"
+                + USER_STATUS + "\n"
+                + " FROM " + USER_TABLE + "\n"
                 + " WHERE 1=1 \n";
         // add condition for filter
         if (genderFilter != null && !genderFilter.isEmpty()) {
-            sql += " AND user.gender = ? ";
+            sql += " AND " + USER_GENDER + "= ? ";
         }
         if (roleFilter != 0) {
-            sql += " AND user.roleid = ?";
+            sql += " AND " + USER_SETTING_ID + "= ? ";
         }
         if (statusFilter != null && !statusFilter.isEmpty()) {
-            sql += " AND user.status = ? ";
+            sql += " AND " + USER_STATUS + "= ? ";
         }
         // add search to query
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            sql += " AND (user.email LIKE ? OR user.fullname LIKE ? OR user.phone LIKE ?) ";
+            sql += " AND (" + USER_EMAIL + " LIKE ? OR " + USER_FULLNAME + " LIKE ? OR " + USER_PHONE + " LIKE ?) ";
         }
         // add sort condition 
         sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY " + sortParam + (order ? " ASC" : " DESC") : "")
@@ -86,14 +101,14 @@ public class UserDAO {
 
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String email = rs.getString("email");
-                int roleId = rs.getInt("roleid");
-                boolean status = rs.getBoolean("status");
-                String fullname = rs.getString("fullname");
-                boolean gender = rs.getBoolean("gender");
-                String phone = rs.getString("phone");
-                Setting st = stDAO.getSettingById(roleId);
+                int id = rs.getInt(USER_ID);
+                String email = rs.getString(USER_EMAIL);
+                int settingID = rs.getInt(USER_SETTING_ID);
+                boolean status = rs.getBoolean(USER_STATUS);
+                String fullname = rs.getString(USER_FULLNAME);
+                boolean gender = rs.getBoolean(USER_GENDER);
+                String phone = rs.getString(USER_PHONE);
+                Setting st = stDAO.getSettingById(settingID);
                 User u = new User(id, st, email, fullname, phone, status, gender);
                 list.add(u);
             }
@@ -124,36 +139,36 @@ public class UserDAO {
     // get user by id
     public User getUserById(int id) {
         User u = null;
-        String sql = "SELECT `user`.`id`,\n"
-                + "    `user`.`email`,\n"
-                + "    `user`.`password`,\n"
-                + "    `user`.`roleid`,\n"
-                + "    `user`.`confirmation`,\n"
-                + "    `user`.`status`,\n"
-                + "    `user`.`fullname`,\n"
-                + "    `user`.`gender`,\n"
-                + "    `user`.`imageurl`,\n"
-                + "    `user`.`dob`,\n"
-                + "    `user`.`phone`,\n"
-                + "    `user`.`address`\n"
-                + "FROM `swp391_g1`.`user`\n"
-                + "where `user`.`id`=?;";
+        String sql = "SELECT " + USER_ID + ",\n"
+                + USER_EMAIL + ",\n"
+                + USER_PASSWORD + ",\n"
+                + USER_SETTING_ID + ",\n"
+                + USER_STATUS + ",\n"
+                + USER_FULLNAME + ",\n"
+                + USER_GENDER + ",\n"
+                + USER_IMAGE + ",\n"
+                + USER_DOB + ",\n"
+                + USER_PHONE + ",\n"
+                + USER_ADDRESS + "\n"
+                + "FROM " + USER_TABLE + "\n"
+                + "where " + USER_ID + " = ?;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
+//            System.out.println("sql: "+sql);
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Setting s = stDAO.getSettingById(rs.getInt("roleid"));
+                Setting s = stDAO.getSettingById(rs.getInt(USER_SETTING_ID));
                 u = new User(id,
                         s,
-                        rs.getString("email"),
-                        rs.getString("fullname"),
-                        rs.getString("imageurl"),
-                        rs.getString("phone"),
-                        rs.getString("address"),
-                        rs.getBoolean("status"),
-                        rs.getBoolean("gender"));
+                        rs.getString(USER_EMAIL),
+                        rs.getString(USER_FULLNAME),
+                        rs.getString(USER_IMAGE),
+                        rs.getString(USER_PHONE),
+                        rs.getString(USER_ADDRESS),
+                        rs.getBoolean(USER_STATUS),
+                        rs.getBoolean(USER_GENDER));
             }
         } catch (SQLException e) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -170,12 +185,12 @@ public class UserDAO {
     }
 
     // update user status and role
-    public void updateUserStatusAndRole(int id, int stId,boolean status) {
-        String sql = "UPDATE `swp391_g1`.`user`\n"
+    public void updateUserStatusAndRole(int id, int stId, boolean status) {
+        String sql = "UPDATE %s\n"
                 + "SET\n"
-                + "`roleid` = ?,\n"
-                + "`status` = ?\n"
-                + "WHERE `id` = ?;";
+                + "%s = ?,\n"
+                + "%s = ?\n"
+                + "WHERE %s = ?;".format(USER_TABLE, USER_SETTING_ID, USER_STATUS, USER_ID);
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
@@ -198,11 +213,11 @@ public class UserDAO {
 
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-        User list = dao.getUserById(1);
+        User list = dao.getUserById(94);
         if (list != null) {
             System.out.println("id: " + list.getId());
             System.out.println("name: " + list.getFullname());
-            System.out.println("role: " + list.getSetting().getValue());
+//            System.out.println("role: " + list.getSetting().getValue());
             System.out.println("Email: " + list.getEmail());
             System.out.println("address: " + list.getAddress());
             System.out.println("====================");
