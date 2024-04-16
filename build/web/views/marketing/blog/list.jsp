@@ -108,7 +108,7 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="bloglist" method="post">
+                    <form action="bloglist" method="get">
                         <!--search input-->
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
@@ -118,7 +118,7 @@
                                         class="fa fa-search"></i></button>
                             </span>
                         </div>
-                        <!--gender select-->
+                        <!--status select-->
                         <div class="filter-row">
                             <div class="form-group">
                                 <label for="filstatus">Filter by Status:</label>
@@ -128,7 +128,7 @@
                                     <option value="hide" ${param.filstatus != null && param.filstatus.equals("Hide") ? "selected" : ""}>Hide</option>
                                 </select>
                             </div>
-                            <!--role select-->
+                            <!--category select-->
                             <div class="form-group">
                                 <label for="filcate">Filter by Blog Category:</label>
                                 <select name="filcate" id="filcate" class="form-control">
@@ -141,7 +141,7 @@
                                     </c:forEach>
                                 </select>
                             </div>
-                            <!--status select-->
+                            <!--author select-->
                             <div class="form-group">
                                 <label for="filauthor">Filter by Author: </label>
                                 <select name="filauthor" id="filauthor" class="form-control">
@@ -164,13 +164,32 @@
 
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>ID
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=id">
+                                            <i class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
                                     <th>Thumbnail</th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Author</th>
-                                    <th>Description</th>
-                                    <th>Status</th>
+                                    <th>Title
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=title">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Category
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=value">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Author
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=fullname">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Description
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=detail">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Status
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=status">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -197,7 +216,7 @@
                             <ul class="pagination">
                                 <c:if test="${currentPage > 1}">
                                     <li>
-                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Previous">
+                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.sortOrder}&sort=${param.sort}" aria-label="Previous">
                                             <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
                                         </a>
                                     </li>
@@ -209,14 +228,14 @@
                                             <li class="active"><span>${i}</span></li>
                                                 </c:when>
                                                 <c:otherwise>
-                                            <li><a href="bloglist?page=${i}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}">${i}</a></li>
+                                            <li><a href="bloglist?page=${i}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
 
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
-                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Next">
+                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
                                             <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
                                         </a>
                                     </li>

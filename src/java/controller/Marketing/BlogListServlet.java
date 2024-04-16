@@ -74,11 +74,15 @@ public class BlogListServlet extends HttpServlet {
         List<User> user = new ArrayList<>();
         BlogDAO blogDAO = new BlogDAO();
         SettingDAO settingDAO = new SettingDAO();
+        //filter
         String page_raw = request.getParameter("page");
         String statusFilter = request.getParameter("filstatus");
         String categoryFilter = request.getParameter("filcate");
         String authorFilter = request.getParameter("filauthor");
         String searchQuery = request.getParameter("q");
+        //sort
+        String sortColumn = request.getParameter("sort");
+        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
         //mapping filter
         if (statusFilter != null && !statusFilter.isEmpty()) {
             if (statusFilter.equalsIgnoreCase("show")) {
@@ -96,7 +100,7 @@ public class BlogListServlet extends HttpServlet {
             }
         }
         try {
-            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery);
+            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery, sortColumn, sortOrder);
             setting = settingDAO.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
         } catch (SQLException ex) {

@@ -30,7 +30,8 @@ public class BlogDAO extends DBContext {
     private int noOfrecord;
 
     // get list of user with search and filter
-    public List<Blog> getAllBlogPagination(int offset, int limit, String cateFilter, String authorFilter, String statusFilter, String searchQuery) throws SQLException {
+    public List<Blog> getAllBlogPagination(int offset, int limit, String cateFilter, String authorFilter,
+            String statusFilter, String searchQuery, String sortParam, boolean order) throws SQLException {
         List<Blog> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS "
                 + "t3.value, "
@@ -63,7 +64,7 @@ public class BlogDAO extends DBContext {
             sql += " AND t1.title LIKE ? OR t3.value LIKE ? OR t2.fullname LIKE ? ";
         }
         // add sort condition 
-        sql += " ORDER BY t1.id ASC  LIMIT ?, ?;"; // pagination
+        sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY " + sortParam + (order ? " ASC" : " DESC") : "") + " LIMIT ?, ?;"; // pagination
         try {
             conn = context.getConnection();
 //            System.out.println(sql);
