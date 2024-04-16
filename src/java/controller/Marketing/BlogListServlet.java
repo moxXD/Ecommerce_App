@@ -5,6 +5,7 @@
 package controller.Marketing;
 
 import dal.BlogDAO;
+import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -72,6 +73,7 @@ public class BlogListServlet extends HttpServlet {
         List<Setting> setting = new ArrayList<>();
         List<User> user = new ArrayList<>();
         BlogDAO blogDAO = new BlogDAO();
+        SettingDAO settingDAO = new SettingDAO();
         String page_raw = request.getParameter("page");
         String statusFilter = request.getParameter("filstatus");
         String categoryFilter = request.getParameter("filcate");
@@ -95,7 +97,7 @@ public class BlogListServlet extends HttpServlet {
         }
         try {
             list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery);
-            setting = blogDAO.getAllBlogSetting();
+            setting = settingDAO.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
         } catch (SQLException ex) {
             Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, ex);

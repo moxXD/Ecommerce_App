@@ -46,8 +46,8 @@ public class BlogDAO extends DBContext {
                 + "t1.lastupdate \n"
                 + "FROM swp391_g1.blog AS t1\n"
                 + "INNER JOIN swp391_g1.user AS t2 ON t2.id = t1.authorid\n"
-                + "INNER JOIN swp391_g1.setting AS t3 ON t3.order = t1.categoryid\n"
-                + "WHERE t3.type='category'\n";
+                + "INNER JOIN swp391_g1.setting AS t3 ON t3.id = t1.categoryid\n"
+                + "WHERE t3.type='blog'\n";
 //        // add condition for filter
         if (cateFilter != null && !cateFilter.isEmpty()) {
             sql += " AND t3.value = ? ";
@@ -144,8 +144,8 @@ public class BlogDAO extends DBContext {
                 + "t1.lastupdate \n"
                 + "FROM swp391_g1.blog AS t1\n"
                 + "INNER JOIN swp391_g1.user AS t2 ON t2.id = t1.authorid\n"
-                + "INNER JOIN swp391_g1.setting AS t3 ON t3.order = t1.categoryid\n"
-                + "WHERE t3.type='category' AND t1.id=?;";
+                + "INNER JOIN swp391_g1.setting AS t3 ON t3.id = t1.categoryid\n"
+                + "WHERE t3.type='blog' AND t1.id=?;";
 //        
         try {
             conn = context.getConnection();
@@ -187,7 +187,7 @@ public class BlogDAO extends DBContext {
 
     public List<Setting> getAllBlogSetting() throws SQLException {
         List<Setting> list = new ArrayList<>();
-        String sql = "select * from swp391_g1.setting WHERE setting.type = 'category';";
+        String sql = "select * from swp391_g1.setting WHERE setting.type = 'blog';";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
@@ -219,7 +219,7 @@ public class BlogDAO extends DBContext {
         List<User> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS user.*\n"
                 + "FROM swp391_g1.user\n"
-                + "INNER JOIN swp391_g1.setting ON user.roleid = setting.order\n"
+                + "INNER JOIN swp391_g1.setting ON user.roleid = setting.id\n"
                 + "where setting.value = 'marketing';";
         try {
             conn = context.getConnection();
@@ -252,6 +252,64 @@ public class BlogDAO extends DBContext {
             }
         }
         return list;
+    }
+
+    public void updateBlog(int id, int cateid, int authorid, String title, String content, boolean status) {
+        String sql = "update swp391_g1.blog set \n"
+                + "`title` = ?, \n"
+                + "`authorid` = ? , \n"
+                + "`categoryid` = ? , \n"
+                + "`detail` = ?, \n"
+                + "`status` = ?, \n"
+                + "`lastupdate` = NOW()\n"
+                + "where `id` = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, title);
+            stm.setInt(2, authorid);
+            stm.setInt(3, cateid);
+            stm.setString(4, content);
+            stm.setBoolean(5, status);
+            stm.setInt(6, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
+    public void addNewBlog(int cateid, int authorid, String imgurl, String title, String content, boolean status) {
+        String sql = "insert into `swp391_g1`.`blog`(`categoryid`, `authorid`, `imageurl`, `title`, `detail`, `status`, `createdtime`, `lastupdate`)\n"
+                + "values (?, ?, ?, ?, ?, ?, NOW(), NOW());";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, cateid);
+            stm.setInt(2, authorid);
+            stm.setString(3, imgurl);
+            stm.setString(4, title);
+            stm.setString(5, content);
+            stm.setBoolean(6, status);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
     }
 
     public static void main(String[] args) throws SQLException {

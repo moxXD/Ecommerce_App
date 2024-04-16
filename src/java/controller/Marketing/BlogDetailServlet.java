@@ -5,6 +5,7 @@
 package controller.Marketing;
 
 import dal.BlogDAO;
+import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -67,36 +68,34 @@ public class BlogDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id_view_raw = request.getParameter("viewID");
-        String id_update_raw = request.getParameter("updateID");
+        String id_raw = request.getParameter("ID");
+        String action = request.getParameter("action");
         int id;
         BlogDAO blogDAO = new BlogDAO();
+        SettingDAO settingDAo = new SettingDAO();
         List<Setting> list = new ArrayList<>();
         List<User> user = new ArrayList<>();
         Blog blog = null;
-        if(id_view_raw == null || id_view_raw.isEmpty()){
-            id = Integer.parseInt(id_update_raw);
-        }else{
-            id = Integer.parseInt(id_view_raw);
-        }
-        
         try {
-//Blog Information
-            int categoryId = blogDAO.getBlogByID(id).getCategoryId();
-            int Id = blogDAO.getBlogByID(id).getId();
-            int authorId = blogDAO.getBlogByID(id).getAuthorId();
-            String imgUrl = blogDAO.getBlogByID(id).getImgUrl();
-            String title = blogDAO.getBlogByID(id).getTitle();
-            String detail = blogDAO.getBlogByID(id).getDetail();
-            boolean status = blogDAO.getBlogByID(id).isStatus();
-            Timestamp createTime = blogDAO.getBlogByID(id).getCreateTime();
-            Timestamp updateTime = blogDAO.getBlogByID(id).getUpdateTime();
-            String authorName = blogDAO.getBlogByID(id).getAuthorName();
-            String categoryName = blogDAO.getBlogByID(id).getCategoryName();
-            blog = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName);
+            if (action.equalsIgnoreCase("view") || action.equalsIgnoreCase("update")) {
+                id = Integer.parseInt(id_raw);
+                int categoryId = blogDAO.getBlogByID(id).getCategoryId();
+                int Id = blogDAO.getBlogByID(id).getId();
+                int authorId = blogDAO.getBlogByID(id).getAuthorId();
+                String imgUrl = blogDAO.getBlogByID(id).getImgUrl();
+                String title = blogDAO.getBlogByID(id).getTitle();
+                String detail = blogDAO.getBlogByID(id).getDetail();
+                boolean status = blogDAO.getBlogByID(id).isStatus();
+                Timestamp createTime = blogDAO.getBlogByID(id).getCreateTime();
+                Timestamp updateTime = blogDAO.getBlogByID(id).getUpdateTime();
+                String authorName = blogDAO.getBlogByID(id).getAuthorName();
+                String categoryName = blogDAO.getBlogByID(id).getCategoryName();
+                blog = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName);
 //            -------------------------------
+            }
+//Blog Information
             //Setting information
-            list = blogDAO.getAllBlogSetting();
+            list = settingDAo.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
 
         } catch (Exception e) {
@@ -105,11 +104,7 @@ public class BlogDetailServlet extends HttpServlet {
         request.setAttribute("blogAuthors", user);
         request.setAttribute("settingList", list);
         request.setAttribute("blogdetails", blog);
-        if(id_view_raw == null || id_view_raw.isEmpty()){
-            request.getRequestDispatcher("../views/marketing/blog/update.jsp").forward(request, response);
-        }else{
-            request.getRequestDispatcher("../views/marketing/blog/details.jsp").forward(request, response);
-        }
+        request.getRequestDispatcher("../views/marketing/blog/details.jsp").forward(request, response);
     }
 
     /**
@@ -123,7 +118,54 @@ public class BlogDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("formAction");
+        String id_raw = request.getParameter("blogId");
+        BlogDAO blogDAO = new BlogDAO();
+        if (action != null && action.equalsIgnoreCase("add")) {
+            boolean status;
+            String category_raw = request.getParameter("category");
+            String author_raw = request.getParameter("author");
+            String status_raw = request.getParameter("status");
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            int categoryid = Integer.parseInt(category_raw);
+            int authorid = Integer.parseInt(author_raw);
+            if (status_raw.equals("Show")) {
+                status = true;
+            } else {
+                status = false;
+            }
+            String imgUrl = "http://imageurl.com/" + author_raw;
+            try {
+                blogDAO.addNewBlog(categoryid, authorid, imgUrl, title, content, status);
+            } catch (NumberFormatException e) {
+                Logger.getLogger(BlogDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+            response.sendRedirect("bloglist");
+
+        } else {
+            boolean status;
+            String category_raw = request.getParameter("category");
+            String author_raw = request.getParameter("author");
+            String status_raw = request.getParameter("status");
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            int id = Integer.parseInt(id_raw);
+            int categoryid = Integer.parseInt(category_raw);
+            int authorid = Integer.parseInt(author_raw);
+            if (status_raw.equalsIgnoreCase("show")) {
+                status = true;
+            } else {
+                status = false;
+            }
+            try {
+                blogDAO.updateBlog(id, categoryid, authorid, title, content, status);
+                response.sendRedirect("bloglist");
+            } catch (NumberFormatException e) {
+                Logger.getLogger(BlogDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+
+        }
     }
 
     /**

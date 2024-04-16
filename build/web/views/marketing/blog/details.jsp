@@ -84,21 +84,21 @@
                         </div>
                     </div>
                     <ul class="sidebar-menu">
-<!--                        <li>
+                        <li>
                             <a href="dashboard">
                                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
-                        </li>-->
+                        </li>
                         <li class="active">
-                            <a href="#">
+                            <a href="userlist">
                                 <i class="fa fa-users"></i> <span>Blog List</span>
                             </a>
                         </li>
-<!--                        <li>
+                        <li>
                             <a href="settinglist">
                                 <i class="fa fa-gear"></i> <span>Settings</span>
                             </a>
-                        </li>-->
+                        </li>
 
                     </ul>
                 </section>
@@ -107,55 +107,58 @@
             <aside class="right-side">
                 <section class="content">
                     <div class="container" >
-                        <form action="update" method="post">
-                            <div class="row ">
-                                <div class="col">
-                                    <div class="col-sm-12">
-                                        <div class="blog-post-area">
-                                            <h2 class="title text-center">Blog Details</h2>
+                        <div class="row ">
+                            <div class="col">
+                                <div class="col-sm-12">
+                                    <div class="blog-post-area">
+                                        <h2 class="title text-center">Blog Details</h2>
+
+                                        <form method="post" action="blogdetail">
                                             <c:set var="c" value="${requestScope.blogdetails}" />
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div class="form-group">
+                                                    <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
                                                         <label for="inputLabel1">ID: </label>
-                                                        <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.id}">
+                                                        <input type="text" class="form-control" id="id" ${param.action.equals("view")||param.action.equals("update") ? "readonly": "" }  value="${c.id}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Title</label>
-                                                        <input type="text" class="form-control" id="inputLabel1" value="${c.title}">
+                                                        <input name="title" type="text" class="form-control" id="title" ${param.action.equals("view") ? "readonly": ""} value="${c.title}" >
+                                                        <div id="titleError" style="color: red;"></div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="gender">Category:</label>
-                                                        <select name="gender" class="form-control ">
+                                                        <select ${param.action.equals("view")?"disabled" : ""} name="category" class="form-control ">
                                                             <c:forEach items="${requestScope.settingList}" var="s">
-                                                                <option ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
+                                                                <c:if test="${s.type.equals('blog')}">
+                                                                    <option value="${s.id}" ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
+                                                                </c:if>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Author</label>
-                                                        <select name="gender" class="form-control ">
+                                                        <select name="author" class="form-control" ${param.action.equals("view")?"disabled" : ""}>
                                                             <c:forEach items="${requestScope.blogAuthors}" var="a">
-                                                                <option ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
+                                                                <option value="${a.id}" ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
-                                                    
                                                 </div>
                                                 <!---->
                                                 <div class="form-right">
                                                     <div class="col-md-6">
-                                                        <div class="form-group">
+                                                        <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
                                                             <label for="create_time">Create Time:</label>
                                                             <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.createTime}">
                                                         </div>
-                                                        <div class="form-group">
+                                                        <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
                                                             <label for="update_time">Updated Time:</label>
                                                             <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.updateTime}">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="gender">Status:</label>
-                                                            <select name="gender" class="form-control">
+                                                            <select name="status" class="form-control" ${param.action.equals("view")? "disabled":""}>
                                                                 <option value="Show" ${c.status == true ? "selected" : ""}>Show </option>
                                                                 <option value="Hide" ${c.status == false ? "selected" : ""}>Hide</option>
                                                             </select>
@@ -171,22 +174,28 @@
                                             </div>
                                             <div class="col-md-12" style="margin-bottom: 5%">
                                                 <label for="content">Content:</label>
-                                                <textarea style="height: 500px" class="form-control" >${c.detail}</textarea>
+                                                <textarea name="content" style="height: 500px" class="form-control" ${param.action.equals("view") ? "readonly": ""}>${c.detail}</textarea>
                                             </div>
                                             <div class="row" style="margin-bottom: 5%">
-                                                <div class="col-md-3">
-                                                    <button type="button" class="btn btn-primary btn-block">Save</button>
+                                                <c:if test="${param.action.equals('add')}">
+                                                    <input type="hidden" name="formAction" value="add">
+                                                </c:if>
+                                                <input type="hidden" name="blogId" value="${param.ID}">
+                                                <div class="col-md-3" style="${param.action.equals("view") || param.action.equals("update") ? "display: none;": "" }">
+                                                    <button type="submit" class="btn btn-primary btn-block" id="addButton" onclick="validateInputs(event)">Add</button>
+                                                </div>
+                                                <div class="col-md-3" style="${param.action.equals("view") || param.action.equals("add") ? "display: none;": "" }">
+                                                    <button type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)">Save</button>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <button type="button" class="btn btn-primary btn-block" id="backButton" >Back</button>
                                                 </div>
                                             </div>
-                                            </form>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </section>
             </aside>
@@ -198,6 +207,34 @@
         document.getElementById("backButton").onclick = function () {
             location.href = "bloglist";
         };
+        function validateInputs(event) {
+            var titleInput = document.getElementById("title");
+            var title = titleInput.value.trim();
+
+            // Kiểm tra input không được để trống
+            if (title === "") {
+                alert("Please fill title");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+
+            // Kiểm tra input không ít hơn 10 ký tự
+            if (title.length < 10) {
+                alert("Title must at least 10 characters");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+
+            // Kiểm tra input không chứa ký tự đặc biệt
+            var specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+            if (specialCharacters.test(title)) {
+                alert("Title cannot contain special character");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+
+            // Nếu tất cả điều kiện đều đúng, không cần ngăn chặn hành động mặc định của button
+        }
     </script>
     <!-- jQuery 2.0.2 -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
