@@ -200,35 +200,35 @@ public class BlogDAO extends DBContext {
         return null;
     }
 
-    public List<Setting> getAllBlogSetting() throws SQLException {
-        List<Setting> list = new ArrayList<>();
-        String sql = "SELECT * FROM swp391_g1_v1.setting where `type` = 'blog';";
-        try {
-            conn = context.getConnection();
-            PreparedStatement stm = conn.prepareStatement(sql);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int order = rs.getInt("order");
-                String value = rs.getString("value");
-                String type = rs.getString("type");
-                boolean status = rs.getBoolean("status");
-                Setting u = new Setting(id, order, value, type, status);
-                list.add(u);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return list;
-    }
+//    public List<Setting> getAllBlogSetting() throws SQLException {
+//        List<Setting> list = new ArrayList<>();
+//        String sql = "SELECT * FROM swp391_g1_v1.setting where `type` = 'blog';";
+//        try {
+//            conn = context.getConnection();
+//            PreparedStatement stm = conn.prepareStatement(sql);
+//            ResultSet rs = stm.executeQuery();
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                int order = rs.getInt("order");
+//                String value = rs.getString("value");
+//                String type = rs.getString("type");
+//                boolean status = rs.getBoolean("status");
+//                Setting u = new Setting(id, order, value, type, status);
+//                list.add(u);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (conn != null) {
+//                try {
+//                    conn.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        return list;
+//    }
 
     public List<User> getAllBlogAuthor() throws SQLException {
         List<User> list = new ArrayList<>();
@@ -344,9 +344,9 @@ public class BlogDAO extends DBContext {
         }
     }
 
-    public static void main(String[] args) throws SQLException {
-        BlogDAO st = new BlogDAO();
-        List<Setting> list = st.getAllBlogSetting();
-        System.out.println("list " + list.size());
-    }
+//    public static void main(String[] args) throws SQLException {
+//        BlogDAO st = new BlogDAO();
+//        List<Setting> list = st.getAllBlogSetting();
+//        System.out.println("list " + list.size());
+//    }
 }

@@ -210,7 +210,7 @@ public class SettingDAO {
                 + "    `setting`.`value`,\n"
                 + "    `setting`.`order`,\n"
                 + "    `setting`.`status`\n"
-                + "FROM `swp391_g1`.`setting`\n"
+                + "FROM `swp391_g1_v1`.`setting`\n"
                 + "";
         try {
             conn = context.getConnection();

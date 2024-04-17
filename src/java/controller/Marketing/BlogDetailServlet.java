@@ -97,7 +97,7 @@ public class BlogDetailServlet extends HttpServlet {
             }
 //Blog Information
             //Setting information
-            list = blogDAO.getAllBlogSetting();
+            list = settingDAo.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
 
         } catch (Exception e) {

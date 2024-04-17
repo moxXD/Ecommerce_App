@@ -174,29 +174,29 @@
                             <thead>
                                 <tr>
                                     <th>ID
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=id">
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=id">
                                             <i class="fa fa-sort"></i>
                                         </a>
                                     </th>
                                     <th>Thumbnail</th>
                                     <th>Title
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=title">
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=title">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
                                     <th>Category
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=value">
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=value">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
                                     <th>Author
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=fullname">
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
                                     <th>Feature
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=is_featured">
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=is_featured">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
                                     <th>Status
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=status">
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
                                     <th>Action</th>
@@ -225,7 +225,7 @@
                             <ul class="pagination">
                                 <c:if test="${currentPage > 1}">
                                     <li>
-                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.sortOrder}&sort=${param.sort}" aria-label="Previous">
+                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Previous">
                                             <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
                                         </a>
                                     </li>
