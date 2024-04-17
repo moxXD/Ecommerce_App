@@ -186,7 +186,7 @@
                                             <select name="status" class="form-control" >
                                                 <option value="">Select Status</option>
                                                 <option value="true" ${u.status?"selected":""}>Active</option>
-                                                <option value="false" ${u.status!=null &&!u.status?"selected":""}>Inactive</option>
+                                                <option value="false" ${u.status==false?"selected":""}>Inactive</option>
                                             </select>
 
                                         </div>
@@ -203,12 +203,7 @@
                                     <input type="hidden" name="userId" value="${param.id}">
                                     <div class="row text-center" style="margin: 3% 0  3% 0">
                                         <div class="col-sm-6 ">
-                                            <c:if test="${param.action.equals('view')}">
-                                                <button type="button" class="btn btn-primary btn-block" onclick="redirectToEdit(${param.id})">Edit</button>
-                                            </c:if>
-                                            <c:if test="${!param.action.equals('view')}">
-                                                <button type="submit" class="btn btn-primary btn-block" >Save</button>
-                                            </c:if>
+                                            <button type="submit" class="btn btn-primary btn-block" >Save</button>
                                         </div>
 
                                         <c:if test="${!param.action.equals('add')}">

@@ -115,20 +115,12 @@ public class SettingDetailServlet extends HttpServlet {
             String id_raw = request.getParameter("settingId");
             String type_raw = request.getParameter("type");
             String value_raw = request.getParameter("value");
-           
             int id;
-            boolean cb = false;
-            String active = request.getParameter("activecb");
-            String deactive = request.getParameter("deactivecb");
-            if (active != null && active.equals("on")) {
-                cb = true;
-            }
-            if (deactive != null && deactive.equals("on")) {
-                cb = false;
-            }
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
+
             try {
                 id = Integer.parseInt(id_raw);
-                stDao.updateSettingById(id, type_raw, value_raw.toLowerCase(), cb);
+                stDao.updateSettingById(id, type_raw, value_raw.toLowerCase(), status);
                 response.sendRedirect("settinglist");
             } catch (NumberFormatException e) {
                 Logger.getLogger(SettingDetailServlet.class.getName()).log(Level.SEVERE, null, e);

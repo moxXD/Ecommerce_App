@@ -119,7 +119,7 @@
             <aside class="right-side">
                 <section class="content">
                     <c:set value="${requestScope.setting}" var="s"/>
-                    <c:set value="${requestScope.disabled}" var="d"/>
+            
 
                     <div class="container ">
 
@@ -146,21 +146,16 @@
                             <div class="form-group row">
                                 <label for="type" class="col-sm-2 col-form-label">Type:</label>
                                 <div class="col-sm-10">
-                                    <c:if test="${requestScope.disabled}">
-                                        <select name="type" class="form-control" disabled="">
-                                            <option value="" >${s.type}</option>
-                                        </select>
-                                    </c:if>
-                                    <c:if test="${!requestScope.disabled}">
-                                        <!--                                        <input type="text" class="form-control" 
-                                                                                       id="type" name="type" value="${s.type}" >-->
-                                        <select name="type" class="form-control">
-                                            <option value="blog" ${s.type=="blog"?"selected":""}>Blog</option>
-                                            <option value="role" ${s.type=="role"?"selected":""}>Role</option>
-                                            <option value="product category" ${s.type.trim()=="product category".trim()?"selected":""}>Product Category</option>
-                                            <option value="brand" ${s.type=="brand"?"selected":""}>Brand</option>
-                                        </select>
-                                    </c:if>
+
+                                    <!--                                        <input type="text" class="form-control" 
+                                                                                   id="type" name="type" value="${s.type}" >-->
+                                    <select name="type" class="form-control">
+                                        <option value="blog" ${s.type=="blog"?"selected":""}>Blog</option>
+                                        <option value="role" ${s.type=="role"?"selected":""}>Role</option>
+                                        <option value="product category" ${s.type.trim()=="product category".trim()?"selected":""}>Product Category</option>
+                                        <option value="brand" ${s.type=="brand"?"selected":""}>Brand</option>
+                                    </select>
+
                                     <span id="typeError" class="error-msg"></span>
                                 </div>
                             </div>  
@@ -170,17 +165,11 @@
                             <div class="form-group row">
                                 <label for="value" class="col-sm-2 col-form-label">Value:</label>
                                 <div class="col-sm-10">
-                                    <c:if test="${requestScope.disabled}">
-                                        <input type="text" class="form-control" 
-                                               id="value" name="value"  disabled 
-                                               value="${s.value}">
 
-                                    </c:if>
-                                    <c:if test="${!requestScope.disabled }">
-                                        <input type="text" class="form-control" 
-                                               id="value" name="value" value="${s.value}">
 
-                                    </c:if>
+                                    <input type="text" class="form-control" 
+                                           id="value" name="value" value="${s.value}">
+
                                     <span id="valueError" class="error-msg"></span>
                                 </div>
                             </div>
@@ -191,9 +180,7 @@
                                 <c:if test="${requestScope.disabled}">
                                     <label for="order" class="col-sm-2 col-form-label">Order:</label>
                                 </c:if>
-                                <c:if test="${!requestScope.disabled && param.action eq 'edit'}">
-                                    <label for="order" class="col-sm-2 col-form-label">Order:</label>
-                                </c:if>
+                                
                                 <div class="col-sm-10">
                                     <c:if test="${requestScope.disabled}">
                                         <input type="text" class="form-control" 
@@ -201,11 +188,7 @@
                                                value="${s.isOrder()}">
 
                                     </c:if>
-                                    <c:if test="${!requestScope.disabled && param.action eq 'edit'}">
-                                        <input type="text" class="form-control" 
-                                               id="order" name="order" value="${s.isOrder()}" disabled >
-
-                                    </c:if>
+                            
                                     <span id="orderError" class="error-msg"></span>
 
                                 </div>
@@ -218,29 +201,11 @@
                                     <label for="status" class="col-sm-2 col-form-label">Status:</label>
 
                                     <div class="col-sm-10">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <c:if test="${requestScope.disabled}">
-                                                    <input  type="checkbox"   id="active" name="activecb" onclick="toggleCheckbox(this)" ${s.status == true ? 'checked="true"' : ''} disabled> <span>Active</span>
-
-                                                </c:if>
-                                                <c:if test="${!requestScope.disabled}">
-                                                    <input  type="checkbox"  id="active" name="activecb" onclick="toggleCheckbox(this)" ${s.status == true ? 'checked="true"' : ''} > <span>Active</span>
-
-                                                </c:if>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <c:if test="${requestScope.disabled}">
-                                                    <input  type="checkbox"  id="deactive" name="deactivecb" onclick="toggleCheckbox(this)" ${s.status == false ? 'checked="true"' : ''} disabled><span>Deactive</span>
-
-                                                </c:if>
-                                                <c:if test="${!requestScope.disabled}">
-                                                    <input  type="checkbox"  id="deactive" name="deactivecb" onclick="toggleCheckbox(this)" ${s.status == false ? 'checked="true"' : ''} ><span>Deactive</span>
-
-                                                </c:if>
-                                            </div>
-
-                                        </div>
+                                        <select name="status" class="form-control">
+                                            <option value="">Select Status</option>
+                                            <option value="true" ${s.status?"selected":""}>Active</option>
+                                            <option value="false" ${!s.status?"selected":""}>Inactive</option>
+                                        </select>
                                     </div>
                                 </c:if>
                                 <span id="checkboxError" class="error-msg"></span>
@@ -250,14 +215,10 @@
                             <!-- Button -->
 
                             <div class=" form-group row " style="padding: 0 15% 0 15%">
-                                <c:if test="${!requestScope.disabled}">
-                                    <div >
-                                        <button  type="submit" class="btn btn-primary btn-block">Save</button>
-                                    </div>
-                                </c:if>
+                                
                                 <c:if test="${requestScope.disabled}">
                                     <div class="col-md-6">
-                                        <button  type="button" class="btn btn-primary btn-block" onclick="redirectToEditSetting(${param.id})">Edit</button>
+                                         <button  type="submit" class="btn btn-primary btn-block">Save</button>
                                     </div>
                                 </c:if>
                                 <c:if test="${requestScope.disabled}">
@@ -290,70 +251,29 @@
                 // redirect to setting detail with action
                 window.location.href = 'settingdetail?action=' + action;
             }
-            function redirectToEditSetting(id) {
-                // redirect to setting detail with action edit
-                window.location.href = 'settingdetail?action=edit&id=' + id;
-            }
+            
             function redirectToSettingList() {
                 // redirect to setting list
                 window.location.href = 'settinglist';
             }
             // validate input
             function validateForm() {
-//                var type = document.getElementById("type").value;
                 var value = document.getElementById("value").value;
-                var order = document.getElementById("order").value;
-
                 var specialChars = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]/;
-
-//                var typeError = document.getElementById("typeError");
                 var valueError = document.getElementById("valueError");
-                var orderError = document.getElementById("orderError");
 
-                // Reset previous error messages
-//                typeError.innerHTML = '';
                 valueError.innerHTML = '';
-                orderError.innerHTML = '';
-                checkboxError.innerHTML = '';
 
-//                if (specialChars.test(type)) {
-//                    typeError.innerHTML = 'Type should not contain special characters.';
-//                    return false; // Prevent form submission if type contains special characters
-//                }
 
                 if (specialChars.test(value)) {
                     valueError.innerHTML = 'Value should not contain special characters.';
                     return false; // Prevent form submission if value contains special characters
                 }
 
-//                if (type.trim() === '') {
-//                    typeError.innerHTML = 'Please enter type.';
-//                    return false; // Prevent form submission if type is not entered
-//                }
-
                 if (value.trim() === '') {
                     valueError.innerHTML = 'Please enter value.';
                     return false; // Prevent form submission if value is not entered
                 }
-
-                if (order.trim() === '') {
-                    orderError.innerHTML = 'Please enter order.';
-                    return false; // Prevent form submission if order is not entered
-                }
-
-                if (isNaN(order)) {
-                    orderError.innerHTML = 'Order must be a number.';
-                    return false; // Prevent form submission if order is not a number
-                }
-                // Check if at least one checkbox is checked
-                var activeCheckbox = document.getElementById("active");
-                var deactiveCheckbox = document.getElementById("deactive");
-
-                if (!activeCheckbox.checked && !deactiveCheckbox.checked) {
-                    checkboxError.innerHTML = 'Please select at least one status.';
-                    return false; // Prevent form submission if neither checkbox is checked
-                }
-                // Check other conditions if necessary
 
                 return true; // Allow form submission if all conditions are met
             }

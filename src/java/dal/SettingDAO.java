@@ -255,7 +255,7 @@ public class SettingDAO {
                 + "FROM " + SETTING_TABLE + ";";
         try {
             conn = context.getConnection();
-            System.out.println("sql: " + sql);
+//            System.out.println("sql: " + sql);
             PreparedStatement stm = conn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
 

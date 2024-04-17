@@ -80,7 +80,8 @@ public class UserListServlet extends HttpServlet {
         String roleFilter_raw = request.getParameter("filrole");
         String statusFilter = request.getParameter("filstatus");
         String searchQuery = request.getParameter("q");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
+        boolean sortOrder = request.getParameter("order") != null 
+                ? Boolean.parseBoolean(request.getParameter("order")):false ;
 
         if (genderFilter != null && !genderFilter.isEmpty()) {
             if (genderFilter.equalsIgnoreCase("male")) {
@@ -145,11 +146,7 @@ public class UserListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id_raw = request.getParameter("userId");
-        Logger log=Logger.getLogger("vao post");
-        log.info("hello");
-
         try {
-            System.out.println("here1=================");
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
             int id = Integer.parseInt(id_raw);
             

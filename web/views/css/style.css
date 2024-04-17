@@ -4258,11 +4258,7 @@ li.dropdown-header {
     margin-right: 10px;
     flex: 1; /* Điều chỉnh tỷ lệ chiều rộng của các select box */
 }
-.pagination {
-    margin-top: 20px;
-    text-align: center;
-    
-}
+
 
 .pagination li {
     display: inline;

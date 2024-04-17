@@ -170,12 +170,13 @@ public class UserDetailServlet extends HttpServlet {
         } else {
             String role_raw = request.getParameter("role");
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
+            System.out.println("status: "+status);
 //            String deactiveCb = request.getParameter("deactivatecb");
-            int roleId, id;
+            int  id;
             try {
                 id=Integer.parseInt(id_raw);
                 Setting s=new SettingDAO().getSettingByTypeAndValue("role", role_raw);
-                if (!status) {
+                if (status) {
                     userDao.updateUserStatusAndRole(id, s.getId(), true);
                 } else {
                     userDao.updateUserStatusAndRole(id, s.getId(), false);

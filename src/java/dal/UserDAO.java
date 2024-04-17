@@ -186,17 +186,20 @@ public class UserDAO {
 
     // update user status and role
     public void updateUserStatusAndRole(int id, int stId, boolean status) {
-        String sql = "UPDATE %s\n"
+        String sql = "UPDATE " + USER_TABLE + "\n"
                 + "SET\n"
-                + "%s = ?,\n"
-                + "%s = ?\n"
-                + "WHERE %s = ?;".format(USER_TABLE, USER_SETTING_ID, USER_STATUS, USER_ID);
+                + USER_SETTING_ID + "= ?,\n"
+                + USER_STATUS + " = ?\n"
+                + "WHERE " + USER_ID + " = ?;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
+            System.out.println("==========");
+
             stm.setInt(1, stId);
             stm.setBoolean(2, status);
             stm.setInt(3, id);
+            System.out.println("sql:" + stm.toString());
             stm.executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -213,10 +216,10 @@ public class UserDAO {
 
     // update user status
     public void updateUserStatus(int id, boolean status) {
-        String sql = "UPDATE "+USER_TABLE+"\n"
+        String sql = "UPDATE " + USER_TABLE + "\n"
                 + "SET\n"
-                + USER_STATUS+"= ?\n"
-                + "WHERE "+USER_ID+"= ?;";
+                + USER_STATUS + "= ?\n"
+                + "WHERE " + USER_ID + "= ?;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
@@ -288,7 +291,7 @@ public class UserDAO {
 
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-        dao.updateUserStatus(1,true);
-        
+        dao.updateUserStatus(1, true);
+
     }
 }
