@@ -1,2 +1,4 @@
 /dist/
 /build/
+web/views/admin/newjsp.jsp
+src/java/controller/admin/UploadServlet.java

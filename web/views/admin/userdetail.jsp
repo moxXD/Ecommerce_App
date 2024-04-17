@@ -50,15 +50,12 @@
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <!-- Theme style -->
         <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" type="text/css" />
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-
-
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-  <![endif]-->
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
         <style type="text/css">
 
@@ -129,10 +126,17 @@
                         <!--heading-->
                         <h2 class="mb-4">User Detail</h2>
                         <div class="row">
-                            <form method="post" action="userdetail">
+                            <form method="post" action="userdetail" enctype="multipart/form-data">
                                 <!--avatar-->
                                 <div class="col-md-4">
-                                    <img src="${u.imgUrl}" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                    <c:if test="${u==null}">
+
+                                        <img id="img-preview" src="${pageContext.request.contextPath}/views/img/14162.png" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                    </c:if>
+                                    <c:if test="${u!=null}">
+                                        <img src="C:\Program Files\Apache Software Foundation\Tomcat 10.0\bin\images\WIN_20240409_18_46_42_Pro.jpg" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                    </c:if>
+                                    <input type="file" name="file" id="file-input" accept="image/*">
                                 </div>
                                 <div class="col-md-8">
                                     <!--full name-->
@@ -144,8 +148,9 @@
                                     <div class="form-group">
                                         <label for="gender">Gender:</label>
                                         <select class="form-control" name="gender" id="gender" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                            <option value="">Select Gender</option>
                                             <option value="true" ${u.gender?"selected":""}>Male</option>
-                                            <option value="false" ${!u.gender?"selected":""}>Female</option>
+                                            <option value="false" ${u.gender!=null &&!u.gender?"selected":""}>Female</option>
                                         </select>
                                     </div>
                                     <!--email-->
@@ -161,11 +166,10 @@
                                     <!--role-->
                                     <div class="form-group">
                                         <label for="role">Role</label>
-                                        <select class="form-control" name="role" id="role" ${param.action.equals("view")?"disabled":""}>
+                                        <select class="form-control" name="role" id="role" >
                                             <c:forEach items="${requestScope.settingsData}" var="s">
                                                 <c:if test="${s.type.equals('role')}">
-                                                    
-                                                    <option value="${s.id}"${u.setting.id==s.id?"selected":""}>${s.value}</option>
+                                                    <option value="${s.value}"${u.setting.id==s.id?"selected":""}>${s.value}</option>
                                                 </c:if>
                                             </c:forEach>
                                         </select>
@@ -178,26 +182,26 @@
                                     <!--status-->
                                     <div class="form-group">
                                         <label for="status-group"  class="form-check-label">Status</label>
-                                        <div class="form-check row"  id="status-group">
-                                            <div class="col-sm-6">
-                                                <input class="form-check-input" type="checkbox" onclick="toggleCheckbox(this)" 
-                                                       id="active" name="activecb" ${u.status?"checked":""} 
-                                                       ${param.action.equals("view")?"disabled":""}> Active
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input class="form-check-input" type="checkbox" onclick="toggleCheckbox(this)" 
-                                                       id="deactive" name="deactivatecb" ${!u.status?"checked":""} 
-                                                       ${param.action.equals("view")?"disabled":""}> Deactivate
-                                            </div>
+                                        <div  id="status-group">
+                                            <select name="status" class="form-control" >
+                                                <option value="">Select Status</option>
+                                                <option value="true" ${u.status?"selected":""}>Active</option>
+                                                <option value="false" ${u.status!=null &&!u.status?"selected":""}>Inactive</option>
+                                            </select>
+
                                         </div>
                                     </div>
-
+                                    <div class="form-group">
+                                        <label for="dob"  class="form-check-label">Date Of Birth</label>
+                                        <input type="date" name="dob" class="form-control" id="dob" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                    </div>
                                     <!--button group-->
                                     <c:if test="${param.action.equals('add')}">
+
                                         <input type="hidden" name="formAction" value="add">
                                     </c:if>
                                     <input type="hidden" name="userId" value="${param.id}">
-                                    <div class="row text-center">
+                                    <div class="row text-center" style="margin: 3% 0  3% 0">
                                         <div class="col-sm-6 ">
                                             <c:if test="${param.action.equals('view')}">
                                                 <button type="button" class="btn btn-primary btn-block" onclick="redirectToEdit(${param.id})">Edit</button>
@@ -206,12 +210,25 @@
                                                 <button type="submit" class="btn btn-primary btn-block" >Save</button>
                                             </c:if>
                                         </div>
-                                        <div class="col-sm-6 ">
-                                            <button type="button" class="btn btn-primary btn-block" onclick="redirectToAdd()">Add</button>
-                                        </div>
-                                        <div class="col-sm-12 " style="margin:1% 0 5% 0">
-                                            <button type="button" class="btn btn-danger btn-block " onclick="redirectToUserList()">Back</button>
-                                        </div>
+
+                                        <c:if test="${!param.action.equals('add')}">
+                                            <div class="col-sm-6 ">
+                                                <button type="button" class="btn btn-primary btn-block" onclick="redirectToAdd()">Add</button>
+                                            </div>
+                                        </c:if>
+
+
+                                        <c:if test="${!param.action.equals('add')}">
+                                            <div class="col-sm-12 " style="margin:1% 0 5% 0">
+                                                <button type="button" class="btn btn-danger btn-block " onclick="redirectToUserList()">Back</button>
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${param.action.equals('add')}">
+                                            <div class="col-sm-6 " >
+                                                <button type="button" class="btn btn-danger btn-block " onclick="redirectToUserList()">Back</button>
+                                            </div>
+                                        </c:if>
+
                                     </div>
                                 </div>
                         </div>
@@ -224,42 +241,33 @@
 
     <%@include file="../layout/footer.jsp" %>
     <script type="text/javascript">
+        function redirectToEdit(id) {
+            window.location.href = "userdetail?action=edit&id=" + id;
+        }
         function redirectToUserList() {
-            window.location.href = 'userlist';
+            window.location.href = "userlist";
         }
         function redirectToAdd() {
-            window.location.href = 'userdetail?action=add';
-        }
-        function redirectToEdit(id) {
-            window.location.href = 'userdetail?action=edit&id=' + id;
-        }
-        function toggleCheckbox(checkbox) {
-            // Get the ID of the other checkbox
-            var otherCheckboxId = (checkbox.id === 'active') ? 'deactive' : 'active';
-            // Get the other checkbox element
-            var otherCheckbox = document.getElementById(otherCheckboxId);
+            window.location.href = "userdetail?action=add";
 
-            // If the current checkbox is checked
-            if (checkbox.checked) {
-                // Uncheck the other checkbox
-                otherCheckbox.checked = false;
-            } else {
-                // If both checkboxes are unchecked
-                if (!otherCheckbox.checked) {
-                    // Perform the desired action when both checkboxes are unchecked
-                    console.log("Neither checkbox is checked");
-                    // Change the state of the current checkbox to checked
-                    checkbox.checked = true;
-                }
+        }
+        const input = document.getElementById('file-input');
+        const image = document.getElementById('img-preview');
+
+        input.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                const src = URL.createObjectURL(e.target.files[0]);
+                image.src = src;
             }
-        }
+        });
 
     </script>
-    <script type="text/javascript">
-        document.getElementById("backButton").onclick = function () {
-            location.href = "userlist";
-        };
-    </script>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
     <!-- jQuery 2.0.2 -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/views/js/jquery.min.js"

@@ -223,7 +223,11 @@
                                         <td>${u.status?"Active":"Inactive"}</td>
                                         <td><a href="userdetail?action=view&id=${u.id}">View</a> 
                                             &nbsp;
-                                            <a href="userdetail?action=edit&id=${u.id}">Edit</a> 
+                                            <form action="userlist">
+                                                <input type="hidden" name="userId" value="${u.id}">
+                                                <input type="hidden" name="status" value="${u.status?true:false}">
+                                                <input type="submit" value="${!u.status?"Activate":"Deactivate"}" />
+                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -270,10 +274,10 @@
         </div>
 
 
-                                        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../layout/footer.jsp" %>
         <script type="text/javascript">
-            function redirectToAddUser(){
-                window.location.href='userdetail?action=add';
+            function redirectToAddUser() {
+                window.location.href = 'userdetail?action=add';
             }
         </script>
         <!-- jQuery 2.0.2 -->

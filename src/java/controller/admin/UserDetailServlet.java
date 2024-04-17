@@ -9,22 +9,37 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Date;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Setting;
 import model.User;
+import service.EmailService;
+import utility.Encode;
 
 /**
  *
  * @author Duc Le
  */
 @WebServlet(name = "UserDetailServlet", urlPatterns = {"/admin/userdetail"})
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class UserDetailServlet extends HttpServlet {
 
     /**
@@ -113,45 +128,57 @@ public class UserDetailServlet extends HttpServlet {
         String id_raw = request.getParameter("userId");
         UserDAO userDao = new UserDAO();
         if (action != null && action.equals("add")) {
-            int roleId, id;
-            boolean status = false;
-            boolean gender;
+
             // get all parameter
             String role_raw = request.getParameter("role");
-            String activeCb = request.getParameter("activecb");
-            if (activeCb != null && activeCb.equals("on")) {
-                status = true;
-            }
-            String fullName_raw = request.getParameter("fullname");
-            String gender_raw = request.getParameter("gender");
-            String email_raw = request.getParameter("email");
-            String phone_raw = request.getParameter("phone");
-            String address_raw = request.getParameter("address");
+            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
             // convert parameter
             try {
-                gender=Boolean.parseBoolean(gender_raw);
-                roleId = Integer.parseInt(role_raw);
-                // get image url
-                // get dob
-                // generate random password
-                // confirmation?
-            } catch (NumberFormatException e ) {
+                // Lưu file tải lên và nhận đường dẫn lưu trữ
+                String uploadDirectory = "images";
+
+                String imgUrl = "../image/" + saveUploadedFile(request.getPart("file"), uploadDirectory);
+                String fullName = request.getParameter("fullname");
+                String email = request.getParameter("email");
+                String phone = request.getParameter("mobile");
+                String address = request.getParameter("address");
+                String dob = request.getParameter("dob");
+                Date newDob = Date.valueOf(dob);
+                /// Sinh mật khẩu ngẫu nhiên và gửi qua email
+                String password = new Encode().generateRandomPassword(12);
+                String hashed= new Encode().toSHA1(password);
+                new EmailService().sendNewPassword(fullName, email, password);
+
+                // Lấy role từ database
+                SettingDAO settingDAO = new SettingDAO();
+                Setting role = settingDAO.getSettingByTypeAndValue("role", role_raw);
+
+                User u = new User(0, role, email, hashed,
+                        fullName, imgUrl, phone, address, true, status, gender, newDob);
+                try {
+                    userDao.insertUser(u);
+                } catch (Exception e) {
+                    Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+
+                }
+
+                response.sendRedirect("userlist");
+            } catch (NumberFormatException e) {
                 Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
             }
-            
-            // redirect to user list
         } else {
             String role_raw = request.getParameter("role");
-            String activeCb = request.getParameter("activecb");
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
 //            String deactiveCb = request.getParameter("deactivatecb");
             int roleId, id;
             try {
-                id = Integer.parseInt(id_raw);
-                roleId = Integer.parseInt(role_raw);
-                if (activeCb != null && activeCb.equals("on")) {
-                    userDao.updateUserStatusAndRole(id, roleId, true);
+                id=Integer.parseInt(id_raw);
+                Setting s=new SettingDAO().getSettingByTypeAndValue("role", role_raw);
+                if (!status) {
+                    userDao.updateUserStatusAndRole(id, s.getId(), true);
                 } else {
-                    userDao.updateUserStatusAndRole(id, roleId, false);
+                    userDao.updateUserStatusAndRole(id, s.getId(), false);
                 }
                 response.sendRedirect("userlist");
             } catch (NumberFormatException e) {
@@ -172,4 +199,32 @@ public class UserDetailServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private String getFileName(final Part part) {
+        final String partHeader = part.getHeader("content-disposition");
+        for (String content : partHeader.split(";")) {
+            if (content.trim().startsWith("filename")) {
+                return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return null;
+    }
+
+    // Phương thức xử lý ghi file tải lên
+    private String saveUploadedFile(Part filePart, String uploadDirectory) {
+        String fileName = getFileName(filePart);
+        if (fileName != null) {
+            try ( InputStream inputStream = filePart.getInputStream()) {
+                File uploadDir = new File(uploadDirectory);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+                File file = new File(uploadDir, fileName);
+                Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                return file.getAbsolutePath();
+            } catch (IOException e) {
+                Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+        return null;
+    }
 }

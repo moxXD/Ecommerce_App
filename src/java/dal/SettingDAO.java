@@ -64,6 +64,41 @@ public class SettingDAO {
         return st;
     }
 
+    // get setting by type and value
+    public Setting getSettingByTypeAndValue(String type, String value) {
+        Setting s = null;
+        String sql = "SELECT * FROM " + SETTING_TABLE + " WHERE " + SETTING_TYPE + "=? AND "
+                + SETTING_VALUE + "=?";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, type);
+            stm.setString(2, value);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int stId = rs.getInt(SETTING_ID);
+                String v = rs.getString(SETTING_VALUE);
+                String t = rs.getString(SETTING_TYPE);
+                boolean status = rs.getBoolean(SETTING_STATUS);
+                int order = rs.getInt(SETTING_ORDER);
+                s = new Setting(stId, order, v, t, status);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+
+                }
+            }
+        }
+        return s;
+    }
+
     // get role id
     public List<Setting> getRoleId() {
         List<Setting> st = new ArrayList<>();
@@ -342,7 +377,7 @@ public class SettingDAO {
         SettingDAO st = new SettingDAO();
         Setting s = st.getSettingById(1);
         System.out.println("id: " + s.getId());
-            System.out.println("value: " + s.getValue());
+        System.out.println("value: " + s.getValue());
         System.out.println("s:" + s);
 //        List<Setting> list = st.();
 //        for (Setting setting : list) {

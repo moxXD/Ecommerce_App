@@ -211,16 +211,84 @@ public class UserDAO {
         }
     }
 
+    // update user status
+    public void updateUserStatus(int id, boolean status) {
+        String sql = "UPDATE "+USER_TABLE+"\n"
+                + "SET\n"
+                + USER_STATUS+"= ?\n"
+                + "WHERE "+USER_ID+"= ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setBoolean(1, status);
+            stm.setInt(2, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
+    public void insertUser(User u) {
+        String sql = "INSERT INTO " + USER_TABLE + "\n ("
+                + USER_EMAIL + ",\n"
+                + USER_PASSWORD + ",\n"
+                + USER_SETTING_ID + ",\n"
+                + USER_STATUS + ",\n"
+                + USER_FULLNAME + ",\n"
+                + USER_GENDER + ",\n"
+                + USER_IMAGE + ",\n"
+                + USER_DOB + ",\n"
+                + USER_PHONE + ",\n"
+                + USER_ADDRESS + ")\n"
+                + "VALUES\n"
+                + "(?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?);";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, u.getEmail());
+            stm.setString(2, u.getPassword());
+            stm.setInt(3, u.getSetting().getId());
+            stm.setBoolean(4, u.isStatus());
+            stm.setString(5, u.getFullname());
+            stm.setBoolean(6, u.isGender());
+            stm.setString(7, u.getImgUrl());
+            stm.setDate(8, u.getDob());
+            stm.setString(9, u.getPhone());
+            stm.setString(10, u.getAddress());
+            stm.execute();
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-        User list = dao.getUserById(94);
-        if (list != null) {
-            System.out.println("id: " + list.getId());
-            System.out.println("name: " + list.getFullname());
-//            System.out.println("role: " + list.getSetting().getValue());
-            System.out.println("Email: " + list.getEmail());
-            System.out.println("address: " + list.getAddress());
-            System.out.println("====================");
-        }
+        dao.updateUserStatus(1,true);
+        
     }
 }

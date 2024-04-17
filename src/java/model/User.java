@@ -21,7 +21,8 @@ public class User {
     public User() {
     }
 
-    public User(int id, Setting setting, String email, String password, String fullname, String imgUrl, String phone, String address, boolean confirmation, boolean status, boolean gender, Date dob) {
+    public User(int id, Setting setting, String email, String password, String fullname,
+            String imgUrl, String phone, String address, boolean confirmation, boolean status, boolean gender, Date dob) {
         this.id = id;
         this.setting = setting;
         this.email = email;
