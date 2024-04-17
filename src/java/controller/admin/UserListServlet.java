@@ -65,8 +65,8 @@ public class UserListServlet extends HttpServlet {
         int page = 1;
         int recordPerPage = 10;
         List<User> list = new ArrayList<>();
-
         List<Setting> st = new ArrayList<>();
+        
         try {
             st = setDAO.getRoleId();
         } catch (Exception e) {
@@ -145,7 +145,8 @@ public class UserListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id_raw = request.getParameter("userId");
-                    System.out.println("here===========");
+        Logger log=Logger.getLogger("vao post");
+        log.info("hello");
 
         try {
             System.out.println("here1=================");

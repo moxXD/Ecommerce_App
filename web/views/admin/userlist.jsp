@@ -20,15 +20,7 @@
         <!-- font Awesome -->
         <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet"
               type="text/css" />
-        <!-- Ionicons -->
-        <link href="${pageContext.request.contextPath}/views/css/ionicons.min.css" rel="stylesheet"
-              type="text/css" />
-        <!-- Morris chart -->
-        <link href="${pageContext.request.contextPath}/views/css/morris/morris.css" rel="stylesheet"
-              type="text/css" />
-        <!-- jvectormap -->
-        <link href="${pageContext.request.contextPath}/views/css/jvectormap/jquery-jvectormap-1.2.2.css"
-              rel="stylesheet" type="text/css" />
+
         <!-- Date Picker -->
         <link href="${pageContext.request.contextPath}/views/css/datepicker/datepicker3.css" rel="stylesheet"
               type="text/css" />
@@ -37,9 +29,6 @@
         <!-- Daterange picker -->
         <link href="${pageContext.request.contextPath}/views/css/daterangepicker/daterangepicker-bs3.css"
               rel="stylesheet" type="text/css" />
-        <!-- iCheck for checkboxes and radio inputs -->
-        <link href="${pageContext.request.contextPath}/views/css/iCheck/all.css" rel="stylesheet"
-              type="text/css" />
         <!-- bootstrap wysihtml5 - text editor -->
         <!-- <link href="css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" /> -->
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
@@ -221,9 +210,8 @@
                                         <td>${u.phone}</td>
                                         <td>${u.setting.value}</td>
                                         <td>${u.status?"Active":"Inactive"}</td>
-                                        <td><a href="userdetail?action=view&id=${u.id}">View</a> 
-                                            &nbsp;
-                                            <form action="userlist">
+                                        <td><a href="userdetail?action=view&id=${u.id}">View</a>
+                                            <form action="userlist" method="post">
                                                 <input type="hidden" name="userId" value="${u.id}">
                                                 <input type="hidden" name="status" value="${u.status?true:false}">
                                                 <input type="submit" value="${!u.status?"Activate":"Deactivate"}" />
