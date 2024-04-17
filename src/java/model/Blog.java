@@ -16,11 +16,13 @@ public class Blog {
     private String imgUrl, title, detail, authorName, categoryName;
     private boolean status;
     private Timestamp createTime, updateTime;
-
+    private boolean is_featured;
+    private String sumary;
+    
     public Blog() {
     }
 
-    public Blog(int categoryId, int Id, int authorId, String imgUrl, String title, String detail, boolean status, Timestamp createTime, Timestamp updateTime, String authorName, String categoryName) {
+    public Blog(int categoryId, int Id, int authorId, String imgUrl, String title, String detail, boolean status, Timestamp createTime, Timestamp updateTime, String authorName, String categoryName, boolean is_featured, String sumary) {
         this.categoryId = categoryId;
         this.Id = Id;
         this.authorId = authorId;
@@ -32,8 +34,26 @@ public class Blog {
         this.updateTime = updateTime;
         this.authorName=authorName;
         this.categoryName=categoryName;
+        this.is_featured = is_featured;
+        this.sumary = sumary;
     }
 
+    public boolean isIs_featured() {
+        return is_featured;
+    }
+
+    public void setIs_featured(boolean is_featured) {
+        this.is_featured = is_featured;
+    }
+
+    public String getSumary() {
+        return sumary;
+    }
+
+    public void setSumary(String sumary) {
+        this.sumary = sumary;
+    }
+    
     public String getCategoryName() {
         return categoryName;
     }

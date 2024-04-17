@@ -124,7 +124,6 @@
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Title</label>
                                                         <input name="title" type="text" class="form-control" id="title" ${param.action.equals("view") ? "readonly": ""} value="${c.title}" >
-                                                        <div id="titleError" style="color: red;"></div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="gender">Category:</label>
@@ -137,7 +136,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="inputLabel1">Author</label>
+                                                        <label for="inputLabel1">Author:</label>
                                                         <select name="author" class="form-control" ${param.action.equals("view")?"disabled" : ""}>
                                                             <c:forEach items="${requestScope.blogAuthors}" var="a">
                                                                 <option value="${a.id}" ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
@@ -148,6 +147,10 @@
                                                 <!---->
                                                 <div class="form-right">
                                                     <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="inputLabel1">Summary</label>
+                                                            <input name="sumary" type="text" class="form-control" id="sumary" ${param.action.equals("view") ? "readonly": ""} value="${c.sumary}" >
+                                                        </div>
                                                         <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
                                                             <label for="create_time">Create Time:</label>
                                                             <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.createTime}">
@@ -156,12 +159,49 @@
                                                             <label for="update_time">Updated Time:</label>
                                                             <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.updateTime}">
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="gender">Status:</label>
-                                                            <select name="status" class="form-control" ${param.action.equals("view")? "disabled":""}>
-                                                                <option value="Show" ${c.status == true ? "selected" : ""}>Show </option>
-                                                                <option value="Hide" ${c.status == false ? "selected" : ""}>Hide</option>
-                                                            </select>
+                                                        <div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <label for="gender">Status:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row form-check-inline">
+                                                                <div class="col-md-3 ">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${c.status == true ? "checked" : ""} ${param.action.equals("view") ? "disabled" : ""}>
+                                                                        <label class="form-check-label" for="showRadio">Show</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3 ">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Hide" ${c.status == false ? "checked" : ""} ${param.action.equals("view") ? "disabled" : ""}>
+                                                                        <label class="form-check-label" for="hideRadio">Hide</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <label for="gender">Feature:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row form-check-inline">
+                                                                <div class="col-md-3 ">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="feature" id="yesRadio" value="Yes" ${c.is_featured == true ? "checked" : ""} ${param.action.equals("view") ? "disabled" : ""}>
+                                                                        <label class="form-check-label" for="showRadio">Yes</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3 ">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="feature" id="noRadio" value="No" ${c.is_featured == false ? "checked" : ""} ${param.action.equals("view") ? "disabled" : ""}>
+                                                                        <label class="form-check-label" for="hideRadio">No</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
 
                                                     </div>
@@ -209,11 +249,23 @@
         };
         function validateInputs(event) {
             var titleInput = document.getElementById("title");
+            var sumaryInput = document.getElementById("sumary");
+            var contentInput = document.getElementById("content");
             var title = titleInput.value.trim();
+            var sumary = sumaryInput.value.trim();
+            var content = contentInput.value.trim();
 
             // Kiểm tra input không được để trống
             if (title === "") {
-                alert("Please fill title");
+                alert("Please fill Title");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            } else if(sumary == ""){
+                alert("Please fill Sumary");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            } else if(content == ""){
+                alert("Please fill Content");
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
@@ -229,6 +281,10 @@
             var specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
             if (specialCharacters.test(title)) {
                 alert("Title cannot contain special character");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }else if (specialCharacters.test(sumary)) {
+                alert("Sumary cannot contain special character");
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }

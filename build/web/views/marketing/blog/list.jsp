@@ -96,7 +96,7 @@
                             </a>
                         </li>
                         <!--                        <li>
-                                                    <a href="#">
+                                                    <a href="bloglist">
                                                         <i class="fa fa-gear"></i> <span>Settings</span>
                                                     </a>
                                                 </li>-->
@@ -118,8 +118,17 @@
                                         class="fa fa-search"></i></button>
                             </span>
                         </div>
-                        <!--status select-->
                         <div class="filter-row">
+                        <!--feature select-->
+                            <div class="form-group">
+                                <label for="filfeature">Filter by Feature: </label>
+                                <select name="filfeature" id="filfeature" class="form-control">
+                                    <option value="">All Feature</option>
+                                    <option value="yes" ${param.filfeature != null && param.filfeature.equals("Yes") ? "selected" : ""}>Yes</option>
+                                    <option value="no" ${param.filfeature != null && param.filfeature.equals("No") ? "selected" : ""}>No</option>
+                                </select>
+                            </div>
+                        <!--status select-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by Status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
@@ -182,8 +191,8 @@
                                         <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=fullname">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
-                                    <th>Description
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=detail">
+                                    <th>Feature
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not sortOrder}&sort=is_featured">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
                                     <th>Status
@@ -202,7 +211,7 @@
                                         <td>${u.title}</td>
                                         <td>${u.categoryName}</td>
                                         <td>${u.authorName}</td>
-                                        <td>${u.detail.substring(0, 25)}</td>
+                                        <td style="color: ${u.is_featured ? 'green' : 'red'}">${u.is_featured ? 'Yes' : 'No'}</td>
                                         <td style="color: ${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
                                         <td><a href="blogdetail?action=view&ID=${id}">View</a><a href="blogdetail?action=update&ID=${id}"style="margin-left: 20px">Edit</a></td>
                                     </tr>
@@ -216,7 +225,7 @@
                             <ul class="pagination">
                                 <c:if test="${currentPage > 1}">
                                     <li>
-                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.sortOrder}&sort=${param.sort}" aria-label="Previous">
+                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.sortOrder}&sort=${param.sort}" aria-label="Previous">
                                             <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
                                         </a>
                                     </li>
@@ -228,14 +237,14 @@
                                             <li class="active"><span>${i}</span></li>
                                                 </c:when>
                                                 <c:otherwise>
-                                            <li><a href="bloglist?page=${i}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
+                                            <li><a href="bloglist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
 
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
-                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
+                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
                                             <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
                                         </a>
                                     </li>

@@ -79,6 +79,7 @@ public class BlogListServlet extends HttpServlet {
         String statusFilter = request.getParameter("filstatus");
         String categoryFilter = request.getParameter("filcate");
         String authorFilter = request.getParameter("filauthor");
+        String featureFilter = request.getParameter("filfeature");
         String searchQuery = request.getParameter("q");
         //sort
         String sortColumn = request.getParameter("sort");
@@ -91,6 +92,13 @@ public class BlogListServlet extends HttpServlet {
                 statusFilter = "0";
             }
         }
+        if (featureFilter != null && !featureFilter.isEmpty()) {
+            if (featureFilter.equalsIgnoreCase("Yes")) {
+                featureFilter = "1";
+            } else {
+                featureFilter = "0";
+            }
+        }
 
         if (page_raw != null) {
             try {
@@ -100,7 +108,7 @@ public class BlogListServlet extends HttpServlet {
             }
         }
         try {
-            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery, sortColumn, sortOrder);
+            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery, sortColumn, sortOrder, featureFilter);
             setting = settingDAO.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
         } catch (SQLException ex) {

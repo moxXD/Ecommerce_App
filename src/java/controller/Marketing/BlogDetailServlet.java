@@ -86,16 +86,18 @@ public class BlogDetailServlet extends HttpServlet {
                 String title = blogDAO.getBlogByID(id).getTitle();
                 String detail = blogDAO.getBlogByID(id).getDetail();
                 boolean status = blogDAO.getBlogByID(id).isStatus();
+                boolean feature = blogDAO.getBlogByID(id).isIs_featured();
+                String sumary = blogDAO.getBlogByID(id).getSumary();
                 Timestamp createTime = blogDAO.getBlogByID(id).getCreateTime();
                 Timestamp updateTime = blogDAO.getBlogByID(id).getUpdateTime();
                 String authorName = blogDAO.getBlogByID(id).getAuthorName();
                 String categoryName = blogDAO.getBlogByID(id).getCategoryName();
-                blog = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName);
+                blog = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName, feature, sumary);
 //            -------------------------------
             }
 //Blog Information
             //Setting information
-            list = settingDAo.getAllSetting();
+            list = blogDAO.getAllBlogSetting();
             user = blogDAO.getAllBlogAuthor();
 
         } catch (Exception e) {
@@ -122,12 +124,14 @@ public class BlogDetailServlet extends HttpServlet {
         String id_raw = request.getParameter("blogId");
         BlogDAO blogDAO = new BlogDAO();
         if (action != null && action.equalsIgnoreCase("add")) {
-            boolean status;
+            boolean status, feature;
             String category_raw = request.getParameter("category");
             String author_raw = request.getParameter("author");
             String status_raw = request.getParameter("status");
+            String feature_raw = request.getParameter("feature");
             String title = request.getParameter("title");
             String content = request.getParameter("content");
+            String sumary = request.getParameter("sumary");
             int categoryid = Integer.parseInt(category_raw);
             int authorid = Integer.parseInt(author_raw);
             if (status_raw.equals("Show")) {
@@ -135,21 +139,29 @@ public class BlogDetailServlet extends HttpServlet {
             } else {
                 status = false;
             }
+            if (feature_raw.equalsIgnoreCase("Yes")) {
+                feature = true;
+            } else {
+                feature = false;
+            }
             String imgUrl = "http://imageurl.com/" + author_raw;
             try {
-                blogDAO.addNewBlog(categoryid, authorid, imgUrl, title, content, status);
+                blogDAO.addNewBlog(categoryid, authorid, imgUrl, title, content, status, feature, sumary);
             } catch (NumberFormatException e) {
                 Logger.getLogger(BlogDetailServlet.class.getName()).log(Level.SEVERE, null, e);
             }
             response.sendRedirect("bloglist");
 
         } else {
-            boolean status;
+            boolean status, feature;
             String category_raw = request.getParameter("category");
             String author_raw = request.getParameter("author");
             String status_raw = request.getParameter("status");
+            String feature_raw = request.getParameter("feature");
             String title = request.getParameter("title");
+            String sumary = request.getParameter("sumary");
             String content = request.getParameter("content");
+            String imageurl = "http://imageurl.com/" + author_raw;
             int id = Integer.parseInt(id_raw);
             int categoryid = Integer.parseInt(category_raw);
             int authorid = Integer.parseInt(author_raw);
@@ -158,8 +170,13 @@ public class BlogDetailServlet extends HttpServlet {
             } else {
                 status = false;
             }
+            if (feature_raw.equalsIgnoreCase("yes")) {
+                feature = true;
+            } else {
+                feature = false;
+            }
             try {
-                blogDAO.updateBlog(id, categoryid, authorid, title, content, status);
+                blogDAO.updateBlog(id, categoryid, authorid, title, content, status, feature, sumary, imageurl);
                 response.sendRedirect("bloglist");
             } catch (NumberFormatException e) {
                 Logger.getLogger(BlogDetailServlet.class.getName()).log(Level.SEVERE, null, e);
