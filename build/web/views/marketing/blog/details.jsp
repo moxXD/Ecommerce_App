@@ -214,7 +214,7 @@
                                             </div>
                                             <div class="col-md-12" style="margin-bottom: 5%">
                                                 <label for="content">Content:</label>
-                                                <textarea name="content" style="height: 500px" class="form-control" ${param.action.equals("view") ? "readonly": ""}>${c.detail}</textarea>
+                                                <textarea id="content" name="content" style="height: 500px" class="form-control" ${param.action.equals("view") ? "readonly": ""}>${c.detail}</textarea>
                                             </div>
                                             <div class="row" style="margin-bottom: 5%">
                                                 <c:if test="${param.action.equals('add')}">
@@ -249,23 +249,10 @@
         };
         function validateInputs(event) {
             var titleInput = document.getElementById("title");
-            var sumaryInput = document.getElementById("sumary");
-            var contentInput = document.getElementById("content");
             var title = titleInput.value.trim();
-            var sumary = sumaryInput.value.trim();
-            var content = contentInput.value.trim();
-
             // Kiểm tra input không được để trống
             if (title === "") {
                 alert("Please fill Title");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            } else if(sumary == ""){
-                alert("Please fill Sumary");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            } else if(content == ""){
-                alert("Please fill Content");
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
@@ -278,16 +265,45 @@
             }
 
             // Kiểm tra input không chứa ký tự đặc biệt
-            var specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+            var specialCharacters = /[@#$^&*,"{}|<>]/;
             if (specialCharacters.test(title)) {
                 alert("Title cannot contain special character");
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
-            }else if (specialCharacters.test(sumary)) {
-                alert("Sumary cannot contain special character");
+            }
+
+            var sumaryInput = document.getElementById("sumary");
+            var sumary = sumaryInput.value.trim();
+            // Kiểm tra input không được để trống
+            if (sumary === "") {
+                alert("Please fill Sumary");
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
+            var contentInput = document.getElementById("content");
+            var content = contentInput.value.trim();
+            // Kiểm tra input không được để trống
+            if (content === "") {
+                alert("Please fill Content");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            var showRadioChecked = document.getElementById('showRadio').checked;
+            var hideRadioChecked = document.getElementById('hideRadio').checked;
+            var yesRadioChecked = document.getElementById('yesRadio').checked;
+            var noRadioChecked = document.getElementById('noRadio').checked;
+            // Kiểm tra checkbox không được để trống
+            if (!showRadioChecked && !hideRadioChecked) {
+                alert('Please select a Status');
+                event.preventDefault();
+                return;
+            }
+            if (!yesRadioChecked && !noRadioChecked) {
+                alert('Please select a Feature');
+                event.preventDefault();
+                return;
+            }
+            
 
             // Nếu tất cả điều kiện đều đúng, không cần ngăn chặn hành động mặc định của button
         }
