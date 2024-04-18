@@ -61,7 +61,7 @@
                                                 <!-- Add role options here -->
                                                 <c:forEach items="${requestScope.settingList}" var="r">
                                                     <c:if test="${r.type.equals('blog')}">
-                                                        <option value="${r.value}" ${param.filcate==r.value?"selected":""}>${r.value}</option>
+                                                        <option value="${r.value}" ${c.categoryName==r.value?"selected":""}>${r.value}</option>
                                                     </c:if>
                                                 </c:forEach>
                                             </select>
@@ -73,7 +73,7 @@
                                             <select name="filauthor" id="filauthor" class="form-control">
                                                 <option value="">All Authors </option>
                                                 <c:forEach items="${requestScope.blogAuthors}" var="a">
-                                                    <option value="${a.fullname}"  ${param.filauthor==a.fullname?"selected":""}>${a.fullname}</option>
+                                                    <option value="${a.fullname}"  ${c.authorName==a.fullname?"selected":""}>${a.fullname}</option>
                                                 </c:forEach>
                                             </select>
                                         </div>
