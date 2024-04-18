@@ -210,7 +210,7 @@
                                             <!-- -->
                                             <div class="form-group">
                                                 <label for="thumbnail">Thumbnail: </label>
-                                                <img src="images/blog/blog-one.jpg" alt="" />
+                                                <img src="${pageContext.request.contextPath}/images/blog/images.jpg" alt="" />
                                             </div>
                                             <div class="col-md-12" style="margin-bottom: 5%">
                                                 <label for="content">Content:</label>

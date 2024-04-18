@@ -5,40 +5,37 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <%@include file="../../../layout/header.jsp" %>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Tech Mart</title>
+        <!--        <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="description" content="">
+                <meta name="author" content="">
+                <title>Blog Single | E-Shopper</title>
+                <link href="css/bootstrap.min.css" rel="stylesheet">
+                <link href="css/font-awesome.min.css" rel="stylesheet">
+                <link href="css/prettyPhoto.css" rel="stylesheet">
+                <link href="css/price-range.css" rel="stylesheet">
+                <link href="css/animate.css" rel="stylesheet">
+                <link href="css/main.css" rel="stylesheet">
+                <link href="css/responsive.css" rel="stylesheet">-->
         <style>
             .blog-post {
                 background-color: white;
                 border: 1px solid #ddd;
                 padding: 15px;
-                margin-bottom: 15px;
+                margin-bottom: 25px;
                 height: 250px;
             }
 
             .blog-post img {
-                width: 200px;
-                height: 200px;
+                width: 250px;
+                height: 220px;
                 float: left;
                 margin-right: 15px;
-            }
-
-            .blog-post h3 {
-                margin: 0;
-                padding: 0;
-            }
-
-            .blog-post p {
-                margin: 0;
-            }
-
-            .blog-post button {
-                display: block;
-                margin-top: 10px;
             }
         </style>
     </head>
@@ -128,33 +125,57 @@
                     <div class="col-sm-9">
                         <div class="blog-post-area">
                             <h2 class="title text-center">Blog List</h2>
-                            <div class="blog-post">
-                                <img src="../images/home/iframe1.png" alt="">
-                                <h3>Tiêu đề bài viết 1</h3>
-                                <p>Mô tả ngắn gọn cho bài viết 1...</p>
-                                <button type="button">Read More</button>
-                            </div>
-
-                            <div class="blog-post">
-                                <img src="../images/home/gallery1.jpg" alt="Thumbnail">
-                                <h3>Tiêu đề bài viết 2</h3>
-                                <p>Mô tả ngắn gọn cho bài viết 2...</p>
-                                <button type="button">Đọc thêm</button>
-                            </div>
-
-                            <div class="blog-post">
-                                <img src="thumbnail3.jpg" alt="Thumbnail">
-                                <h3>Tiêu đề bài viết 3</h3>
-                                <p>Mô tả ngắn gọn cho bài viết 3...</p>
-                                <button type="button">Đọc thêm</button>
-                            </div>
+                            <c:forEach items="${requestScope.blogList}" var="u">
+                                <c:set var="id" value="${u.id}" />
+                                <div class="blog-post row">
+                                    <div class="col-md-4">
+                                        <img class="img-thumbnail" src="${pageContext.request.contextPath}/images/blog/images.jpg" alt="">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h2 class="display-4">${u.title}</h2>
+                                        <hr class="my-4">
+                                        <div class="post-meta">
+                                            <ul>
+                                                <li><i class="fa fa-user"></i> ${u.authorName}</li>
+                                                <li><i class="fa fa-cog"></i> ${u.categoryName}</li>
+                                            </ul>
+                                        </div>
+                                        <p>${u.sumary}</p>
+                                        <p class="lead" style="position: absolute; top: 180px; right: 20px;">
+                                            <a class="btn btn-warning btn-md" href="blogdetails?id=${id}" role="button">Read more</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </c:forEach>
                         </div>
                         <div class="pagination-area">
                             <ul class="pagination">
-                                <li><a href="" class="active">1</a></li>
-                                <li><a href="">2</a></li>
-                                <li><a href="">3</a></li>
-                                <li><a href=""><i class="fa fa-angle-double-right"></i></a></li>
+                                <c:if test="${currentPage > 1}">
+                                    <li>
+                                        <a href="blogslist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fa fa-angle-double-left fa-sm"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+
+                                <c:forEach begin="1" end="${noOfPage}" var="i">
+                                    <c:choose>
+                                        <c:when test="${currentPage eq i}">
+                                            <li class="active"><span>${i}</span></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                            <li><a href="blogslist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+
+                                <c:if test="${currentPage < noOfPage}">
+                                    <li>
+                                        <a href="blogslist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fa fa-angle-double-right fa-sm"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
                             </ul>
                         </div>
                     </div>
@@ -162,5 +183,6 @@
             </div>
         </section>
         <%@ include file="../../../layout/footer.jsp" %>
+
     </body>
 </html>

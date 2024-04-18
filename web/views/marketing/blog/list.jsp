@@ -119,7 +119,7 @@
                             </span>
                         </div>
                         <div class="filter-row">
-                        <!--feature select-->
+                            <!--feature select-->
                             <div class="form-group">
                                 <label for="filfeature">Filter by Feature: </label>
                                 <select name="filfeature" id="filfeature" class="form-control">
@@ -128,7 +128,7 @@
                                     <option value="no" ${param.filfeature != null && param.filfeature.equals("No") ? "selected" : ""}>No</option>
                                 </select>
                             </div>
-                        <!--status select-->
+                            <!--status select-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by Status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
@@ -207,7 +207,8 @@
                                     <c:set var="id" value="${u.id}" />
                                     <tr>
                                         <td>${id}</td>
-                                        <td>${u.imgUrl}</td>
+                                        <td><img src="${pageContext.request.contextPath}/images/blog/images.jpg"
+                                                 style="width: 80px; height: 50px;" alt="User Image" /></td>
                                         <td>${u.title}</td>
                                         <td>${u.categoryName}</td>
                                         <td>${u.authorName}</td>

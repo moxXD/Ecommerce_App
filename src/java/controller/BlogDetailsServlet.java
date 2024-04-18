@@ -5,7 +5,6 @@
 
 package controller;
 
-import controller.Marketing.BlogListServlet;
 import dal.BlogDAO;
 import dal.SettingDAO;
 import java.io.IOException;
@@ -15,11 +14,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Blog;
 import model.Setting;
 import model.User;
@@ -28,8 +25,8 @@ import model.User;
  *
  * @author Admin
  */
-@WebServlet(name="BlogListController", urlPatterns={"/blogslist"})
-public class BlogListController extends HttpServlet {
+@WebServlet(name="BlogDetailsServlet", urlPatterns={"/blogdetails"})
+public class BlogDetailsServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -46,10 +43,10 @@ public class BlogListController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BlogListController</title>");  
+            out.println("<title>Servlet BlogDetailsServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BlogListController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet BlogDetailsServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,61 +63,43 @@ public class BlogListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int page = 1;
-        int recordPerPage = 5;
-        List<Blog> list = new ArrayList<>();
-        List<Setting> setting = new ArrayList<>();
-        List<User> user = new ArrayList<>();
+        String id_raw = request.getParameter("id");
+        String action = request.getParameter("action");
+        int id;
         BlogDAO blogDAO = new BlogDAO();
-        SettingDAO settingDAO = new SettingDAO();
-        //filter
-        String page_raw = request.getParameter("page");
-        String statusFilter = request.getParameter("filstatus");
-        String categoryFilter = request.getParameter("filcate");
-        String authorFilter = request.getParameter("filauthor");
-        String featureFilter = request.getParameter("filfeature");
-        String searchQuery = request.getParameter("q");
-        //sort
-        String sortColumn = request.getParameter("sort");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
-        //mapping filter
-        if (statusFilter != null && !statusFilter.isEmpty()) {
-            if (statusFilter.equalsIgnoreCase("show")) {
-                statusFilter = "1";
-            } else {
-                statusFilter = "0";
-            }
-        }
-        if (featureFilter != null && !featureFilter.isEmpty()) {
-            if (featureFilter.equalsIgnoreCase("Yes")) {
-                featureFilter = "1";
-            } else {
-                featureFilter = "0";
-            }
-        }
-
-        if (page_raw != null) {
-            try {
-                page = Integer.parseInt(page_raw);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        SettingDAO settingDAo = new SettingDAO();
+        List<Setting> list = new ArrayList<>();
+        List<User> user = new ArrayList<>();
+        Blog blog = null;
         try {
-            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery, sortColumn, sortOrder, featureFilter);
-            setting = settingDAO.getAllSetting();
+                id = Integer.parseInt(id_raw);
+                int categoryId = blogDAO.getBlogByID(id).getCategoryId();
+                int Id = blogDAO.getBlogByID(id).getId();
+                int authorId = blogDAO.getBlogByID(id).getAuthorId();
+                String imgUrl = blogDAO.getBlogByID(id).getImgUrl();
+                String title = blogDAO.getBlogByID(id).getTitle();
+                String detail = blogDAO.getBlogByID(id).getDetail();
+                boolean status = blogDAO.getBlogByID(id).isStatus();
+                boolean feature = blogDAO.getBlogByID(id).isIs_featured();
+                String sumary = blogDAO.getBlogByID(id).getSumary();
+                Timestamp createTime = blogDAO.getBlogByID(id).getCreateTime();
+                Timestamp updateTime = blogDAO.getBlogByID(id).getUpdateTime();
+                String authorName = blogDAO.getBlogByID(id).getAuthorName();
+                String categoryName = blogDAO.getBlogByID(id).getCategoryName();
+                blog = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName, feature, sumary);
+//            -------------------------------
+//Blog Information
+            //Setting information
+            list = settingDAo.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
-        } catch (SQLException ex) {
-            Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        int noOfrecord = blogDAO.getNumberOfRecord();
-        int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
         request.setAttribute("blogAuthors", user);
-        request.setAttribute("blogList", list);
-        request.setAttribute("settingList", setting);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("noOfPage", noOfPage);
-        request.getRequestDispatcher("views/bloglist.jsp").forward(request, response);
+        request.setAttribute("settingList", list);
+        request.setAttribute("blogdetails", blog);
+        request.getRequestDispatcher("/views/blogdetails.jsp").forward(request, response);
     } 
 
     /** 
