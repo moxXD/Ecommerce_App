@@ -11,3 +11,4 @@ nbactions.xml
 nb-configuration.xml
 *.jar
 *.war
+web/META-INF/context.xml
