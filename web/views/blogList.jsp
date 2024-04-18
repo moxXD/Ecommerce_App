@@ -47,13 +47,13 @@
                     <div class="col-sm-3">
                         <div class="left-sidebar">
                             <form action="blogslist" method="get">
-                                <h2>Category</h2>
+                                <h2>Search</h2>
                                 <div class="panel-group category-products" id="accordian"><!--category-productsr-->
                                     <div class="panel panel-default">
                                         <div class="form-group">
                                             <label for="filcate">Filter by Blog Category:</label>
                                             <select name="filcate" id="filcate" class="form-control">
-                                                <option value="" >All Category</option>
+                                                <option value="" >All Categories</option>
                                                 <!-- Add role options here -->
                                                 <c:forEach items="${requestScope.settingList}" var="r">
                                                     <c:if test="${r.type.equals('blog')}">
@@ -67,7 +67,7 @@
                                         <div class="form-group">
                                             <label for="filauthor">Filter by Author: </label>
                                             <select name="filauthor" id="filauthor" class="form-control">
-                                                <option value="">All Author </option>
+                                                <option value="">All Authors </option>
                                                 <c:forEach items="${requestScope.blogAuthors}" var="a">
                                                     <option value="${a.fullname}"  ${param.filauthor==a.fullname?"selected":""}>${a.fullname}</option>
                                                 </c:forEach>

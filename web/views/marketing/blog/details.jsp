@@ -127,7 +127,8 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="gender">Category:</label>
-                                                        <select ${param.action.equals("view")?"disabled" : ""} name="category" class="form-control ">
+                                                        <select ${param.action.equals("view")?"disabled" : ""} name="category" id="category" class="form-control ">
+                                                            <option value="" disabled selected hidden>Choose category of your blog</option>
                                                             <c:forEach items="${requestScope.settingList}" var="s">
                                                                 <c:if test="${s.type.equals('blog')}">
                                                                     <option value="${s.id}" ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
@@ -137,7 +138,8 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Author:</label>
-                                                        <select name="author" class="form-control" ${param.action.equals("view")?"disabled" : ""}>
+                                                        <select id="author" name="author" class="form-control" ${param.action.equals("view")?"disabled" : ""}>
+                                                            <option value="" disabled selected hidden>Choose author of your blog</option>
                                                             <c:forEach items="${requestScope.blogAuthors}" var="a">
                                                                 <option value="${a.id}" ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
                                                             </c:forEach>
@@ -303,7 +305,21 @@
                 event.preventDefault();
                 return;
             }
-            
+            var categoryOption = document.getElementById("category");
+            var category = categoryOption.value.trim();
+            var authorOption = document.getElementById("author");
+            var author = authorOption.value.trim();
+            // Kiểm tra input không được để trống
+            if (category === "") {
+                alert("Please choose Category of your blog");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (author === "") {
+                alert("Please choose Author of your blog");
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
 
             // Nếu tất cả điều kiện đều đúng, không cần ngăn chặn hành động mặc định của button
         }
