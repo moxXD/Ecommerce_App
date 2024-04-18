@@ -107,7 +107,7 @@
                                 </button>
                             </span>
                         </div>
-                            <!--select type-->
+                        <!--select type-->
                         <div class="filter-row">
                             <div class="form-group">
                                 <label for="filtype">Filter by type:</label>
@@ -174,10 +174,15 @@
                                         <td>${s.type}</td>
                                         <td>${s.value}</td>
                                         <td>${s.isOrder()}</td>
-                                        <td>${s.status?"Active":"Inactive"}</td>
+                                        <c:if test="${s.status}">
+                                            <td style="color: #62f04f">Active</td>
+                                        </c:if>
+                                        <c:if test="${!s.status}">
+                                            <td style="color: red">Inactive</td>
+                                        </c:if>
                                         <td><a href="settingdetail?action=view&id=${s.id}">View</a>
-                                            &nbsp;
-                                            <a href="settingdetail?action=edit&id=${s.id}">Edit</a>
+                                            <!--                                            &nbsp;
+                                                                                        <a href="settingdetail?action=edit&id=${s.id}">Edit</a>-->
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -185,47 +190,57 @@
                             </tbody>
                         </table>
                         <!-- Diplay list of page -->
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <!--next page-->
-                                <c:if test="${currentPage > 1}">
-                                    <li>
-                                        <a href="settinglist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                                <!--list of pages-->
-                                <c:forEach begin="1" end="${noOfPage}" var="i">
-                                    <c:choose>
-                                        <c:when test="${currentPage eq i}">
-                                            <li class="active"><span>${i}</span></li>
-                                                </c:when>
-                                                <c:otherwise>
-                                            <li><a href="settinglist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">${i}</a></li>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                <!--prev page-->
-                                <c:if test="${currentPage < noOfPage}">
-                                    <li>
-                                        <a href="settinglist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                            </ul>
+                        <nav aria-label="Page navigation" class="row">
+                            <div class="col-sm-6">
+                                <ul class="pagination">
+                                    <!--next page-->
+                                    <c:if test="${currentPage > 1}">
+                                        <li>
+                                            <a href="settinglist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Previous">
+                                                <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                    <!--list of pages-->
+                                    <c:forEach begin="1" end="${noOfPage}" var="i">
+                                        <c:choose>
+                                            <c:when test="${currentPage eq i}">
+                                                <li class="active"><span>${i}</span></li>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                <li><a href="settinglist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">${i}</a></li>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    <!--prev page-->
+                                    <c:if test="${currentPage < noOfPage}">
+                                        <li>
+                                            <a href="settinglist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Next">
+                                                <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <button type="button" class="btn btn-primary  "
+                                        onclick="redirectToSettingDetail('add')"
+                                        style="margin-top: 3.5% "
+                                        >Add</button>
+                            </div>
+
+
                         </nav>
                     </div>
 
-                    <button type="button" class="btn btn-primary btn-block " onclick="redirectToSettingDetail('add')">Add</button>
+
                 </section>
             </aside>
         </div>
 
 
 
-                                        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../layout/footer.jsp" %>
         <script>
             function redirectToSettingDetail(action) {
                 // Chuyển hướng đến trang settingdetail với tham số action=add

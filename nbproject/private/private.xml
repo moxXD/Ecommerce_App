@@ -3,12 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/admin/settinglist.jsp</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/admin/userdetail.jsp</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/model/Setting.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/admin/settingdetail.jsp</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/admin/userlist.jsp</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/SettingDetailServlet.java</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/service/EmailService.java</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/model/User.java</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/views/admin/userlist.jsp</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/utility/Encode.java</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/dal/UserDAO.java</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/views/admin/userdetail.jsp</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/views/admin/newjsp.jsp</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/UploadServlet.java</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/UserListServlet.java</file>
+            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/UserDetailServlet.java</file>
             <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/dal/SettingDAO.java</file>
         </group>
     </open-files>

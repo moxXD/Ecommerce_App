@@ -20,15 +20,7 @@
         <!-- font Awesome -->
         <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet"
               type="text/css" />
-        <!-- Ionicons -->
-        <link href="${pageContext.request.contextPath}/views/css/ionicons.min.css" rel="stylesheet"
-              type="text/css" />
-        <!-- Morris chart -->
-        <link href="${pageContext.request.contextPath}/views/css/morris/morris.css" rel="stylesheet"
-              type="text/css" />
-        <!-- jvectormap -->
-        <link href="${pageContext.request.contextPath}/views/css/jvectormap/jquery-jvectormap-1.2.2.css"
-              rel="stylesheet" type="text/css" />
+
         <!-- Date Picker -->
         <link href="${pageContext.request.contextPath}/views/css/datepicker/datepicker3.css" rel="stylesheet"
               type="text/css" />
@@ -37,9 +29,6 @@
         <!-- Daterange picker -->
         <link href="${pageContext.request.contextPath}/views/css/daterangepicker/daterangepicker-bs3.css"
               rel="stylesheet" type="text/css" />
-        <!-- iCheck for checkboxes and radio inputs -->
-        <link href="${pageContext.request.contextPath}/views/css/iCheck/all.css" rel="stylesheet"
-              type="text/css" />
         <!-- bootstrap wysihtml5 - text editor -->
         <!-- <link href="css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" /> -->
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
@@ -220,10 +209,19 @@
                                         <td>${u.email}</td>
                                         <td>${u.phone}</td>
                                         <td>${u.setting.value}</td>
-                                        <td>${u.status?"Active":"Inactive"}</td>
-                                        <td><a href="userdetail?action=view&id=${u.id}">View</a> 
-                                            &nbsp;
-                                            <a href="userdetail?action=edit&id=${u.id}">Edit</a> 
+                                        <c:if test="${u.status}">
+                                            <td style="color: #62f04f">Active</td>
+                                        </c:if>
+                                        <c:if test="${!u.status}">
+                                            <td style="color: red">Inactive</td>
+                                        </c:if>
+
+                                        <td><a href="userdetail?action=view&id=${u.id}">View</a>
+                                            <form action="userlist" method="post">
+                                                <input type="hidden" name="userId" value="${u.id}">
+                                                <input type="hidden" name="status" value="${u.status?true:false}">
+                                                <input type="submit" value="${!u.status?"Activate":"Deactivate"}" />
+                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -232,48 +230,58 @@
                         </table>
 
                         <!-- Diplay list of page -->
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <!--prev page-->
-                                <c:if test="${currentPage > 1}">
-                                    <li>
-                                        <a href="userlist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                                <!--page list-->
-                                <c:forEach begin="1" end="${noOfPage}" var="i">
-                                    <c:choose>
-                                        <c:when test="${currentPage eq i}">
-                                            <li class="active"><span>${i}</span></li>
-                                                </c:when>
-                                                <c:otherwise>
-                                            <li><a href="userlist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}">${i}</a></li>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                <!--prev page-->
-                                <c:if test="${currentPage < noOfPage}">
-                                    <li>
-                                        <a href="userlist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                            </ul>
+
+                        <nav aria-label="Page navigation" class="row">
+                            <div class="col-sm-6">
+                                <ul class="pagination">
+                                    <!--prev page-->
+                                    <c:if test="${currentPage > 1}">
+                                        <li>
+                                            <a href="userlist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Previous">
+                                                <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                    <!--page list-->
+                                    <c:forEach begin="1" end="${noOfPage}" var="i">
+                                        <c:choose>
+                                            <c:when test="${currentPage eq i}">
+                                                <li class="active"><span>${i}</span></li>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                <li><a href="userlist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}">${i}</a></li>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    <!--prev page-->
+                                    <c:if test="${currentPage < noOfPage}">
+                                        <li>
+                                            <a href="userlist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Next">
+                                                <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <button type="button" class="btn btn-primary btn-block "
+                                        onclick="redirectToAddUser()"
+                                        style="margin-top: 3.5%;width: 30%"
+                                        >Add</button>
+
+                            </div>
                         </nav>
+
                     </div>
-                    <button type="button" class="btn btn-primary btn-block " onclick="redirectToAddUser()">Add</button>
                 </section>
             </aside>
         </div>
 
 
-                                        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../layout/footer.jsp" %>
         <script type="text/javascript">
-            function redirectToAddUser(){
-                window.location.href='userdetail?action=add';
+            function redirectToAddUser() {
+                window.location.href = 'userdetail?action=add';
             }
         </script>
         <!-- jQuery 2.0.2 -->

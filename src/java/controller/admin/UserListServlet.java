@@ -1,4 +1,3 @@
-
 package controller.admin;
 
 import dal.SettingDAO;
@@ -23,7 +22,8 @@ import model.User;
  */
 @WebServlet(name = "UserListServlet", urlPatterns = {"/admin/userlist"})
 public class UserListServlet extends HttpServlet {
-
+        SettingDAO setDAO = new SettingDAO();
+        UserDAO userDao = new UserDAO();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -65,13 +65,13 @@ public class UserListServlet extends HttpServlet {
         int page = 1;
         int recordPerPage = 10;
         List<User> list = new ArrayList<>();
-        SettingDAO setDAO = new SettingDAO();
-        List<Setting> st=new ArrayList<>();
+        List<Setting> st = new ArrayList<>();
+        
         try {
             st = setDAO.getRoleId();
         } catch (Exception e) {
             Logger.getLogger(UserListServlet.class.getName()).log(Level.SEVERE, null, e);
-        
+
         }
 
         String page_raw = request.getParameter("page");
@@ -80,9 +80,9 @@ public class UserListServlet extends HttpServlet {
         String roleFilter_raw = request.getParameter("filrole");
         String statusFilter = request.getParameter("filstatus");
         String searchQuery = request.getParameter("q");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
+        boolean sortOrder = request.getParameter("order") != null 
+                ? Boolean.parseBoolean(request.getParameter("order")):false ;
 
-        // maping filter
         if (genderFilter != null && !genderFilter.isEmpty()) {
             if (genderFilter.equalsIgnoreCase("male")) {
                 genderFilter = "1";
@@ -116,9 +116,8 @@ public class UserListServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        UserDAO userDao=new UserDAO();
-        // get pagination user list
 
+        // get pagination user list
         list = userDao.getUserListWithFilter((page - 1) * recordPerPage,
                 recordPerPage, sortColumn, sortOrder, genderFilter, roleFilter, statusFilter, searchQuery);
         // get number of record found
@@ -146,7 +145,16 @@ public class UserListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String id_raw = request.getParameter("userId");
+        try {
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
+            int id = Integer.parseInt(id_raw);
+            
+            userDao.updateUserStatus(id, !status);
+            response.sendRedirect("userlist");
+        } catch (NumberFormatException e) {
+            Logger.getLogger(UserListServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
     /**
