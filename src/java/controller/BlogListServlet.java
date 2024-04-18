@@ -5,7 +5,7 @@
 
 package controller;
 
-import controller.Marketing.BlogListServlet;
+//import controller.Marketing.BlogListServlet;
 import dal.BlogDAO;
 import dal.SettingDAO;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import model.User;
  * @author Admin
  */
 @WebServlet(name="BlogListController", urlPatterns={"/blogslist"})
-public class BlogListController extends HttpServlet {
+public class BlogListServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -75,30 +75,10 @@ public class BlogListController extends HttpServlet {
         SettingDAO settingDAO = new SettingDAO();
         //filter
         String page_raw = request.getParameter("page");
-        String statusFilter = request.getParameter("filstatus");
         String categoryFilter = request.getParameter("filcate");
         String authorFilter = request.getParameter("filauthor");
-        String featureFilter = request.getParameter("filfeature");
         String searchQuery = request.getParameter("q");
-        //sort
-        String sortColumn = request.getParameter("sort");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
         //mapping filter
-        if (statusFilter != null && !statusFilter.isEmpty()) {
-            if (statusFilter.equalsIgnoreCase("show")) {
-                statusFilter = "1";
-            } else {
-                statusFilter = "0";
-            }
-        }
-        if (featureFilter != null && !featureFilter.isEmpty()) {
-            if (featureFilter.equalsIgnoreCase("Yes")) {
-                featureFilter = "1";
-            } else {
-                featureFilter = "0";
-            }
-        }
-
         if (page_raw != null) {
             try {
                 page = Integer.parseInt(page_raw);
@@ -107,7 +87,7 @@ public class BlogListController extends HttpServlet {
             }
         }
         try {
-            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery, sortColumn, sortOrder, featureFilter);
+            list = blogDAO.getAllBlogPaginationPublic((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, searchQuery);
             setting = settingDAO.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
         } catch (SQLException ex) {

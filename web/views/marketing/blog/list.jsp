@@ -124,8 +124,8 @@
                                 <label for="filfeature">Filter by Feature: </label>
                                 <select name="filfeature" id="filfeature" class="form-control">
                                     <option value="">All Feature</option>
-                                    <option value="yes" ${param.filfeature != null && param.filfeature.equals("Yes") ? "selected" : ""}>Yes</option>
-                                    <option value="no" ${param.filfeature != null && param.filfeature.equals("No") ? "selected" : ""}>No</option>
+                                    <option value="yes" ${param.filfeature != null && param.filfeature.equalsIgnoreCase("Yes") ? "selected" : ""}>Yes</option>
+                                    <option value="no" ${param.filfeature != null && param.filfeature.equalsIgnoreCase("No") ? "selected" : ""}>No</option>
                                 </select>
                             </div>
                             <!--status select-->
@@ -133,8 +133,8 @@
                                 <label for="filstatus">Filter by Status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
                                     <option value="">All Status</option>
-                                    <option value="show" ${param.filstatus != null && param.filstatus.equals("Show") ? "selected" : ""}>Show</option>
-                                    <option value="hide" ${param.filstatus != null && param.filstatus.equals("Hide") ? "selected" : ""}>Hide</option>
+                                    <option value="show" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Show") ? "selected" : ""}>Show</option>
+                                    <option value="hide" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Hide") ? "selected" : ""}>Hide</option>
                                 </select>
                             </div>
                             <!--category select-->

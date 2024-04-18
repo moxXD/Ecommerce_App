@@ -46,91 +46,61 @@
     <body>
         <section>
             <div class="container">
+                <c:set var="c" value="${requestScope.blogdetails}" />
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="left-sidebar">
-                            <h2>Category</h2>
-                            <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                                                Category
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="sportswear" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <ul>
-                                                <li><a href="">Laptop </a></li>
-                                                <li><a href="">Gear</a></li>
-                                                <li><a href="">Mouse</a></li>
-                                                <li><a href="">Headphone</a></li>
-                                            </ul>
+                            <form action="blogslist" method="get">
+                                <h2>Category</h2>
+                                <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                                    <div class="panel panel-default">
+                                        <div class="form-group">
+                                            <label for="filcate">Filter by Blog Category:</label>
+                                            <select name="filcate" id="filcate" class="form-control">
+                                                <option value="" >All Category</option>
+                                                <!-- Add role options here -->
+                                                <c:forEach items="${requestScope.settingList}" var="r">
+                                                    <c:if test="${r.type.equals('blog')}">
+                                                        <option value="${r.value}" ${param.filcate==r.value?"selected":""}>${r.value}</option>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordian" href="#mens">
-                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                                                Author
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="mens" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <ul>
-                                                <li><a href="">Fendi</a></li>
-                                                <li><a href="">Guess</a></li>
-                                                <li><a href="">Valentino</a></li>
-                                                <li><a href="">Dior</a></li>
-                                                <li><a href="">Versace</a></li>
-                                            </ul>
+                                    <div class="panel panel-default">
+                                        <div class="form-group">
+                                            <label for="filauthor">Filter by Author: </label>
+                                            <select name="filauthor" id="filauthor" class="form-control">
+                                                <option value="">All Author </option>
+                                                <c:forEach items="${requestScope.blogAuthors}" var="a">
+                                                    <option value="${a.fullname}"  ${param.filauthor==a.fullname?"selected":""}>${a.fullname}</option>
+                                                </c:forEach>
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="panel panel-default">
+                                        <div class="form-group">
+                                            <label for="filsearch">Search:</label>
+                                            <div class="input-group">
+                                                <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
+                                                <span class="input-group-btn">
+                                                    <button type='submit' id='search-btn' class="btn btn-flat btn-default">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!--/category-products-->
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordian" href="#womens">
-                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                                                Status
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="womens" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <ul>
-                                                <li><a href="">Hide</a></li>
-                                                <li><a href="">Show</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--/category-products-->
-
-                            <div class="price-range"><!--price-range-->
-                                <h2>Search</h2>
-                                <div class="well" style="height: 150px">
-                                    <div class="col-sm-3">
-                                        <p style="width: 100px">Search by name </>
-                                        <div class="search_box"style="margin-bottom: 20px">
-                                            <input type="text" placeholder="Search"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                     <div class="col-sm-9">
                         <div class="blog-post-area">
                             <h2 class="title text-center">From Our Blog</h2>
                             <div class="single-blog-post">
-                                <c:set var="c" value="${requestScope.blogdetails}" />
+                                
                                 <h1 class="display-4">${c.title}</h1>
                                 <hr class="my-4">
                                 <div class="post-meta">

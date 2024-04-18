@@ -133,6 +133,96 @@ public class BlogDAO extends DBContext {
 
         return list;
     }
+    public List<Blog> getAllBlogPaginationPublic(int offset, int limit, String cateFilter, String authorFilter,String searchQuery) throws SQLException {
+        List<Blog> list = new ArrayList<>();
+        String sql = "SELECT SQL_CALC_FOUND_ROWS "
+                + "t3.value, "
+                + "t2.fullname, "
+                + "t1.id, "
+                + "t1.setting_id, "
+                + "t1.authorid, "
+                + "t1.image_url, "
+                + "t1.title, "
+                + "t1.detail, "
+                + "t1.status, "
+                + "t1.is_featured, "
+                + "t1.sumary, "
+                + "t1.createdtime, "
+                + "t1.lastupdate \n"
+                + "FROM swp391_g1_v1.blog AS t1\n"
+                + "INNER JOIN swp391_g1_v1.user AS t2 ON t2.id = t1.authorid\n"
+                + "INNER JOIN swp391_g1_v1.setting AS t3 ON t3.id = t1.setting_id\n"
+                + "WHERE t3.type='blog' and t1.status = true";
+//        // add condition for filter
+        if (cateFilter != null && !cateFilter.isEmpty()) {
+            sql += " AND t3.value = ? ";
+        }
+        if (authorFilter != null && !authorFilter.isEmpty()) {
+            sql += " AND t2.fullname = ?";
+        }
+//        // add search query
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql += " AND t1.title LIKE ? OR t3.value LIKE ? OR t2.fullname LIKE ? ";
+        }
+        // add sort condition 
+        sql +=" ORDER BY t1.lastupdate DESC LIMIT ?, ?;"; // pagination
+        try {
+            conn = context.getConnection();
+//            System.out.println(sql);
+            PreparedStatement stm = conn.prepareStatement(sql);
+            int paramIndex = 1;
+            if (cateFilter != null && !cateFilter.isEmpty()) {
+                stm.setString(paramIndex++, cateFilter);
+            }
+            if (authorFilter != null && !authorFilter.isEmpty()) {
+                stm.setString(paramIndex++, authorFilter);
+            }
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String likeParam = "%" + searchQuery + "%";
+                stm.setString(paramIndex++, likeParam);
+                stm.setString(paramIndex++, likeParam);
+                stm.setString(paramIndex++, likeParam);
+            }
+            stm.setInt(paramIndex++, offset);
+            stm.setInt(paramIndex++, limit);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int categoryId = rs.getInt("setting_id");
+                int Id = rs.getInt("id");
+                int authorId = rs.getInt("authorid");
+                String imgUrl = rs.getString("image_url");
+                String title = rs.getString("title");
+                String detail = rs.getString("detail");
+                boolean status = rs.getBoolean("status");
+                boolean is_featured = rs.getBoolean("is_featured");
+                String sumary = rs.getString("sumary");
+                Timestamp createTime = rs.getTimestamp("createdtime");
+                Timestamp updateTime = rs.getTimestamp("lastupdate");
+                String authorName = rs.getString("fullname");
+                String categoryName = rs.getString("value");
+//            Setting st = stDAO.getSettingById(roleId);
+                Blog u = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName, is_featured, sumary);
+                list.add(u);
+            }
+            rs = stm.executeQuery("SELECT FOUND_ROWS()"); // get total number of row found while execute query
+            if (rs.next()) {
+                this.noOfrecord = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+        }
+
+        return list;
+    }
 
     public int getNumberOfRecord() {
         return noOfrecord;
