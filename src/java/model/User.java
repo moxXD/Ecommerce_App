@@ -61,7 +61,7 @@ public User(int id, String email, String password, String fullname, String imgUr
     }
 
     public User(int id, Setting setting, String email, String fullname, String imgUrl,
-            String phone, String address, boolean status, boolean gender) {
+            String phone, String address, boolean status, boolean gender,Date dob) {
         this.id = id;
         this.setting = setting;
         this.email = email;
@@ -71,6 +71,7 @@ public User(int id, String email, String password, String fullname, String imgUr
         this.address = address;
         this.status = status;
         this.gender = gender;
+        this.dob=dob;
     }
 
     public int getId() {

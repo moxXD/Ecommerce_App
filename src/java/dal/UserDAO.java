@@ -20,7 +20,7 @@ import model.User;
  * @author Duc Le
  */
 public class UserDAO {
-
+    
     private final String USER_TABLE = "user";
     private final String USER_ID = "id";
     private final String USER_EMAIL = "email";
@@ -35,7 +35,7 @@ public class UserDAO {
     private final String USER_DOB = "dob";
     private final String USER_PHONE = "phone";
     private final String USER_ADDRESS = "address";
-
+    
     DBContext context = new DBContext();
     private Connection conn;
     SettingDAO stDAO = new SettingDAO();
@@ -78,7 +78,7 @@ public class UserDAO {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             int paramIndex = 1;
-
+            
             if (genderFilter != null && !genderFilter.isEmpty()) {
                 stm.setString(paramIndex++, genderFilter);
             }
@@ -94,11 +94,11 @@ public class UserDAO {
                 stm.setString(paramIndex++, likeParam);
                 stm.setString(paramIndex++, likeParam);
                 stm.setString(paramIndex++, likeParam);
-
+                
             }
             stm.setInt(paramIndex++, offset);
             stm.setInt(paramIndex++, limit);
-
+            
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt(USER_ID);
@@ -116,10 +116,10 @@ public class UserDAO {
             if (rs.next()) {
                 this.noOfrecord = rs.getInt(1);
             }
-
+            
         } catch (SQLException e) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
-
+            
         } finally {
             if (conn != null) {
                 try {
@@ -131,7 +131,7 @@ public class UserDAO {
         }
         return list;
     }
-
+    
     public int getNumberOfRecord() {
         return noOfrecord;
     }
@@ -149,6 +149,7 @@ public class UserDAO {
                 + USER_IMAGE + ",\n"
                 + USER_DOB + ",\n"
                 + USER_PHONE + ",\n"
+                + USER_DOB + ",\n"
                 + USER_ADDRESS + "\n"
                 + "FROM " + USER_TABLE + "\n"
                 + "where " + USER_ID + " = ?;";
@@ -168,7 +169,8 @@ public class UserDAO {
                         rs.getString(USER_PHONE),
                         rs.getString(USER_ADDRESS),
                         rs.getBoolean(USER_STATUS),
-                        rs.getBoolean(USER_GENDER));
+                        rs.getBoolean(USER_GENDER),
+                        rs.getDate(USER_DOB));
             }
         } catch (SQLException e) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -195,7 +197,7 @@ public class UserDAO {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             System.out.println("==========");
-
+            
             stm.setInt(1, stId);
             stm.setBoolean(2, status);
             stm.setInt(3, id);
@@ -238,7 +240,7 @@ public class UserDAO {
             }
         }
     }
-
+    
     public void insertUser(User u) {
         String sql = "INSERT INTO " + USER_TABLE + "\n ("
                 + USER_EMAIL + ",\n"
@@ -288,10 +290,10 @@ public class UserDAO {
             }
         }
     }
-
+    
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
         dao.updateUserStatus(1, true);
-
+        
     }
 }

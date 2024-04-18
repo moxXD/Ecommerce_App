@@ -119,7 +119,7 @@
             <aside class="right-side">
                 <section class="content">
                     <c:set value="${requestScope.setting}" var="s"/>
-            
+
 
                     <div class="container ">
 
@@ -180,7 +180,7 @@
                                 <c:if test="${requestScope.disabled}">
                                     <label for="order" class="col-sm-2 col-form-label">Order:</label>
                                 </c:if>
-                                
+
                                 <div class="col-sm-10">
                                     <c:if test="${requestScope.disabled}">
                                         <input type="text" class="form-control" 
@@ -188,7 +188,7 @@
                                                value="${s.isOrder()}">
 
                                     </c:if>
-                            
+
                                     <span id="orderError" class="error-msg"></span>
 
                                 </div>
@@ -206,19 +206,25 @@
                                             <option value="true" ${s.status?"selected":""}>Active</option>
                                             <option value="false" ${!s.status?"selected":""}>Inactive</option>
                                         </select>
+                                        <span id="checkboxError" class="error-msg"></span>
                                     </div>
                                 </c:if>
-                                <span id="checkboxError" class="error-msg"></span>
+                                
 
                             </div>
 
                             <!-- Button -->
 
                             <div class=" form-group row " style="padding: 0 15% 0 15%">
-                                
+
                                 <c:if test="${requestScope.disabled}">
                                     <div class="col-md-6">
-                                         <button  type="submit" class="btn btn-primary btn-block">Save</button>
+                                        <button  type="submit" class="btn btn-primary btn-block">Save</button>
+                                    </div>
+                                </c:if>
+                                <c:if test="${!requestScope.disabled}">
+                                    <div class="col-md-12">
+                                        <button  type="submit" class="btn btn-primary btn-block">Save</button>
                                     </div>
                                 </c:if>
                                 <c:if test="${requestScope.disabled}">
@@ -251,7 +257,7 @@
                 // redirect to setting detail with action
                 window.location.href = 'settingdetail?action=' + action;
             }
-            
+
             function redirectToSettingList() {
                 // redirect to setting list
                 window.location.href = 'settinglist';
@@ -259,11 +265,12 @@
             // validate input
             function validateForm() {
                 var value = document.getElementById("value").value;
+                var status = document.getElementsByName("status")[0].value;
                 var specialChars = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]/;
-                var valueError = document.getElementById("valueError");
+                var checkboxError = document.getElementById("checkboxError");
 
                 valueError.innerHTML = '';
-
+                checkboxError.innerHTML = '';
 
                 if (specialChars.test(value)) {
                     valueError.innerHTML = 'Value should not contain special characters.';
@@ -274,16 +281,13 @@
                     valueError.innerHTML = 'Please enter value.';
                     return false; // Prevent form submission if value is not entered
                 }
-
+                if (status === '') {
+                    checkboxError.innerHTML = 'Please select status.'; // Hiển thị thông báo lỗi nếu status không được chọn
+                    return false; // Prevent form submission if status is not selected
+                }
                 return true; // Allow form submission if all conditions are met
             }
-            function toggleCheckbox(checkbox) {
-                var otherCheckboxId = (checkbox.id === 'active') ? 'deactive' : 'active';
-                var otherCheckbox = document.getElementById(otherCheckboxId);
-                if (checkbox.checked) {
-                    otherCheckbox.checked = false;
-                }
-            }
+
 
         </script>
         <!-- jQuery 2.0.2 -->

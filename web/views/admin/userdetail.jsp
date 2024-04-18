@@ -58,7 +58,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
         <style type="text/css">
-
+            .error-msg {
+                color: red;
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
@@ -126,7 +129,7 @@
                         <!--heading-->
                         <h2 class="mb-4">User Detail</h2>
                         <div class="row">
-                            <form method="post" action="userdetail" enctype="multipart/form-data">
+                            <form method="post" action="userdetail" enctype="multipart/form-data" onsubmit="return validateForm()">
                                 <!--avatar-->
                                 <div class="col-md-4">
                                     <c:if test="${u==null}">
@@ -188,12 +191,15 @@
                                                 <option value="true" ${u.status?"selected":""}>Active</option>
                                                 <option value="false" ${u.status==false?"selected":""}>Inactive</option>
                                             </select>
-
+                                            <span id="checkboxError" class="error-msg"></span>
                                         </div>
                                     </div>
+                                    <!--dob-->
                                     <div class="form-group">
                                         <label for="dob"  class="form-check-label">Date Of Birth</label>
-                                        <input type="date" name="dob" class="form-control" id="dob" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                        <input type="date" name="dob" class="form-control" id="dob"
+                                               ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}
+                                               value="${u.getDob()}">
                                     </div>
                                     <!--button group-->
                                     <c:if test="${param.action.equals('add')}">
@@ -255,7 +261,20 @@
                 image.src = src;
             }
         });
+        function validateForm() {
+            var status = document.getElementsByName("status")[0].value;
+            var checkboxError = document.getElementById("checkboxError");
 
+
+            checkboxError.innerHTML = '';
+
+
+            if (status === '') {
+                checkboxError.innerHTML = 'Please select status.'; // Hiển thị thông báo lỗi nếu status không được chọn
+                return false; // Prevent form submission if status is not selected
+            }
+            return true; // Allow form submission if all conditions are met
+        }
     </script>
 
     <!-- jQuery -->

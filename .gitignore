@@ -12,3 +12,5 @@ nb-configuration.xml
 *.jar
 *.war
 web/META-INF/context.xml
+nbproject/private/private.xml
+/nbproject
