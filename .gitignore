@@ -14,3 +14,9 @@ nb-configuration.xml
 web/META-INF/context.xml
 nbproject/private/private.xml
 /nbproject
+/.vs
+/nbproject/build-impl.xml
+/nbproject/genfiles.properties
+/nbproject/project.properties
+/nbproject/project.xml
+/nbproject/private/private.properties
