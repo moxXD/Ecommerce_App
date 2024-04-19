@@ -13,6 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -71,6 +75,10 @@ public class ProductListServlet extends HttpServlet {
         int page = 1;
         int recordPerPage = 6;
         int cateId = 0;
+//        LocalDateTime now = LocalDateTime.now();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-mm");
+        Date date = new Date();
+//        System.out.println("date: " + formatter.format(date));
         String page_raw = request.getParameter("page");
         String cateId_raw = request.getParameter("categoryId");
         String search_raw = request.getParameter("searchInput");
@@ -102,6 +110,7 @@ public class ProductListServlet extends HttpServlet {
         request.setAttribute("products", pList);
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
+        request.setAttribute("currentDate", formatter.format(date));
         request.getRequestDispatcher("productlist.jsp").forward(request, response);
     }
 

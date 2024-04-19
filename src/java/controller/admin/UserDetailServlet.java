@@ -16,12 +16,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Setting;
@@ -38,6 +39,11 @@ import utility.Encode;
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class UserDetailServlet extends HttpServlet {
+
+    UserDAO userDao = new UserDAO();
+    SettingDAO settingDao = new SettingDAO();
+    Encode encode = new Encode();
+    private final String UPLOAD_DIRECTORY = "uploads";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -77,36 +83,32 @@ public class UserDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // get request parameter
         String action = request.getParameter("action");
-
-        UserDAO userDao = new UserDAO();
-        SettingDAO setDao = new SettingDAO();
-        List<Setting> settings = new ArrayList<>();
-
         String id_raw = request.getParameter("id");
+
+        List<Setting> settings = new ArrayList<>();
         int id;
         User u = null;
-
+        // get all setting for view
         try {
-            settings = setDao.getAllSetting();
+            settings = settingDao.getAllSetting();
         } catch (NumberFormatException e) {
             Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
         }
-
+        // get user information in view and edit action
         if (action.equals("view") || action.equals("edit")) {
-
             try {
                 id = Integer.parseInt(id_raw);
                 u = userDao.getUserById(id);
             } catch (NumberFormatException e) {
                 Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
-
             }
-
         }
+        // set data for view
         request.setAttribute("settingsData", settings);
         request.setAttribute("userData", u);
-
+        // redirect 
         request.getRequestDispatcher("../views/admin/userdetail.jsp").forward(request, response);
     }
 
@@ -122,68 +124,23 @@ public class UserDetailServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("formAction");
-        String id_raw = request.getParameter("userId");
-        UserDAO userDao = new UserDAO();
-        if (action != null && action.equals("add")) {
 
-            // get all parameter
-            String role_raw = request.getParameter("role");
-            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-            boolean status = Boolean.parseBoolean(request.getParameter("status"));
-            // convert parameter
+        if (action != null && !action.isEmpty()) {
             try {
-                // Lưu file tải lên và nhận đường dẫn lưu trữ
-                String uploadDirectory = "images";
-
-                String imgUrl = "../image/" + saveUploadedFile(request.getPart("file"), uploadDirectory);
-                String fullName = request.getParameter("fullname");
-                String email = request.getParameter("email");
-                String phone = request.getParameter("mobile");
-                String address = request.getParameter("address");
-                String dob = request.getParameter("dob");
-                Date newDob = Date.valueOf(dob);
-                /// Sinh mật khẩu ngẫu nhiên và gửi qua email
-                String password = new Encode().generateRandomPassword(12);
-                String hashed= new Encode().toSHA1(password);
-                new EmailService().sendNewPassword(fullName, email, password);
-
-                // Lấy role từ database
-                SettingDAO settingDAO = new SettingDAO();
-                Setting role = settingDAO.getSettingByTypeAndValue("role", role_raw);
-
-                User u = new User(0, role, email, hashed,
-                        fullName, imgUrl, phone, address, true, status, gender, newDob);
-                try {
-                    userDao.insertUser(u);
-                } catch (Exception e) {
-                    Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
-
+                String fileName = "";
+                Part filePart = request.getPart("file");
+                if (filePart != null) {
+                    fileName = extractFileName(filePart);
+                    // refines the fileName in case it is an absolute path
+                    fileName = new File(fileName).getName();
+                    filePart.write(this.getFolderUpload().getAbsolutePath() + File.separator + fileName);
                 }
-
-                response.sendRedirect("userlist");
-            } catch (NumberFormatException e) {
+                addNewUser(request, response, fileName);
+            } catch (Exception e) {
                 Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         } else {
-            String role_raw = request.getParameter("role");
-            boolean status = Boolean.parseBoolean(request.getParameter("status"));
-            System.out.println("status: "+status);
-//            String deactiveCb = request.getParameter("deactivatecb");
-            int  id;
-            try {
-                id=Integer.parseInt(id_raw);
-                Setting s=new SettingDAO().getSettingByTypeAndValue("role", role_raw);
-                if (status) {
-                    userDao.updateUserStatusAndRole(id, s.getId(), true);
-                } else {
-                    userDao.updateUserStatusAndRole(id, s.getId(), false);
-                }
-                response.sendRedirect("userlist");
-            } catch (NumberFormatException e) {
-                Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
-
-            }
-
+            updateUser(request, response);
         }
     }
 
@@ -197,32 +154,88 @@ public class UserDetailServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private String getFileName(final Part part) {
-        final String partHeader = part.getHeader("content-disposition");
-        for (String content : partHeader.split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
-            }
+    private void addNewUser(HttpServletRequest request,
+            HttpServletResponse response, String imgUrl) throws IOException, ServletException {
+        // get input data
+        String role_raw = request.getParameter("role");
+        boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        String fullName = request.getParameter("fullname");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("mobile");
+        String address = request.getParameter("address");
+        String dob = request.getParameter("dob");
+        Date newDob = null;
+        if (dob != null) {
+            newDob = Date.valueOf(dob);// conver into sql date
         }
-        return null;
+        // add if email or phone not dup
+        boolean emailCheck = userDao.isEmailExist(email);
+        boolean phoneCheck = userDao.isPhoneExist(phone);
+        // both phone and email exist
+        if (emailCheck && phoneCheck) {
+            request.setAttribute("err", "Email and phone already exist in the system");
+            request.getRequestDispatcher("../views/admin/userdetail.jsp").forward(request, response);
+        } else if (emailCheck) { // email exist
+            request.setAttribute("emailErr", "Email already exist in the system");
+            request.getRequestDispatcher("../views/admin/userdetail.jsp").forward(request, response);
+        } else if (phoneCheck) { // phone exist
+            request.setAttribute("phoneErr", "Phone already exist in the system");
+            request.getRequestDispatcher("../views/admin/userdetail.jsp").forward(request, response);
+        } else { // add user into database
+            /// generate and send new password by mail
+            String password = encode.generateRandomPassword(12);
+            String hashed = encode.toSHA1(password); // hash password to save into db
+            new EmailService().sendNewPassword(fullName, email, password);
+            // get role from db
+            Setting role = settingDao.getSettingByTypeAndValue("role", role_raw);
+            // insert new user
+            User u = new User(0, role, email, hashed,
+                    fullName, imgUrl, phone, address, true, status, gender, newDob);
+            userDao.insertUser(u);
+            // redirect after insert
+            response.sendRedirect("userlist");
+        }
     }
 
-    // Phương thức xử lý ghi file tải lên
-    private String saveUploadedFile(Part filePart, String uploadDirectory) {
-        String fileName = getFileName(filePart);
-        if (fileName != null) {
-            try ( InputStream inputStream = filePart.getInputStream()) {
-                File uploadDir = new File(uploadDirectory);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                File file = new File(uploadDir, fileName);
-                Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                return file.getAbsolutePath();
-            } catch (IOException e) {
-                Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+    private void updateUser(HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+        // get data from request
+        String id_raw = request.getParameter("userId");
+        String role_raw = request.getParameter("role");
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        int id;
+        try {
+            id = Integer.parseInt(id_raw);
+            // get setting from db by type and value
+            Setting s = new SettingDAO().getSettingByTypeAndValue("role", role_raw);
+            if (status) {
+                userDao.updateUserStatusAndRole(id, s.getId(), true);
+            } else {
+                userDao.updateUserStatusAndRole(id, s.getId(), false);
+            }
+            response.sendRedirect("userlist");
+        } catch (NumberFormatException e) {
+            Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
             }
         }
-        return null;
+        return "";
+    }
+
+    public File getFolderUpload() {
+        File folderUpload = new File(getServletContext().getRealPath("/") + "/" + UPLOAD_DIRECTORY);
+        if (!folderUpload.exists()) {
+            folderUpload.mkdirs();
+        }
+        return folderUpload;
     }
 }

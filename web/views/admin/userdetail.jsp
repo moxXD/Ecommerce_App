@@ -137,62 +137,53 @@
                                         <img id="img-preview" src="${pageContext.request.contextPath}/views/img/14162.png" alt="Avatar" class="img-fluid rounded-circle mb-4">
                                     </c:if>
                                     <c:if test="${u!=null}">
-                                        <img src="C:\Program Files\Apache Software Foundation\Tomcat 10.0\bin\images\WIN_20240409_18_46_42_Pro.jpg" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                        <img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
                                     </c:if>
                                     <input type="file" name="file" id="file-input" accept="image/*">
                                 </div>
                                 <div class="col-md-8">
-                                    <!--full name-->
-                                    <div class="form-group">
-                                        <label for="fullname">Full Name:</label>
-                                        <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+
+                                    <div class="row"  style="margin-bottom: 1%">
+                                        <!--full name-->
+                                        <div class=" col-md-6">
+                                            <label for="fullname">Full Name:</label>
+                                            <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                            <span id="fullnameError" class="error-msg"></span>
+                                        </div>
+                                        <!--gender-->
+                                        <div class=" col-md-6">
+                                            <label for="gender">Gender:</label>
+                                            <select class="form-control" style="width: 97%" name="gender" id="gender" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                                <option value="">Select Gender</option>
+                                                <option value="true" ${u.gender?"selected":""}>Male</option>
+                                                <option value="false" ${u.gender!=null &&!u.gender?"selected":""}>Female</option>
+                                            </select>
+                                            <span id="genderError" class="error-msg"></span>
+                                        </div>
                                     </div>
-                                    <!--gender-->
-                                    <div class="form-group">
-                                        <label for="gender">Gender:</label>
-                                        <select class="form-control" name="gender" id="gender" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
-                                            <option value="">Select Gender</option>
-                                            <option value="true" ${u.gender?"selected":""}>Male</option>
-                                            <option value="false" ${u.gender!=null &&!u.gender?"selected":""}>Female</option>
-                                        </select>
-                                    </div>
+
                                     <!--email-->
-                                    <div class="form-group">
+                                    <div class="form-group ">
                                         <label for="email">Email:</label>
                                         <input type="email" class="form-control" name="email" id="email" value="${u.email}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                        <c:if test="${not empty emailErr}">
+                                            <span class="error-msg">${emailErr}</span>
+                                        </c:if>
+                                        <span id="emailError" class="error-msg">${emailErr}</span>
                                     </div>
+
+
                                     <!--mobile -->
                                     <div class="form-group">
                                         <label for="mobile">Mobile:</label>
-                                        <input type="text" class="form-control" name="mobile" id="mobile" value="${u.phone}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
-                                    </div>
-                                    <!--role-->
-                                    <div class="form-group">
-                                        <label for="role">Role</label>
-                                        <select class="form-control" name="role" id="role" >
-                                            <c:forEach items="${requestScope.settingsData}" var="s">
-                                                <c:if test="${s.type.equals('role')}">
-                                                    <option value="${s.value}"${u.setting.id==s.id?"selected":""}>${s.value}</option>
-                                                </c:if>
-                                            </c:forEach>
-                                        </select>
+                                        <input type="number" class="form-control" name="mobile" id="mobile" value="${u.phone}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>                                        
+                                        <span id="mobileError" class="error-msg">${phoneErr}</span>
                                     </div>
                                     <!--adress-->
                                     <div class="form-group">
                                         <label for="address">Address:</label>
                                         <input type="text" class="form-control" name="address" id="address" value="${u.address}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
-                                    </div>
-                                    <!--status-->
-                                    <div class="form-group">
-                                        <label for="status-group"  class="form-check-label">Status</label>
-                                        <div  id="status-group">
-                                            <select name="status" class="form-control" >
-                                                <option value="">Select Status</option>
-                                                <option value="true" ${u.status?"selected":""}>Active</option>
-                                                <option value="false" ${u.status==false?"selected":""}>Inactive</option>
-                                            </select>
-                                            <span id="checkboxError" class="error-msg"></span>
-                                        </div>
+                                        <span id="addressError" class="error-msg"></span>
                                     </div>
                                     <!--dob-->
                                     <div class="form-group">
@@ -200,7 +191,38 @@
                                         <input type="date" name="dob" class="form-control" id="dob"
                                                ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}
                                                value="${u.getDob()}">
+                                        <span id="dobError" class="error-msg"></span>
                                     </div>
+                                    <div class="row">
+                                        <!--role-->
+                                        <div class="col-md-6">
+                                            <label for="role">Role</label>
+                                            <select class="form-control" name="role" id="role" >
+                                                <c:forEach items="${requestScope.settingsData}" var="s">
+                                                    <c:if test="${s.type.equals('role')}">
+                                                        <option value="${s.value}"${u.setting.id==s.id?"selected":""}>${s.value}</option>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+
+                                        <!--status-->
+                                        <div class="col-md-6">
+                                            <label for="status-group"  class="form-check-label">Status</label>
+                                            <!--<div  id="status-group">-->
+                                            <select name="status" class="form-control" style="width: 97%">
+                                                <option value="">Select Status</option>
+                                                <option value="true" ${u.status?"selected":""}>Active</option>
+                                                <option value="false" ${u.status==false?"selected":""}>Inactive</option>
+                                            </select>
+                                            <span id="statusError" class="error-msg"></span>
+                                            <!--                                            </div>-->
+                                        </div>
+                                    </div>
+
+                                    <c:if test="${not empty err}">
+                                        <div class="error-msg">${err}</div>
+                                    </c:if>
                                     <!--button group-->
                                     <c:if test="${param.action.equals('add')}">
 
@@ -232,82 +254,134 @@
 
                                     </div>
                                 </div>
+                            </form>
                         </div>
-                        </form>
                     </div>
                 </section>
             </aside>
         </div>
-    </body>
+    </div>
+</body>
 
-    <%@include file="../layout/footer.jsp" %>
-    <script type="text/javascript">
-        function redirectToEdit(id) {
-            window.location.href = "userdetail?action=edit&id=" + id;
+<%@include file="../layout/footer.jsp" %>
+<script type="text/javascript">
+    function redirectToEdit(id) {
+        window.location.href = "userdetail?action=edit&id=" + id;
+    }
+    function redirectToUserList() {
+        window.location.href = "userlist";
+    }
+    function redirectToAdd() {
+        window.location.href = "userdetail?action=add";
+
+    }
+
+    const input = document.getElementById('file-input');
+    const image = document.getElementById('img-preview');
+    // preview image
+    input.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            const src = URL.createObjectURL(e.target.files[0]);
+            image.src = src;
         }
-        function redirectToUserList() {
-            window.location.href = "userlist";
+    });
+    function validateForm() {
+        // Lấy giá trị của các trường input
+        var fullname = document.getElementById("fullname").value;
+        var gender = document.getElementById("gender").value;
+        var email = document.getElementById("email").value;
+        var mobile = document.getElementById("mobile").value;
+        var address = document.getElementById("address").value;
+        var dob = document.getElementById("dob").value;
+        var status = document.getElementsByName("status")[0].value;
+
+
+        // get error span
+        var fullnameError = document.getElementById("fullnameError");
+        var genderError = document.getElementById("genderError");
+        var emailError = document.getElementById("emailError");
+        var mobileError = document.getElementById("mobileError");
+        var addressError = document.getElementById("addressError");
+        var dobError = document.getElementById("dobError");
+        var statusError = document.getElementById("statusError");
+        // Xóa thông báo lỗi cũ
+        fullnameError.innerHTML = '';
+        genderError.innerHTML = '';
+        emailError.innerHTML = '';
+        mobileError.innerHTML = '';
+        addressError.innerHTML = '';
+        dobError.innerHTML = '';
+        statusError.innerHTML = '';
+
+        // Kiểm tra nếu bất kỳ trường nào là rỗng, hiển thị thông báo lỗi và ngăn việc submit form
+        if (fullname.trim() === '') {
+            fullnameError.innerHTML = 'Please enter your full name.';
+            return false;
         }
-        function redirectToAdd() {
-            window.location.href = "userdetail?action=add";
-
+        if (gender === '') {
+            genderError.innerHTML = 'Please select your gender.';
+            return false;
         }
-        const input = document.getElementById('file-input');
-        const image = document.getElementById('img-preview');
-
-        input.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                const src = URL.createObjectURL(e.target.files[0]);
-                image.src = src;
-            }
-        });
-        function validateForm() {
-            var status = document.getElementsByName("status")[0].value;
-            var checkboxError = document.getElementById("checkboxError");
-
-
-            checkboxError.innerHTML = '';
-
-
-            if (status === '') {
-                checkboxError.innerHTML = 'Please select status.'; // Hiển thị thông báo lỗi nếu status không được chọn
-                return false; // Prevent form submission if status is not selected
-            }
-            return true; // Allow form submission if all conditions are met
+        if (email.trim() === '') {
+            emailError.innerHTML = 'Please enter your email.';
+            return false;
         }
-    </script>
+        if (mobile.trim() === '') {
+            mobileError.innerHTML = 'Please enter your mobile.';
 
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            return false;
+        }
+        if (address.trim() === '') {
+            addressError.innerHTML = 'Please enter your adress.';
+
+            return false;
+        }
+        if (dob.trim() === '') {
+            dobError.innerHTML = 'Please select your date of birth.';
+
+            return false;
+        }
+        if (status === '') {
+            statusError.innerHTML = 'Please select your gender';
+            return false;
+        }
+
+        // Nếu tất cả các trường đều được điền đầy đủ, cho phép submit form
+        return true;
+    }
+</script>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
 
-    <!-- jQuery 2.0.2 -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-    <script src="${pageContext.request.contextPath}/views/js/jquery.min.js"
-    type="text/javascript"></script>
+<!-- jQuery 2.0.2 -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/views/js/jquery.min.js"
+type="text/javascript"></script>
 
-    <!-- jQuery UI 1.10.3 -->
-    <script src="${pageContext.request.contextPath}/views/js/jquery-ui-1.10.3.min.js"
-    type="text/javascript"></script>
-    <!-- Bootstrap -->
-    <script src="${pageContext.request.contextPath}/views/js/bootstrap.min.js"
-    type="text/javascript"></script>
-    <!-- daterangepicker -->
-    <script
-        src="${pageContext.request.contextPath}/views/js/plugins/daterangepicker/daterangepicker.js"
-    type="text/javascript"></script>
+<!-- jQuery UI 1.10.3 -->
+<script src="${pageContext.request.contextPath}/views/js/jquery-ui-1.10.3.min.js"
+type="text/javascript"></script>
+<!-- Bootstrap -->
+<script src="${pageContext.request.contextPath}/views/js/bootstrap.min.js"
+type="text/javascript"></script>
+<!-- daterangepicker -->
+<script
+    src="${pageContext.request.contextPath}/views/js/plugins/daterangepicker/daterangepicker.js"
+type="text/javascript"></script>
 
-    <script src="${pageContext.request.contextPath}/views/js/plugins/chart.js"
-    type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/views/js/plugins/chart.js"
+type="text/javascript"></script>
 
-    <!-- Director App -->
-    <script src="${pageContext.request.contextPath}/views/js/Director/app.js"
-    type="text/javascript"></script>
+<!-- Director App -->
+<script src="${pageContext.request.contextPath}/views/js/Director/app.js"
+type="text/javascript"></script>
 
-    <!-- Director dashboard demo (This is only for demo purposes) -->
-    <script src="${pageContext.request.contextPath}/views/js/Director/dashboard.js"
-    type="text/javascript"></script>
+<!-- Director dashboard demo (This is only for demo purposes) -->
+<script src="${pageContext.request.contextPath}/views/js/Director/dashboard.js"
+type="text/javascript"></script>
 
 
 
