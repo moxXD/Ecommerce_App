@@ -44,6 +44,7 @@ public class UserDetailServlet extends HttpServlet {
     SettingDAO settingDao = new SettingDAO();
     Encode encode = new Encode();
     private final String UPLOAD_DIRECTORY = "uploads";
+    List<Setting> settings = new ArrayList<>();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -87,7 +88,6 @@ public class UserDetailServlet extends HttpServlet {
         String action = request.getParameter("action");
         String id_raw = request.getParameter("id");
 
-        List<Setting> settings = new ArrayList<>();
         int id;
         User u = null;
         // get all setting for view
@@ -97,7 +97,7 @@ public class UserDetailServlet extends HttpServlet {
             Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
         }
         // get user information in view and edit action
-        if (action.equals("view") || action.equals("edit")) {
+        if (action.equals("view") ) {
             try {
                 id = Integer.parseInt(id_raw);
                 u = userDao.getUserById(id);
@@ -129,7 +129,7 @@ public class UserDetailServlet extends HttpServlet {
             try {
                 String fileName = "";
                 Part filePart = request.getPart("file");
-                if (filePart != null) {
+                if (filePart != null && filePart.getSize() > 0) {
                     fileName = extractFileName(filePart);
                     // refines the fileName in case it is an absolute path
                     fileName = new File(fileName).getName();
@@ -172,23 +172,33 @@ public class UserDetailServlet extends HttpServlet {
         // add if email or phone not dup
         boolean emailCheck = userDao.isEmailExist(email);
         boolean phoneCheck = userDao.isPhoneExist(phone);
+
         // both phone and email exist
         if (emailCheck && phoneCheck) {
             request.setAttribute("err", "Email and phone already exist in the system");
+            settings = settingDao.getAllSetting();
+            request.setAttribute("settingsData", settings);
             request.getRequestDispatcher("../views/admin/userdetail.jsp").forward(request, response);
         } else if (emailCheck) { // email exist
             request.setAttribute("emailErr", "Email already exist in the system");
+            settings = settingDao.getAllSetting();
+            request.setAttribute("settingsData", settings);
             request.getRequestDispatcher("../views/admin/userdetail.jsp").forward(request, response);
         } else if (phoneCheck) { // phone exist
             request.setAttribute("phoneErr", "Phone already exist in the system");
+            settings = settingDao.getAllSetting();
+            request.setAttribute("settingsData", settings);
             request.getRequestDispatcher("../views/admin/userdetail.jsp").forward(request, response);
         } else { // add user into database
+
             /// generate and send new password by mail
             String password = encode.generateRandomPassword(12);
             String hashed = encode.toSHA1(password); // hash password to save into db
             new EmailService().sendNewPassword(fullName, email, password);
+
             // get role from db
             Setting role = settingDao.getSettingByTypeAndValue("role", role_raw);
+
             // insert new user
             User u = new User(0, role, email, hashed,
                     fullName, imgUrl, phone, address, true, status, gender, newDob);

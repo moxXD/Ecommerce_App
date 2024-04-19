@@ -63,7 +63,7 @@ public class UserListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int page = 1;
-        int recordPerPage = 10;
+        int recordPerPage = 5;
         List<User> list = new ArrayList<>();
         List<Setting> st = new ArrayList<>();
         

@@ -147,13 +147,13 @@
                                         <!--full name-->
                                         <div class=" col-md-6">
                                             <label for="fullname">Full Name:</label>
-                                            <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                            <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view")?"disabled":""}>
                                             <span id="fullnameError" class="error-msg"></span>
                                         </div>
                                         <!--gender-->
                                         <div class=" col-md-6">
                                             <label for="gender">Gender:</label>
-                                            <select class="form-control" style="width: 97%" name="gender" id="gender" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                            <select class="form-control" style="width: 97%" name="gender" id="gender" ${param.action.equals("view") ?"disabled":""}>
                                                 <option value="">Select Gender</option>
                                                 <option value="true" ${u.gender?"selected":""}>Male</option>
                                                 <option value="false" ${u.gender!=null &&!u.gender?"selected":""}>Female</option>
@@ -165,10 +165,7 @@
                                     <!--email-->
                                     <div class="form-group ">
                                         <label for="email">Email:</label>
-                                        <input type="email" class="form-control" name="email" id="email" value="${u.email}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
-                                        <c:if test="${not empty emailErr}">
-                                            <span class="error-msg">${emailErr}</span>
-                                        </c:if>
+                                        <input type="email" class="form-control" name="email" id="email" value="${u.email}" ${param.action.equals("view") ?"disabled":""}>
                                         <span id="emailError" class="error-msg">${emailErr}</span>
                                     </div>
 
@@ -176,21 +173,21 @@
                                     <!--mobile -->
                                     <div class="form-group">
                                         <label for="mobile">Mobile:</label>
-                                        <input type="number" class="form-control" name="mobile" id="mobile" value="${u.phone}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>                                        
+                                        <input type="number" class="form-control" name="mobile" id="mobile" value="${u.phone}" ${param.action.equals("view") ?"disabled":""}>                                        
                                         <span id="mobileError" class="error-msg">${phoneErr}</span>
                                     </div>
                                     <!--adress-->
                                     <div class="form-group">
                                         <label for="address">Address:</label>
-                                        <input type="text" class="form-control" name="address" id="address" value="${u.address}" ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}>
+                                        <input type="text" class="form-control" name="address" id="address" value="${u.address}" ${param.action.equals("view") ?"disabled":""}>
                                         <span id="addressError" class="error-msg"></span>
                                     </div>
                                     <!--dob-->
                                     <div class="form-group">
                                         <label for="dob"  class="form-check-label">Date Of Birth</label>
                                         <input type="date" name="dob" class="form-control" id="dob"
-                                               ${param.action.equals("view") || param.action.equals("edit")?"disabled":""}
-                                               value="${u.getDob()}">
+                                               ${param.action.equals("view") ?"disabled":""}
+                                               value="${u.getDob()}" max="<%=java.time.LocalDate.now()%>">
                                         <span id="dobError" class="error-msg"></span>
                                     </div>
                                     <div class="row">
@@ -224,7 +221,7 @@
                                         <div class="error-msg">${err}</div>
                                     </c:if>
                                     <!--button group-->
-                                    <c:if test="${param.action.equals('add')}">
+                                    <c:if test="${param.action.equals('add') or param.action==null}">
 
                                         <input type="hidden" name="formAction" value="add">
                                     </c:if>
@@ -265,9 +262,7 @@
 
 <%@include file="../layout/footer.jsp" %>
 <script type="text/javascript">
-    function redirectToEdit(id) {
-        window.location.href = "userdetail?action=edit&id=" + id;
-    }
+
     function redirectToUserList() {
         window.location.href = "userlist";
     }
@@ -342,7 +337,7 @@
             return false;
         }
         if (status === '') {
-            statusError.innerHTML = 'Please select your gender';
+            statusError.innerHTML = 'Please select status';
             return false;
         }
 
