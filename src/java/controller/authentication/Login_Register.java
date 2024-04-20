@@ -86,13 +86,14 @@ public class Login_Register extends HttpServlet {
         User check = ud.getUserByEmail(mail);
         User u = ud.getUser(mail, enpass);
         session.setAttribute("userSession", u);
-        session.setAttribute("id", u.getId());
 
         if (mail.isEmpty()) {
             request.setAttribute("nullInput", "Can not be null in this field");
             request.getRequestDispatcher("authen/login_register.jsp").forward(request, response);
             return;
         }
+        //=========================================
+        //Login
         if (action.equals("login")) {
             if (check == null) {
                 session.setAttribute("wrong", "You must register in system");
@@ -104,15 +105,18 @@ public class Login_Register extends HttpServlet {
                 return;
             } else if (u != null) {
                 if (u.getSetting().getId() == 1) {
+                    session.setAttribute("id", u.getId());
                     response.sendRedirect("admin/dashboard");
                 } else {
+                    session.setAttribute("id", u.getId());
                     response.sendRedirect("Profile");
                 }
             } else {
                 request.getRequestDispatcher("authen/login_register.jsp").forward(request, response);
                 return;
             }
-        }//=========================================
+        }
+        //=========================================
         //Register
         if (action.equals("register")) {
             if (check != null) {
