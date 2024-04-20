@@ -58,6 +58,19 @@
                                 <div class="panel-group category-products" id="accordian"><!--category-productsr-->
                                     <div class="panel panel-default">
                                         <div class="form-group">
+                                            <label for="filsearch">Search:</label>
+                                            <div class="input-group">
+                                                <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
+                                                <span class="input-group-btn">
+                                                    <button type='submit' id='search-btn' class="btn btn-flat btn-default">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="form-group">
                                             <label for="filcate">Filter by Blog Category:</label>
                                             <select name="filcate" id="filcate" class="form-control">
                                                 <option value="" >All Categories</option>
@@ -81,19 +94,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="panel panel-default">
-                                        <div class="form-group">
-                                            <label for="filsearch">Search:</label>
-                                            <div class="input-group">
-                                                <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
-                                                <span class="input-group-btn">
-                                                    <button type='submit' id='search-btn' class="btn btn-flat btn-default">
-                                                        <i class="fa fa-search"></i>
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div><!--/category-products-->
 
                             </form>
