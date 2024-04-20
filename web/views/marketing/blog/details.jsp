@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.22.0/ckeditor.js" integrity="sha512-RSWDsT/H7QchdPKU7L7Wffwm1BA2s4TV92E6jdrAWmQVHqlT4EkozepxCCbhVNzx6fPbcQNxWJM/5tCBonuP7g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!DOCTYPE html>
 <html>
     <head>
@@ -108,26 +109,30 @@
                 <section class="content">
                     <div class="container" >
                         <div class="row ">
-                            <div class="col">
-                                <div class="col-sm-12">
-                                    <div class="blog-post-area">
-                                        <h2 class="title text-center">Blog Details</h2>
+                            <form method="post" action="blogdetail" enctype="multipart/form-data">
+                                <div class="col">
+                                    <div class="col-sm-12">
+                                        <div class="blog-post-area">
+                                            <h2 class="title text-center">Blog Details</h2>
 
-                                        <form method="post" action="blogdetail">
                                             <c:set var="c" value="${requestScope.blogdetails}" />
-                                            <div class="row">
+                                            <div class="row" style="margin-bottom: 5%; margin-top: 3%">
                                                 <div class="col-md-6">
-                                                    <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
+<!--                                                    <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
                                                         <label for="inputLabel1">ID: </label>
                                                         <input type="text" class="form-control" id="id" ${param.action.equals("view")||param.action.equals("update") ? "readonly": "" }  value="${c.id}">
+                                                    </div>-->
+                                                    <div class="form-group">
+                                                        <label for="inputLabel1">Title:</label>
+                                                        <input name="title" type="text" class="form-control" id="title" value="${c.title}" >
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="inputLabel1">Title</label>
-                                                        <input name="title" type="text" class="form-control" id="title" ${param.action.equals("view") ? "readonly": ""} value="${c.title}" >
+                                                        <label for="inputLabel1">Brief: </label>
+                                                        <input name="sumary" type="text" class="form-control" id="sumary" value="${c.sumary}" >
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="gender">Category:</label>
-                                                        <select ${param.action.equals("view")?"disabled" : ""} name="category" id="category" class="form-control ">
+                                                        <select  name="category" id="category" class="form-control ">
                                                             <option value="" disabled selected hidden>Choose category of your blog</option>
                                                             <c:forEach items="${requestScope.settingList}" var="s">
                                                                 <c:if test="${s.type.equals('blog')}">
@@ -138,105 +143,105 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Author:</label>
-                                                        <select id="author" name="author" class="form-control" ${param.action.equals("view")?"disabled" : ""}>
+                                                        <select id="author" name="author" class="form-control">
                                                             <option value="" disabled selected hidden>Choose author of your blog</option>
                                                             <c:forEach items="${requestScope.blogAuthors}" var="a">
                                                                 <option value="${a.id}" ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
-                                                </div>
-                                                <!---->
-                                                <div class="form-right">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="inputLabel1">Summary</label>
-                                                            <input name="sumary" type="text" class="form-control" id="sumary" ${param.action.equals("view") ? "readonly": ""} value="${c.sumary}" >
+                                                    <div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <label for="gender">Status:</label>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
-                                                            <label for="create_time">Create Time:</label>
-                                                            <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.createTime}">
-                                                        </div>
-                                                        <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
-                                                            <label for="update_time">Updated Time:</label>
-                                                            <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.updateTime}">
-                                                        </div>
-                                                        <div>
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <label for="gender">Status:</label>
+                                                        <div class="row form-check-inline">
+                                                            <div class="col-md-3 ">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${c.status == true ? "checked" : ""} >
+                                                                    <label class="form-check-label" for="showRadio">Show</label>
                                                                 </div>
                                                             </div>
-                                                            <div class="row form-check-inline">
-                                                                <div class="col-md-3 ">
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${c.status == true ? "checked" : ""} ${param.action.equals("view") ? "disabled" : ""}>
-                                                                        <label class="form-check-label" for="showRadio">Show</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-3 ">
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Hide" ${c.status == false ? "checked" : ""} ${param.action.equals("view") ? "disabled" : ""}>
-                                                                        <label class="form-check-label" for="hideRadio">Hide</label>
-                                                                    </div>
+                                                            <div class="col-md-3 ">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Hide" ${c.status == false ? "checked" : ""} >
+                                                                    <label class="form-check-label" for="hideRadio">Hide</label>
                                                                 </div>
                                                             </div>
+                                                        </div>
 
+                                                    </div>
+                                                    <div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <label for="gender">Feature:</label>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <label for="gender">Feature:</label>
+                                                        <div class="row form-check-inline">
+                                                            <div class="col-md-3 ">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="feature" id="yesRadio" value="Yes" ${c.is_featured == true ? "checked" : ""} >
+                                                                    <label class="form-check-label" for="showRadio">Yes</label>
                                                                 </div>
                                                             </div>
-                                                            <div class="row form-check-inline">
-                                                                <div class="col-md-3 ">
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="radio" name="feature" id="yesRadio" value="Yes" ${c.is_featured == true ? "checked" : ""} ${param.action.equals("view") ? "disabled" : ""}>
-                                                                        <label class="form-check-label" for="showRadio">Yes</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-3 ">
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="radio" name="feature" id="noRadio" value="No" ${c.is_featured == false ? "checked" : ""} ${param.action.equals("view") ? "disabled" : ""}>
-                                                                        <label class="form-check-label" for="hideRadio">No</label>
-                                                                    </div>
+                                                            <div class="col-md-3 ">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="feature" id="noRadio" value="No" ${c.is_featured == false ? "checked" : ""} >
+                                                                    <label class="form-check-label" for="hideRadio">No</label>
                                                                 </div>
                                                             </div>
-
                                                         </div>
 
                                                     </div>
                                                 </div>
+                                                
+                                                <div class="form-right">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="thumbnail">Thumbnail: </label>
+                                                            <c:choose>
+                                                                <c:when test="${empty c.imgUrl}">
+                                                                    <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle mb-4">
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <img src="<c:url value='/uploads/${c.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                                                </c:otherwise>
+                                                            </c:choose>                                                           
+                                                            <input type="file" name="file" id="file-input" accept="image/*">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <!-- -->
-                                            <div class="form-group">
-                                                <label for="thumbnail">Thumbnail: </label>
-                                                <img src="${pageContext.request.contextPath}/images/blog/images.jpg" alt="" />
-                                            </div>
+
                                             <div class="col-md-12" style="margin-bottom: 5%">
                                                 <label for="content">Content:</label>
-                                                <textarea id="content" name="content" style="height: 500px" class="form-control" ${param.action.equals("view") ? "readonly": ""}>${c.detail}</textarea>
+                                                <textarea id="content" name="content" style="height: 500px; resize: none;" class="form-control">${c.detail}</textarea>
+                                                <script>
+                                                    CKEDITOR.replace('content', {
+                                                        resize_enabled: false // Ngăn chặn CKEditor resize
+                                                    });
+                                                </script>
                                             </div>
+                                            <input type="hidden" name="formAction" value="${param.action.equals("add") ? "add": "update" }">
+                                            <input type="hidden" name="blogID" value="${param.ID}">
+
                                             <div class="row" style="margin-bottom: 5%">
-                                                <c:if test="${param.action.equals('add')}">
-                                                    <input type="hidden" name="formAction" value="add">
-                                                </c:if>
-                                                <input type="hidden" name="blogId" value="${param.ID}">
-                                                <div class="col-md-3" style="${param.action.equals("view") || param.action.equals("update") ? "display: none;": "" }">
+                                                <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
                                                     <button type="submit" class="btn btn-primary btn-block" id="addButton" onclick="validateInputs(event)">Add</button>
                                                 </div>
-                                                <div class="col-md-3" style="${param.action.equals("view") || param.action.equals("add") ? "display: none;": "" }">
+                                                <div class="col-md-3" style="${param.action.equals("add") ? "display: none;": "" }">
                                                     <button type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)">Save</button>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="button" class="btn btn-primary btn-block" id="backButton" >Back</button>
+                                                    <button type="button" class="btn btn-primary btn-block" id="backButton">Back</button>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </section>
@@ -249,6 +254,17 @@
         document.getElementById("backButton").onclick = function () {
             location.href = "bloglist";
         };
+
+        const input = document.getElementById('file-input');
+        const image = document.getElementById('img-preview');
+        // preview image
+        input.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                const src = URL.createObjectURL(e.target.files[0]);
+                image.src = src;
+            }
+        });
+
         function validateInputs(event) {
             var titleInput = document.getElementById("title");
             var title = titleInput.value.trim();
@@ -278,15 +294,7 @@
             var sumary = sumaryInput.value.trim();
             // Kiểm tra input không được để trống
             if (sumary === "") {
-                alert("Please fill Sumary");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            }
-            var contentInput = document.getElementById("content");
-            var content = contentInput.value.trim();
-            // Kiểm tra input không được để trống
-            if (content === "") {
-                alert("Please fill Content");
+                alert("Please fill Brief");
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
@@ -320,9 +328,15 @@
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
-
+            var editorContent = CKEDITOR.instances.content.getData(); // Lấy nội dung của CKEditor
+            if (!editorContent.trim()) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
+                alert("Please fill Content"); // Thông báo lỗi
+                event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
+                return;
+            }
             // Nếu tất cả điều kiện đều đúng, không cần ngăn chặn hành động mặc định của button
         }
+
     </script>
     <!-- jQuery 2.0.2 -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
@@ -343,10 +357,10 @@
     <script src="${pageContext.request.contextPath}/views/js/plugins/chart.js"
     type="text/javascript"></script>
 
-    <!-- datepicker
-                                                                                        <script src="js/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>-->
-    <!-- Bootstrap WYSIHTML5
-                                                                                        <script src="js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>-->
+    datepicker
+    <script src="js/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+    Bootstrap WYSIHTML5
+    <script src="js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
     <!-- iCheck -->
     <script src="${pageContext.request.contextPath}/views/js/plugins/iCheck/icheck.min.js"
     type="text/javascript"></script>
@@ -365,34 +379,39 @@
     <!-- Director for demo purposes -->
 
     <script type="text/javascript">
-        $('input').on('ifChecked', function (event) {
-            // var element = $(this).parent().find('input:checkbox:first');
-            // element.parent().parent().parent().addClass('highlight');
+        $('input').on('ifChecked', function (event)
+        {
+// var element = $(this).parent().find('input:checkbox:first');
+// element.parent().parent().parent().addClass('highlight');
             $(this).parents('li').addClass("task-done");
             console.log('ok');
         });
-        $('input').on('ifUnchecked', function (event) {
-            // var element = $(this).parent().find('input:checkbox:first');
-            // element.parent().parent().parent().removeClass('highlight');
+        $('input').on('ifUnchecked', function (event)
+        {
+// var element = $(this).parent().find('input:checkbox:first');
+// element.parent().parent().parent().removeClass('highlight');
             $(this).parents('li').removeClass("task-done");
             console.log('not');
         });
 
     </script>
     <script>
-        $('#noti-box').slimScroll({
-            height: '400px',
-            size: '5px',
-            BorderRadius: '5px'
-        });
+        $('#noti-box').slimScroll(
+                {
+                    height: '400px',
+                    size: '5px',
+                    BorderRadius: '5px'
+                });
 
-        $('input[type="checkbox"].flat-grey, input[type="radio"].flat-grey').iCheck({
-            checkboxClass: 'icheckbox_flat-grey',
-            radioClass: 'iradio_flat-grey'
-        });
+        $('input[type="checkbox"].flat-grey, input[type="radio"].flat-grey').iCheck(
+                {
+                    checkboxClass: 'icheckbox_flat-grey',
+                    radioClass: 'iradio_flat-grey'
+                });
     </script>
     <script type="text/javascript">
-        $(function () {
+        $(function ()
+        {
             "use strict";
             //BAR CHART
             var data = {
@@ -431,3 +450,12 @@
 </body>
 </html>
 
+
+<!--                                                        <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
+    <label for="create_time">Create Time:</label>
+    <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.createTime}">
+</div>
+<div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
+    <label for="update_time">Updated Time:</label>
+    <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.updateTime}">
+</div>-->

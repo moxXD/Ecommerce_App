@@ -135,7 +135,18 @@ public class BlogListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        BlogDAO blogDAO = new BlogDAO();
+        String id_raw = request.getParameter("blogId");
+        try {
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
+            int id = Integer.parseInt(id_raw);
+            
+            blogDAO.updateBlogStatus(id, !status);
+            response.sendRedirect("bloglist");
+        } catch (NumberFormatException e) {
+            Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+
     }
 
     /**

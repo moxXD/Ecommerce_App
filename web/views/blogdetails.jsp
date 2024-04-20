@@ -41,6 +41,9 @@
                 display: block;
                 margin-top: 10px;
             }
+            .single-blog-post h1 {
+                overflow-wrap: break-word; /* hoặc word-wrap: break-word */
+            }
         </style>
     </head>
     <body>
@@ -100,7 +103,7 @@
                         <div class="blog-post-area">
                             <h2 class="title text-center">From Our Blog</h2>
                             <div class="single-blog-post">
-                                
+
                                 <h1 class="display-4">${c.title}</h1>
                                 <hr class="my-4">
                                 <div class="post-meta">
@@ -127,7 +130,8 @@
                                         <li><i class="fa fa-cog"></i> ${c.categoryName}</li>
                                     </ul>
                                 </div>
-                                <img class="img-fluid img-thumbnail"  src="${pageContext.request.contextPath}/images/blog/blog-one.jpg" alt="" style="margin-bottom: 5%">
+<!--                                <img class="img-fluid img-thumbnail"  src="${pageContext.request.contextPath}/images/blog/blog-one.jpg" alt="" style="margin-bottom: 5%">-->
+                                <h4>${c.sumary}</h4> <br>
                                 <p>${c.detail}</p> <br>
                                 <p class="lead" >
                                     <a class="btn btn-warning btn-lg float-right" href="blogslist" role="button">View more blogs</a>

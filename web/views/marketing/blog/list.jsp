@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 
@@ -109,15 +110,6 @@
             <aside class="right-side">
                 <section class="content">
                     <form action="bloglist" method="get">
-                        <!--search input-->
-                        <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
-                            <span class="input-group-btn">
-                                <button type='submit' id='search-btn' class="btn btn-flat"
-                                        style="background-color: white;border: 1px solid grey;border-radius: 5px "><i
-                                        class="fa fa-search"></i></button>
-                            </span>
-                        </div>
                         <div class="filter-row">
                             <!--feature select-->
                             <div class="form-group">
@@ -160,11 +152,23 @@
                                     </c:forEach>
                                 </select>
                             </div>
+                            <!--Search-->
+                            <div class="form-group">
+                                <label for="filauthor">Search: </label>
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" placeholder="Search by title, author, category..." value="${param.q}"/>
+                                    <span class="input-group-btn">
+                                        <button type='submit' id='search-btn' class="btn btn-flat"
+                                                style="background-color: white;border: 1px solid grey;border-radius: 5px "><i
+                                                class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </form>
                     <div class="table-responsive">
-                        <div class="row ">
-                            <div class="col-md-3 ">
+                        <div class="form-group">
+                            <div class="col-md-2" style="float: right; margin-bottom: 1%">
                                 <button type="button" class="btn btn-primary btn-block" onclick="redirectToAddBlog()">Add New Blog</button>
                             </div>
                         </div>
@@ -195,11 +199,11 @@
                                         <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=is_featured">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
-                                    <th>Status
+                                    <th>Action
                                         <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
                                             <i class="fa fa-sort"></i>
                                         </a></th>
-                                    <th>Action</th>
+                                    <!--<th>Action</th>-->
                                 </tr>
                             </thead>
                             <tbody>
@@ -209,12 +213,28 @@
                                         <td>${id}</td>
                                         <td><img src="${pageContext.request.contextPath}/images/blog/images.jpg"
                                                  style="width: 80px; height: 50px;" alt="User Image" /></td>
-                                        <td>${u.title}</td>
+<!--                                        <td>${u.title}</td>-->
+                                        <c:if test="${fn:length(u.title) > 30}">
+                                            <c:set var="subTitle" value="${fn:substring(u.title, 0, 30)}" />
+                                            <td>${subTitle}...</td>
+                                        </c:if>
+                                        <c:if test="${fn:length(u.title) <= 30}">
+                                            <td>${u.title}</td>
+                                        </c:if>
                                         <td>${u.categoryName}</td>
                                         <td>${u.authorName}</td>
                                         <td style="color: ${u.is_featured ? 'green' : 'red'}">${u.is_featured ? 'Yes' : 'No'}</td>
-                                        <td style="color: ${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
-                                        <td><a href="blogdetail?action=view&ID=${id}">View</a><a href="blogdetail?action=update&ID=${id}"style="margin-left: 20px">Edit</a></td>
+                                        <!--<td style="color: ${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>-->
+                                        <td><form action="bloglist" method="post">
+                                                <input type="hidden" name="blogId" value="${id}">
+                                                <input type="hidden" name="status" value="${u.status?true:false}">
+                                                <input id="changeStatus" onclick="return confirmSubmit()" type="submit" value="${!u.status?"Hide":"Show"}" style="color: ${!u.status?"Red":"Green"}; border: none" />
+                                                <a href="blogdetail?action=update&ID=${id}"style="margin-left: 20px">Edit</a></td>
+                                        </form>
+                                        </td>
+                                        <!--<td>-->
+                                            <!--<a href="blogdetail?action=view&ID=${id}">View</a>-->
+
                                     </tr>
                                 </c:forEach>
                                 <!-- Thêm nhiều hàng tại đây -->
@@ -265,6 +285,14 @@
 
         <%@include file="../../layout/footer.jsp" %>
         <script type="text/javascript">
+            function confirmSubmit() {
+                if (confirm("Are you sure you want to Change this status?")) {
+                    document.getElementById("myForm").submit();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
             function redirectToAddBlog() {
                 window.location.href = 'blogdetail?action=add';
             }

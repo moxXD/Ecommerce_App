@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
     <%@include file="../../../layout/header.jsp" %>
@@ -99,18 +100,39 @@
                                 <c:set var="id" value="${u.id}" />
                                 <div class="blog-post row">
                                     <div class="col-md-4">
-                                        <img class="img-thumbnail" src="${pageContext.request.contextPath}/images/blog/images.jpg" alt="">
+                                        <c:choose>
+                                            <c:when test="${empty u.imgUrl}">
+                                                <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle mb-4">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                            </c:otherwise>
+                                        </c:choose>  
                                     </div>
                                     <div class="col-md-8">
-                                        <h2 class="display-4">${u.title}</h2>
+                                        <!--<h2 class="display-4">${u.title}</h2>-->
+                                        <h2><c:if test="${fn:length(u.title) > 30}">
+                                                <c:set var="subTitle" value="${fn:substring(u.title, 0, 30)}" />
+                                                <td>${subTitle}...</td>
+                                            </c:if>
+                                            <c:if test="${fn:length(u.title) <= 30}">
+                                                <td>${u.title}</td>
+                                            </c:if></h2>
                                         <hr class="my-4">
                                         <div class="post-meta">
                                             <ul>
-                                                <li><i class="fa fa-user"></i> ${u.authorName}</li>
                                                 <li><i class="fa fa-cog"></i> ${u.categoryName}</li>
+                                                <li><i class="fa fa-user"></i> ${u.authorName}</li>
                                             </ul>
                                         </div>
-                                        <p>${u.sumary}</p>
+                                        <!--<p>${u.sumary}</p>-->
+                                        <p><c:if test="${fn:length(u.sumary) > 130}">
+                                                <c:set var="subBrief" value="${fn:substring(u.sumary, 0, 130)}" />
+                                            <td>${subBrief}...</td>
+                                        </c:if>
+                                        <c:if test="${fn:length(u.sumary) <= 130}">
+                                            <td>${u.sumary}</td>
+                                        </c:if></p>
                                         <p class="lead" style="position: absolute; top: 180px; right: 20px;">
                                             <a class="btn btn-warning btn-md" href="blogdetails?id=${id}" role="button">Read more</a>
                                         </p>
@@ -123,7 +145,7 @@
                                 <c:if test="${currentPage > 1}">
                                     <li>
                                         <a href="blogslist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-angle-double-left fa-sm"></i></span>
+                                            <span style="padding: 0" aria-hidden="true"><i class="fa fa-angle-double-left fa-sm"></i></span>
                                         </a>
                                     </li>
                                 </c:if>
@@ -142,7 +164,7 @@
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
                                         <a href="blogslist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-angle-double-right fa-sm"></i></span>
+                                            <span style="padding: 0" aria-hidden="true"><i class="fa fa-angle-double-right fa-sm"></i></span>
                                         </a>
                                     </li>
                                 </c:if>

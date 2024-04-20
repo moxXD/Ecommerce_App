@@ -133,7 +133,8 @@ public class BlogDAO extends DBContext {
 
         return list;
     }
-    public List<Blog> getAllBlogPaginationPublic(int offset, int limit, String cateFilter, String authorFilter,String searchQuery) throws SQLException {
+
+    public List<Blog> getAllBlogPaginationPublic(int offset, int limit, String cateFilter, String authorFilter, String searchQuery) throws SQLException {
         List<Blog> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS "
                 + "t3.value, "
@@ -165,7 +166,7 @@ public class BlogDAO extends DBContext {
             sql += " AND t1.title LIKE ? OR t3.value LIKE ? OR t2.fullname LIKE ? ";
         }
         // add sort condition 
-        sql +=" ORDER BY t1.lastupdate DESC LIMIT ?, ?;"; // pagination
+        sql += " ORDER BY t1.lastupdate DESC LIMIT ?, ?;"; // pagination
         try {
             conn = context.getConnection();
 //            System.out.println(sql);
@@ -319,7 +320,6 @@ public class BlogDAO extends DBContext {
 //        }
 //        return list;
 //    }
-
     public List<User> getAllBlogAuthor() throws SQLException {
         List<User> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS user.*\n"
@@ -420,6 +420,29 @@ public class BlogDAO extends DBContext {
             stm.setBoolean(6, status);
             stm.setBoolean(7, feature);
             stm.setString(8, sumary);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
+    public void updateBlogStatus(int id, boolean status) {
+        String sql = "update swp391_g1_v1.blog \n"
+                + "set `status` = ? \n"
+                + "where `id` = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setBoolean(1, status);
+            stm.setInt(2, id);
             stm.executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
