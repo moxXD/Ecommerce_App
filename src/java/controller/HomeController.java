@@ -34,6 +34,9 @@ public class HomeController extends HttpServlet {
     throws ServletException, IOException {
         ProductDAO dao = new ProductDAO();
         List<Product> list = dao.getAllProduct();
+        for (Product product : list) {
+            System.out.println(product.getImageurl());
+        }
         
         request.setAttribute("listP", list);
         request.getRequestDispatcher("views/home.jsp").forward(request, response);

@@ -45,11 +45,11 @@ public class ProductDAO extends DBContext{
         
         return list;
     }
-    public static void main(String[] args) {
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getAllProduct();
-        for (Product o : list) {
-            System.out.println(o);
-        }
-    }
+//    public static void main(String[] args) {
+//        ProductDAO dao = new ProductDAO();
+//        List<Product> list = dao.getAllProduct();
+//        for (Product o : list) {
+//            System.out.println(o);
+//        }
+//    }
 }
