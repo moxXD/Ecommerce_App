@@ -130,7 +130,7 @@ public class ProductList extends HttpServlet {
         request.setAttribute("listProduct", listProduct);
         request.setAttribute("roleList", st);
         request.setAttribute("sortOrder", sortOrder);
-        request.getRequestDispatcher("views/marketing/procduct/list.jsp").forward(request, response);
+        request.getRequestDispatcher("views/marketing/product/list.jsp").forward(request, response);
     } 
 
     /** 

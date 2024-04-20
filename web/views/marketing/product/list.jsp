@@ -14,37 +14,37 @@
         <meta name="keywords" content="Admin, Bootstrap 3, Template, Theme, Responsive">
         <!-- bootstrap 3.0.2 -->
 
-        <link href="${pageContext.request.contextPath}/admin/css/bootstrap.min.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/bootstrap.min.css" rel="stylesheet"
               type="text/css" />
 
         <!-- font Awesome -->
-        <link href="${pageContext.request.contextPath}/admin/css/font-awesome.min.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet"
               type="text/css" />
         <!-- Ionicons -->
-        <link href="${pageContext.request.contextPath}/admin/css/ionicons.min.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/ionicons.min.css" rel="stylesheet"
               type="text/css" />
         <!-- Morris chart -->
-        <link href="${pageContext.request.contextPath}/admin/css/morris/morris.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/morris/morris.css" rel="stylesheet"
               type="text/css" />
         <!-- jvectormap -->
-        <link href="${pageContext.request.contextPath}/admin/css/jvectormap/jquery-jvectormap-1.2.2.css"
+        <link href="${pageContext.request.contextPath}/views/css/jvectormap/jquery-jvectormap-1.2.2.css"
               rel="stylesheet" type="text/css" />
         <!-- Date Picker -->
-        <link href="${pageContext.request.contextPath}/admin/css/datepicker/datepicker3.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/datepicker/datepicker3.css" rel="stylesheet"
               type="text/css" />
         <!-- fullCalendar -->
         <!-- <link href="css/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" /> -->
         <!-- Daterange picker -->
-        <link href="${pageContext.request.contextPath}/admin/css/daterangepicker/daterangepicker-bs3.css"
+        <link href="${pageContext.request.contextPath}/views/css/daterangepicker/daterangepicker-bs3.css"
               rel="stylesheet" type="text/css" />
         <!-- iCheck for checkboxes and radio inputs -->
-        <link href="${pageContext.request.contextPath}/admin/css/iCheck/all.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/iCheck/all.css" rel="stylesheet"
               type="text/css" />
         <!-- bootstrap wysihtml5 - text editor -->
         <!-- <link href="css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" /> -->
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <!-- Theme style -->
-        <link href="${pageContext.request.contextPath}/admin/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" type="text/css" />
 
 
 
@@ -198,21 +198,21 @@
 
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-        <script src="${pageContext.request.contextPath}/admin/js/jquery.min.js"
+        <script src="${pageContext.request.contextPath}/views/js/jquery.min.js"
         type="text/javascript"></script>
 
         <!-- jQuery UI 1.10.3 -->
-        <script src="${pageContext.request.contextPath}/admin/js/jquery-ui-1.10.3.min.js"
+        <script src="${pageContext.request.contextPath}/views/js/jquery-ui-1.10.3.min.js"
         type="text/javascript"></script>
         <!-- Bootstrap -->
-        <script src="${pageContext.request.contextPath}/admin/js/bootstrap.min.js"
+        <script src="${pageContext.request.contextPath}/views/js/bootstrap.min.js"
         type="text/javascript"></script>
         <!-- daterangepicker -->
         <script
-            src="${pageContext.request.contextPath}/admin/js/plugins/daterangepicker/daterangepicker.js"
+            src="${pageContext.request.contextPath}/views/js/plugins/daterangepicker/daterangepicker.js"
         type="text/javascript"></script>
 
-        <script src="${pageContext.request.contextPath}/admin/js/plugins/chart.js"
+        <script src="${pageContext.request.contextPath}/views/js/plugins/chart.js"
         type="text/javascript"></script>
 
         <!-- datepicker
@@ -220,18 +220,18 @@
         <!-- Bootstrap WYSIHTML5
                                                                                             <script src="js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>-->
         <!-- iCheck -->
-        <script src="${pageContext.request.contextPath}/admin/js/plugins/iCheck/icheck.min.js"
+        <script src="${pageContext.request.contextPath}/views/js/plugins/iCheck/icheck.min.js"
         type="text/javascript"></script>
         <!-- calendar -->
-        <script src="${pageContext.request.contextPath}/admin/js/plugins/fullcalendar/fullcalendar.js"
+        <script src="${pageContext.request.contextPath}/views/js/plugins/fullcalendar/fullcalendar.js"
         type="text/javascript"></script>
 
         <!-- Director App -->
-        <script src="${pageContext.request.contextPath}/admin/js/Director/app.js"
+        <script src="${pageContext.request.contextPath}/views/js/Director/app.js"
         type="text/javascript"></script>
 
         <!-- Director dashboard demo (This is only for demo purposes) -->
-        <script src="${pageContext.request.contextPath}/admin/js/Director/dashboard.js"
+        <script src="${pageContext.request.contextPath}/views/js/Director/dashboard.js"
         type="text/javascript"></script>
 
         <!-- Director for demo purposes -->
