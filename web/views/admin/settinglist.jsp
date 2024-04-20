@@ -98,18 +98,10 @@
             <aside class="right-side">
                 <section class="content">
                     <form action="settinglist" method="get">
-                        <!--search input-->
-                        <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}" />
-                            <span class="input-group-btn">
-                                <button type='submit' id='search-btn' class="btn btn-flat" style="background-color: white;border: 1px solid grey;border-radius: 5px ">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </div>
+
                         <!--select type-->
                         <div class="filter-row">
-                            <div class="form-group">
+                            <div class="form-group col-md-2">
                                 <label for="filtype">Filter by type:</label>
                                 <select name="filtype" id="filtype" class="form-control">
                                     <option value="">All type</option>
@@ -128,16 +120,32 @@
                                     <!-- Add status options here -->
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="filstatus">Search:</label>
+                                    <div class="input-group ">
+                                        <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
+                                        <span class="input-group-btn">
+                                            <button type='submit' id='search-btn' class="btn btn-flat"
+                                                    style="background-color: white;border: 1px solid grey;border-radius: 5px "><i
+                                                    class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
-                    <button type="button" class="btn btn-primary  "
-                            onclick="redirectToSettingDetail('add')"
-                            style=""
-                            >Add</button>
-
                     <!-- Table for displaying user data -->
 
                     <div class="table-responsive">
+                        <div class="form-group">
+                            <div class="col-md-2" style="float: right; margin-bottom: 1%">
+                                <button type="button" class="btn btn-primary  "
+                                        onclick="redirectToSettingDetail('add')"
+                                        style=""
+                                        >Add New Setting</button>
+                            </div>
+                        </div>
                         <table class="table user-table">
                             <!--table head-->
                             <thead>
