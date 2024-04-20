@@ -5,6 +5,8 @@
 
 package controller;
 
+import dal.BlogDAO;
+import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +14,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import model.Blog;
+import model.Setting;
+import model.User;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="BlogListController", urlPatterns={"/blogListController"})
-public class BlogListController extends HttpServlet {
+@WebServlet(name="BlogDetailsServlet", urlPatterns={"/blogdetails"})
+public class BlogDetailsServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +43,10 @@ public class BlogListController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BlogListController</title>");  
+            out.println("<title>Servlet BlogDetailsServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BlogListController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet BlogDetailsServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +63,43 @@ public class BlogListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("views/blogList.jsp").forward(request, response);
+        String id_raw = request.getParameter("id");
+        String action = request.getParameter("action");
+        int id;
+        BlogDAO blogDAO = new BlogDAO();
+        SettingDAO settingDAo = new SettingDAO();
+        List<Setting> list = new ArrayList<>();
+        List<User> user = new ArrayList<>();
+        Blog blog = null;
+        try {
+                id = Integer.parseInt(id_raw);
+                int categoryId = blogDAO.getBlogByID(id).getCategoryId();
+                int Id = blogDAO.getBlogByID(id).getId();
+                int authorId = blogDAO.getBlogByID(id).getAuthorId();
+                String imgUrl = blogDAO.getBlogByID(id).getImgUrl();
+                String title = blogDAO.getBlogByID(id).getTitle();
+                String detail = blogDAO.getBlogByID(id).getDetail();
+                boolean status = blogDAO.getBlogByID(id).isStatus();
+                boolean feature = blogDAO.getBlogByID(id).isIs_featured();
+                String sumary = blogDAO.getBlogByID(id).getSumary();
+                Timestamp createTime = blogDAO.getBlogByID(id).getCreateTime();
+                Timestamp updateTime = blogDAO.getBlogByID(id).getUpdateTime();
+                String authorName = blogDAO.getBlogByID(id).getAuthorName();
+                String categoryName = blogDAO.getBlogByID(id).getCategoryName();
+                blog = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, authorName, categoryName, feature, sumary);
+//            -------------------------------
+//Blog Information
+            //Setting information
+            list = settingDAo.getAllSetting();
+            user = blogDAO.getAllBlogAuthor();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("blogAuthors", user);
+        request.setAttribute("settingList", list);
+        request.setAttribute("blogdetails", blog);
+        request.getRequestDispatcher("/views/blogdetails.jsp").forward(request, response);
     } 
 
     /** 

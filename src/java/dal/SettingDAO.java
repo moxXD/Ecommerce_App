@@ -247,12 +247,14 @@ public class SettingDAO {
     // get all setting 
     public List<Setting> getAllSetting() {
         List<Setting> lst = new ArrayList<>();
-        String sql = "SELECT " + SETTING_ID + ",\n"
-                + SETTING_TYPE + ",\n"
-                + SETTING_VALUE + ",\n`"
-                + SETTING_ORDER + "`,\n"
-                + SETTING_STATUS + "\n"
-                + "FROM " + SETTING_TABLE + ";";
+
+        String sql = "SELECT `setting`.`id`,\n"
+                + "    `setting`.`type`,\n"
+                + "    `setting`.`value`,\n"
+                + "    `setting`.`order`,\n"
+                + "    `setting`.`status`\n"
+                + "FROM `swp391_g1_v1`.`setting`\n"
+                + "";
         try {
             conn = context.getConnection();
 //            System.out.println("sql: " + sql);

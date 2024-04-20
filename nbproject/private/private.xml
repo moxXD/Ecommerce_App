@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0" />
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/service/EmailService.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/model/User.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/views/admin/userlist.jsp</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/utility/Encode.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/dal/UserDAO.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/views/admin/userdetail.jsp</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/web/views/admin/newjsp.jsp</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/UploadServlet.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/UserListServlet.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/controller/admin/UserDetailServlet.java</file>
-            <file>file:/C:/Users/Duc%20Le/Documents/g1/src/java/dal/SettingDAO.java</file>
+            <file>file:/C:/Users/Admin/OneDrive/Desktop/FPT/SWP391Bl5/g1/web/views/blogdetails.jsp</file>
+            <file>file:/C:/Users/Admin/OneDrive/Desktop/FPT/SWP391Bl5/g1/web/views/bloglist.jsp</file>
         </group>
     </open-files>
 </project-private>

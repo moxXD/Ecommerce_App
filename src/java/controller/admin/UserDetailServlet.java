@@ -200,8 +200,7 @@ public class UserDetailServlet extends HttpServlet {
             Setting role = settingDao.getSettingByTypeAndValue("role", role_raw);
 
             // insert new user
-            User u = new User(0, role, email, hashed,
-                    fullName, imgUrl, phone, address, true, status, gender, newDob);
+            User u = new User(0, role, email, hashed, fullName, imgUrl, phone, address, true, status, gender, newDob);
             userDao.insertUser(u);
             // redirect after insert
             response.sendRedirect("userlist");
