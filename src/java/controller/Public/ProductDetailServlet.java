@@ -5,6 +5,9 @@
 
 package controller.Public;
 
+import dal.ProductDAO;
+import dal.SaleDAO;
+import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +15,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Product;
+import model.Sale;
+import model.Setting;
 
 /**
  *
@@ -19,7 +28,9 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name="ProductDetailServlet", urlPatterns={"/productdetail"})
 public class ProductDetailServlet extends HttpServlet {
-   
+    ProductDAO pDao=new ProductDAO();
+    SettingDAO sDao=new SettingDAO();
+    SaleDAO saleDao=new SaleDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -55,6 +66,19 @@ public class ProductDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        // get request parameter
+        String id_raw=request.getParameter("id");
+        int id;
+        List<Setting> list=sDao.getSettingByType("product category");
+        try {
+            id=Integer.parseInt(id_raw);
+            Product p=pDao.getProductById(id);
+            System.out.println("product:"+ p.toString());
+            request.setAttribute("data", p);
+        } catch (NumberFormatException e) {
+            Logger.getLogger(ProductDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+        request.setAttribute("categories", list);
         request.getRequestDispatcher("productdetail.jsp").forward(request, response);
     } 
 

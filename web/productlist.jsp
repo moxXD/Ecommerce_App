@@ -120,7 +120,7 @@
             }
             #sidebar {
                 flex: 0 0 250px; /* Đặt kích thước cố định cho sidebar */
-                background-color: #f8f9fa;
+                background-color: #f7bc63;
                 padding-top: 2%;
             }
 
@@ -182,7 +182,7 @@
                         <div class="col-md-4">
                             <div class="product-card " >
                                 <div class="product-card-image">
-                                    <a href="userdetail?id=${p.id}"style="justify-content: center" >
+                                    <a href="productdetail?id=${p.id}"style="justify-content: center" >
                                         <img src="<c:url value='/uploads/${p.imgUrl}'/>" 
                                              alt="${p.name}">
                                     </a>    
