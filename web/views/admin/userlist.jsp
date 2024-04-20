@@ -46,6 +46,7 @@
 
         <style type="text/css">
 
+            
         </style>
     </head>
 
@@ -112,7 +113,7 @@
                 <section class="content">
                     <form action="userlist" method="get">
                         <!--search input-->
-                        <div class="input-group">
+                        <div class="input-group ">
                             <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
                             <span class="input-group-btn">
                                 <button type='submit' id='search-btn' class="btn btn-flat"
@@ -120,9 +121,10 @@
                                         class="fa fa-search"></i></button>
                             </span>
                         </div>
-                        <!--gender select-->
+
                         <div class="filter-row">
-                            <div class="form-group">
+                            <!--gender select-->
+                            <div class="form-group ">
                                 <label for="filgender">Filter by gender:</label>
                                 <select name="filgender" id="filgender" class="form-control">
                                     <option value="">All genders</option>
@@ -148,12 +150,16 @@
                                     <option value="">All status</option>
                                     <option value="active" ${param.filstatus != null && param.filstatus.equals("active") ? "selected" : ""}>Active</option>
                                     <option value="inactive" ${param.filstatus != null && param.filstatus.equals("inactive") ? "selected" : ""}>Inactive</option>
-
                                 </select>
                             </div>
                         </div>
                     </form>
-
+                    <div >
+                        <button type="button" class="btn btn-primary btn-block "
+                                onclick="redirectToAddUser()"
+                                style="width: 30%;"
+                                >Add</button>
+                    </div>
                     <!-- Table for displaying user data -->
                     <div class="table-responsive">
 
@@ -231,45 +237,38 @@
 
                         <!-- Diplay list of page -->
 
-                        <nav aria-label="Page navigation" class="row">
-                            <div class="col-sm-6">
-                                <ul class="pagination">
-                                    <!--prev page-->
-                                    <c:if test="${currentPage > 1}">
-                                        <li>
-                                            <a href="userlist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Previous">
-                                                <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
-                                            </a>
-                                        </li>
-                                    </c:if>
-                                    <!--page list-->
-                                    <c:forEach begin="1" end="${noOfPage}" var="i">
-                                        <c:choose>
-                                            <c:when test="${currentPage eq i}">
-                                                <li class="active"><span>${i}</span></li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                <li><a href="userlist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}">${i}</a></li>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </c:forEach>
-                                    <!--prev page-->
-                                    <c:if test="${currentPage < noOfPage}">
-                                        <li>
-                                            <a href="userlist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Next">
-                                                <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
-                                            </a>
-                                        </li>
-                                    </c:if>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 text-right">
-                                <button type="button" class="btn btn-primary btn-block "
-                                        onclick="redirectToAddUser()"
-                                        style="margin-top: 3.5%;width: 30%"
-                                        >Add</button>
+                        <nav aria-label="Page navigation" >
 
-                            </div>
+                            <ul class="pagination">
+                                <!--prev page-->
+                                <c:if test="${currentPage > 1}">
+                                    <li>
+                                        <a href="userlist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <!--page list-->
+                                <c:forEach begin="1" end="${noOfPage}" var="i">
+                                    <c:choose>
+                                        <c:when test="${currentPage eq i}">
+                                            <li class="active"><span>${i}</span></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                            <li><a href="userlist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}">${i}</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                <!--prev page-->
+                                <c:if test="${currentPage < noOfPage}">
+                                    <li>
+                                        <a href="userlist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+
                         </nav>
 
                     </div>
