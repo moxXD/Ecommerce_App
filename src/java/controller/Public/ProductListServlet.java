@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin;
+package controller.Public;
 
+import dal.ProductDAO;
 import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,15 +15,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Product;
 import model.Setting;
 
 /**
  *
  * @author Duc Le
  */
-@WebServlet(name = "SettingListServlet", urlPatterns = {"/admin/settinglist"})
-public class SettingListServlet extends HttpServlet {
+@WebServlet(name = "ProductListServlet", urlPatterns = {"/productlist"})
+public class ProductListServlet extends HttpServlet {
+
+    SettingDAO settDao = new SettingDAO();
+    ProductDAO pDao = new ProductDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +47,10 @@ public class SettingListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SettingListServlet</title>");
+            out.println("<title>Servlet ProductListServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SettingListServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProductListServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,39 +68,45 @@ public class SettingListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // variable for pagination
         int page = 1;
-        int recordPerPage = 10;
-        
+        int recordPerPage = 6;
+        int cateId = 0;
+        // get request parameter
         String page_raw = request.getParameter("page");
-        String sortColumn = request.getParameter("sort");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
-        String typeFilter = request.getParameter("filtype");
-        String statusFilter = request.getParameter("filstatus");
-        String search = request.getParameter("q");
-
-        SettingDAO setDAO = new SettingDAO();
-        List<String> lst = setDAO.getAllSettingType();
-     
-        if (page_raw != null) {
+        String cateId_raw = request.getParameter("categoryId");
+        String search_raw = request.getParameter("searchInput");
+        List<Product> pList = new ArrayList<>();
+        // parse integer
+        if (page_raw != null && !page_raw.isEmpty()) {
             try {
                 page = Integer.parseInt(page_raw);
             } catch (NumberFormatException e) {
-                Logger.getLogger(e.getMessage());
+                Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }// parse integer
+        if (cateId_raw != null && !cateId_raw.isEmpty()) {
+            try {
+                cateId = Integer.parseInt(cateId_raw);
+            } catch (NumberFormatException e) {
+                Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         }
-
-        List<Setting> stList = setDAO.getAllSettingWithFilterAndSearch((page - 1) * recordPerPage, recordPerPage,
-                sortColumn, sortOrder, typeFilter, statusFilter, search);
-        int noOfrecord = setDAO.getNumberOfRecord();
-        int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
+        // get pagination production list with added filter
+        pList = pDao.getProductWithFilter((page - 1) * recordPerPage,
+                recordPerPage, search_raw, cateId);
         
-        request.setAttribute("data", stList);
-        request.setAttribute("settingData", lst);
+        int noOfrecord = pDao.getNumberOfRecord();
+        int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
+        // get product category data
+        List<Setting> list = settDao.getSettingByType("product category");
+        // set request attribute
+        request.setAttribute("categorys", list);
+        request.setAttribute("products", pList);
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
-        request.setAttribute("sortOrder", sortOrder);
-        
-        request.getRequestDispatcher("../views/admin/settinglist.jsp").forward(request, response);
+        // redirect to productlist.jsp
+        request.getRequestDispatcher("productlist.jsp").forward(request, response);
     }
 
     /**

@@ -107,7 +107,7 @@
                                 </button>
                             </span>
                         </div>
-                            <!--select type-->
+                        <!--select type-->
                         <div class="filter-row">
                             <div class="form-group">
                                 <label for="filtype">Filter by type:</label>
@@ -130,6 +130,10 @@
                             </div>
                         </div>
                     </form>
+                    <button type="button" class="btn btn-primary  "
+                            onclick="redirectToSettingDetail('add')"
+                            style=""
+                            >Add</button>
 
                     <!-- Table for displaying user data -->
 
@@ -174,10 +178,15 @@
                                         <td>${s.type}</td>
                                         <td>${s.value}</td>
                                         <td>${s.isOrder()}</td>
-                                        <td>${s.status?"Active":"Inactive"}</td>
+                                        <c:if test="${s.status}">
+                                            <td style="color: #62f04f">Active</td>
+                                        </c:if>
+                                        <c:if test="${!s.status}">
+                                            <td style="color: red">Inactive</td>
+                                        </c:if>
                                         <td><a href="settingdetail?action=view&id=${s.id}">View</a>
-                                            &nbsp;
-                                            <a href="settingdetail?action=edit&id=${s.id}">Edit</a>
+                                            <!--                                            &nbsp;
+                                                                                        <a href="settingdetail?action=edit&id=${s.id}">Edit</a>-->
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -185,7 +194,8 @@
                             </tbody>
                         </table>
                         <!-- Diplay list of page -->
-                        <nav aria-label="Page navigation">
+                        <nav aria-label="Page navigation" >
+
                             <ul class="pagination">
                                 <!--next page-->
                                 <c:if test="${currentPage > 1}">
@@ -215,17 +225,22 @@
                                     </li>
                                 </c:if>
                             </ul>
+
+
+
+
+
                         </nav>
                     </div>
 
-                    <button type="button" class="btn btn-primary btn-block " onclick="redirectToSettingDetail('add')">Add</button>
+
                 </section>
             </aside>
         </div>
 
 
 
-                                        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../layout/footer.jsp" %>
         <script>
             function redirectToSettingDetail(action) {
                 // Chuyển hướng đến trang settingdetail với tham số action=add

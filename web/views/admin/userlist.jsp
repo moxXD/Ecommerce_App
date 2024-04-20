@@ -20,15 +20,7 @@
         <!-- font Awesome -->
         <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet"
               type="text/css" />
-        <!-- Ionicons -->
-        <link href="${pageContext.request.contextPath}/views/css/ionicons.min.css" rel="stylesheet"
-              type="text/css" />
-        <!-- Morris chart -->
-        <link href="${pageContext.request.contextPath}/views/css/morris/morris.css" rel="stylesheet"
-              type="text/css" />
-        <!-- jvectormap -->
-        <link href="${pageContext.request.contextPath}/views/css/jvectormap/jquery-jvectormap-1.2.2.css"
-              rel="stylesheet" type="text/css" />
+
         <!-- Date Picker -->
         <link href="${pageContext.request.contextPath}/views/css/datepicker/datepicker3.css" rel="stylesheet"
               type="text/css" />
@@ -37,9 +29,6 @@
         <!-- Daterange picker -->
         <link href="${pageContext.request.contextPath}/views/css/daterangepicker/daterangepicker-bs3.css"
               rel="stylesheet" type="text/css" />
-        <!-- iCheck for checkboxes and radio inputs -->
-        <link href="${pageContext.request.contextPath}/views/css/iCheck/all.css" rel="stylesheet"
-              type="text/css" />
         <!-- bootstrap wysihtml5 - text editor -->
         <!-- <link href="css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" /> -->
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
@@ -57,6 +46,7 @@
 
         <style type="text/css">
 
+            
         </style>
     </head>
 
@@ -123,7 +113,7 @@
                 <section class="content">
                     <form action="userlist" method="get">
                         <!--search input-->
-                        <div class="input-group">
+                        <div class="input-group ">
                             <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
                             <span class="input-group-btn">
                                 <button type='submit' id='search-btn' class="btn btn-flat"
@@ -131,9 +121,10 @@
                                         class="fa fa-search"></i></button>
                             </span>
                         </div>
-                        <!--gender select-->
+
                         <div class="filter-row">
-                            <div class="form-group">
+                            <!--gender select-->
+                            <div class="form-group ">
                                 <label for="filgender">Filter by gender:</label>
                                 <select name="filgender" id="filgender" class="form-control">
                                     <option value="">All genders</option>
@@ -159,12 +150,16 @@
                                     <option value="">All status</option>
                                     <option value="active" ${param.filstatus != null && param.filstatus.equals("active") ? "selected" : ""}>Active</option>
                                     <option value="inactive" ${param.filstatus != null && param.filstatus.equals("inactive") ? "selected" : ""}>Inactive</option>
-
                                 </select>
                             </div>
                         </div>
                     </form>
-
+                    <div >
+                        <button type="button" class="btn btn-primary btn-block "
+                                onclick="redirectToAddUser()"
+                                style="width: 30%;"
+                                >Add</button>
+                    </div>
                     <!-- Table for displaying user data -->
                     <div class="table-responsive">
 
@@ -220,10 +215,19 @@
                                         <td>${u.email}</td>
                                         <td>${u.phone}</td>
                                         <td>${u.setting.value}</td>
-                                        <td>${u.status?"Active":"Inactive"}</td>
-                                        <td><a href="userdetail?action=view&id=${u.id}">View</a> 
-                                            &nbsp;
-                                            <a href="userdetail?action=edit&id=${u.id}">Edit</a> 
+                                        <c:if test="${u.status}">
+                                            <td style="color: #62f04f">Active</td>
+                                        </c:if>
+                                        <c:if test="${!u.status}">
+                                            <td style="color: red">Inactive</td>
+                                        </c:if>
+
+                                        <td><a href="userdetail?action=view&id=${u.id}">View</a>
+                                            <form action="userlist" method="post">
+                                                <input type="hidden" name="userId" value="${u.id}">
+                                                <input type="hidden" name="status" value="${u.status?true:false}">
+                                                <input type="submit" value="${!u.status?"Activate":"Deactivate"}" />
+                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -232,7 +236,9 @@
                         </table>
 
                         <!-- Diplay list of page -->
-                        <nav aria-label="Page navigation">
+
+                        <nav aria-label="Page navigation" >
+
                             <ul class="pagination">
                                 <!--prev page-->
                                 <c:if test="${currentPage > 1}">
@@ -262,18 +268,19 @@
                                     </li>
                                 </c:if>
                             </ul>
+
                         </nav>
+
                     </div>
-                    <button type="button" class="btn btn-primary btn-block " onclick="redirectToAddUser()">Add</button>
                 </section>
             </aside>
         </div>
 
 
-                                        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../layout/footer.jsp" %>
         <script type="text/javascript">
-            function redirectToAddUser(){
-                window.location.href='userdetail?action=add';
+            function redirectToAddUser() {
+                window.location.href = 'userdetail?action=add';
             }
         </script>
         <!-- jQuery 2.0.2 -->

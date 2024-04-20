@@ -11,3 +11,9 @@ nbactions.xml
 nb-configuration.xml
 *.jar
 *.war
+web/META-INF/context.xml
+nbproject/private/private.xml
+/nbproject
+/web/META-INF
+src/java/dal/FakeData.java
+/web/META-INF

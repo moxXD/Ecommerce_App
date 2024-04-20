@@ -20,6 +20,13 @@ import model.Setting;
  */
 public class SettingDAO {
 
+    private final String SETTING_TABLE = "setting";
+    private final String SETTING_ID = "id";
+    private final String SETTING_TYPE = "type";
+    private final String SETTING_VALUE = "value";
+    private final String SETTING_ORDER = "order";
+    private final String SETTING_STATUS = "status";
+
     DBContext context = new DBContext();
     private Connection conn;
     private int noOfrecord;
@@ -27,18 +34,18 @@ public class SettingDAO {
     // get setting by id
     public Setting getSettingById(int id) {
         Setting st = null;
-        String sql = "SELECT * FROM swp391_g1.setting\n"
-                + "WHERE setting.id=? ORDER by `order` asc";
+        String sql = "SELECT * FROM " + SETTING_TABLE + " \n"
+                + "WHERE " + SETTING_ID + "=? ORDER by `" + SETTING_ORDER + "` asc";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                String value = rs.getString("value");
-                String type = rs.getString("type");
-                boolean status = rs.getBoolean("status");
-                int order = rs.getInt("order");
+                String value = rs.getString(SETTING_VALUE);
+                String type = rs.getString(SETTING_TYPE);
+                boolean status = rs.getBoolean(SETTING_STATUS);
+                int order = rs.getInt(SETTING_ORDER);
                 st = new Setting(id, order, value, type, status);
             }
         } catch (SQLException e) {
@@ -57,21 +64,56 @@ public class SettingDAO {
         return st;
     }
 
+    // get setting by type and value
+    public Setting getSettingByTypeAndValue(String type, String value) {
+        Setting s = null;
+        String sql = "SELECT * FROM " + SETTING_TABLE + " WHERE " + SETTING_TYPE + "=? AND "
+                + SETTING_VALUE + "=?";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, type);
+            stm.setString(2, value);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int stId = rs.getInt(SETTING_ID);
+                String v = rs.getString(SETTING_VALUE);
+                String t = rs.getString(SETTING_TYPE);
+                boolean status = rs.getBoolean(SETTING_STATUS);
+                int order = rs.getInt(SETTING_ORDER);
+                s = new Setting(stId, order, v, t, status);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+
+                }
+            }
+        }
+        return s;
+    }
+
     // get role id
     public List<Setting> getRoleId() {
         List<Setting> st = new ArrayList<>();
-        String sql = "SELECT * FROM swp391_g1.setting\n"
-                + "WHERE setting.type='role' ORDER by `order` asc";
+        String sql = "SELECT * FROM " + SETTING_TABLE + " \n"
+                + "WHERE " + SETTING_TYPE + "='role' ORDER by `" + SETTING_ORDER + "` asc";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                int stId = rs.getInt("id");
-                String value = rs.getString("value");
-                String type = rs.getString("type");
-                boolean status = rs.getBoolean("status");
-                int order = rs.getInt("order");
+                int stId = rs.getInt(SETTING_ID);
+                String value = rs.getString(SETTING_VALUE);
+                String type = rs.getString(SETTING_TYPE);
+                boolean status = rs.getBoolean(SETTING_STATUS);
+                int order = rs.getInt(SETTING_ORDER);
                 Setting s = new Setting(stId, order, value, type, status);
                 st.add(s);
             }
@@ -98,25 +140,25 @@ public class SettingDAO {
         List<Setting> list = new ArrayList<>();
         String sql = "SELECT "
                 + "    SQL_CALC_FOUND_ROWS\n"
-                + "    `setting`.`id`,\n"
-                + "    `setting`.`type`,\n"
-                + "    `setting`.`value`,\n"
-                + "    `setting`.`order`,\n"
-                + "    `setting`.`status`\n"
-                + "FROM `swp391_g1`.`setting`\n"
+                + SETTING_ID + ",\n"
+                + SETTING_TYPE + ",\n"
+                + SETTING_VALUE + ",\n`"
+                + SETTING_ORDER + "`,\n"
+                + SETTING_STATUS + "\n"
+                + "FROM " + SETTING_TABLE + " \n"
                 + "WHERE 1=1";
         // add filter condition
         if (typeFilter != null && !typeFilter.isEmpty()) {
-            sql += " AND `setting`.`type`=? ";
+            sql += " AND " + SETTING_TYPE + "=? ";
         }
 
         // status
         if (statusFilter != null && !statusFilter.isEmpty()) {
-            sql += " AND `setting`.`status`=? ";
+            sql += " AND " + SETTING_STATUS + "=? ";
         }
         // add search to query
         if (search != null && !search.isEmpty()) {
-            sql += " AND `setting`.`value` LIKE ?  ";
+            sql += " AND " + SETTING_VALUE + " LIKE ?  ";
         }
         // add sort condition to query
         sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY `" + sortParam
@@ -146,11 +188,11 @@ public class SettingDAO {
             ResultSet rs = stm.executeQuery();
 //            System.out.println("sql query: "+sql);
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String type = rs.getString("type");
-                String value = rs.getString("value");
-                int orderCol = rs.getInt("order");
-                boolean status = rs.getBoolean("status");
+                int id = rs.getInt(SETTING_ID);
+                String type = rs.getString(SETTING_TYPE);
+                String value = rs.getString(SETTING_VALUE);
+                int orderCol = rs.getInt(SETTING_ORDER);
+                boolean status = rs.getBoolean(SETTING_STATUS);
                 Setting st = new Setting(id, orderCol, value, type, status);
                 list.add(st);
             }
@@ -178,14 +220,14 @@ public class SettingDAO {
     public List<String> getAllSettingType() {
         List<String> lst = new ArrayList<>();
         String sql = "SELECT distinct\n"
-                + "    `setting`.`type`\n"
-                + "FROM `swp391_g1`.`setting`;";
+                + SETTING_TYPE + "\n"
+                + "FROM " + SETTING_TABLE + ";";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                String s=rs.getString("type");
+                String s = rs.getString(SETTING_TYPE);
                 lst.add(s);
             }
         } catch (SQLException e) {
@@ -205,6 +247,7 @@ public class SettingDAO {
     // get all setting 
     public List<Setting> getAllSetting() {
         List<Setting> lst = new ArrayList<>();
+
         String sql = "SELECT `setting`.`id`,\n"
                 + "    `setting`.`type`,\n"
                 + "    `setting`.`value`,\n"
@@ -214,15 +257,16 @@ public class SettingDAO {
                 + "";
         try {
             conn = context.getConnection();
+//            System.out.println("sql: " + sql);
             PreparedStatement stm = conn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                Setting s = new Setting(rs.getInt("id"),
-                        rs.getInt("order"),
-                        rs.getString("value"),
-                        rs.getString("type"),
-                        rs.getBoolean("status"));
+                Setting s = new Setting(rs.getInt(SETTING_ID),
+                        rs.getInt(SETTING_ORDER),
+                        rs.getString(SETTING_VALUE),
+                        rs.getString(SETTING_TYPE),
+                        rs.getBoolean(SETTING_STATUS));
                 lst.add(s);
             }
         } catch (SQLException e) {
@@ -243,14 +287,74 @@ public class SettingDAO {
         return noOfrecord;
     }
 
+    public int getMaxOrder(String type) {
+        String sql = "SELECT IFNULL(MAX(`order`), 0) + 1 as max_order FROM setting WHERE type = ?";
+        int max = 0;
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, type);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                max = rs.getInt("max_order");
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return max;
+    }
+
+    // get setting by type
+    public List<Setting> getSettingByType(String type) {
+        List<Setting> list = new ArrayList<>();
+        String sql = "SELECT * "
+                + "FROM " + SETTING_TABLE + " \n"
+                + "WHERE `" + SETTING_TYPE + "`=?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, type);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(SETTING_ID);
+                String value=rs.getString(SETTING_VALUE);
+                int order=rs.getInt(SETTING_ORDER);
+                String t=rs.getString(SETTING_TYPE);
+                boolean status=rs.getBoolean(SETTING_STATUS);
+                Setting st=new Setting(id, order, value, t, status);
+                list.add(st);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return list;
+    }
+
     // insert new setting
-    public void insertSetting(String type, String value, int order) {
-        String sql = "INSERT INTO `swp391_g1`.`setting`\n"
+    public void insertSetting(String type, String value) {
+        String sql = "INSERT INTO " + SETTING_TABLE + "\n"
                 + "(\n"
-                + "`type`,\n"
-                + "`value`,\n"
-                + "`order`,\n"
-                + "`status`)\n"
+                + SETTING_TYPE + ",\n"
+                + SETTING_VALUE + ",\n`"
+                + SETTING_ORDER + "`,\n"
+                + SETTING_STATUS + ")\n"
                 + "VALUES\n"
                 + "(?,?,?,?);";
         try {
@@ -258,7 +362,8 @@ public class SettingDAO {
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setString(1, type);
             stm.setString(2, value);
-            stm.setInt(3, order);
+            int newOrder = getMaxOrder(type);
+            stm.setInt(3, newOrder);
             stm.setBoolean(4, true);
             stm.execute();
         } catch (SQLException e) {
@@ -276,22 +381,20 @@ public class SettingDAO {
 
     // update setting
     public void updateSettingById(int id, String type,
-            String value, int order, boolean status) {
-        String sql = "UPDATE `swp391_g1`.`setting`\n"
+            String value, boolean status) {
+        String sql = "UPDATE " + SETTING_TABLE + "\n"
                 + "SET\n"
-                + "`type` = ?,\n"
-                + "`value` = ?,\n"
-                + "`order` =?,\n"
-                + "`status` = ?\n"
-                + "WHERE `id` = ?;";
+                + SETTING_TYPE + "= ?,\n"
+                + SETTING_VALUE + " = ?,\n"
+                + SETTING_STATUS + " = ?\n"
+                + "WHERE " + SETTING_ID + " = ?;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setString(1, type);
             stm.setString(2, value);
-            stm.setInt(3, order);
-            stm.setBoolean(4, status);
-            stm.setInt(5, id);
+            stm.setBoolean(3, status);
+            stm.setInt(4, id);
             stm.executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -308,10 +411,14 @@ public class SettingDAO {
 
     public static void main(String[] args) {
         SettingDAO st = new SettingDAO();
-        List<Setting> list = st.getRoleId();
-        for (Setting setting : list) {
-            System.out.println("id: " + setting.getId());
-            System.out.println("value: " + setting.getValue());
-        }
+        Setting s = st.getSettingById(1);
+        System.out.println("id: " + s.getId());
+        System.out.println("value: " + s.getValue());
+        System.out.println("s:" + s);
+//        List<Setting> list = st.();
+//        for (Setting setting : list) {
+//            System.out.println("id: " + setting.getId());
+//            System.out.println("value: " + setting.getValue());
+//        }
     }
 }
