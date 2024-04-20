@@ -16,6 +16,10 @@ public class Setting {
     public Setting() {
     }
 
+    public Setting(int id) {
+        this.id = id;
+    }
+
     public Setting(int id, int order, String value, String type, boolean status) {
         this.id = id;
         this.order = order;

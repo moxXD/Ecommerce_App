@@ -21,6 +21,39 @@ public class User {
     public User() {
     }
 
+    public User(Setting setting, String email, String password, String fullname, boolean status) {
+        this.setting = setting;
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.status = status;
+    }
+
+    public User(String email, String password, String fullname) {
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", setting=" + setting + ", email=" + email + ", password=" + password + ", fullname=" + fullname + ", imgUrl=" + imgUrl + ", phone=" + phone + ", address=" + address + ", confirmation=" + confirmation + ", status=" + status + ", gender=" + gender + ", dob=" + dob + '}';
+    }
+
+    public User(int id, Setting setting, String email, String password, String fullname, String imgUrl, String phone, String address, boolean status, boolean gender, Date dob) {
+        this.id = id;
+        this.setting = setting;
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.imgUrl = imgUrl;
+        this.phone = phone;
+        this.address = address;
+        this.status = status;
+        this.gender = gender;
+        this.dob = dob;
+    }
+
     public User(int id, Setting setting, String email, String password, String fullname,
             String imgUrl, String phone, String address, boolean confirmation, boolean status, boolean gender, Date dob) {
         this.id = id;
@@ -147,7 +180,7 @@ public User(int id, String email, String password, String fullname, String imgUr
     }
 
     public boolean isStatus() {
-        return status;
+        return status ;
     }
 
     public void setStatus(boolean status) {
