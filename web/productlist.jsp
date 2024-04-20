@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,25 +30,7 @@
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
         <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
         <style>
-            /*CSS styles for the sidebar*/
-            /* Sidebar */
-            /*            #sidebar {
-                            float: left;
-                            width: 250px;
-                            padding: 15px;
-                            background-color: #f8f9fa;
-                            border-right: 1px solid #dee2e6;
-                        }
-            
-                        .content {
-                            margin-left: 250px;
-            
-                            padding: 15px;
-                        }*/
 
-            /*            #sidebar {
-                            margin-left: 1%;
-                        }*/
             .search-box {
                 margin-bottom: 15px;
 
@@ -61,41 +44,86 @@
                 margin-left: 1.25rem; /* Tạo khoảng cách giữa radio button và nhãn */
             }
             /* CSS for product cards */
+            /* CSS */
             .product-card {
                 border: 1px solid #dee2e6;
+                display: flex;
                 border-radius: 5px;
                 margin-bottom: 20px;
-                /*                width: 350px;  Chiều rộng cố định 
-                                height: auto;  Chiều cao tự động điều chỉnh theo nội dung */
+                flex-direction: column;
+                width: 30rem; /* Đặt chiều rộng cố định */
+                height: 30rem; /* Đặt chiều cao cố định */
+                overflow: hidden; /* Ẩn bất kỳ nội dung nào tràn ra khỏi product card */
+                cursor:pointer;
             }
-            .product-card img {
+            @media (max-width: 992px) {
+                .product-card {
+                    width: 90%; /* Thay đổi chiều rộng của card thành 100% khi màn hình nhỏ hơn 992px */
+                    padding-right: 20px; /* Loại bỏ margin phải */
+                    margin-bottom: 20px; /* Giữ khoảng cách dưới mỗi card */
+                }
+            }
+            .product-card-image {
+                display: flex; /* Sử dụng flexbox */
+                justify-content: center; /* Căn giữa theo chiều ngang */
+                align-items: center; /* Căn giữa theo chiều dọc */
+                width: 100%; /* Chiều rộng của product-card-image */
+                height: 50%; /* Chiều cao của product-card-image */
+                border-radius: 5px 5px 0 0; /* Đặt border-radius nếu cần */
+                margin: 0; /* Loại bỏ margin */
+                padding: 0; /* Loại bỏ padding */
+                border: 1px solid #e8d9d8; /* Đặt border nếu cần */
+            }
 
-                width: 100%;
-                border-radius: 5px 5px 0 0;
+            .product-card-image a {
+                width: 100%; /* Chiều rộng của thẻ a bên trong product-card-image */
+                height: 100%; /* Chiều cao của thẻ a bên trong product-card-image */
+                display: flex; /* Sử dụng flexbox */
+                justify-content: center; /* Căn giữa theo chiều ngang */
+                align-items: center; /* Căn giữa theo chiều dọc */
             }
-            .product-card .card-body {
+
+            .product-card-image a img {
+                width: 80%; /* Chiều rộng của hình ảnh */
+                height: 100%; /* Chiều cao của hình ảnh */
+                align-self: center; /* Căn giữa theo chiều dọc */
+            }
+            .card-body {
                 padding: 15px;
-            }
-            .product-card .btn {
                 width: 100%;
-                margin-top: 10px;
+                margin-bottom: 0;
+                flex: 1;
+                height: 50%; /* Đặt chiều cao cố định cho phần content */
+                display: flex; /* Sử dụng flexbox để căn giữa nội dung */
+                flex-direction: row; /* Căn giữa nội dung dọc */
+                justify-content: space-between; /* Căn giữa nội dung theo chiều dọc */
             }
+            .product-card .card-body-button{
+                width: 9rem;
+                display: flex;
+                flex-direction: column;
+                justify-content:   space-evenly;
+            }
+            .product-card .btn{
+                width: 9rem;
+            }
+            .product-card p{
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
             .wrapper {
                 display: flex; /* Sử dụng Flexbox */
                 padding: 0 12% 0 12%;
 
             }
-
             #sidebar {
                 flex: 0 0 250px; /* Đặt kích thước cố định cho sidebar */
                 background-color: #f8f9fa;
                 padding-top: 2%;
             }
 
-            .content {
-                flex: 1; /* Phần content sẽ tự mở rộng để lấp đầy không gian còn lại */
-                padding: 15px; /* Thêm padding cho content */
-            }
             /* CSS cho phần tử <a> và <span> */
             .pagination li a span{
                 background-color: #f0f0e9;
@@ -108,11 +136,9 @@
     </head>
     <body>
         <%@include file="layout/header.jsp" %>
-        <h1 class="col-md-12" style="text-align: center;padding-bottom: 2%">Product list</h1>
+        <h1 class="col-md-12" style="text-align: center;padding-bottom: 2%;margin: 0">Product list</h1>
         <div class="wrapper row">
             <!-- Sidebar  -->
-
-
             <nav id="sidebar" class="col-md-2">
                 <!-- Search box -->
                 <form id="filterForm" action="productlist" method="GET">
@@ -129,11 +155,12 @@
                             <button id="searchBtn" class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
+                    <a href="productlist?searchInput=${param.searchInput}">Clear Category</a>
                     <!--</form>-->
                     <!-- Radio buttons -->
                     <!--<form id="filterForm" action="productlist" method="GET">-->
                     <div class="form-group mt-3 ">
-                        <label>Select Option:</label>
+                        <label>Select Category:</label>
                         <div class="custom-control custom-radio">
                             <c:forEach items="${requestScope.categorys}" var="c">
                                 <div class="custom-control custom-radio">
@@ -153,37 +180,44 @@
                     <!-- Product Cards -->
                     <c:forEach items="${requestScope.products}" var="p">
                         <div class="col-md-4">
-                            <div class="product-card">
-                                <img src="${p.imgUrl}" alt="${p.imgUrl}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${p.name}</h5>
-                                    <p class="card-text">${p.specification}</p>
+                            <div class="product-card " >
+                                <div class="product-card-image">
+                                    <a href="userdetail?id=${p.id}"style="justify-content: center" >
+                                        <img src="<c:url value='/uploads/${p.imgUrl}'/>" 
+                                             alt="${p.name}">
+                                    </a>    
+                                </div>
 
-                                    <c:if test="${not empty p.salePrice}">
-                                        <c:choose>
-                                            <c:when test="${p.salePrice.start.time le requestScope.currentTime.time and requestScope.currentTime.time le p.salePrice.end.time}">
-                                               
-
-                                                <!--<p class="card-text" style="color: #62f04f">Sale Price: ${p.salePrice.salePrice}</p>-->
-                                                <p class="card-text" style="text-decoration: line-through; color: red">Regular Price: ${p.price}</p>
-                                            </c:when>
-                                            <c:otherwise>
-                                                 <p class="card-text" style="color: #62f04f">start Price: ${p.salePrice.start}</p>
-                                                <p class="card-text" style="color: #62f04f">end Price: ${p.salePrice.end}</p>
-                                                <p class="card-text" style="color: #62f04f">curent Price: ${requestScope.currentDate}</p>
-                                                <p class="card-text" style="color: #62f04f">Price: ${p.price}</p>
-                                                <p class="card-text">Not on sale</p>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:if>
-                                    <c:if test="${empty p.salePrice}">
-                                        <p class="card-text" style="color: #62f04f">Price: ${p.price}</p>
-                                        <p class="card-text" >Not on sale</p>
-
-                                    </c:if>
-
-                                    <button class="btn btn-primary">Add to Cart</button>
-                                    <button class="btn btn-secondary">Feedback</button>
+                                <div class="card-body row">
+                                    <div class="card-body-content col-md-8">
+                                        <h5 class="card-title">${p.name}</h5>
+                                        <p class="card-text" >${p.specification}</p>
+                                        <!-- product has a sale price-->
+                                        <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
+                                        <c:if test="${not empty p.salePrice}">
+                                            <jsp:useBean id="now" class="java.util.Date"/>
+                                            <c:choose>
+                                                <c:when test="${p.salePrice.start < now && now < p.salePrice.end}"> 
+                                                    <fmt:formatNumber value="${p.salePrice.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
+                                                    <p class="card-text" style="text-decoration: line-through;color: red">Price: ${formattedPrice}</p>
+                                                    <p class="card-text" style="color: #62f04f">Sale Price: ${formattedSalePrice}</p>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p class="card-text" style="color: #62f04f">Price: ${formattedPrice}</p>
+                                                    <p class="card-text">Not on sale</p>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:if>
+                                        <!--show if product is not on sale-->
+                                        <c:if test="${empty p.salePrice}">
+                                            <p class="card-text" style="color: #62f04f">Price: ${formattedPrice}</p>
+                                            <p class="card-text" >Not on sale</p>
+                                        </c:if>
+                                    </div>
+                                    <div class="card-body-button col-md-4"> 
+                                        <button class="btn btn-primary">Buy now</button>
+                                        <button class="btn btn-info">Add to cart</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -69,7 +69,7 @@ public class ProductDAO {
             }
             stm.setInt(index++, offset);
             stm.setInt(index++, limit);
-            System.out.println("sql: "+stm.toString());
+//            System.out.println("sql: " + stm.toString());
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 SettingDAO stDao = new SettingDAO();
@@ -161,7 +161,9 @@ public class ProductDAO {
         for (Product product : list) {
             System.out.println("id: " + product.getId());
             System.out.println("name: " + product.getName());
-            System.out.println("Price: " + product.getPrice());
+            if (product.getSalePrice() != null) {
+                System.out.println("sale: " + product.getSalePrice().toString());
+            }
         }
     }
 }
