@@ -142,28 +142,12 @@ public class BlogDetailServlet extends HttpServlet {
                 fileName = new File(fileName).getName();
                 filePart.write(this.getFolderUpload().getAbsolutePath() + File.separator + fileName);
             }
-            String category_raw = request.getParameter("category");
-            String author_raw = request.getParameter("author");
-            String status_raw = request.getParameter("status");
-            String feature_raw = request.getParameter("feature");
-            String title = request.getParameter("title");
-            String content = request.getParameter("content");
-            String sumary = request.getParameter("sumary");
-            System.out.println("cate: "+ category_raw);
-            System.out.println("author: "+ author_raw);
-            System.out.println("status: "+ status_raw);
-            System.out.println("feature: "+ feature_raw);
-            System.out.println("title: "+ title);
-            System.out.println("content: "+ content);
-            System.out.println("sum: "+ sumary);
-            System.out.println("hehe1: " + fileName);
-            System.out.println("action: " + action);
-            System.out.println("ID: " + id_raw);
+            
             if (action != null && action.equalsIgnoreCase("add")) {
-                System.out.println("hehe2");
+                
                 addNewBlog(request, response, fileName);
             } else if (action != null && action.equalsIgnoreCase("update")) {
-                System.out.println("hehe3");
+                
                 updateBlog(request, response, fileName, id_raw);
             }
         } catch (Exception e) {
