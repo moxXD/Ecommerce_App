@@ -211,8 +211,17 @@
                                     <c:set var="id" value="${u.id}" />
                                     <tr>
                                         <td>${id}</td>
-                                        <td><img src="${pageContext.request.contextPath}/images/blog/images.jpg"
-                                                 style="width: 80px; height: 50px;" alt="User Image" /></td>
+                                        <td>
+                                            <c:choose>
+                                            <c:when test="${empty u.imgUrl}">
+                                                <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle" style="width: 80px; height: 50px;">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle"style="width: 80px; height: 50px;">
+                                            </c:otherwise>
+                                        </c:choose>  
+<!--                                            <img src="${pageContext.request.contextPath}/images/blog/images.jpg"
+                                                 style="width: 80px; height: 50px;" alt="User Image" /></td>-->
 <!--                                        <td>${u.title}</td>-->
                                         <c:if test="${fn:length(u.title) > 30}">
                                             <c:set var="subTitle" value="${fn:substring(u.title, 0, 30)}" />
