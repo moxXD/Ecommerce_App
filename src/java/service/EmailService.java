@@ -5,6 +5,8 @@
 package service;
 
 import dal.SettingDAO;
+import dal.UserDAO;
+import jakarta.servlet.http.HttpServletRequest;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Properties;
@@ -27,7 +29,7 @@ import utility.Encode;
  */
 public class EmailService {
 
-    public static void send(String emailTo, String emailSubject, String emailContent) {
+    public static boolean send(String emailTo, String emailSubject, String emailContent) {
         final String email = "service.techmart11@gmail.com";
         final String pass = "tdwo xdve ghol tasl";
         Properties prop = new Properties();
@@ -50,12 +52,85 @@ public class EmailService {
             message.setContent(emailContent, "text/html");
             Transport.send(message);
             System.out.println("Email sent sucessfully to [" + emailTo + "]");
+            return true;
         } catch (Exception e) {
             Logger.getLogger(EmailService.class.getName()).log(Level.SEVERE, null, e);
         }
+        return false;
     }
 
-    public void sendNewPassword(String name,String email,String password) {
+    public static String getOTP() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder otp = new StringBuilder(6);
+        for (int i = 0; i < 6; i++) {
+            otp.append(random.nextInt(10));
+        }
+        return otp.toString();
+    }
+
+    public static String sendOTPResetPassword(User user) {
+        String OTP = EmailService.getOTP();
+        String subject = "Password Reset Request for " + user.getFullname() + "\n";
+        String message = "Dear " + user.getFullname() + ",\n"
+                + "\n"
+                + "We received a request to reset your password for TechMart.\n"
+                + "\n"
+                + "Your OTP: " + OTP + "\n"
+                + "\n"
+                + "Please use this OTP to continue with your password reset process. If you did not request a password reset, please ignore this email or contact our support team immediately.\n"
+                + "\n"
+                + "For security reasons, this OTP will expire in 10 minutes.\n"
+                + "\n"
+                + "Thank you .\n"
+                + "\n"
+                + "Best regards,\n"
+                + "TechMart";
+        if (send(user.getEmail(), subject, message)) {
+            return OTP;
+        }
+        return null;
+    }
+
+    public static int verifyOTP(String action, String otp, String providedOTP, HttpServletRequest request) {
+        if (!otp.equals(providedOTP)) {
+            return -1;
+        }
+        if (System.currentTimeMillis() >= ((long) request.getSession().getAttribute("expireTime"))) {
+            return -2;
+        }
+        if (action.equals("forgot-password")) {
+            return 1;
+        } else if (action.equals("confirm-email")) {
+            
+            return 2;
+        }
+        return 0;
+    }
+
+    public static String SendOTPConfirmEmail(User user) {
+        String OTP = EmailService.getOTP();
+        String subject = "Your verify code is " + OTP + "\n";
+        String message = "Dear " + user.getFullname() + ",\n"
+                + "\n"
+                + "Use this OTP to verify your account in TechMart.\n"
+                + "\n"
+                + "Your OTP: " + OTP + "\n"
+                + "\n"
+                + "Please use this OTP to continue with your registation.\n"
+                + "\n"
+                + "For security reasons, this OTP will expire in 10 minutes.\n"
+                + "\n"
+                + "Thank you .\n"
+                + "\n"
+                + "Best regards,\n"
+                + "TechMart";
+        if (send(user.getEmail(), subject, message)) {
+            return OTP;
+        }
+        return null;
+    }
+
+    public void sendNewPassword(String name, String email, String password) {
         String subject = "Your New Password for TECHMART";
         String message = "<html><body><p>Dear " + name + ",</p>"
                 + "<p>Use this password: <strong>" + password + "</strong> to login into your account in TechMart.</p>"
@@ -65,18 +140,14 @@ public class EmailService {
         send(email, subject, message);
 
     }
-
-
-    
-
-//    public static void main(String[] args) {
-//        String emailTo = "ducltse05390@fpt.edu.vn";
-//        String emailSubjeString = "service.techmart11@gmail.com";
-//        Setting st = new SettingDAO().getSettingById(1);
-//        User u = new User(1, st, "ducltse05390@fpt.edu.vn", "duc", "0327079634", true, true);
-//        EmailService.sendNewPassword(u);
-////        boolean send = EmailService.send(emailTo, emailSubjeString, otp);
-//
-//    }
+    public static void main(String[] args) {
+        String emailTo = "23trongthanh@gmail.com";
+        String emailSubjectString = "service.techmart11@gmail.com";
+        UserDAO ud = new UserDAO();
+        User u = ud.getUserByEmail(emailTo);
+        String otp = EmailService.SendOTPConfirmEmail(u);
+        boolean send = EmailService.send(emailTo, emailSubjectString, otp);
+        System.out.println(otp);
+    }
 
 }

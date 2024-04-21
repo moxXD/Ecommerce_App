@@ -3,8 +3,27 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0" />
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/OneDrive/Desktop/FPT/SWP391Bl5/g1/web/views/blogdetails.jsp</file>
-            <file>file:/C:/Users/Admin/OneDrive/Desktop/FPT/SWP391Bl5/g1/web/views/bloglist.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/web/authen/login_register.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/dal/ProductDAO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/web/authen/forgotPassword.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/controller/product/EditProduct.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/dal/UserDAO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/model/Category.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/model/Setting.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/dal/SettingDAO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/web/views/marketing/product/edit.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/model/Brand.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/web/views/marketing/product/add.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/utility/Encode.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/controller/product/ProductList.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/dal/BlogDAO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/controller/authentication/Login_Register.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/web/views/marketing/product/list.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/web/views/marketing/product/detail.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/controller/product/AddProduct.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/controller/product/ProductDetail.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/model/Product.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/develop_v1/g1/src/java/dal/DBContext.java</file>
         </group>
     </open-files>
 </project-private>

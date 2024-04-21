@@ -13,7 +13,8 @@ import org.apache.tomcat.util.codec.binary.Base64;
  * @author Duc Le
  */
 public class Encode {
-    public String toSHA1(String str){
+
+    public static String toSHA1(String str) {
         String salt = "this is encode";
         String result = null;
         str = str + salt;
@@ -25,7 +26,6 @@ public class Encode {
             e.printStackTrace();
         }
         return result;
-
     }
     private static final String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
     private static final String CHAR_UPPER = CHAR_LOWER.toUpperCase();

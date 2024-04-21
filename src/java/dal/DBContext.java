@@ -15,19 +15,18 @@ import java.sql.SQLException;
 public class DBContext {
     // Edit URL , username, password to authenticate with your MS SQL Server
 
-    
     private final String serverName = "localhost";
     private final String dbName = "swp391_g1_v1"; // Change accroding database name
     private final String portNumber = "3306";
     private final String userID = "root"; // change user name
-    private final String password = "thanh812"; // change password
+    private final String password = "123456"; // change password
 
     public DBContext() {
 
     }
 
     public Connection getConnection() {
-        Connection connection=null;
+        Connection connection = null;
         try {
             String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName;
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -37,6 +36,15 @@ public class DBContext {
         }
         return connection;
     }
-    
-    
+
+    public static void main(String[] args) throws SQLException {
+        DBContext db = new DBContext();
+        Connection conn = db.getConnection();
+        if (conn != null) {
+            System.out.println("Connect successfully");
+        } else {
+            System.out.println("Connect failed");
+        }
+    }
+
 }
