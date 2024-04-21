@@ -10,13 +10,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Cart;
 import model.Product;
 import model.Setting;
 
@@ -95,7 +100,7 @@ public class ProductListServlet extends HttpServlet {
         // get pagination production list with added filter
         pList = pDao.getProductWithFilter((page - 1) * recordPerPage,
                 recordPerPage, search_raw, cateId);
-        
+
         int noOfrecord = pDao.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
         // get product category data
@@ -120,7 +125,47 @@ public class ProductListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String id_raw = request.getParameter("productId");
+//        System.out.println("id:" + id_raw);
+        HttpSession session = request.getSession();
+        int id;
+        if (id_raw != null && !id_raw.isEmpty()) {
+            try {
+                id = Integer.parseInt(id_raw);
+                Product p = pDao.getProductById(id);
+                Object obj = session.getAttribute("cart");
+                if (obj == null) {// create new
+                    Cart c = new Cart();
+                    c.setProduct(p);
+                    c.setQuantity(1);
+
+                    Map<String, Cart> map = new HashMap<>();
+                    map.put(id_raw, c);
+
+                    session.setAttribute("cart", map);
+                    session.setAttribute("cartAdded", true);
+
+                } else { // add to existing cart
+                    Map<String, Cart> map = (Map<String, Cart>) obj;
+                    Cart c = map.get(id_raw);
+                    if (c == null) { // create new product cart
+                        c = new Cart();
+                        c.setProduct(p);
+                        c.setQuantity(1);
+
+                        map.put(id_raw, c);
+                    } else {// add quantity if cart exist
+                        c.setQuantity(c.getQuantity() + 1);
+                    }
+                    session.setAttribute("cart", map);
+                    session.setAttribute("cartAdded", true);
+
+                }
+                response.sendRedirect("cartdetail");
+            } catch (NumberFormatException e) {
+                Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
     }
 
     /**

@@ -5,8 +5,6 @@
 package controller.Public;
 
 import dal.ProductDAO;
-import dal.SaleDAO;
-import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,25 +14,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Cart;
 import model.Product;
-import model.Sale;
-import model.Setting;
 
 /**
  *
  * @author Duc Le
  */
-@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/productdetail"})
-public class ProductDetailServlet extends HttpServlet {
-
-    ProductDAO pDao = new ProductDAO();
-    SettingDAO sDao = new SettingDAO();
-    SaleDAO saleDao = new SaleDAO();
+@WebServlet(name = "AddToCartServlet", urlPatterns = {"/addtocart"})
+public class AddToCartServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -53,10 +44,10 @@ public class ProductDetailServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailServlet</title>");
+            out.println("<title>Servlet AddToCartServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddToCartServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -74,35 +65,9 @@ public class ProductDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // get request parameter
         String id_raw = request.getParameter("id");
-        int id;
-        List<Setting> list = sDao.getSettingByType("product category");
-        try {
-            id = Integer.parseInt(id_raw);
-            Product p = pDao.getProductById(id);
-//            System.out.println("product:"+ p.toString()); 
-            request.setAttribute("data", p);
-        } catch (NumberFormatException e) {
-            Logger.getLogger(ProductDetailServlet.class.getName()).log(Level.SEVERE, null, e);
-        }
-        request.setAttribute("categories", list);
-        request.getRequestDispatcher("productdetail.jsp").forward(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String id_raw = request.getParameter("productId");
 //        System.out.println("id:" + id_raw);
+        ProductDAO pDao = new ProductDAO();
         HttpSession session = request.getSession();
         int id;
         if (id_raw != null && !id_raw.isEmpty()) {
@@ -137,11 +102,44 @@ public class ProductDetailServlet extends HttpServlet {
                     session.setAttribute("cartAdded", true);
 
                 }
-                response.sendRedirect("cartdetail");
+                response.sendRedirect("productlist");
             } catch (NumberFormatException e) {
                 Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         }
+//        // Lấy ra giỏ hàng từ session
+//        Map<String, Cart> map = (Map<String, Cart>) session.getAttribute("cart");
+//
+//// In ra giá trị của từng giỏ hàng trong map
+//        if (map != null) {
+//            System.out.println("================");
+//
+//            for (Map.Entry<String, Cart> entry : map.entrySet()) {
+//                String productId = entry.getKey();
+//                Cart cart = entry.getValue();
+//                Product product = cart.getProduct();
+//                int quantity = cart.getQuantity();
+//                System.out.println("Product ID: " + productId);
+//                System.out.println("Product Name: " + product.getName());
+//                System.out.println("Quantity: " + quantity);
+//            }
+//        } else {
+//            System.out.println("No carts found in session.");
+//        }
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

@@ -100,7 +100,7 @@ public class BlogListServlet extends HttpServlet {
         request.setAttribute("settingList", setting);
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
-        request.getRequestDispatcher("views/bloglist.jsp").forward(request, response);
+        request.getRequestDispatcher("views/blogList.jsp").forward(request, response); 
     } 
 
     /** 
