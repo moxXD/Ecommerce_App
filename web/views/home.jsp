@@ -95,7 +95,7 @@
                                             <h2>${f.name}</h2>
                                             <h2>${f.price}</h2>
                                             <p>${f.description}</p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
+                                            <a href="detail?pid=${f.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
                                             <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                                         </div>
 
@@ -117,7 +117,7 @@
                                             <h2>${s.name}</h2>
                                             <h2>${s.price}</h2>
                                             <p>${s.description}</p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
+                                            <a href="detail?pid=${s.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
                                             <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                                         </div>
 
