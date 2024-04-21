@@ -93,7 +93,7 @@ public class UserDetailServlet extends HttpServlet {
             Logger.getLogger(UserDetailServlet.class.getName()).log(Level.SEVERE, null, e);
         }
         // get user information in view and edit action
-        if (action.equals("view") ) {
+        if (action.equals("view")) {
             try {
                 id = Integer.parseInt(id_raw);
                 u = userDao.getUserById(id);
@@ -154,6 +154,7 @@ public class UserDetailServlet extends HttpServlet {
             HttpServletResponse response, String imgUrl) throws IOException, ServletException {
         // get input data
         String role_raw = request.getParameter("role");
+//        System.out.println("role: " + role_raw);
         boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
         String fullName = request.getParameter("fullname");
@@ -194,9 +195,15 @@ public class UserDetailServlet extends HttpServlet {
 
             // get role from db
             Setting role = settingDao.getSettingByTypeAndValue("role", role_raw);
-
+            System.out.println("role parses: " + role.toString());
+            System.out.println("emila:"+email);
+            System.out.println("pas:"+hashed);
+            System.out.println("name"+fullName);
+            System.out.println("img: "+imgUrl);
             // insert new user
-            User u = new User(0, role, email, hashed, fullName, imgUrl, phone, address, true, status, gender, newDob);
+            User u = new User(0, role, email, hashed, fullName, imgUrl, phone,
+                    address, status, gender, newDob);
+            System.out.println("user: " + u.toString());
             userDao.insertUser(u);
             // redirect after insert
             response.sendRedirect("userlist");

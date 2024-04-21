@@ -129,7 +129,7 @@
                         <!--heading-->
                         <h2 class="mb-4">User Detail</h2>
                         <div class="row">
-                            <form method="post" action="userdetail" enctype="multipart/form-data" onsubmit="return validateForm()">
+                            <form action="userdetail" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                                 <!--avatar-->
                                 <div class="col-md-4">
                                     <c:choose>
@@ -231,8 +231,7 @@
                                         <div class="error-msg">${err}</div>
                                     </c:if>
                                     <!--button group-->
-                                    <c:if test="${param.action.equals('add') or param.action==null}">
-
+                                    <c:if test="${param.action.equals('add') or empty param.action}">
                                         <input type="hidden" name="formAction" value="add">
                                     </c:if>
                                     <input type="hidden" name="userId" value="${param.id}">

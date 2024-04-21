@@ -50,10 +50,9 @@ public class User {
         this.dob = dob;
     }
 
-    public User(int id, Setting setting, String email, String password, String fullname,
-            String imgUrl, String phone, String address, boolean confirmation,
-            boolean status, boolean gender, Date dob) {
-
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", setting=" + setting + ", email=" + email + ", password=" + password + ", fullname=" + fullname + ", imgUrl=" + imgUrl + ", phone=" + phone + ", address=" + address + ", status=" + status + ", gender=" + gender + ", dob=" + dob + '}';
     }
 
 
