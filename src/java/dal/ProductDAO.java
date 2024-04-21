@@ -45,6 +45,32 @@ public class ProductDAO extends DBContext{
         
         return list;
     }
+    
+    public List<Product> getRecommendItem(){
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT * FROM swp391_g1_v2.product LIMIT 6";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new Product(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getInt(3), 
+                        rs.getInt(4), 
+                        rs.getDouble(5), 
+                        rs.getString(6), 
+                        rs.getString(7), 
+                        rs.getString(8), 
+                        rs.getInt(9), 
+                        rs.getInt(10), 
+                        rs.getInt(11)));
+            }
+        } catch (Exception e) {
+        }
+        
+        return list;
+    }
 //    public static void main(String[] args) {
 //        ProductDAO dao = new ProductDAO();
 //        List<Product> list = dao.getAllProduct();

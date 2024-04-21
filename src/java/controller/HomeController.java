@@ -33,12 +33,13 @@ public class HomeController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getAllProduct();
-        for (Product product : list) {
-            System.out.println(product.getImageurl());
-        }
+        List<Product> list = dao.getRecommendItem();
         
-        request.setAttribute("listP", list);
+        List<Product> firstList = list.subList(0, Math.min(list.size(), 3));
+        List<Product> secondList = list.subList(3, Math.min(list.size(), 6));
+        
+        request.setAttribute("firstList", firstList);
+        request.setAttribute("secondList", secondList);
         request.getRequestDispatcher("views/home.jsp").forward(request, response);
     } 
 
