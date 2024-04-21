@@ -8,134 +8,71 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <footer id="footer"><!--Footer-->
-            <div class="footer-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <div class="companyinfo">
-                                <h2><span>Tech </span>Mart</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-10">
-                            <div class="col-sm-3">
-                                <div class="video-gallery text-center">
-                                    <a href="#">
-                                        <div class="iframe-img">
-                                            <img src="images/home/iframe1.png" alt="" />
-                                        </div>
-                                        <div class="overlay-icon">
-                                            <i class="fa fa-play-circle-o"></i>
-                                        </div>
-                                    </a>
-                                    <p>Circle of Hands</p>
-                                    <h2>24 DEC 2014</h2>
+        <div class="container-fluid"
+             style="background-color: #454545; color: white; margin-top: 70px;">
+            <div class="container">
+                <h3 class="text-center">Contact</h3>
+                <p class="text-center">
+                    <em>We love our fans!</em>
+                </p>
+                <div class="row test">
+                    <div class="col-md-4">
+                        <p>Fan? Drop a note.</p>
+                        <p>
+                            <span class="glyphicon glyphicon-map-marker"></span>Bitter Code
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-phone"></span>Phone: +91
+                            1515151515
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-envelope"></span>Email:
+                            thebittercode@gmail.com
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-copyright-mark"></span>
+                            BitterCode - 2023
+                        </p>
+                    </div>
+                    <div class="col-md-8">
+                        <form action="fansMessage" method="post">
+                            <div class="row">
+                                <div class="col-sm-6 form-group">
+                                    <input class="form-control" id="name" name="name"
+                                           placeholder="Name" type="text" required>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <select class="form-control" id="type" name="type" required>
+                                        <option value="0">Choose type of contact</option>
+                                        <option value="21">Technical Issue</option>
+                                        <option value="23">Ordering Matters</option>
+                                        <option value="22">Registration/Account</option>
+                                    </select>
                                 </div>
                             </div>
-
-                            <div class="col-sm-3">
-                                <div class="video-gallery text-center">
-                                    <a href="#">
-                                        <div class="iframe-img">
-                                            <img src="images/home/iframe2.png" alt="" />
-                                        </div>
-                                        <div class="overlay-icon">
-                                            <i class="fa fa-play-circle-o"></i>
-                                        </div>
-                                    </a>
-                                    <p>Circle of Hands</p>
-                                    <h2>24 DEC 2014</h2>
+                            <div class="row">
+                                <div class="col-sm-6 form-group">
+                                    <input class="form-control" id="email" name="email"
+                                           placeholder="Email" type="email" required>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <input class="form-control" id="mobile" name="mobile"
+                                           placeholder="Mobile" type="text" required>
                                 </div>
                             </div>
-
-                            <div class="col-sm-3">
-                                <div class="video-gallery text-center">
-                                    <a href="#">
-                                        <div class="iframe-img">
-                                            <img src="images/home/iframe3.png" alt="" />
-                                        </div>
-                                        <div class="overlay-icon">
-                                            <i class="fa fa-play-circle-o"></i>
-                                        </div>
-                                    </a>
-                                    <p>Circle of Hands</p>
-                                    <h2>24 DEC 2014</h2>
+                            <textarea class="form-control" id="comments" name="comments"
+                                      placeholder="Comment" rows="5" required></textarea>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <button class="btn pull-right" type="submit">Send</button>
                                 </div>
                             </div>
-
-                            <div class="col-sm-3">
-                                <div class="video-gallery text-center">
-                                    <a href="#">
-                                        <div class="iframe-img">
-                                            <img src="images/home/iframe4.png" alt="" />
-                                        </div>
-                                        <div class="overlay-icon">
-                                            <i class="fa fa-play-circle-o"></i>
-                                        </div>
-                                    </a>
-                                    <p>Circle of Hands</p>
-                                    <h2>24 DEC 2014</h2>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
-
-            <div class="footer-widget">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="single-widget">
-                                <h2>Service</h2>
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="#">Online Help</a></li>
-                                    <li><a href="#">Change Location</a></li>
-                                    <li><a href="#">FAQ’s</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-3">
-                            <div class="single-widget">
-                                <h2>Policies</h2>
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="#">Terms of Use</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Refund Policy</a></li>
-                                    <li><a href="#">Billing System</a></li>
-                                    <li><a href="#">Ticket System</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="single-widget">
-                                <h2>About Us</h2>
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="#">Company Information</a></li>
-                                    <li><a href="#">Careers</a></li>
-                                    <li><a href="#">Store Location</a></li>
-                                    <li><a href="#">Affiliate Program</a></li>
-                                    <li><a href="#">Copyright</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                       
-
-                    </div>
-                </div>
-            </div>
-
-
-        </footer>
-        <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------------------> 
-        <script src="js/jquery.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.scrollUp.min.js"></script>
-        <script src="js/price-range.js"></script>
-        <script src="js/jquery.prettyPhoto.js"></script>
-        <script src="js/main.js"></script>
+        </div>
+        <!-- End of Contact or about us -->
     </body>
 
 </html>

@@ -41,6 +41,58 @@ public class UserDAO {
     SettingDAO stDAO = new SettingDAO();
     private int noOfrecord;
 
+    //get user by gmail and password
+    public User getUser(String email, String password) {
+        User u = null;
+        String sql = "SELECT " + USER_ID + ",\n"
+                + USER_EMAIL + ",\n"
+                + USER_PASSWORD + ",\n"
+                + USER_SETTING_ID + ",\n"
+                + USER_STATUS + ",\n"
+                + USER_FULLNAME + ",\n"
+                + USER_GENDER + ",\n"
+                + USER_IMAGE + ",\n"
+                + USER_DOB + ",\n"
+                + USER_PHONE + ",\n"
+                + USER_DOB + ",\n"
+                + USER_ADDRESS + "\n"
+                + "FROM " + USER_TABLE + "\n"
+                + "where " + USER_EMAIL + " = ? and " + USER_PASSWORD + " = ? ";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+//            System.out.println("sql: "+sql);
+            stm.setString(1, email);
+            stm.setString(2, password);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Setting s = stDAO.getSettingById(rs.getInt(USER_SETTING_ID));
+                u = new User(rs.getInt(USER_ID),
+                        s,
+                        email,
+                        password,
+                        rs.getString(USER_FULLNAME),
+                        rs.getString(USER_IMAGE),
+                        rs.getString(USER_PHONE),
+                        rs.getString(USER_ADDRESS),
+                        rs.getBoolean(USER_STATUS),
+                        rs.getBoolean(USER_GENDER),
+                        rs.getDate(USER_DOB));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return u;
+    }
+
     // get list of user with search and filter
     public List<User> getUserListWithFilter(int offset, int limit, String sortParam,
             boolean order, String genderFilter, int roleFilter,
@@ -347,9 +399,90 @@ public class UserDAO {
         }
     }
 
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        dao.updateUserStatus(1, true);
-
+    //get user by user gmail 
+    public User getUserByEmail(String email) {
+        User u = null;
+        String sql = "SELECT " + USER_ID + ",\n"
+                + USER_EMAIL + ",\n"
+                + USER_PASSWORD + ",\n"
+                + USER_SETTING_ID + ",\n"
+                + USER_STATUS + ",\n"
+                + USER_FULLNAME + ",\n"
+                + USER_GENDER + ",\n"
+                + USER_IMAGE + ",\n"
+                + USER_DOB + ",\n"
+                + USER_PHONE + ",\n"
+                + USER_DOB + ",\n"
+                + USER_ADDRESS + "\n"
+                + "FROM " + USER_TABLE + "\n"
+                + "where " + USER_EMAIL + " = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+//            System.out.println("sql: "+sql);
+            stm.setString(1, email);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Setting s = stDAO.getSettingById(rs.getInt(USER_SETTING_ID));
+                u = new User(rs.getInt(USER_ID),
+                        s,
+                        email,
+                        rs.getString(USER_FULLNAME),
+                        rs.getString(USER_IMAGE),
+                        rs.getString(USER_PHONE),
+                        rs.getString(USER_ADDRESS),
+                        rs.getBoolean(USER_STATUS),
+                        rs.getBoolean(USER_GENDER),
+                        rs.getDate(USER_DOB));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return u;
     }
+
+//    public boolean create(User u) {
+//        String sql = "INSERT INTO " + USER_TABLE + "\n ("
+//                + USER_EMAIL + ",\n"
+//                + USER_PASSWORD + ",\n"
+//                + USER_SETTING_ID + ",\n"
+//                + USER_STATUS + ",\n"
+//                + USER_FULLNAME + ")\n"
+//                + "VALUES\n"
+//                + "(?,\n"
+//                + "?,\n"
+//                + "4,\n"
+//                + "0,\n"
+//                + "?);";
+//        try {
+//            conn = context.getConnection();
+//            PreparedStatement stm = conn.prepareStatement(sql);
+//            stm.setString(1, u.getEmail());
+//            stm.setString(2, u.getPassword());
+//            stm.setString(3, u.getFullname());
+//            stm.execute();
+//            return true;
+//        } catch (SQLException e) {
+//            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+//        } finally {
+//            if (conn != null) {
+//                try {
+//                    conn.close();
+//                } catch (SQLException e) {
+//                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+//                }
+//            }
+//        }
+//        return false;
+//    }
+
+  
 }

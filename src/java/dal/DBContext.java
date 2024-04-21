@@ -15,7 +15,6 @@ import java.sql.SQLException;
 public class DBContext {
     // Edit URL , username, password to authenticate with your MS SQL Server
 
-    
     private final String serverName = "localhost";
     private final String dbName = "swp391_g1_v1"; // Change accroding database name
     private final String portNumber = "3306";
@@ -27,7 +26,7 @@ public class DBContext {
     }
 
     public Connection getConnection() {
-        Connection connection=null;
+        Connection connection = null;
         try {
             String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName;
             Class.forName("com.mysql.cj.jdbc.Driver");
