@@ -122,68 +122,78 @@
                 </form>
             </nav>
             <div class="container" style="background-color:  #F2F2F2">
-                <a href="productlist">
-                    <i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Back
-                </a>
-                <c:set value="${requestScope.data}" var="d"/>
-                <div class="row">
-                    <!-- Left Section - Product Image -->
-                    <div class="col-md-4">
-                        <div class="product-details-container">
-                            <img src="<c:url value='/uploads/${d.imgUrl}'/>"
-                                 style="border: 1px solid grey;border-radius: 5px"
-                                 alt="Product Image" class="product-image">
-                        </div>
-                    </div>
-                    <!-- Right Section - Product Info and Buttons -->
-                    <div class="col-md-8">
-                        <div class="product-details-container">
-                            <div class="product-info">
-                                <h2>${d.name}</h2>
-                                <p>Specification ${d.specification}</p>
-                                <fmt:formatNumber value="${d.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
-                                <c:choose>
-                                    <c:when test="${not empty d.salePrice}">
-                                        <jsp:useBean id="now" class="java.util.Date"/>
-                                        <c:choose>
-                                            <c:when test="${d.salePrice.start<now && d.salePrice.end>now}">
-                                                <fmt:formatNumber value="${d.salePrice.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
-                                                <p style="text-decoration: line-through;color: red">Price: ${formattedPrice}</p>
-                                                <p style="color: #62f04f">Sale Price: ${formattedSalePrice}</p>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <p style="color: #62f04f">Price: ${formattedPrice}</p>
-                                                <p>Not on sale</p>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <p style="color: #62f04f">Price: ${formattedPrice}</p>
-                                        <p >Not on sale</p>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                            <div class="row" style="align-items:   space-between">
-                                <button class="btn btn-primary col-md-4" style="margin-top: 0;margin-right: 2%;
-                                        border-radius: 3px">Buy Now</button>
-                                <button class="btn btn-info col-md-4">Add to Cart</button>
+                <form action="productdetail" method="post">
+                    <a href="productlist">
+                        <i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Back
+                    </a>
+                    <c:set value="${requestScope.data}" var="d"/>
+                    <div class="row">
+                        <!-- Left Section - Product Image -->
+                        <div class="col-md-4">
+                            <div class="product-details-container">
+                                <img src="<c:url value='/uploads/${d.imgUrl}'/>"
+                                     style="border: 1px solid grey;border-radius: 5px"
+                                     alt="Product Image" class="product-image">
                             </div>
                         </div>
+                        <!-- Right Section - Product Info and Buttons -->
+                        <div class="col-md-8">
+                            <div class="product-details-container">
+                                <div class="product-info">
+                                    <h2>${d.name}</h2>
+                                    <p>Specification ${d.specification}</p>
+                                    <fmt:formatNumber value="${d.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
+                                    <c:choose>
+                                        <c:when test="${not empty d.salePrice}">
+                                            <jsp:useBean id="now" class="java.util.Date"/>
+                                            <c:choose>
+                                                <c:when test="${d.salePrice.start<now && d.salePrice.end>now}">
+                                                    <fmt:formatNumber value="${d.salePrice.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
+                                                    <p style="text-decoration: line-through;color: red">Price: ${formattedPrice}</p>
+                                                    <p style="color: #62f04f">Sale Price: ${formattedSalePrice}</p>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p style="color: #62f04f">Price: ${formattedPrice}</p>
+                                                    <p>Not on sale</p>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <p style="color: #62f04f">Price: ${formattedPrice}</p>
+                                            <p >Not on sale</p>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div class="row" style="align-items:   space-between">
+                                    <input type="hidden" name="productId" value="${d.id}"/>
+                                    <button class="btn btn-primary col-md-4" style="margin-top: 0;margin-right: 2%;
+                                            border-radius: 3px">Buy Now</button>
+                                    <button type="button"
+                                            class="btn btn-info col-md-4"
+                                            onclick="addToCart(${d.id})">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- Product Description Section -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3>Description</h3>
-                        <hr class="solid">
-                        ${requestScope.data.description}
-                        <hr class="solid">
+                    <!-- Product Description Section -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3>Description</h3>
+                            <hr class="solid">
+                            ${requestScope.data.description}
+                            <hr class="solid">
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
         <%@include file="layout/footer.jsp" %>
+        <script type="text/javascript">
+            function addToCart(id) {
+                window.location.href = 'addtocart?id=' + id;
+            }
+        </script>
         <!-- Bootstrap JS and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
