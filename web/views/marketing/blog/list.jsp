@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 
@@ -85,21 +86,21 @@
                         </div>
                     </div>  
                     <ul class="sidebar-menu">
-<!--                        <li>
-                            <a href="#">
-                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                            </a>
-                        </li>-->
+                        <!--                        <li>
+                                                    <a href="#">
+                                                        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                                                    </a>
+                                                </li>-->
                         <li class="active">
                             <a href="bloglist">
                                 <i class="fa fa-users"></i> <span>Blog List</span>
                             </a>
                         </li>
-<!--                        <li>
-                            <a href="#">
-                                <i class="fa fa-gear"></i> <span>Settings</span>
-                            </a>
-                        </li>-->
+                        <!--                        <li>
+                                                    <a href="bloglist">
+                                                        <i class="fa fa-gear"></i> <span>Settings</span>
+                                                    </a>
+                                                </li>-->
 
                     </ul>
                 </section>
@@ -109,37 +110,39 @@
             <aside class="right-side">
                 <section class="content">
                     <form action="bloglist" method="get">
-                        <!--search input-->
-                        <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
-                            <span class="input-group-btn">
-                                <button type='submit' id='search-btn' class="btn btn-flat"
-                                        style="background-color: white;border: 1px solid grey;border-radius: 5px "><i
-                                        class="fa fa-search"></i></button>
-                            </span>
-                        </div>
-                        <!--gender select-->
                         <div class="filter-row">
+                            <!--feature select-->
+                            <div class="form-group">
+                                <label for="filfeature">Filter by Feature: </label>
+                                <select name="filfeature" id="filfeature" class="form-control">
+                                    <option value="">All Feature</option>
+                                    <option value="yes" ${param.filfeature != null && param.filfeature.equalsIgnoreCase("Yes") ? "selected" : ""}>Yes</option>
+                                    <option value="no" ${param.filfeature != null && param.filfeature.equalsIgnoreCase("No") ? "selected" : ""}>No</option>
+                                </select>
+                            </div>
+                            <!--status select-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by Status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
                                     <option value="">All Status</option>
-                                    <option value="show" ${param.filstatus != null && param.filstatus.equals("Show") ? "selected" : ""}>Show</option>
-                                    <option value="hide" ${param.filstatus != null && param.filstatus.equals("Hide") ? "selected" : ""}>Hide</option>
+                                    <option value="show" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Show") ? "selected" : ""}>Show</option>
+                                    <option value="hide" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Hide") ? "selected" : ""}>Hide</option>
                                 </select>
                             </div>
-                            <!--role select-->
+                            <!--category select-->
                             <div class="form-group">
                                 <label for="filcate">Filter by Blog Category:</label>
                                 <select name="filcate" id="filcate" class="form-control">
                                     <option value="" >All Category</option>
                                     <!-- Add role options here -->
                                     <c:forEach items="${requestScope.settingList}" var="r">
-                                        <option value="${r.value}" ${param.filcate==r.value?"selected":""}>${r.value}</option>
+                                        <c:if test="${r.type.equals('blog')}">
+                                            <option value="${r.value}" ${param.filcate==r.value?"selected":""}>${r.value}</option>
+                                        </c:if>
                                     </c:forEach>
                                 </select>
                             </div>
-                            <!--status select-->
+                            <!--author select-->
                             <div class="form-group">
                                 <label for="filauthor">Filter by Author: </label>
                                 <select name="filauthor" id="filauthor" class="form-control">
@@ -149,24 +152,58 @@
                                     </c:forEach>
                                 </select>
                             </div>
+                            <!--Search-->
+                            <div class="form-group">
+                                <label for="filauthor">Search: </label>
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" placeholder="Search by title, author, category..." value="${param.q}"/>
+                                    <span class="input-group-btn">
+                                        <button type='submit' id='search-btn' class="btn btn-flat"
+                                                style="background-color: white;border: 1px solid grey;border-radius: 5px "><i
+                                                class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </form>
-
-
                     <div class="table-responsive">
+                        <div class="form-group">
+                            <div class="col-md-2" style="float: right; margin-bottom: 1%">
+                                <button type="button" class="btn btn-primary btn-block" onclick="redirectToAddBlog()">Add New Blog</button>
+                            </div>
+                        </div>
 
                         <table class="table user-table">
 
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>ID
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=id">
+                                            <i class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
                                     <th>Thumbnail</th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Author</th>
-                                    <th>Description</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Title
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=title">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Category
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=value">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Author
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Feature
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=is_featured">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Action
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <!--<th>Action</th>-->
                                 </tr>
                             </thead>
                             <tbody>
@@ -174,13 +211,30 @@
                                     <c:set var="id" value="${u.id}" />
                                     <tr>
                                         <td>${id}</td>
-                                        <td>${u.imgUrl}</td>
-                                        <td>${u.title}</td>
+                                        <td><img src="${pageContext.request.contextPath}/images/blog/images.jpg"
+                                                 style="width: 80px; height: 50px;" alt="User Image" /></td>
+<!--                                        <td>${u.title}</td>-->
+                                        <c:if test="${fn:length(u.title) > 30}">
+                                            <c:set var="subTitle" value="${fn:substring(u.title, 0, 30)}" />
+                                            <td>${subTitle}...</td>
+                                        </c:if>
+                                        <c:if test="${fn:length(u.title) <= 30}">
+                                            <td>${u.title}</td>
+                                        </c:if>
                                         <td>${u.categoryName}</td>
                                         <td>${u.authorName}</td>
-                                        <td>${u.detail.substring(0, 25)}</td>
-                                        <td style="color: ${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>
-                                        <td><a href="blogdetail?viewID=${id}">View</a><a href="blogdetail?updateID=${id}"style="margin-left: 20px">Edit</a></td>
+                                        <td style="color: ${u.is_featured ? 'green' : 'red'}">${u.is_featured ? 'Yes' : 'No'}</td>
+                                        <!--<td style="color: ${u.status ? 'green' : 'red'}">${u.status ? 'Show' : 'Hide'}</td>-->
+                                        <td><form action="bloglist" method="post">
+                                                <input type="hidden" name="blogId" value="${id}">
+                                                <input type="hidden" name="status" value="${u.status?true:false}">
+                                                <input id="changeStatus" onclick="return confirmSubmit()" type="submit" value="${!u.status?"Hide":"Show"}" style="color: ${!u.status?"Red":"Green"}; border: none" />
+                                                <a href="blogdetail?action=update&ID=${id}"style="margin-left: 20px">Edit</a></td>
+                                        </form>
+                                        </td>
+                                        <!--<td>-->
+                                            <!--<a href="blogdetail?action=view&ID=${id}">View</a>-->
+
                                     </tr>
                                 </c:forEach>
                                 <!-- Thêm nhiều hàng tại đây -->
@@ -192,7 +246,7 @@
                             <ul class="pagination">
                                 <c:if test="${currentPage > 1}">
                                     <li>
-                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Previous">
+                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Previous">
                                             <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
                                         </a>
                                     </li>
@@ -204,25 +258,21 @@
                                             <li class="active"><span>${i}</span></li>
                                                 </c:when>
                                                 <c:otherwise>
-                                            <li><a href="bloglist?page=${i}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}">${i}</a></li>
+                                            <li><a href="bloglist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
 
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
-                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Next">
+                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
                                             <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
                                         </a>
                                     </li>
                                 </c:if>
                             </ul>
                         </nav>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <button type="button" class="btn btn-primary btn-block" >Add New Blog</button>
-                            </div>
-                        </div>
+
                     </div>
 
                     </div>
@@ -234,7 +284,19 @@
 
 
         <%@include file="../../layout/footer.jsp" %>
-
+        <script type="text/javascript">
+            function confirmSubmit() {
+                if (confirm("Are you sure you want to Change this status?")) {
+                    document.getElementById("myForm").submit();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            function redirectToAddBlog() {
+                window.location.href = 'blogdetail?action=add';
+            }
+        </script>
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/admin/js/jquery.min.js"

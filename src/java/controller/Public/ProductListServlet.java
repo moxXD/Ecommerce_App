@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.Marketing;
+package controller.Public;
 
-import dal.BlogDAO;
+import dal.ProductDAO;
 import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,21 +13,22 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Blog;
+import model.Product;
 import model.Setting;
-import model.User;
 
 /**
  *
- * @author Admin
+ * @author Duc Le
  */
-@WebServlet(name = "ListBlogController", urlPatterns = {"/marketing/bloglist"})
-public class BlogListServlet extends HttpServlet {
+@WebServlet(name = "ProductListServlet", urlPatterns = {"/productlist"})
+public class ProductListServlet extends HttpServlet {
+
+    SettingDAO settDao = new SettingDAO();
+    ProductDAO pDao = new ProductDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,10 +47,10 @@ public class BlogListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListBlogController</title>");
+            out.println("<title>Servlet ProductListServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ListBlogController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProductListServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -67,61 +68,45 @@ public class BlogListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // variable for pagination
         int page = 1;
-        int recordPerPage = 10;
-        List<Blog> list = new ArrayList<>();
-        List<Setting> setting = new ArrayList<>();
-        List<User> user = new ArrayList<>();
-        BlogDAO blogDAO = new BlogDAO();
-        SettingDAO settingDAO = new SettingDAO();
-        //filter
+        int recordPerPage = 6;
+        int cateId = 0;
+        // get request parameter
         String page_raw = request.getParameter("page");
-        String statusFilter = request.getParameter("filstatus");
-        String categoryFilter = request.getParameter("filcate");
-        String authorFilter = request.getParameter("filauthor");
-        String featureFilter = request.getParameter("filfeature");
-        String searchQuery = request.getParameter("q");
-        //sort
-        String sortColumn = request.getParameter("sort");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
-        //mapping filter
-        if (statusFilter != null && !statusFilter.isEmpty()) {
-            if (statusFilter.equalsIgnoreCase("show")) {
-                statusFilter = "1";
-            } else {
-                statusFilter = "0";
-            }
-        }
-        if (featureFilter != null && !featureFilter.isEmpty()) {
-            if (featureFilter.equalsIgnoreCase("Yes")) {
-                featureFilter = "1";
-            } else {
-                featureFilter = "0";
-            }
-        }
-
-        if (page_raw != null) {
+        String cateId_raw = request.getParameter("categoryId");
+        String search_raw = request.getParameter("searchInput");
+        List<Product> pList = new ArrayList<>();
+        // parse integer
+        if (page_raw != null && !page_raw.isEmpty()) {
             try {
                 page = Integer.parseInt(page_raw);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }// parse integer
+        if (cateId_raw != null && !cateId_raw.isEmpty()) {
+            try {
+                cateId = Integer.parseInt(cateId_raw);
+            } catch (NumberFormatException e) {
+                Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         }
-        try {
-            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery, sortColumn, sortOrder, featureFilter);
-            setting = settingDAO.getAllSetting();
-            user = blogDAO.getAllBlogAuthor();
-        } catch (SQLException ex) {
-            Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        int noOfrecord = blogDAO.getNumberOfRecord();
+        // get pagination production list with added filter
+        pList = pDao.getProductWithFilter((page - 1) * recordPerPage,
+                recordPerPage, search_raw, cateId);
+        
+        int noOfrecord = pDao.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
-        request.setAttribute("blogAuthors", user);
-        request.setAttribute("blogList", list);
-        request.setAttribute("settingList", setting);
+        // get product category data
+        List<Setting> list = settDao.getSettingByType("product category");
+        // set request attribute
+        request.setAttribute("categorys", list);
+        request.setAttribute("products", pList);
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
-        request.getRequestDispatcher("../views/marketing/blog/list.jsp").forward(request, response);
+        // redirect to productlist.jsp
+        request.getRequestDispatcher("productlist.jsp").forward(request, response);
     }
 
     /**
@@ -135,18 +120,7 @@ public class BlogListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        BlogDAO blogDAO = new BlogDAO();
-        String id_raw = request.getParameter("blogId");
-        try {
-            boolean status = Boolean.parseBoolean(request.getParameter("status"));
-            int id = Integer.parseInt(id_raw);
-            
-            blogDAO.updateBlogStatus(id, !status);
-            response.sendRedirect("bloglist");
-        } catch (NumberFormatException e) {
-            Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, e);
-        }
-
+        processRequest(request, response);
     }
 
     /**

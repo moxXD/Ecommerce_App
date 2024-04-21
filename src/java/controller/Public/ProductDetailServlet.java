@@ -3,8 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package controller.Public;
 
+import dal.ProductDAO;
+import dal.SaleDAO;
+import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +15,22 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Product;
+import model.Sale;
+import model.Setting;
 
 /**
  *
- * @author Admin
+ * @author Duc Le
  */
-@WebServlet(name="BlogListController", urlPatterns={"/blogListController"})
-public class BlogListController extends HttpServlet {
-   
+@WebServlet(name="ProductDetailServlet", urlPatterns={"/productdetail"})
+public class ProductDetailServlet extends HttpServlet {
+    ProductDAO pDao=new ProductDAO();
+    SettingDAO sDao=new SettingDAO();
+    SaleDAO saleDao=new SaleDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -35,10 +46,10 @@ public class BlogListController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BlogListController</title>");  
+            out.println("<title>Servlet ProductDetailServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BlogListController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +66,20 @@ public class BlogListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("views/blogList.jsp").forward(request, response);
+        // get request parameter
+        String id_raw=request.getParameter("id");
+        int id;
+        List<Setting> list=sDao.getSettingByType("product category");
+        try {
+            id=Integer.parseInt(id_raw);
+            Product p=pDao.getProductById(id);
+            System.out.println("product:"+ p.toString());
+            request.setAttribute("data", p);
+        } catch (NumberFormatException e) {
+            Logger.getLogger(ProductDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+        request.setAttribute("categories", list);
+        request.getRequestDispatcher("productdetail.jsp").forward(request, response);
     } 
 
     /** 

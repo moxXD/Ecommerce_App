@@ -293,6 +293,62 @@ public class UserDAO {
         }
     }
 
+    // check duplicate email
+    public boolean isEmailExist(String email) {
+        boolean check = false;
+        String sql = "SELECT COUNT(*) AS count FROM " + USER_TABLE + " WHERE "
+                + USER_EMAIL + "=?";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, email);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                check = count > 0;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return check;
+    }
+    // check duplicate email
+
+    public boolean isPhoneExist(String phone) {
+        boolean check = false;
+        String sql = "SELECT COUNT(*) AS count FROM " + USER_TABLE + " WHERE "
+                + USER_PHONE + "=?";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, phone);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                check = count > 0;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return check;
+    }
+
     public void insertUser(User u) {
         String sql = "INSERT INTO " + USER_TABLE + "\n ("
                 + USER_EMAIL + ",\n"
@@ -428,14 +484,5 @@ public class UserDAO {
 //        return false;
 //    }
 
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        String gmail = "23trongthanh@gmail.com";
-        String pass = "4ZmWUP3StSt7snXT5mIzkvGcLJo=";
-        //String name = "test123";
-   //     User u = new User(gmail, pass, name);
-//        System.out.println( dao.create(u));
-    User gu = dao.getUser(gmail, pass);
-        System.out.println(gu);
-    }
+  
 }

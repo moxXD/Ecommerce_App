@@ -9,8 +9,9 @@ package model;
  * @author Duc Le
  */
 public class Setting {
-    private int id,order;
-    private String value,type;
+
+    private int id, order;
+    private String value, type;
     private boolean status;
 
     public Setting() {
@@ -32,10 +33,6 @@ public class Setting {
     public String toString() {
         return "Setting{" + "id=" + id + ", order=" + order + ", value=" + value + ", type=" + type + ", status=" + status + '}';
     }
-
-    
-
-    
 
     public int getId() {
         return id;
@@ -76,5 +73,5 @@ public class Setting {
     public void setStatus(boolean status) {
         this.status = status;
     }
-    
+
 }

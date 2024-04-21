@@ -5,156 +5,170 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
     <%@include file="../../../layout/header.jsp" %>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Tech Mart</title>
+        <!--        <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="description" content="">
+                <meta name="author" content="">
+                <title>Blog Single | E-Shopper</title>
+                <link href="css/bootstrap.min.css" rel="stylesheet">
+                <link href="css/font-awesome.min.css" rel="stylesheet">
+                <link href="css/prettyPhoto.css" rel="stylesheet">
+                <link href="css/price-range.css" rel="stylesheet">
+                <link href="css/animate.css" rel="stylesheet">
+                <link href="css/main.css" rel="stylesheet">
+                <link href="css/responsive.css" rel="stylesheet">-->
         <style>
             .blog-post {
                 background-color: white;
                 border: 1px solid #ddd;
                 padding: 15px;
-                margin-bottom: 15px;
+                margin-bottom: 25px;
                 height: 250px;
             }
 
             .blog-post img {
-                width: 200px;
-                height: 200px;
+                width: 250px;
+                height: 220px;
                 float: left;
                 margin-right: 15px;
-            }
-
-            .blog-post h3 {
-                margin: 0;
-                padding: 0;
-            }
-
-            .blog-post p {
-                margin: 0;
-            }
-
-            .blog-post button {
-                display: block;
-                margin-top: 10px;
             }
         </style>
     </head>
     <body>
         <section>
+
             <div class="container">
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="left-sidebar">
-                            <h2>Category</h2>
-                            <div class="panel-group category-products" id="accordian"><!--category-productsr-->
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                                                Category
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="sportswear" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <ul>
-                                                <li><a href="">Laptop </a></li>
-                                                <li><a href="">Gear</a></li>
-                                                <li><a href="">Mouse</a></li>
-                                                <li><a href="">Headphone</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordian" href="#mens">
-                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                                                Author
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="mens" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <ul>
-                                                <li><a href="">Fendi</a></li>
-                                                <li><a href="">Guess</a></li>
-                                                <li><a href="">Valentino</a></li>
-                                                <li><a href="">Dior</a></li>
-                                                <li><a href="">Versace</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordian" href="#womens">
-                                                <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                                                Status
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="womens" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <ul>
-                                                <li><a href="">Hide</a></li>
-                                                <li><a href="">Show</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--/category-products-->
-
-                            <div class="price-range"><!--price-range-->
+                            <form action="blogslist" method="get">
                                 <h2>Search</h2>
-                                <div class="well" style="height: 150px">
-                                    <div class="col-sm-3">
-                                        <p style="width: 100px">Search by name </>
-                                        <div class="search_box"style="margin-bottom: 20px">
-                                            <input type="text" placeholder="Search"/>
+                                <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                                    <div class="panel panel-default">
+                                        <div class="form-group">
+                                            <label for="filsearch">Search:</label>
+                                            <div class="input-group">
+                                                <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
+                                                <span class="input-group-btn">
+                                                    <button type='submit' id='search-btn' class="btn btn-flat btn-default">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div><!--/price-range-->
+                                    <div class="panel panel-default">
+                                        <div class="form-group">
+                                            <label for="filcate">Filter by Blog Category:</label>
+                                            <select name="filcate" id="filcate" class="form-control">
+                                                <option value="" >All Categories</option>
+                                                <!-- Add role options here -->
+                                                <c:forEach items="${requestScope.settingList}" var="r">
+                                                    <c:if test="${r.type.equals('blog')}">
+                                                        <option value="${r.value}" ${param.filcate==r.value?"selected":""}>${r.value}</option>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="form-group">
+                                            <label for="filauthor">Filter by Author: </label>
+                                            <select name="filauthor" id="filauthor" class="form-control">
+                                                <option value="">All Authors </option>
+                                                <c:forEach items="${requestScope.blogAuthors}" var="a">
+                                                    <option value="${a.fullname}"  ${param.filauthor==a.fullname?"selected":""}>${a.fullname}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </div><!--/category-products-->
+
+                            </form>
                         </div>
                     </div>
                     <div class="col-sm-9">
                         <div class="blog-post-area">
                             <h2 class="title text-center">Blog List</h2>
-                            <div class="blog-post">
-                                <img src="../images/home/iframe1.png" alt="">
-                                <h3>Tiêu đề bài viết 1</h3>
-                                <p>Mô tả ngắn gọn cho bài viết 1...</p>
-                                <button type="button">Read More</button>
-                            </div>
-
-                            <div class="blog-post">
-                                <img src="../images/home/gallery1.jpg" alt="Thumbnail">
-                                <h3>Tiêu đề bài viết 2</h3>
-                                <p>Mô tả ngắn gọn cho bài viết 2...</p>
-                                <button type="button">Đọc thêm</button>
-                            </div>
-
-                            <div class="blog-post">
-                                <img src="thumbnail3.jpg" alt="Thumbnail">
-                                <h3>Tiêu đề bài viết 3</h3>
-                                <p>Mô tả ngắn gọn cho bài viết 3...</p>
-                                <button type="button">Đọc thêm</button>
-                            </div>
+                            <c:forEach items="${requestScope.blogList}" var="u">
+                                <c:set var="id" value="${u.id}" />
+                                <div class="blog-post row">
+                                    <div class="col-md-4">
+                                        <c:choose>
+                                            <c:when test="${empty u.imgUrl}">
+                                                <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle mb-4">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                            </c:otherwise>
+                                        </c:choose>  
+                                    </div>
+                                    <div class="col-md-8">
+                                        <!--<h2 class="display-4">${u.title}</h2>-->
+                                        <h2><c:if test="${fn:length(u.title) > 30}">
+                                                <c:set var="subTitle" value="${fn:substring(u.title, 0, 30)}" />
+                                                <td>${subTitle}...</td>
+                                            </c:if>
+                                            <c:if test="${fn:length(u.title) <= 30}">
+                                                <td>${u.title}</td>
+                                            </c:if></h2>
+                                        <hr class="my-4">
+                                        <div class="post-meta">
+                                            <ul>
+                                                <li><i class="fa fa-cog"></i> ${u.categoryName}</li>
+                                                <li><i class="fa fa-user"></i> ${u.authorName}</li>
+                                            </ul>
+                                        </div>
+                                        <!--<p>${u.sumary}</p>-->
+                                        <p><c:if test="${fn:length(u.sumary) > 130}">
+                                                <c:set var="subBrief" value="${fn:substring(u.sumary, 0, 130)}" />
+                                            <td>${subBrief}...</td>
+                                        </c:if>
+                                        <c:if test="${fn:length(u.sumary) <= 130}">
+                                            <td>${u.sumary}</td>
+                                        </c:if></p>
+                                        <p class="lead" style="position: absolute; top: 180px; right: 20px;">
+                                            <a class="btn btn-warning btn-md" href="blogdetails?id=${id}" role="button">Read more</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </c:forEach>
                         </div>
                         <div class="pagination-area">
                             <ul class="pagination">
-                                <li><a href="" class="active">1</a></li>
-                                <li><a href="">2</a></li>
-                                <li><a href="">3</a></li>
-                                <li><a href=""><i class="fa fa-angle-double-right"></i></a></li>
+                                <c:if test="${currentPage > 1}">
+                                    <li>
+                                        <a href="blogslist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Previous">
+                                            <span style="padding: 0" aria-hidden="true"><i class="fa fa-angle-double-left fa-sm"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+
+                                <c:forEach begin="1" end="${noOfPage}" var="i">
+                                    <c:choose>
+                                        <c:when test="${currentPage eq i}">
+                                            <li class="active"><span>${i}</span></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                            <li><a href="blogslist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}">${i}</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+
+                                <c:if test="${currentPage < noOfPage}">
+                                    <li>
+                                        <a href="blogslist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Next">
+                                            <span style="padding: 0" aria-hidden="true"><i class="fa fa-angle-double-right fa-sm"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
                             </ul>
                         </div>
                     </div>
@@ -162,5 +176,6 @@
             </div>
         </section>
         <%@ include file="../../../layout/footer.jsp" %>
+
     </body>
 </html>

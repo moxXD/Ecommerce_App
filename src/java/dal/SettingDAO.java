@@ -315,12 +315,14 @@ public class SettingDAO extends DBContext {
     // get all setting 
     public List<Setting> getAllSetting() {
         List<Setting> lst = new ArrayList<>();
-        String sql = "SELECT " + SETTING_ID + ",\n"
-                + SETTING_TYPE + ",\n"
-                + SETTING_VALUE + ",\n`"
-                + SETTING_ORDER + "`,\n"
-                + SETTING_STATUS + "\n"
-                + "FROM " + SETTING_TABLE + ";";
+
+        String sql = "SELECT `setting`.`id`,\n"
+                + "    `setting`.`type`,\n"
+                + "    `setting`.`value`,\n"
+                + "    `setting`.`order`,\n"
+                + "    `setting`.`status`\n"
+                + "FROM `swp391_g1_v1`.`setting`\n"
+                + "";
         try {
             conn = context.getConnection();
 //            System.out.println("sql: " + sql);
@@ -377,6 +379,40 @@ public class SettingDAO extends DBContext {
             }
         }
         return max;
+    }
+
+    // get setting by type
+    public List<Setting> getSettingByType(String type) {
+        List<Setting> list = new ArrayList<>();
+        String sql = "SELECT * "
+                + "FROM " + SETTING_TABLE + " \n"
+                + "WHERE `" + SETTING_TYPE + "`=?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, type);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(SETTING_ID);
+                String value=rs.getString(SETTING_VALUE);
+                int order=rs.getInt(SETTING_ORDER);
+                String t=rs.getString(SETTING_TYPE);
+                boolean status=rs.getBoolean(SETTING_STATUS);
+                Setting st=new Setting(id, order, value, t, status);
+                list.add(st);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return list;
     }
 
     // insert new setting
