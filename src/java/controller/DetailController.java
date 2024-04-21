@@ -9,19 +9,16 @@ import dal.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import model.Product;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="HomeController", urlPatterns={"/home"})
-public class HomeController extends HttpServlet {
+public class DetailController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -32,15 +29,13 @@ public class HomeController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        String id = request.getParameter("pid");
         ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getRecommendItem();
+        Product p = dao.getProductById(id);
         
-        List<Product> firstList = list.subList(0, Math.min(list.size(), 3));
-        List<Product> secondList = list.subList(3, Math.min(list.size(), 6));
-        
-        request.setAttribute("firstList", firstList);
-        request.setAttribute("secondList", secondList);
-        request.getRequestDispatcher("views/home.jsp").forward(request, response);
+        request.setAttribute("detail", p);
+        request.getRequestDispatcher("views/product-details.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -55,7 +50,6 @@ public class HomeController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         processRequest(request, response);
-        
     } 
 
     /** 
