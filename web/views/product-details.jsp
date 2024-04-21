@@ -22,7 +22,7 @@
                         <div class="product-details"><!--product-details-->
                             <div class="col-sm-5">
                                 <div class="view-product">
-                                    <img src="images/product-details/1.jpg" alt="" />
+                                    <img src="${detail.imageurl}" alt="" />
                                     <h3>ZOOM</h3>
                                 </div>
 
@@ -32,10 +32,10 @@
                             <div class="col-sm-7">
                                 <div class="product-information"><!--/product-information-->
                                     <img src="images/product-details/new.jpg" class="newarrival" alt="" />
-                                    <h2>Product Name</h2>
+                                    <h2>${detail.name}</h2>
                                     <img src="images/product-details/rating.png" alt="" />
                                     <span>
-                                        <span>US $59</span>
+                                        <span>${detail.price}</span>
                                         <label>Quantity:</label>
                                         <input type="text" value="3" />
                                         <button type="button" class="btn btn-fefault cart">
@@ -43,8 +43,8 @@
                                             Add to cart
                                         </button>
                                     </span>
-                                    <p><b>Specification:</b> Wireless printing</p>
-                                    <p><b>Stock:</b> 300</p>
+                                    <p><b>Specification:</b> ${detail.specification}</p>
+                                    <p><b>Stock:</b> ${detail.stock}</p>
                                     <p><b>Brand:</b> 113</p>
                                     <a href=""><img src="images/product-details/share.png" class="share img-responsive"  alt="" /></a>
                                 </div><!--/product-information-->
@@ -63,7 +63,7 @@
                                 <div class="tab-pane fade active in" id="reviews" >
                                     <div class="col-sm-12">
 
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                        <p>${detail.description}</p>
 
                                     </div>
                                 </div>
