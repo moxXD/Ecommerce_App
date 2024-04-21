@@ -104,13 +104,13 @@ public class ProductDAO extends DBContext{
         }
         return null;
     }
-//    public static void main(String[] args) {
-//        ProductDAO dao = new ProductDAO();
-//        List<Product> list = dao.getAllProduct();
-//        for (Product o : list) {
-//            System.out.println(o);
-//        }
-//    }
+    public static void main(String[] args) {
+        ProductDAO dao = new ProductDAO();
+        List<Product> list = dao.getRecommendItem();
+        for (Product o : list) {
+            System.out.println(o.getImageUrl());
+        }
+    }
 
 
     public Product getProduct(int id) {
@@ -476,14 +476,14 @@ public class ProductDAO extends DBContext{
         return p;
     }
 
-    public static void main(String[] args) {
-        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0);
-        for (Product product : list) {
-            System.out.println("id: " + product.getId());
-            System.out.println("name: " + product.getName());
-            if (product.getSalePrice() != null) {
-                System.out.println("sale: " + product.getSalePrice().toString());
-            }
-        }
-    }
+//    public static void main(String[] args) {
+//        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0);
+//        for (Product product : list) {
+//            System.out.println("id: " + product.getId());
+//            System.out.println("name: " + product.getName());
+//            if (product.getSalePrice() != null) {
+//                System.out.println("sale: " + product.getSalePrice().toString());
+//            }
+//        }
+//    }
 }

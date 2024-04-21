@@ -45,7 +45,7 @@
                                     </span>
                                     <p><b>Specification:</b> ${detail.specification}</p>
                                     <p><b>Stock:</b> ${detail.stock}</p>
-                                    <p><b>Brand:</b> 113</p>
+                                    <p><b>Brand:</b> Apple</p>
                                     <a href=""><img src="images/product-details/share.png" class="share img-responsive"  alt="" /></a>
                                 </div><!--/product-information-->
                             </div>
