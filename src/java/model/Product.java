@@ -28,7 +28,7 @@ public class Product {
     public Product(int id, String name, Brand brand, Category cate, double price, String description, String specification, String imageUrl, boolean status, int stock) {
         this.id = id;
         this.name = name;
-        this.brand = brand;
+        this.brands = brand;
         this.cate = cate;
         this.price = price;
         this.description = description;
@@ -76,7 +76,7 @@ public class Product {
     public Product(int id, String name, Brand brand, Category cate, double price, String description, String specification, boolean status, int stock) {
         this.id = id;
         this.name = name;
-        this.brand = brand;
+        this.brands = brand;
         this.cate = cate;
         this.price = price;
         this.description = description;
@@ -137,17 +137,17 @@ public class Product {
     }
 
     public Setting getSetting() {
-        return setting;
+        return settings;
     }
 
     public void setSetting(Setting setting) {
-        this.setting = setting;
+        this.settings = setting;
     }
 
   
 
     public void setBrand(Brand brand) {
-        this.brand = brand;
+        this.brands = brand;
     }
 
     public Category getCate() {

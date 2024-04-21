@@ -56,22 +56,7 @@ public class User {
 
     }
 
-    public User(int id, Setting setting, String email, String password, String fullname, String imgUrl, String phone,
-            String address, boolean confirm, boolean status, boolean gender, Date dob) {
 
-        this.id = id;
-        this.setting = setting;
-        this.email = email;
-        this.password = password;
-        this.fullname = fullname;
-        this.imgUrl = imgUrl;
-        this.phone = phone;
-        this.address = address;
-
-        this.status = status;
-        this.gender = gender;
-        this.dob = dob;
-    }
 
     public User(int id, String email, String password, String fullname, String imgUrl, String phone, String address,
             boolean status, boolean gender, Date dob) {

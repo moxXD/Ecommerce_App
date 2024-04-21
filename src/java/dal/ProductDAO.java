@@ -4,6 +4,7 @@
  */
 package dal;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -315,7 +316,7 @@ public class ProductDAO extends DBContext {
             ps.setString(1, p.getName());
             ps.setInt(3, p.getBrandid());
             ps.setInt(2, p.getCategoryProductId());
-            ps.setFloat(4, p.getPrice());
+            ps.setDouble(4, p.getPrice());
             ps.setString(5, p.getDescription());
             ps.setString(6, p.getSpecification());
             ps.setString(7, p.getImageUrl());
