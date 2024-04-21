@@ -12,13 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Brand;
+import model.Category;
 import model.Setting;
 
 /**
  *
  * @author Duc Le
  */
-public class SettingDAO {
+public class SettingDAO extends DBContext {
 
     private final String SETTING_TABLE = "setting";
     private final String SETTING_ID = "id";
@@ -26,10 +28,76 @@ public class SettingDAO {
     private final String SETTING_VALUE = "value";
     private final String SETTING_ORDER = "order";
     private final String SETTING_STATUS = "status";
-
+    private PreparedStatement ps;
+    private ResultSet rs;
     DBContext context = new DBContext();
     private Connection conn;
     private int noOfrecord;
+
+    public ArrayList<Brand> getListBrand() {
+        String sql = "SELECT * FROM swp391_g1.setting\n"
+                + "where type like '%Brand%'";
+        ArrayList<Brand> brandList = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                brandList.add(new Brand(rs.getInt("id"),
+                        rs.getString("type"),
+                        rs.getString("value")));
+            }
+        } catch (Exception e) {
+        }
+        return brandList;
+    }
+
+    public ArrayList<Category> getListCategory() {
+        String sql = "SELECT * FROM swp391_g1.setting\n"
+                + "where type like '%Category%'";
+        ArrayList<Category> categoryList = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                categoryList.add(new Category(rs.getInt("id"),
+                        rs.getString("type"),
+                        rs.getString("value")));
+            }
+        } catch (Exception e) {
+        }
+        return categoryList;
+    }
+
+    public ArrayList<Setting> getBandC() {
+        String sql = "SELECT * FROM swp391_g1_v1.setting\n"
+                + "where setting.type = 'Brand' or setting.type = 'Category'\n"
+                + "order by `order` asc";
+        ArrayList<Setting> st = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String type = rs.getString(2);
+                String value = rs.getString(3);
+                int order = rs.getInt(4);
+                boolean status = rs.getBoolean(5);
+                Setting s = new Setting(id, order, value, type, status);
+                st.add(s);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return st;
+    }
 
     // get setting by id
     public Setting getSettingById(int id) {
@@ -247,12 +315,14 @@ public class SettingDAO {
     // get all setting 
     public List<Setting> getAllSetting() {
         List<Setting> lst = new ArrayList<>();
-        String sql = "SELECT " + SETTING_ID + ",\n"
-                + SETTING_TYPE + ",\n"
-                + SETTING_VALUE + ",\n`"
-                + SETTING_ORDER + "`,\n"
-                + SETTING_STATUS + "\n"
-                + "FROM " + SETTING_TABLE + ";";
+
+        String sql = "SELECT `setting`.`id`,\n"
+                + "    `setting`.`type`,\n"
+                + "    `setting`.`value`,\n"
+                + "    `setting`.`order`,\n"
+                + "    `setting`.`status`\n"
+                + "FROM `swp391_g1_v1`.`setting`\n"
+                + "";
         try {
             conn = context.getConnection();
 //            System.out.println("sql: " + sql);
@@ -309,6 +379,40 @@ public class SettingDAO {
             }
         }
         return max;
+    }
+
+    // get setting by type
+    public List<Setting> getSettingByType(String type) {
+        List<Setting> list = new ArrayList<>();
+        String sql = "SELECT * "
+                + "FROM " + SETTING_TABLE + " \n"
+                + "WHERE `" + SETTING_TYPE + "`=?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, type);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(SETTING_ID);
+                String value=rs.getString(SETTING_VALUE);
+                int order=rs.getInt(SETTING_ORDER);
+                String t=rs.getString(SETTING_TYPE);
+                boolean status=rs.getBoolean(SETTING_STATUS);
+                Setting st=new Setting(id, order, value, t, status);
+                list.add(st);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return list;
     }
 
     // insert new setting

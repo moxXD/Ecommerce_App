@@ -98,18 +98,10 @@
             <aside class="right-side">
                 <section class="content">
                     <form action="settinglist" method="get">
-                        <!--search input-->
-                        <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}" />
-                            <span class="input-group-btn">
-                                <button type='submit' id='search-btn' class="btn btn-flat" style="background-color: white;border: 1px solid grey;border-radius: 5px ">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </div>
+
                         <!--select type-->
                         <div class="filter-row">
-                            <div class="form-group">
+                            <div class="form-group col-md-2">
                                 <label for="filtype">Filter by type:</label>
                                 <select name="filtype" id="filtype" class="form-control">
                                     <option value="">All type</option>
@@ -128,12 +120,32 @@
                                     <!-- Add status options here -->
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="filstatus">Search:</label>
+                                    <div class="input-group ">
+                                        <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
+                                        <span class="input-group-btn">
+                                            <button type='submit' id='search-btn' class="btn btn-flat"
+                                                    style="background-color: white;border: 1px solid grey;border-radius: 5px "><i
+                                                    class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
-
                     <!-- Table for displaying user data -->
 
                     <div class="table-responsive">
+                        <div class="form-group">
+                            <div class="col-md-2" style="float: right; margin-bottom: 1%">
+                                <button type="button" class="btn btn-primary  "
+                                        onclick="redirectToSettingDetail('add')"
+                                        style=""
+                                        >Add New Setting</button>
+                            </div>
+                        </div>
                         <table class="table user-table">
                             <!--table head-->
                             <thead>
@@ -190,44 +202,40 @@
                             </tbody>
                         </table>
                         <!-- Diplay list of page -->
-                        <nav aria-label="Page navigation" class="row">
-                            <div class="col-sm-6">
-                                <ul class="pagination">
-                                    <!--next page-->
-                                    <c:if test="${currentPage > 1}">
-                                        <li>
-                                            <a href="settinglist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Previous">
-                                                <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
-                                            </a>
-                                        </li>
-                                    </c:if>
-                                    <!--list of pages-->
-                                    <c:forEach begin="1" end="${noOfPage}" var="i">
-                                        <c:choose>
-                                            <c:when test="${currentPage eq i}">
-                                                <li class="active"><span>${i}</span></li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                <li><a href="settinglist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">${i}</a></li>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </c:forEach>
-                                    <!--prev page-->
-                                    <c:if test="${currentPage < noOfPage}">
-                                        <li>
-                                            <a href="settinglist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Next">
-                                                <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
-                                            </a>
-                                        </li>
-                                    </c:if>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 text-right">
-                                <button type="button" class="btn btn-primary  "
-                                        onclick="redirectToSettingDetail('add')"
-                                        style="margin-top: 3.5% "
-                                        >Add</button>
-                            </div>
+                        <nav aria-label="Page navigation" >
+
+                            <ul class="pagination">
+                                <!--next page-->
+                                <c:if test="${currentPage > 1}">
+                                    <li>
+                                        <a href="settinglist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <!--list of pages-->
+                                <c:forEach begin="1" end="${noOfPage}" var="i">
+                                    <c:choose>
+                                        <c:when test="${currentPage eq i}">
+                                            <li class="active"><span>${i}</span></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                            <li><a href="settinglist?page=${i}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}">${i}</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                <!--prev page-->
+                                <c:if test="${currentPage < noOfPage}">
+                                    <li>
+                                        <a href="settinglist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+
+
+
 
 
                         </nav>

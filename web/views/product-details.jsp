@@ -22,7 +22,7 @@
                         <div class="product-details"><!--product-details-->
                             <div class="col-sm-5">
                                 <div class="view-product">
-                                    <img src="${detail.imageurl}" alt="" />
+                                    <img src="${detail.imageUrl}" alt="" />
                                     <h3>ZOOM</h3>
                                 </div>
 

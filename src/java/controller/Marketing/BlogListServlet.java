@@ -5,6 +5,7 @@
 package controller.Marketing;
 
 import dal.BlogDAO;
+import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -72,17 +73,30 @@ public class BlogListServlet extends HttpServlet {
         List<Setting> setting = new ArrayList<>();
         List<User> user = new ArrayList<>();
         BlogDAO blogDAO = new BlogDAO();
+        SettingDAO settingDAO = new SettingDAO();
+        //filter
         String page_raw = request.getParameter("page");
         String statusFilter = request.getParameter("filstatus");
         String categoryFilter = request.getParameter("filcate");
         String authorFilter = request.getParameter("filauthor");
+        String featureFilter = request.getParameter("filfeature");
         String searchQuery = request.getParameter("q");
+        //sort
+        String sortColumn = request.getParameter("sort");
+        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
         //mapping filter
         if (statusFilter != null && !statusFilter.isEmpty()) {
             if (statusFilter.equalsIgnoreCase("show")) {
                 statusFilter = "1";
             } else {
                 statusFilter = "0";
+            }
+        }
+        if (featureFilter != null && !featureFilter.isEmpty()) {
+            if (featureFilter.equalsIgnoreCase("Yes")) {
+                featureFilter = "1";
+            } else {
+                featureFilter = "0";
             }
         }
 
@@ -94,8 +108,8 @@ public class BlogListServlet extends HttpServlet {
             }
         }
         try {
-            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery);
-            setting = blogDAO.getAllBlogSetting();
+            list = blogDAO.getAllBlogPagination((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, statusFilter, searchQuery, sortColumn, sortOrder, featureFilter);
+            setting = settingDAO.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
         } catch (SQLException ex) {
             Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,7 +135,18 @@ public class BlogListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        BlogDAO blogDAO = new BlogDAO();
+        String id_raw = request.getParameter("blogId");
+        try {
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
+            int id = Integer.parseInt(id_raw);
+            
+            blogDAO.updateBlogStatus(id, !status);
+            response.sendRedirect("bloglist");
+        } catch (NumberFormatException e) {
+            Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+
     }
 
     /**

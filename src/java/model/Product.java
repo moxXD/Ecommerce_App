@@ -9,33 +9,110 @@ package model;
  * @author Admin
  */
 public class Product {
+
     private int id;
     private String name;
-    private int product_category_id;
-    private int brand_id;
-    private double price;
+    private int brandid;
+    private int categoryProductId;
+    private Setting settings;
+    private Brand brands;
+    private Category cate;
     private String description;
     private String specification;
-    private String imageurl;
-    private int status;
+    private String imageUrl;
     private int stock;
-    private int is_featured;
+    
+    private Setting category,brand;
+    private double price;
+    private Sale salePrice;
+    private String imgUrl;
+    private boolean status,isFeatured;
+    public Product(int id, String name, Brand brand, Category cate, double price, String description, String specification, String imageUrl, boolean status, int stock) {
+        this.id = id;
+        this.name = name;
+        this.brands = brand;
+        this.cate = cate;
+        this.price = price;
+        this.description = description;
+        this.specification = specification;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.stock = stock;
+    }
+    
+
+    
+
+   
+    
 
     public Product() {
     }
 
-    public Product(int id, String name, int product_category_id, int brand_id, double price, String description, String specification, String imageurl, int status, int stock, int is_featured) {
+    public Product(int id, String name, int categoryProductId, int brandid, double price, String description, String specification, String imageurl, boolean status, int stock, boolean isFeatured) {
         this.id = id;
         this.name = name;
-        this.product_category_id = product_category_id;
-        this.brand_id = brand_id;
+        this.categoryProductId = categoryProductId;
+        this.brandid = brandid;
         this.price = price;
         this.description = description;
         this.specification = specification;
-        this.imageurl = imageurl;
+        this.imageUrl = imageUrl;
         this.status = status;
         this.stock = stock;
-        this.is_featured = is_featured;
+        this.isFeatured = isFeatured;}
+    public Product(String name, int brandid, int categoryProductId, double price, String description, String specification, String imageUrl, boolean status, int stock) {
+        this.name = name;
+        this.brandid = brandid;
+        this.categoryProductId = categoryProductId;
+        this.price = price;
+        this.description = description;
+        this.specification = specification;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.stock = stock;
+    }
+
+    public Product(int id, String name, int brandid, int categoryProductId, double price, String description, String specification, String imageUrl, boolean status, int stock) {
+        this.id = id;
+        this.name = name;
+        this.brandid = brandid;
+        this.categoryProductId = categoryProductId;
+        this.price = price;
+        this.description = description;
+        this.specification = specification;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.stock = stock;
+    }
+
+    public Product(int id, String name, Brand brand, Category cate, double price, String description, String specification, boolean status, int stock) {
+        this.id = id;
+        this.name = name;
+        this.brands = brand;
+        this.cate = cate;
+        this.price = price;
+        this.description = description;
+        this.specification = specification;
+        this.status = status;
+        this.stock = stock;}
+    
+
+    public Product(int id, int stock, String name, Setting category, Setting brand,
+            double price, Sale salePrice, String description,String specification, String imgUrl,
+            boolean status, boolean isFeatured) {
+        this.id = id;
+        this.stock = stock;
+        this.name = name;
+        this.category = category;
+        this.brand = brand;
+        this.price = price;
+        this.specification=specification;
+        this.salePrice = salePrice;
+        this.description = description;
+        this.imgUrl = imgUrl;
+        this.status = status;
+        this.isFeatured = isFeatured;
     }
 
     public int getId() {
@@ -46,6 +123,8 @@ public class Product {
         this.id = id;
     }
 
+
+
     public String getName() {
         return name;
     }
@@ -54,20 +133,59 @@ public class Product {
         this.name = name;
     }
 
-    public int getProduct_category_id() {
-        return product_category_id;
+    public int getBrandid() {
+        return brandid;
     }
 
-    public void setProduct_category_id(int product_category_id) {
-        this.product_category_id = product_category_id;
+    public void setBrandid(int brandid) {
+        this.brandid = brandid;
     }
 
-    public int getBrand_id() {
-        return brand_id;
+    public int getCategoryProductId() {
+        return categoryProductId;
     }
 
-    public void setBrand_id(int brand_id) {
-        this.brand_id = brand_id;
+    public void setCategoryProductId(int categoryProductId) {
+        this.categoryProductId = categoryProductId;
+    }
+
+    public Setting getSetting() {
+        return settings;
+    }
+
+    public void setSetting(Setting setting) {
+        this.settings = setting;
+    }
+
+  
+
+    public void setBrand(Brand brand) {
+        this.brands = brand;
+    }
+
+    public Category getCate() {
+        return cate;
+    }
+
+    public void setCate(Category cate) {
+        this.cate = cate;
+    }
+
+
+    public Setting getCategory() {
+        return category;
+    }
+
+    public void setCategory(Setting category) {
+        this.category = category;
+    }
+
+    public Setting getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Setting brand) {
+        this.brand = brand;
     }
 
     public double getPrice() {
@@ -75,7 +193,15 @@ public class Product {
     }
 
     public void setPrice(double price) {
-        this.price = price;
+        this.price = price;}
+
+
+    public Sale getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(Sale salePrice) {
+        this.salePrice = salePrice;
     }
 
     public String getDescription() {
@@ -94,19 +220,25 @@ public class Product {
         this.specification = specification;
     }
 
-    public String getImageurl() {
-        return imageurl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageurl(String imageurl) {
-        this.imageurl = imageurl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;}
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public int getStatus() {
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -118,13 +250,13 @@ public class Product {
         this.stock = stock;
     }
 
-    public int getIs_featured() {
-        return is_featured;
+    
+    public boolean isIsFeatured() {
+        return isFeatured;
     }
 
-    public void setIs_featured(int is_featured) {
-        this.is_featured = is_featured;
+    public void setIsFeatured(boolean isFeatured) {
+        this.isFeatured = isFeatured;
     }
-    
     
 }

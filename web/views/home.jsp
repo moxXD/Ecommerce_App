@@ -91,7 +91,7 @@
                                 <div class="product-image-wrapper">
                                     <div class="single-products">
                                         <div class="productinfo text-center">
-                                            <img src="${f.imageurl}" alt="" />
+                                            <img src="${f.imageUrl}" alt="" />
                                             <h2>${f.name}</h2>
                                             <h2>${f.price}</h2>
                                             <p>${f.description}</p>
@@ -113,7 +113,7 @@
                                 <div class="product-image-wrapper">
                                     <div class="single-products">
                                         <div class="productinfo text-center">
-                                            <img src="${s.imageurl}" alt="" />
+                                            <img src="${s.imageUrl}" alt="" />
                                             <h2>${s.name}</h2>
                                             <h2>${s.price}</h2>
                                             <p>${s.description}</p>
