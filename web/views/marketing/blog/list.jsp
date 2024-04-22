@@ -220,6 +220,7 @@
                                                 <img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle"style="width: 80px; height: 50px;">
                                             </c:otherwise>
                                         </c:choose>  
+                                        </td>
 <!--                                            <img src="${pageContext.request.contextPath}/images/blog/images.jpg"
                                                  style="width: 80px; height: 50px;" alt="User Image" /></td>-->
 <!--                                        <td>${u.title}</td>-->
