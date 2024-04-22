@@ -25,7 +25,7 @@ import model.Setting;
  *
  * @author Admin
  */
-@WebServlet(name="ProductList", urlPatterns={"/productList"})
+@WebServlet(name="ProductList", urlPatterns={"/marketing/productList"})
 public class ProductList extends HttpServlet {
    
     /** 

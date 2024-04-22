@@ -68,7 +68,7 @@ public class BlogListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int page = 1;
-        int recordPerPage = 10;
+        int recordPerPage = 6;
         List<Blog> list = new ArrayList<>();
         List<Setting> setting = new ArrayList<>();
         List<User> user = new ArrayList<>();

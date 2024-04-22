@@ -87,7 +87,7 @@ public class ProductDetailServlet extends HttpServlet {
             Logger.getLogger(ProductDetailServlet.class.getName()).log(Level.SEVERE, null, e);
         }
         request.setAttribute("categories", list);
-        request.getRequestDispatcher("productdetail.jsp").forward(request, response);
+        request.getRequestDispatcher("productdetailv2.jsp").forward(request, response);
     }
 
     /**

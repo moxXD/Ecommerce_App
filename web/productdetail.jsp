@@ -81,6 +81,7 @@
             hr.solid {
                 border-top: 1px solid grey;
             }
+            
         </style>
     </head>
     <body>

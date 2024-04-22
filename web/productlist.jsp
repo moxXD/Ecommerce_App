@@ -155,19 +155,31 @@
                             <button id="searchBtn" class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
-                    <a href="productlist?searchInput=${param.searchInput}">Clear Category</a>
+                    <!--<a href="productlist?searchInput=${param.searchInput}">Clear Category</a>-->
                     <!--</form>-->
                     <!-- Radio buttons -->
                     <!--<form id="filterForm" action="productlist" method="GET">-->
                     <div class="form-group mt-3 ">
                         <label>Select Category:</label>
                         <div class="custom-control custom-radio">
+
+                            <select name="categoryId">
+                                <option value="">Select Category</option>
+                                <c:forEach items="${requestScope.categorys}" var="c">
+                                    <option value="${c.id}" ${param.categoryId==c.id?"selected":""}>${c.value}</option>
+                                </c:forEach>
+                            </select>
+                            <%--
                             <c:forEach items="${requestScope.categorys}" var="c">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="category"  ${param.categoryId==c.id?"checked":""} name="categoryId" class="custom-control-input" value="${c.id}">
+                                    <input type="radio" id="category"
+                                           ${param.categoryId==c.id?"checked":""}
+                                           name="categoryId" class="custom-control-input"
+                                           value="${c.id}">
                                     <label class="custom-control-label" for="category">${c.value}</label>
                                 </div>
                             </c:forEach>
+                            --%>
                             <!--<button type="submit" style="display: none;"></button>-->
                         </div>
                     </div>
@@ -268,9 +280,9 @@
                             </c:forEach>
                         <!--prev page-->
                         <c:if test="${currentPage < noOfPage}">
-                            <li >
+                            <li>
                                 <a href="productlist?page=${currentPage + 1}" aria-label="Next" >
-                                    <span aria-hidden="true" ><i class="fa fa-arrow-right" ></i></span>
+                                    <span aria-hidden="true" ><i class="fa fa-arrow-right" style=""></i></span>
                                 </a>
                             </li>
                         </c:if>
@@ -281,7 +293,7 @@
 
         <%@include  file="layout/footer.jsp" %>
         <script type="text/javascript">
-//             Đặt sự kiện change cho tất cả các radio button
+            //             Đặt sự kiện change cho tất cả các radio button
             document.querySelectorAll('input[type="radio"]').forEach(function (radio) {
                 radio.addEventListener('click', function () {
 
