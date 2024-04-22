@@ -109,12 +109,12 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="bloglist" method="get">
+                    <form action="bloglist" id="filterForm" method="get">
                         <div class="filter-row">
                             <!--feature select-->
                             <div class="form-group">
                                 <label for="filfeature">Filter by Feature: </label>
-                                <select name="filfeature" id="filfeature" class="form-control">
+                                <select name="filfeature" id="filfeature" class="form-control" onchange="submitForm()">
                                     <option value="">All Feature</option>
                                     <option value="yes" ${param.filfeature != null && param.filfeature.equalsIgnoreCase("Yes") ? "selected" : ""}>Yes</option>
                                     <option value="no" ${param.filfeature != null && param.filfeature.equalsIgnoreCase("No") ? "selected" : ""}>No</option>
@@ -123,7 +123,7 @@
                             <!--status select-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by Status:</label>
-                                <select name="filstatus" id="filstatus" class="form-control">
+                                <select name="filstatus" id="filstatus" class="form-control"onchange="submitForm()">
                                     <option value="">All Status</option>
                                     <option value="show" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Show") ? "selected" : ""}>Show</option>
                                     <option value="hide" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Hide") ? "selected" : ""}>Hide</option>
@@ -132,7 +132,8 @@
                             <!--category select-->
                             <div class="form-group">
                                 <label for="filcate">Filter by Blog Category:</label>
-                                <select name="filcate" id="filcate" class="form-control">
+                                <select name="filcate" id="filcate" class="form-control"
+                                        onchange="submitForm()">
                                     <option value="" >All Category</option>
                                     <!-- Add role options here -->
                                     <c:forEach items="${requestScope.settingList}" var="r">
@@ -145,7 +146,7 @@
                             <!--author select-->
                             <div class="form-group">
                                 <label for="filauthor">Filter by Author: </label>
-                                <select name="filauthor" id="filauthor" class="form-control">
+                                <select name="filauthor" id="filauthor" class="form-control"onchange="submitForm()">
                                     <option value="">All Author </option>
                                     <c:forEach items="${requestScope.blogAuthors}" var="a">
                                         <option value="${a.fullname}"  ${param.filauthor==a.fullname?"selected":""}>${a.fullname}</option>
@@ -306,6 +307,10 @@
             function redirectToAddBlog() {
                 window.location.href = 'blogdetail?action=add';
             }
+            function submitForm(){
+                var form=document.getElementById("filterForm");
+                form.submit();
+            }
         </script>
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
@@ -348,6 +353,7 @@
         <!-- Director for demo purposes -->
 
         <script type="text/javascript">
+            
             $('input').on('ifChecked', function (event) {
                 // var element = $(this).parent().find('input:checkbox:first');
                 // element.parent().parent().parent().addClass('highlight');
@@ -373,6 +379,7 @@
                 checkboxClass: 'icheckbox_flat-grey',
                 radioClass: 'iradio_flat-grey'
             });
+            
         </script>
         <script type="text/javascript">
             $(function () {

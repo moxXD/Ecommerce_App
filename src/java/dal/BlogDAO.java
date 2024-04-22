@@ -50,7 +50,7 @@ public class BlogDAO extends DBContext {
                 + "FROM swp391_g1_v1.blog AS t1\n"
                 + "INNER JOIN swp391_g1_v1.user AS t2 ON t2.id = t1.authorid\n"
                 + "INNER JOIN swp391_g1_v1.setting AS t3 ON t3.id = t1.setting_id\n"
-                + "WHERE t3.type='blog'";
+                + "WHERE t3.type='blog' and t3.status = true";
 //        // add condition for filter
         if (cateFilter != null && !cateFilter.isEmpty()) {
             sql += " AND t3.value = ? ";
@@ -153,7 +153,7 @@ public class BlogDAO extends DBContext {
                 + "FROM swp391_g1_v1.blog AS t1\n"
                 + "INNER JOIN swp391_g1_v1.user AS t2 ON t2.id = t1.authorid\n"
                 + "INNER JOIN swp391_g1_v1.setting AS t3 ON t3.id = t1.setting_id\n"
-                + "WHERE t3.type='blog' and t1.status = true";
+                + "WHERE t3.type='blog' and t1.status = true and t3.status = true";
 //        // add condition for filter
         if (cateFilter != null && !cateFilter.isEmpty()) {
             sql += " AND t3.value = ? ";
