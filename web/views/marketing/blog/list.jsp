@@ -258,7 +258,7 @@
                                 <c:if test="${currentPage > 1}">
                                     <li>
                                         <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                           <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </li>
                                 </c:if>
@@ -277,7 +277,7 @@
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
                                         <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                            <i class="fa fa-arrow-right"></i>
                                         </a>
                                     </li>
                                 </c:if>

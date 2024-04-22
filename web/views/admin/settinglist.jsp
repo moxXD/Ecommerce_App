@@ -211,7 +211,7 @@
                                 <c:if test="${currentPage > 1}">
                                     <li>
                                         <a href="settinglist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                            <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </li>
                                 </c:if>
@@ -230,7 +230,7 @@
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
                                         <a href="settinglist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                            <i class="fa fa-arrow-right"></i>
                                         </a>
                                     </li>
                                 </c:if>
