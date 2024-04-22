@@ -126,7 +126,7 @@
                                 <div class="form-group">
                                     <label for="filstatus">Search:</label>
                                     <div class="input-group ">
-                                        <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
+                                        <input type="text" name="q" class="form-control" placeholder="Search by value ..." value="${param.q}"/>
                                         <span class="input-group-btn">
                                             <button type='submit' id='search-btn' class="btn btn-flat"
                                                     style="background-color: white;border: 1px solid grey;border-radius: 5px "><i

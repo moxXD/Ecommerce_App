@@ -109,12 +109,13 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="bloglist" method="get">
+                    <form action="bloglist" id="filterForm" method="get">
                         <div class="filter-row">
                             <!--feature select-->
                             <div class="form-group">
                                 <label for="filfeature">Filter by Feature: </label>
-                                <select name="filfeature" id="filfeature" class="form-control">
+                                <select name="filfeature" id="filfeature" 
+                                        class="form-control" onchange="submitForm()">
                                     <option value="">All Feature</option>
                                     <option value="yes" ${param.filfeature != null && param.filfeature.equalsIgnoreCase("Yes") ? "selected" : ""}>Yes</option>
                                     <option value="no" ${param.filfeature != null && param.filfeature.equalsIgnoreCase("No") ? "selected" : ""}>No</option>
@@ -123,7 +124,8 @@
                             <!--status select-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by Status:</label>
-                                <select name="filstatus" id="filstatus" class="form-control">
+                                <select name="filstatus" id="filstatus" 
+                                        class="form-control" onchange="submitForm()">
                                     <option value="">All Status</option>
                                     <option value="show" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Show") ? "selected" : ""}>Show</option>
                                     <option value="hide" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Hide") ? "selected" : ""}>Hide</option>
@@ -132,7 +134,8 @@
                             <!--category select-->
                             <div class="form-group">
                                 <label for="filcate">Filter by Blog Category:</label>
-                                <select name="filcate" id="filcate" class="form-control">
+                                <select name="filcate" id="filcate" 
+                                        class="form-control" onchange="submitForm()">
                                     <option value="" >All Category</option>
                                     <!-- Add role options here -->
                                     <c:forEach items="${requestScope.settingList}" var="r">
@@ -145,7 +148,8 @@
                             <!--author select-->
                             <div class="form-group">
                                 <label for="filauthor">Filter by Author: </label>
-                                <select name="filauthor" id="filauthor" class="form-control">
+                                <select name="filauthor" id="filauthor"
+                                        class="form-control" onchange="submitForm()">
                                     <option value="">All Author </option>
                                     <c:forEach items="${requestScope.blogAuthors}" var="a">
                                         <option value="${a.fullname}"  ${param.filauthor==a.fullname?"selected":""}>${a.fullname}</option>
@@ -211,9 +215,16 @@
                                     <c:set var="id" value="${u.id}" />
                                     <tr>
                                         <td>${id}</td>
-                                        <td><img src="${pageContext.request.contextPath}/images/blog/images.jpg"
-                                                 style="width: 80px; height: 50px;" alt="User Image" /></td>
-<!--                                        <td>${u.title}</td>-->
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${empty u.imgUrl}">
+                                                    <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle" style="width: 80px; height: 50px;">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle"style="width: 80px; height: 50px;">
+                                                </c:otherwise>
+                                            </c:choose>  
+                                        </td>
                                         <c:if test="${fn:length(u.title) > 30}">
                                             <c:set var="subTitle" value="${fn:substring(u.title, 0, 30)}" />
                                             <td>${subTitle}...</td>
@@ -400,6 +411,10 @@
 
             });
             // Chart.defaults.global.responsive = true;
+            function submitForm() {
+                var form = document.getElementById("filterForm");
+                form.submit();
+            }
         </script>
     </body> 
 

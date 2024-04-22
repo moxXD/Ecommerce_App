@@ -233,6 +233,11 @@
                                         </c:if>
 
                                         <td><a href="userdetail?action=view&id=${u.id}">View</a>
+<!--                                            <form action="userlist" method="post" id="statusChange" onsubmit="handleSubmit(${u.id}, ${u.status ? true : false})">
+                                                <input type="hidden" name="userId" value="${u.id}">
+                                                <input type="hidden" name="status" value="${u.status ? true : false}">
+                                                <input type="submit" value="${!u.status ? 'Activate' : 'Deactivate'}" />
+                                            </form>-->
                                             <form action="userlist" method="post">
                                                 <input type="hidden" name="userId" value="${u.id}">
                                                 <input type="hidden" name="status" value="${u.status?true:false}">
@@ -280,6 +285,24 @@
                             </ul>
 
                         </nav>
+                        <div id="confirmModal" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Confirm action</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to change this user status?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" id="confirmBtn">Xác nhận</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy bỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </section>
@@ -296,6 +319,31 @@
                 var form = document.getElementById("filterForm");
                 form.submit();
             }
+//            // Function to show the confirmation modal
+//            function showConfirmationModal(userId, status) {
+//                $('#confirmModal').modal('show');
+//
+//                // Capture the user's decision
+//                $('#confirmBtn').click(function () {
+//                    // Call a function to perform the action based on the user's decision
+//                    // For example, you can make an AJAX call to update the user's status
+//                    // Here, I'm just logging the user's decision to the console
+//                    
+//
+//                    // Close the modal
+//                    $('#confirmModal').modal('hide');
+//                });
+//            }
+//
+//// Function to handle the submission of the form
+//            function handleSubmit(userId, status) {
+//                // Prevent the form from submitting directly
+//                event.preventDefault();
+//
+//                // Show the confirmation modal
+//                showConfirmationModal(userId, status);
+//            }
+
         </script>
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
