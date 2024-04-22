@@ -310,14 +310,17 @@ public class ProductDAO extends DBContext{
 
     // get pagination product list with filtered condition
     public List<Product> getProductWithFilter(int offset, int limit, String search,
-            int categoryId) {
+            int categoryId,int brandId) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS *\n"
                 + "FROM " + PRODUCT_TABLE
-                + " WHERE 1=1 ";
+                + " WHERE 1=1 AND "+PRODUCT_STOCK+">0 ";
         // add filter condition
         if (categoryId != 0) {
             sql += " AND " + PRODUCT_CATEGORY_ID + "=? ";
+        }
+        if (brandId != 0) {
+            sql += " AND " + PRODUCT_BRAND_ID + "=? ";
         }
         // add search to query
         if (search != null && !search.isEmpty()) {
@@ -330,6 +333,9 @@ public class ProductDAO extends DBContext{
             int index = 1;
             if (categoryId != 0) {
                 stm.setInt(index++, categoryId);
+            }
+            if (brandId != 0) {
+                stm.setInt(index++, brandId);
             }
             if (search != null && !search.isEmpty()) {
                 String likeParam = "%" + search + "%";
@@ -476,14 +482,14 @@ public class ProductDAO extends DBContext{
         return p;
     }
 
-    public static void main(String[] args) {
-        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0);
-        for (Product product : list) {
-            System.out.println("id: " + product.getId());
-            System.out.println("name: " + product.getName());
-            if (product.getSalePrice() != null) {
-                System.out.println("sale: " + product.getSalePrice().toString());
-            }
-        }
-    }
+//    public static void main(String[] args) {
+//        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0);
+//        for (Product product : list) {
+//            System.out.println("id: " + product.getId());
+//            System.out.println("name: " + product.getName());
+//            if (product.getSalePrice() != null) {
+//                System.out.println("sale: " + product.getSalePrice().toString());
+//            }
+//        }
+//    }
 }

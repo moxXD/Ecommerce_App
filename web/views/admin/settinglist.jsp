@@ -97,13 +97,14 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="settinglist" method="get">
+                    <form action="settinglist" id="filterForm" method="get">
 
                         <!--select type-->
                         <div class="filter-row">
                             <div class="form-group col-md-2">
                                 <label for="filtype">Filter by type:</label>
-                                <select name="filtype" id="filtype" class="form-control">
+                                <select name="filtype" id="filtype" class="form-control"
+                                        onchange="submitForm()">
                                     <option value="">All type</option>
                                     <c:forEach items="${requestScope.settingData}" var="t">
                                         <option value="${t}" ${param.filtype.equals(t)  ? "selected" : ""}>${t}</option>
@@ -113,7 +114,8 @@
                             <!--select  status-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by status:</label>
-                                <select name="filstatus" id="filstatus" class="form-control">
+                                <select name="filstatus" id="filstatus" class="form-control"
+                                        onchange="submitForm()">
                                     <option value="" >All status</option>
                                     <option value="1" ${param.filstatus.equals("1") ? "selected" : ""}>Active</option>
                                     <option value="0" ${ param.filstatus.equals("0") ? "selected" : ""}>Inactive</option>
@@ -346,6 +348,10 @@
                 });
 
             });
+            function submitForm() {
+                var form = document.getElementById("filterForm");
+                form.submit();
+            }
             // Chart.defaults.global.responsive = true;
         </script>
     </body>

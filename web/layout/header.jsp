@@ -117,7 +117,7 @@
                                         </ul>
                                     </li> 
 
-                                    <li><a href="contact-us.html">Contact</a></li>
+                                    <li><a href="admin/dashboard">Admin</a></li>
                                 </ul>
                             </div>
                         </div>

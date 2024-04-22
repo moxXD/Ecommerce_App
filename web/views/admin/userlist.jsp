@@ -111,7 +111,7 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="userlist" method="get">
+                    <form action="userlist" id="filterForm" method="get">
                         <!--search input-->
 
 
@@ -120,7 +120,8 @@
                                 <!--gender select-->
                                 <div class="col-md-4">
                                     <label for="filgender">Filter by gender:</label>
-                                    <select name="filgender" id="filgender" class="form-control">
+                                    <select name="filgender" id="filgender" class="form-control"
+                                            onchange="submitForm()">
                                         <option value="">All genders</option>
                                         <option value="male" ${param.filgender != null && param.filgender.equals("male") ? "selected" : ""}>Male</option>
                                         <option value="female" ${param.filgender != null && param.filgender.equals("female") ? "selected" : ""}>Female</option>
@@ -129,7 +130,8 @@
                                 <!--role select-->
                                 <div class="col-md-4">
                                     <label for="filrole">Filter by role:</label>
-                                    <select name="filrole" id="filrole" class="form-control">
+                                    <select name="filrole" id="filrole" class="form-control"
+                                            onchange="submitForm()">
                                         <option value="">All roles</option>
                                         <!-- Add role options here -->
                                         <c:forEach items="${requestScope.roleList}" var="r">
@@ -140,7 +142,8 @@
                                 <!--status select-->
                                 <div class="col-md-4">
                                     <label for="filstatus">Filter by status:</label>
-                                    <select name="filstatus" id="filstatus" class="form-control">
+                                    <select name="filstatus" id="filstatus" class="form-control"
+                                            onchange="submitForm()">
                                         <option value="">All status</option>
                                         <option value="active" ${param.filstatus != null && param.filstatus.equals("active") ? "selected" : ""}>Active</option>
                                         <option value="inactive" ${param.filstatus != null && param.filstatus.equals("inactive") ? "selected" : ""}>Inactive</option>
@@ -288,6 +291,10 @@
         <script type="text/javascript">
             function redirectToAddUser() {
                 window.location.href = 'userdetail?action=add';
+            }
+            function submitForm() {
+                var form = document.getElementById("filterForm");
+                form.submit();
             }
         </script>
         <!-- jQuery 2.0.2 -->
