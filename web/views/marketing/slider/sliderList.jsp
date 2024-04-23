@@ -161,7 +161,7 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="bloglist" method="get">
+                    <form action="sliderlist" method="get">
                         <div class="filter-row">
 
                             <!--status select-->
@@ -214,7 +214,10 @@
                                             <i class="fa fa-sort"></i>
                                         </a></th>   
 
-
+                                    <th>Url
+                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
                                     <th>Status
                                         <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
                                             <i class="fa fa-sort"></i>
@@ -234,10 +237,11 @@
                                         <td>${slider.id}</td>
                                         <td><img src="${pageContext.request.contextPath}/images/slider/${slider.image_url}" style="width: 80px; height: 50px;" alt="Slider Image" /></td>
                                         <td>${slider.name}</td>
+                                        <td>${slider.url}</td>
                                         <td style="color: ${slider.status ? 'red' : 'green'}">${slider.status ? 'Inactive' : 'Active'}</td>
                                         <td>
                                             <!--nut edit-->
-                                            <a href="editSlider?id=${slider.id}">Edit</a>
+                                            <a href="sliderdetail?id=${slider.id}">Edit</a>
 
                                             <!-- Nút xóa slider -->
                                             <a href="deleteSlider?sliderid=${slider.id}" onclick="return confirm('Are you sure you want to delete this slider?'); return false;">Delete</a>

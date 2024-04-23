@@ -92,7 +92,7 @@
                         </li>
                         <li class="active">
                             <a href="userlist">
-                                <i class="fa fa-users"></i> <span>Blog List</span>
+                                <i class="fa fa-users"></i> <span>Slider List</span>
                             </a>
                         </li>
                         <li>
@@ -109,47 +109,34 @@
                 <section class="content">
                     <div class="container" >
                         <div class="row ">
-                            <form method="post" action="blogdetail" enctype="multipart/form-data">
+                            <form method="POST" action="editdetail">
                                 <div class="col">
                                     <div class="col-sm-12">
                                         <div class="blog-post-area">
                                             <h2 class="title text-center">Slider Details</h2>
 
-                                            <c:set var="c" value="${requestScope.blogdetails}" />
+
                                             <div class="row" style="margin-bottom: 5%; margin-top: 3%">
                                                 <div class="col-md-6">
 <!--                                                    <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
                                                         <label for="inputLabel1">ID: </label>
                                                         <input type="text" class="form-control" id="id" ${param.action.equals("view")||param.action.equals("update") ? "readonly": "" }  value="${c.id}">
                                                     </div>-->
+                                                    <input name="id" type="hidden" class="form-control" value="${detail.id}" >
+
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Title:</label>
-                                                        <input name="title" type="text" class="form-control" id="title" value="${c.title}" >
+                                                        <input name="name" type="text" class="form-control"  value="${detail.name}" >
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="inputLabel1">Brief: </label>
-                                                        <input name="sumary" type="text" class="form-control" id="sumary" value="${c.sumary}" >
+                                                        <label for="inputLabel1">Description: </label>
+                                                        <input name="description" type="text" class="form-control"  value="${detail.description}" >
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="gender">Category:</label>
-                                                        <select  name="category" id="category" class="form-control ">
-                                                            <option value="" disabled selected hidden>Choose category of your blog</option>
-                                                            <c:forEach items="${requestScope.settingList}" var="s">
-                                                                <c:if test="${s.type.equals('blog')}">
-                                                                    <option value="${s.id}" ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
-                                                                </c:if>
-                                                            </c:forEach>
-                                                        </select>
+                                                        <label for="inputLabel1">Url: </label>
+                                                        <input name="url" type="text" class="form-control" value="${detail.url}" >
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="inputLabel1">Author:</label>
-                                                        <select id="author" name="author" class="form-control">
-                                                            <option value="" disabled selected hidden>Choose author of your blog</option>
-                                                            <c:forEach items="${requestScope.blogAuthors}" var="a">
-                                                                <option value="${a.id}" ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
-                                                            </c:forEach>
-                                                        </select>
-                                                    </div>
+
                                                     <div>
                                                         <div class="row">
                                                             <div class="col-md-12">
@@ -159,36 +146,14 @@
                                                         <div class="row form-check-inline">
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${c.status == true ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${detail.status == true ? "checked" : ""} >
                                                                     <label class="form-check-label" for="showRadio">Show</label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Hide" ${c.status == false ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Hide" ${detail.status == false ? "checked" : ""} >
                                                                     <label class="form-check-label" for="hideRadio">Hide</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <label for="gender">Feature:</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row form-check-inline">
-                                                            <div class="col-md-3 ">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="feature" id="yesRadio" value="Yes" ${c.is_featured == true ? "checked" : ""} >
-                                                                    <label class="form-check-label" for="showRadio">Yes</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3 ">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="feature" id="noRadio" value="No" ${c.is_featured == false ? "checked" : ""} >
-                                                                    <label class="form-check-label" for="hideRadio">No</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -215,24 +180,10 @@
                                             </div>
                                             <!-- -->
 
-                                            <div class="col-md-12" style="margin-bottom: 5%">
-                                                <label for="content">Content:</label>
-                                                <textarea id="content" name="content" style="height: 500px; resize: none;" class="form-control">${c.detail}</textarea>
-                                                <script>
-                                                    CKEDITOR.replace('content', {
-                                                        resize_enabled: false // Ngăn chặn CKEditor resize
-                                                    });
-                                                </script>
-                                            </div>
-                                            <input type="hidden" name="formAction" value="${param.action.equals("add") ? "add": "update" }">
-                                            <input type="hidden" name="blogID" value="${param.ID}">
 
                                             <div class="row" style="margin-bottom: 5%">
-                                                <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
-                                                    <button type="submit" class="btn btn-primary btn-block" id="addButton" onclick="validateInputs(event)">Add</button>
-                                                </div>
-                                                <div class="col-md-3" style="${param.action.equals("add") ? "display: none;": "" }">
-                                                    <button type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)">Save</button>
+                                                <div class="col-md-3">
+                                                    <input type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)">
                                                 </div>
                                                 <div class="col-md-3">
                                                     <button type="button" class="btn btn-primary btn-block" id="backButton">Back</button>

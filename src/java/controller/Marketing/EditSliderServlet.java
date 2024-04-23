@@ -13,14 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Slider;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="SliderDetailServlet", urlPatterns={"/marketing/sliderdetail"})
-public class SliderDetailServlet extends HttpServlet {
+@WebServlet(name="EditSliderServlet", urlPatterns={"/marketing/editdetail"})
+public class EditSliderServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,7 +30,6 @@ public class SliderDetailServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
     } 
 
@@ -46,17 +44,7 @@ public class SliderDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String id = request.getParameter("id");
-        SliderDAO dao = new SliderDAO();
-        Slider slider = dao.getSliderById(id);
-        String a = slider.getDescription();
-        
-        if(!a.isEmpty()){
-            System.out.println(a);
-        }
-        
-        request.setAttribute("detail", slider);
-        request.getRequestDispatcher("../views/marketing/slider/sliderDetails.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 
@@ -69,7 +57,21 @@ public class SliderDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            String sname = request.getParameter("name");
+            String sdescription = request.getParameter("description");
+            String surl = request.getParameter("url");
+            String simage = request.getParameter("image");
+            String sstatus = request.getParameter("status");
+            String sfeatured_item_id = request.getParameter("featured_item_id");
+            String stype = request.getParameter("type");
+            String sid = request.getParameter("id");
+            SliderDAO dao = new SliderDAO();
+            dao.editSlider(sname, sdescription, surl, simage, Boolean.parseBoolean(sstatus), 0, true, Integer.parseInt(sid));
+            response.sendRedirect("/SWP391_G1_OnlineShop/marketing/sliderlist");
+        }
     }
 
     /** 
