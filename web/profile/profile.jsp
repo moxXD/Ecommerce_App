@@ -58,32 +58,13 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label class="form-label">Username</label> 
-                                        <input type="text" class="form-control mb-1" value="${us.fullname}${ur.fullname}">
+                                        <input type="text" class="form-control mb-1" value="${us.fullname}">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">E-mail</label>
-                                        <input type="text" class="form-control mb-1" value="${us.email}${ur.email}" disabled >
+                                        <input type="text" class="form-control mb-1" value="${us.email}" disabled >
 
-                                        <c:if test="${us.status eq false}" >
-                                            <form action="Profile" method="post">
-                                                <div class="alert alert-warning mt-3">                                                   
-                                                    <label for="email-for-pass">Enter your email address</label> 
-                                                    <input value="${emailInputted}" class="form-control" type="text" name="email" id="email-for-pass" required="">
-                                                    <input type="hidden" value="confirm" name="action"/>
-                                                    <button type="submit" class="btn btn-default">Confirmation</button>
-                                                </div> 
-                                            </form>
-                                        </c:if>
-                                        <c:if test="${ur.status eq false }">
-                                            <form action="Profile" method="post">
-                                                <div class="alert alert-warning mt-3">                                                   
-                                                    <label for="email-for-pass">Enter your email address</label> 
-                                                    <input value="${emailInputted}" class="form-control" type="text" name="email" id="email-for-pass" required="">
-                                                    <input type="hidden" value="confirm" name="action"/>
-                                                    <button type="submit" class="btn btn-default">Confirmation</button>
-                                                </div> 
-                                            </form>
-                                        </c:if>
+                                        
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Company</label>

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller.product;
+package controller.Marketing;
 
 import dal.ProductDAO;
 import dal.SettingDAO;
@@ -23,7 +23,7 @@ import model.Product;
  *
  * @author Admin
  */
-@WebServlet(name="ProductDetail", urlPatterns={"/ProductDetail"})
+@WebServlet(name="ProductDetail", urlPatterns={"/marketing/ProductDetail"})
 public class ProductDetail extends HttpServlet {
    
     /** 

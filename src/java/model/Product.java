@@ -10,6 +10,11 @@ package model;
  */
 public class Product {
 
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", brandid=" + brandid + ", categoryProductId=" + categoryProductId + ", settings=" + settings + ", brands=" + brands + ", cate=" + cate + ", description=" + description + ", specification=" + specification + ", imageUrl=" + imageUrl + ", stock=" + stock + ", category=" + category + ", brand=" + brand + ", price=" + price + ", salePrice=" + salePrice + ", imgUrl=" + imgUrl + ", status=" + status + ", isFeatured=" + isFeatured + '}';
+    }
+
     private int id;
     private String name;
     private int brandid;

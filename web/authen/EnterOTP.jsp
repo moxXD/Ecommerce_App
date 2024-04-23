@@ -90,7 +90,7 @@
             });
 
             function startTimer() {
-                let countdown = 20; // 30 seconds
+                let countdown = 30; // 30 seconds
                 const resendBtn = document.getElementById('resendBtn');
                 const timerElement = document.getElementById('timer');
                 const otp = document.querySelector(".input-group");
@@ -102,7 +102,6 @@
                         resendBtn.removeAttribute('disabled');
                         resendBtn.style.display = 'block'; // Show the button
                         timerElement.style.display = 'none'; // Hide the timer text
-                        opt.style.display = "none";
                     } else {
                         timerElement.textContent = 'Resend in ' + countdown + ' seconds';
                        
@@ -144,7 +143,7 @@
                         if (response.status === 'success-forgotpassword') {
                             window.location.href = 'set-new-pass';
                         } else if (response.status === 'success-emailverification') {
-                            window.location.href = 'Login_Register';
+                            window.location.href = 'Login';
                         } else {
                             document.querySelector('#err__container').innerHTML = response.message;
                         }
