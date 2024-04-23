@@ -189,7 +189,11 @@
                         </div>
                     </form>
                     <div class="table-responsive">
-
+                        <div class="form-group">
+                            <div class="col-md-2" style="float: right; margin-bottom: 1%">
+                                <button type="button" class="btn btn-primary btn-block" onclick="redirectToAddSlider()">Add New Slider</button>
+                            </div>
+                        </div>
 
                         <table class="table user-table">
 
@@ -234,12 +238,12 @@
                                         <td>
                                             <!--nut edit-->
                                             <a href="editSlider?id=${slider.id}">Edit</a>
-                                            
+
                                             <!-- Nút xóa slider -->
-                                             <a href="deleteSlider?sliderid=${slider.id}" onclick="return confirm('Are you sure you want to delete this slider?'); return false;">Delete</a>
+                                            <a href="deleteSlider?sliderid=${slider.id}" onclick="return confirm('Are you sure you want to delete this slider?'); return false;">Delete</a>
                                             <form action="deleteSlider" method="post" style="display:inline;">
                                                 <input type="hidden" name="id" value="${slider.id}" />
-<!--                                                <button type="submit" class="btn-link" onclick="return confirm('Are you sure you want to delete this slider?');">Delete</button>-->
+                                                <!--                                                <button type="submit" class="btn-link" onclick="return confirm('Are you sure you want to delete this slider?');">Delete</button>-->
                                             </form>
                                         </td>
                                     </tr>
@@ -300,8 +304,8 @@
                     return false;
                 }
             }
-            function redirectToAddBlog() {
-                window.location.href = 'blogdetail?action=add';
+            function redirectToAddSlider() {
+                window.location.href = 'slidedetail?action=add';
             }
         </script>
         <!-- jQuery 2.0.2 -->

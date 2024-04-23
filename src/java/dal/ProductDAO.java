@@ -55,7 +55,7 @@ public class ProductDAO extends DBContext{
     
     public List<Product> getRecommendItem(){
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM swp391_g1_v3.4.product LIMIT 6";
+        String sql = "SELECT * FROM `swp391_g1_v3.4`.product LIMIT 6";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);

@@ -94,7 +94,7 @@
                                                         <h2>${f.name}</h2>
                                                         <h2>${f.price}</h2>
                                                         <p>${f.specification}</p>
-                                                        <a href="productdetail?id=${s.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
+                                                        <a href="productdetail?id=${f.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
                                                         <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                                                     </div>
 
@@ -112,7 +112,7 @@
                                             <div class="product-image-wrapper">
                                                 <div class="single-products">
                                                     <div class="productinfo text-center">
-                                                        <img src="${s.imageUrl}" alt="" />
+                                                        <img src="<c:url value='/uploads/${s.imageUrl}'/> alt="" >
                                                         <h2>${s.name}</h2>
                                                         <h2>${s.price}</h2>
                                                         <p>${s.specification}</p>
