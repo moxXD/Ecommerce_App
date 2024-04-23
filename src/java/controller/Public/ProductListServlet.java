@@ -76,12 +76,12 @@ public class ProductListServlet extends HttpServlet {
         // variable for pagination
         int page = 1;
         int recordPerPage = 6;
-        int cateId = 0,brandId=0;
+        int cateId = 0, brandId = 0;
         // get request parameter
         String page_raw = request.getParameter("page");
         String cateId_raw = request.getParameter("categoryId");
         String search_raw = request.getParameter("searchInput");
-        String brandId_raw=request.getParameter("brandId");
+        String brandId_raw = request.getParameter("brandId");
         List<Product> pList = new ArrayList<>();
         // parse integer
         if (page_raw != null && !page_raw.isEmpty()) {
@@ -98,7 +98,7 @@ public class ProductListServlet extends HttpServlet {
                 Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         }
-        if(brandId_raw!=null && !brandId_raw.isEmpty()){
+        if (brandId_raw != null && !brandId_raw.isEmpty()) {
             try {
                 brandId = Integer.parseInt(brandId_raw);
             } catch (NumberFormatException e) {
@@ -107,8 +107,8 @@ public class ProductListServlet extends HttpServlet {
         }
         // get pagination production list with added filter
         pList = pDao.getProductWithFilter((page - 1) * recordPerPage,
-                recordPerPage, search_raw, cateId,brandId);
-
+                recordPerPage, search_raw, cateId, brandId);
+        
         int noOfrecord = pDao.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
         // get product category data

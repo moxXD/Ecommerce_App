@@ -40,46 +40,44 @@
                         </div>
                     </div>
                     <div class="col-sm-9 padding-right">
-                        <c:set value="${requestScope.data}" var="d"/>
+                        <form action="productlist" method="post">
 
-                        <div class="product-details"><!--product-details-->
-                            <form action="productdetail" method="post">
+                            <c:set value="${requestScope.data}" var="d"/>
+
+                            <div class="product-details"><!--product-details-->
                                 <div class="col-sm-5">
                                     <div class="view-product">
-                                        <img src="<c:url value='/uploads/${d.imgUrl}'/>"
+                                        <img src="<c:url value='/uploads/${d.imageUrl}'/>"
                                              alt="Product Image" class="product-image">
                                     </div>
                                 </div>
-                                <div class="col-sm-7">
-                                    <div class="product-information"><!--/product-information-->
-                                        <h2>${d.name}</h2>
-                                        <fmt:formatNumber value="${d.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
-                                        <p>Product id: ${d.id}</p>
-                                        <span>
-                                            <c:choose>
-                                                <c:when test="${not empty d.salePrice}">
-                                                    <jsp:useBean id="now" class="java.util.Date"/>
-                                                    <c:choose>
-                                                        <c:when test="${d.salePrice.start<now && d.salePrice.end>now}">
-                                                            <fmt:formatNumber value="${d.salePrice.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
-                                                            <span style="text-decoration: line-through;color: #ff3333">Price: ${formattedPrice}</span>
-                                                            <span >Sale Price: ${formattedSalePrice}</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span >Price: ${formattedPrice}</span>
-                                                            <span>Not on sale</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span>Price: ${formattedPrice}</span>
-                                                    <span>Not on sale</p>
+                                <form action="productdetail" method="post">
+
+                                    <div class="col-sm-7">
+                                        <div class="product-information"><!--/product-information-->
+                                            <h2>${d.name}</h2>
+                                            <p>Product id: ${d.id}</p>
+                                            <span>
+                                                <fmt:formatNumber value="${d.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
+                                                <c:choose>
+                                                    <c:when test="${not empty d.salePrice}">
+                                                        <fmt:formatNumber value="${d.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
+                                                        <span style="text-decoration: line-through;color: #ff3333">Price: ${formattedPrice}</span>
+                                                        <span >Sale Price: ${formattedSalePrice}</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span >Price: ${formattedPrice}</span>
+                                                        <span>Not on sale</span>
                                                     </c:otherwise>
                                                 </c:choose>
+
                                             </span>
-                                            <label for="quantity">Quantity:</label>
-                                            <input type="text" name="quantity" id="quantity" value="3" />
-                                            <button type="button" class="btn btn-fefault cart">
+                                            <input type="hidden" name="productId" value="${d.id}"/>
+                                            <button type="submit" class="btn btn-danger ">
+                                                Buy now
+                                            </button>
+                                            <button  type="button" onclick="addToCart(${d.id})"
+                                                     class="btn btn-info ">
                                                 <i class="fa fa-shopping-cart"></i>
                                                 Add to cart
                                             </button>
@@ -88,31 +86,45 @@
                                             <p><b>Condition:</b> New</p>
                                             <p><b>Brand:</b> ${d.brand.value}</p>
 
-                                    </div><!--/product-information-->
+                                        </div><!--/product-information-->
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="category-tab shop-details-tab"><!--category-tab-->
+                                <div class="col-sm-12">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#details" data-toggle="tab">Details</a></li>
+
+                                        <li ><a href="#reviews" data-toggle="tab">FeedBack</a></li>
+                                    </ul>
                                 </div>
-                            </form>
-                        </div>
-                        <div class="category-tab shop-details-tab"><!--category-tab-->
-                            <div class="col-sm-12">
-                                <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#details" data-toggle="tab">Details</a></li>
-
-                                    <li ><a href="#reviews" data-toggle="tab">FeedBack</a></li>
-                                </ul>
-                            </div>
-                            <div class="tab-content">
-                                ${d.description}
-                                
-
-                            </div>
-                        </div><!--/category-tab-->
+                                <div class="tab-content">
+                                    ${d.description}
+                                </div>
+                            </div><!--/category-tab-->
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <%@include file="layout/footer.jsp" %>
+    <script type="text/javascript">
+        function addToCart(id) {
+            window.location.href = 'addtocart?id=' + id;
+        }
+    </script>
+    <script type="text/javascript">
 
+        // Kiểm tra xem có thuộc tính "cartAdded" trong session không
+        var cartAdded = ${sessionScope.cartAdded};
+        if (cartAdded) {
+            // Hiển thị cảnh báo
+            alert("Sản phẩm đã được thêm vào giỏ hàng thành công!");
+            // Xóa thuộc tính "cartAdded" khỏi session sau khi đã sử dụng
+        ${sessionScope.remove("cartAdded")};
+        }
+    </script>
     <script src="js/jquery.js"></script>
     <script src="js/price-range.js"></script>
     <script src="js/jquery.scrollUp.min.js"></script>

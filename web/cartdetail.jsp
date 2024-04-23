@@ -59,7 +59,7 @@
                                 <fmt:formatNumber value="${entry.value.getPrice()}" pattern="###,###.##" var="formattedPrice" />
                                 <tr>
                                     <td class="cart_product">
-                                        <a href=""><img style="width: 100px;height: 100px" src="<c:url value='/uploads/${entry.value.product.imgUrl}'/>" alt=""></a>
+                                        <a href=""><img style="width: 100px;height: 100px" src="<c:url value='/uploads/${entry.value.product.imageUrl}'/>" alt=""></a>
                                     </td>
                                     <td class="cart_description">
                                         <h4 style="margin-left: 30px"><a href="productdetail?id=${entry.value.product.id}">${entry.value.product.name}</a></h4>
@@ -102,7 +102,7 @@
                 </div>
                 <div class="container" >
                     <button class="btn btn-info" onclick="redirectToProductList()">Continue Shopping</button>
-                    <button class="btn btn-primary" style="margin-bottom: 2rem">Check Out</button>
+                    <button class="btn btn-danger" >Check Out</button>
                 </div>
             </div>
         </section> <!--/#cart_items-->

@@ -22,64 +22,65 @@ import model.Setting;
  *
  * @author Admin
  */
-public class ProductDAO extends DBContext{
+public class ProductDAO extends DBContext {
+
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
-    public List<Product> getAllProduct(){
+
+    public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(new Product(rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3), 
-                        rs.getInt(4), 
-                        rs.getDouble(5), 
-                        rs.getString(6), 
-                        rs.getString(7), 
-                        rs.getString(8), 
-                        rs.getBoolean(9), 
-                        rs.getInt(10), 
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getDouble(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getBoolean(9),
+                        rs.getInt(10),
                         rs.getBoolean(11)));
             }
         } catch (Exception e) {
         }
-        
+
         return list;
     }
-    
-    public List<Product> getRecommendItem(){
+
+    public List<Product> getRecommendItem() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product LIMIT 6";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(new Product(rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3), 
-                        rs.getInt(4), 
-                        rs.getDouble(5), 
-                        rs.getString(6), 
-                        rs.getString(7), 
-                        rs.getString(8), 
-                        rs.getBoolean(9), 
-                        rs.getInt(10), 
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getDouble(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getBoolean(9),
+                        rs.getInt(10),
                         rs.getBoolean(11)));
             }
         } catch (Exception e) {
         }
-        
+
         return list;
     }
-    
-    public Product getProductById(String id){
+
+    public Product getProductById(String id) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product where id =?";
         try {
@@ -87,17 +88,17 @@ public class ProductDAO extends DBContext{
             ps = conn.prepareStatement(sql);
             ps.setString(1, id);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 return new Product(rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3), 
-                        rs.getInt(4), 
-                        rs.getDouble(5), 
-                        rs.getString(6), 
-                        rs.getString(7), 
-                        rs.getString(8), 
-                        rs.getBoolean(9), 
-                        rs.getInt(10), 
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getDouble(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getBoolean(9),
+                        rs.getInt(10),
                         rs.getBoolean(11));
             }
         } catch (Exception e) {
@@ -111,7 +112,6 @@ public class ProductDAO extends DBContext{
 //            System.out.println(o);
 //        }
 //    }
-
 
     public Product getProduct(int id) {
         String sql = "SELECT\n"
@@ -301,20 +301,21 @@ public class ProductDAO extends DBContext{
     private final String PRODUCT_DESCRIPTION = "description";
     private final String PRODUCT_SPECIFICATION = "specification";
     private final String PRODUCT_IMAGE_URL = "imageurl";
+    private final String PRODUCT_SALE_PRICE = "sale_price";
+    private final String PRODUCT_IS_SALE = "is_sale";
     private final String PRODUCT_STATUS = "status";
     private final String PRODUCT_STOCK = "stock";
     private final String PRODUCT_Featured = "is_featured";
 
     DBContext context = new DBContext();
 
-
     // get pagination product list with filtered condition
     public List<Product> getProductWithFilter(int offset, int limit, String search,
-            int categoryId,int brandId) {
+            int categoryId, int brandId) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS *\n"
                 + "FROM " + PRODUCT_TABLE
-                + " WHERE 1=1 AND "+PRODUCT_STOCK+">0 ";
+                + " WHERE 1=1 AND " + PRODUCT_STOCK + ">0 ";
         // add filter condition
         if (categoryId != 0) {
             sql += " AND " + PRODUCT_CATEGORY_ID + "=? ";
@@ -349,18 +350,18 @@ public class ProductDAO extends DBContext{
                 SettingDAO stDao = new SettingDAO();
                 Setting cate = stDao.getSettingById(rs.getInt(PRODUCT_CATEGORY_ID));
                 Setting brand = stDao.getSettingById(rs.getInt(PRODUCT_BRAND_ID));
-                SaleDAO sDao = new SaleDAO();
-                Sale s = sDao.getSalePriceByProductId(rs.getInt(PRODUCT_ID));
+//                SaleDAO sDao = new SaleDAO();
+//                Sale s = sDao.getSalePriceByProductId(rs.getInt(PRODUCT_ID));
                 Product p = new Product(rs.getInt(PRODUCT_ID),
-                        rs.getInt(PRODUCT_STOCK),
                         rs.getString(PRODUCT_NAME),
-                        cate,
-                        brand,
-                        rs.getDouble(PRODUCT_PRICE),
-                        s,
                         rs.getString(PRODUCT_DESCRIPTION),
                         rs.getString(PRODUCT_SPECIFICATION),
                         rs.getString(PRODUCT_IMAGE_URL),
+                        rs.getInt(PRODUCT_STOCK),
+                        rs.getDouble(PRODUCT_SALE_PRICE),
+                        cate,
+                        brand,
+                        rs.getDouble(PRODUCT_PRICE),
                         rs.getBoolean(PRODUCT_STATUS),
                         rs.getBoolean(PRODUCT_Featured));
                 list.add(p);
@@ -453,18 +454,18 @@ public class ProductDAO extends DBContext{
                 SettingDAO stDao = new SettingDAO();
                 Setting cate = stDao.getSettingById(rs.getInt(PRODUCT_CATEGORY_ID));
                 Setting brand = stDao.getSettingById(rs.getInt(PRODUCT_BRAND_ID));
-                SaleDAO sDao = new SaleDAO();
-                Sale s = sDao.getSalePriceByProductId(rs.getInt(PRODUCT_ID));
+//                SaleDAO sDao = new SaleDAO();
+//                Sale s = sDao.getSalePriceByProductId(rs.getInt(PRODUCT_ID));
                 p = new Product(rs.getInt(PRODUCT_ID),
-                        rs.getInt(PRODUCT_STOCK),
                         rs.getString(PRODUCT_NAME),
-                        cate,
-                        brand,
-                        rs.getDouble(PRODUCT_PRICE),
-                        s,
                         rs.getString(PRODUCT_DESCRIPTION),
                         rs.getString(PRODUCT_SPECIFICATION),
                         rs.getString(PRODUCT_IMAGE_URL),
+                        rs.getInt(PRODUCT_STOCK),
+                        rs.getDouble(PRODUCT_SALE_PRICE),
+                        cate,
+                        brand,
+                        rs.getDouble(PRODUCT_PRICE),
                         rs.getBoolean(PRODUCT_STATUS),
                         rs.getBoolean(PRODUCT_Featured));
             }
@@ -482,14 +483,12 @@ public class ProductDAO extends DBContext{
         return p;
     }
 
-//    public static void main(String[] args) {
-//        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0);
-//        for (Product product : list) {
-//            System.out.println("id: " + product.getId());
-//            System.out.println("name: " + product.getName());
-//            if (product.getSalePrice() != null) {
-//                System.out.println("sale: " + product.getSalePrice().toString());
-//            }
-//        }
-//    }
+    public static void main(String[] args) {
+        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0, 0);
+        for (Product product : list) {
+            System.out.println("id: " + product.getId());
+            System.out.println("name: " + product.getName());
+            System.out.println("imgURL: " + product.getImageUrl());
+        }
+    }
 }

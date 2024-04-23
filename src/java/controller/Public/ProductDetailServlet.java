@@ -137,6 +137,7 @@ public class ProductDetailServlet extends HttpServlet {
                     session.setAttribute("cartAdded", true);
 
                 }
+                System.out.println("here");
                 response.sendRedirect("cartdetail");
             } catch (NumberFormatException e) {
                 Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, e);

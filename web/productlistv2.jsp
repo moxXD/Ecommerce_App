@@ -59,14 +59,13 @@
                                 <form action="productlist" method="post">
                                     <input type="hidden" name="productId" value="${p.id}"/>
                                     <div class="col-sm-4">
-                                        <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
                                         <div class="single-products">
                                             <div class="product-card">
                                                 <div class="productinfo text-center">
                                                     <a href="productdetail?id=${p.id}"style="justify-content: center" >
                                                         <c:choose>
-                                                            <c:when test="${not empty p.imgUrl}">
-                                                                <img src="<c:url value='/uploads/${p.imgUrl}'/>" 
+                                                            <c:when test="${not empty p.imageUrl}">
+                                                                <img src="<c:url value='/uploads/${p.imageUrl}'/>" 
                                                                      alt="${p.name}"style="width: 20rem;height: 20rem">
                                                             </c:when>
                                                             <c:otherwise>
@@ -78,24 +77,19 @@
 <!--                                                    <img src="<c:url value='/uploads/${p.imgUrl}'/>" alt="" 
                                                          style="width: 20rem;height: 20rem"/>-->
                                                     <h2>${p.name}</h2>
-                                                    <c:if test="${not empty p.salePrice}">
-                                                        <jsp:useBean id="now" class="java.util.Date"/>
-                                                        <c:choose>
-                                                            <c:when test="${p.salePrice.start < now && now < p.salePrice.end}">
-                                                                <fmt:formatNumber value="${p.salePrice.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
-                                                                <p class="card-text" style="text-decoration: line-through;color: #ff3333">Price: ${formattedPrice}</p>
-                                                                <p class="card-text" style="color: #3af23a">Sale Price: ${formattedSalePrice}</p>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <p class="card-text" style="color: #3af23a">Price: ${formattedPrice}</p>
-                                                                <p class="card-text">Not on sale</p>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </c:if>
-                                                    <c:if test="${empty p.salePrice}">
-                                                        <p class="card-text" style="color: #3af23a">Price: ${formattedPrice}</p>
-                                                        <p class="card-text" >Not on sale</p>
-                                                    </c:if>
+                                                    <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
+                                                    <c:choose>
+                                                        <c:when test="${p.salePrice!=0}">
+                                                            <fmt:formatNumber value="${p.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
+                                                            <p class="card-text" style="text-decoration: line-through;color: #ff3333">Price: ${formattedPrice}</p>
+                                                            <p class="card-text" style="color: #3af23a">Sale Price: ${formattedSalePrice}</p>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <p class="card-text" style="color: #3af23a">Price: ${formattedPrice}</p>
+                                                            <p class="card-text">Not on sale</p>
+                                                        </c:otherwise>
+                                                    </c:choose>
+
                                                     <button class="btn btn-info">Buy now</button>
                                                     <button class="btn btn-danger "
                                                             onclick="addToCart(${p.id})"
@@ -147,16 +141,7 @@
         </section>
         <%@include  file="layout/footer.jsp" %>
         <script type="text/javascript">
-            //             Đặt sự kiện change cho tất cả các radio button
-            document.querySelectorAll('input[type="radio"]').forEach(function (radio) {
-                radio.addEventListener('click', function () {
-
-
-                    // Submit form
-                    var form = document.getElementById('filterForm');
-                    form.submit();
-                });
-            });
+            
             function addToCart(id) {
                 window.location.href = 'addtocart?id=' + id;
             }
@@ -166,6 +151,7 @@
             }
         </script>
         <script type="text/javascript">
+            
             // Kiểm tra xem có thuộc tính "cartAdded" trong session không
             var cartAdded = ${sessionScope.cartAdded};
             if (cartAdded) {
