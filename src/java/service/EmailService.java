@@ -101,7 +101,6 @@ public class EmailService {
         if (action.equals("forgot-password")) {
             return 1;
         } else if (action.equals("confirm-email")) {
-            
             return 2;
         }
         return 0;
@@ -130,6 +129,29 @@ public class EmailService {
         return null;
     }
 
+    public static String SendOTPtoSignUp(String gmail) {
+        String OTP = EmailService.getOTP();
+        String subject = "Your verify code is " + OTP + "\n";
+        String message = "Dear " + gmail + ",\n"
+                + "\n"
+                + "Use this OTP to verify your account in TechMart.\n"
+                + "\n"
+                + "Your OTP: " + OTP + "\n"
+                + "\n"
+                + "Please use this OTP to continue with your registation.\n"
+                + "\n"
+                + "For security reasons, this OTP will expire in 10 minutes.\n"
+                + "\n"
+                + "Thank you .\n"
+                + "\n"
+                + "Best regards,\n"
+                + "TechMart";
+        if (send(gmail, subject, message)) {
+            return OTP;
+        }
+        return null;
+    }
+
     public void sendNewPassword(String name, String email, String password) {
         String subject = "Your New Password for TECHMART";
         String message = "<html><body><p>Dear " + name + ",</p>"
@@ -140,12 +162,13 @@ public class EmailService {
         send(email, subject, message);
 
     }
+
     public static void main(String[] args) {
-        String emailTo = "23trongthanh@gmail.com";
+        String emailTo = "2306trongthanh@gmail.com";
         String emailSubjectString = "service.techmart11@gmail.com";
         UserDAO ud = new UserDAO();
         User u = ud.getUserByEmail(emailTo);
-        String otp = EmailService.SendOTPConfirmEmail(u);
+        String otp = EmailService.SendOTPtoSignUp(emailTo);
         boolean send = EmailService.send(emailTo, emailSubjectString, otp);
         System.out.println(otp);
     }

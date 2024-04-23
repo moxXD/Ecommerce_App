@@ -27,6 +27,13 @@ public class ProductDAO extends DBContext{
     PreparedStatement ps = null;
     ResultSet rs = null;
     
+    public static void main(String[] args) {
+        ProductDAO pd = new ProductDAO();
+        List<Product> lp = pd.getAllProduct();
+        for (Product product : lp) {
+            System.out.println(product);
+        }
+    }
     public List<Product> getAllProduct(){
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product";

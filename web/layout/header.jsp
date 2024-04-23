@@ -4,6 +4,7 @@
     Author     : Admin
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -78,7 +79,12 @@
                                     <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
                                     <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                                     <li><a href="cartdetail"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-                                    <li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+                                        <c:if test="${userSession != null}">
+                                        <li><a href="Logout"><i class="fa fa-lock"></i> Logout</a></li>
+                                        </c:if>
+                                        <c:if test="${userSession == null}">
+                                        <li><a href="Login"><i class="fa fa-lock"></i> Login</a></li>
+                                        </c:if>
                                 </ul>
                             </div>
                         </div>
@@ -116,8 +122,9 @@
                                             <li><a href="blog-single.html">Blog Single</a></li>
                                         </ul>
                                     </li> 
-
-                                    <li><a href="admin/dashboard">Admin</a></li>
+                            
+                                        <li><a href="admin/dashboard">Admin</a></li>
+                                    
                                 </ul>
                             </div>
                         </div>

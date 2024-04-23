@@ -37,49 +37,28 @@
 
         <section id="form"><!--form-->
             <div class="container">
-                <div class="row">
-                    <div class="col-sm-4 col-sm-offset-1">
+                <div class="row" >
+                    <div  style="text-align: center;margin: 0 auto;
+                         width: 300px;">
                         <div class="login-form"><!--login form-->
                             <h2>Login to your account</h2>
-                            <form action="Login_Register" method="post">
+                            <form action="Login" method="post">
                                 <input type="email" name="gmail" placeholder="Email Address" />						
                                 <input type="password" name="pass" placeholder="Password" />
-                                <input type="hidden" name="action" value="login" />
-                                <span>
-                                    <input type="checkbox" class="checkbox"> 
-                                    Keep me signed in
-                                </span>
                                 <div></div>
-                                <span><a href="ForgotPassword"/>Forgot Password</a></span>
+                                <span><a href="ForgotPassword"/>Forgot Password</a></span><br>
+                                <span><a href="Register"/>Sign up account</a></span>
                                 <button type="submit" class="btn btn-default">Login</button>
                             </form>
                             ${wrong}
                             ${user_registed}
                             ${confirmSuccess}
                             ${status}
+                            ${user_registed_successfull}
                         </div><!--/login form-->
                     </div>
-                    <div class="col-sm-1">
-                        <h2 class="or">OR</h2>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="signup-form"><!--sign up form-->
-                            <h2>New User Signup!</h2>
-                            <form action="Login_Register" method="post">
-                                <input type="text" name="name" placeholder="Name"/>
-                                <input type="email" name="gmail" placeholder="Email Address"/>
-                                <input type="password" name="pass" placeholder="Password"/>
-                                <input type="hidden" name="action" value="register" />
-                                <button type="submit" class="btn btn-default">Signup</button>
-                            </form> ${nullInput}
-                            ${nameMax}
-                            ${nameMin}
-                            ${passMin}
-                            ${passMax}
-                            ${exitstedMail}
-                        </div><!--/sign up form-->
 
-                    </div>
+
                 </div>
 
             </div>
