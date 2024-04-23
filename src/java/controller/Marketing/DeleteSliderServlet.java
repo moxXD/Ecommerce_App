@@ -9,19 +9,15 @@ import dal.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Slider;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="SliderListServlet", urlPatterns={"/marketing/sliderlist"})
-public class SliderListServlet extends HttpServlet {
+public class DeleteSliderServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,19 +29,12 @@ public class SliderListServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SliderListServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SliderListServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
+        String sid = request.getParameter("sliderid");
+        int sliderId = Integer.parseInt(sid);
+        SliderDAO dao = new SliderDAO();
+        dao.deleteSlider(sliderId);
+        response.sendRedirect("/SWP391_G1_OnlineShop/marketing/sliderlist");
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -58,11 +47,7 @@ public class SliderListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        SliderDAO dao = new SliderDAO();
-        List<Slider> listSlider = dao.getAllSlider();
-        request.setAttribute("listS", listSlider);
-        request.getRequestDispatcher("../views/marketing/slider/sliderList.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 
