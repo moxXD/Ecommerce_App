@@ -58,7 +58,7 @@ public class AddSliderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("../views/marketing/slider/addSlider.jsp").forward(request, response);
+
     }
 
     /**
@@ -72,17 +72,24 @@ public class AddSliderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        String url = request.getParameter("url");
-        String image = request.getParameter("image");
-        String status = request.getParameter("status");
-        String featured_item_id = request.getParameter("featured_item_id");
-        String type = request.getParameter("type");
-        
-        SliderDAO dao = new SliderDAO();
-        dao.insertSlider(name, description, url, image, true, 0, true);
-        response.sendRedirect("/SWP391_G1_OnlineShop/marketing/sliderlist");
+
+        String service = request.getParameter("service");
+        if (service == null) {
+            request.getRequestDispatcher("../views/marketing/slider/addSlider.jsp").forward(request, response);
+        } else {
+            String name = request.getParameter("name");
+            String description = request.getParameter("description");
+            String url = request.getParameter("url");
+            String image = request.getParameter("image");
+            String status = request.getParameter("status");
+            String featured_item_id = request.getParameter("featured_item_id");
+            String type = request.getParameter("type");
+
+            SliderDAO dao = new SliderDAO();
+            dao.insertSlider(name, description, url, image, status==null || Boolean.parseBoolean(status), 0, true);
+            response.sendRedirect("/SWP391_G1_OnlineShop/marketing/sliderlist");
+        }
+
     }
 
     /**

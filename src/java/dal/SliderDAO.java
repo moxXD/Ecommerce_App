@@ -23,7 +23,7 @@ public class SliderDAO extends DBContext {
 
     public List<Slider> getAllSlider() {
         List<Slider> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v3.4`.slider";
+        String sql = "SELECT * FROM `swp391_g1_v1`.slider";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -46,7 +46,7 @@ public class SliderDAO extends DBContext {
     }
 
     public void deleteSlider(int sid) {
-        String sql = "DELETE FROM `swp391_g1_v3.4`.`slider`\n"
+        String sql = "DELETE FROM `swp391_g1_v1`.`slider`\n"
                 + "WHERE id =?";
         try {
             conn = new DBContext().getConnection();
@@ -60,7 +60,7 @@ public class SliderDAO extends DBContext {
 
     public Slider getSliderById(String id) {
         List<Slider> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v3.4`.slider\n"
+        String sql = "SELECT * FROM `swp391_g1_v1`.slider\n"
                 + "where id = ?";
         try {
             conn = new DBContext().getConnection();
@@ -84,7 +84,7 @@ public class SliderDAO extends DBContext {
 
     public Slider editSlider(String name, String description, String url, String image_url, boolean status, int featured_item_id, boolean type, int id) {
 
-        String sql = "UPDATE `swp391_g1_v3.4`.`slider`\n"
+        String sql = "UPDATE `swp391_g1_v1`.`slider`\n"
                 + "SET\n"
                 + "`name` = ?,\n"
                 + "`description` = ?,\n"
@@ -113,7 +113,7 @@ public class SliderDAO extends DBContext {
 
     public Slider insertSlider(String name, String description, String url, String image_url, boolean status, int featured_item_id, boolean type) {
 
-        String sql = "INSERT INTO `swp391_g1_v3.4`.`slider`\n"
+        String sql = "INSERT INTO `swp391_g1_v1`.`slider`\n"
                 + "(`name`,\n"
                 + "`description`,\n"
                 + "`url`,\n"
@@ -143,6 +143,49 @@ public class SliderDAO extends DBContext {
         } catch (Exception e) {
         }
         return null;
+    }
+
+    //dem so cot trong sql
+    public int getTotalSlider() {
+        String sql = "SELECT COUNT(*)\n"
+                + "FROM slider;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+
+        return 0;
+    }
+
+    public List<Slider> pagingSlider(int index) {
+        List<Slider> list = new ArrayList<>();
+        String sql = "SELECT * FROM `swp391_g1_v1`.slider\n"
+                + "ORDER BY id\n"
+                + "LIMIT ?, 7;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, (index-1)*7);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new Slider(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getBoolean(6),
+                        rs.getInt(7),
+                        rs.getBoolean(8)));
+            }
+        } catch (Exception e) {
+        }
+
+        return list;
     }
 
 //        public static void main(String[] args) {

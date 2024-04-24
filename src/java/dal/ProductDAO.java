@@ -29,7 +29,7 @@ public class ProductDAO extends DBContext{
     
     public List<Product> getAllProduct(){
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM swp391_g1_v3.4.product";
+        String sql = "SELECT * FROM swp391_g1_v1.product";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -55,7 +55,7 @@ public class ProductDAO extends DBContext{
     
     public List<Product> getRecommendItem(){
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v3.4`.product LIMIT 6";
+        String sql = "SELECT * FROM `swp391_g1_v1`.product LIMIT 6";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -81,7 +81,7 @@ public class ProductDAO extends DBContext{
     
     public Product getProductById(String id){
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM swp391_g1_v3.4.product where id =?";
+        String sql = "SELECT * FROM swp391_g1_v1.product where id =?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);

@@ -146,13 +146,13 @@
                                                         <div class="row form-check-inline">
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="false" ${detail.status == false ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="true" ${detail.status == true ? "checked" : ""} >
                                                                     <label class="form-check-label" for="showRadio">Active</label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="true" ${detail.status == true ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="false" ${detail.status == false ? "checked" : ""} >
                                                                     <label class="form-check-label" for="hideRadio">Inactive</label>
                                                                 </div>
                                                             </div>

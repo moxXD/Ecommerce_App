@@ -59,8 +59,24 @@ public class SliderListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String indexPage = request.getParameter("page");
+        if(indexPage==null){
+            indexPage="1";
+        }
+        int page = Integer.parseInt(indexPage);
+        
         SliderDAO dao = new SliderDAO();
         List<Slider> listSlider = dao.getAllSlider();
+        //get total slider
+        int count = dao.getTotalSlider();
+        int endPage = count/7;
+        if(count % 7 != 0){
+            endPage++;
+        }
+        List<Slider> list = dao.pagingSlider(page);
+        
+        request.setAttribute("listP", list);
+        request.setAttribute("endPage", endPage);
         request.setAttribute("listS", listSlider);
         request.getRequestDispatcher("../views/marketing/slider/sliderList.jsp").forward(request, response);
     } 

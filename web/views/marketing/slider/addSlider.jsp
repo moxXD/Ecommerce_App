@@ -110,6 +110,7 @@
                     <div class="container" >
                         <div class="row ">
                             <form method="POST" action="addslider">
+                                <input type="hidden" name="service" value="q">
                                 <div class="col">
                                     <div class="col-sm-12">
                                         <div class="blog-post-area">
@@ -122,19 +123,19 @@
                                                         <label for="inputLabel1">ID: </label>
                                                         <input type="text" class="form-control" id="id" ${param.action.equals("view")||param.action.equals("update") ? "readonly": "" }  value="${c.id}">
                                                     </div>-->
-                                                    <input name="id" type="hidden" class="form-control" value="${detail.id}" >
+                                                    <input name="id" type="hidden" class="form-control">
 
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Title:</label>
-                                                        <input name="name" type="text" class="form-control"  value="${detail.name}" >
+                                                        <input name="name" type="text" class="form-control">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Description: </label>
-                                                        <input name="description" type="text" class="form-control"  value="${detail.description}" >
+                                                        <input name="description" type="text" class="form-control">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Url: </label>
-                                                        <input name="url" type="text" class="form-control" value="${detail.url}" >
+                                                        <input name="url" type="text" class="form-control" >
                                                     </div>
 
                                                     <div>
@@ -146,13 +147,13 @@
                                                         <div class="row form-check-inline">
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${detail.status == false ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="true">
                                                                     <label class="form-check-label" for="showRadio">Active</label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Hide" ${detail.status == true ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="false">
                                                                     <label class="form-check-label" for="hideRadio">Inactive</label>
                                                                 </div>
                                                             </div>

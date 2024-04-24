@@ -192,7 +192,7 @@
                     </form>
 
                     <!--Nut add-->
-                    <form action="addslider" method="get">
+                    <form action="addslider" method="post">
                         <div class="table-responsive">
                             <div class="form-group">
                                 <div class="col-md-2" style="float: right; margin-bottom: 1%">
@@ -205,7 +205,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID
-                                            <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=id">
+                                            <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=id">
                                                 <i class="fa fa-sort"></i>
                                             </a>
                                         </th>
@@ -215,18 +215,18 @@
 
 
                                         <th>Tiltle
-                                            <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=value">
+                                            <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=value">
                                                 <i class="fa fa-sort"></i>
                                             </a></th>   
 
 
                                         <th>Status
-                                            <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
+                                            <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
                                                 <i class="fa fa-sort"></i>
                                             </a></th>
 
                                         <th>Action
-                                            <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
+                                            <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
                                                 <i class="fa fa-sort"></i>
                                             </a></th>
                                         <!--<th>Action</th>-->
@@ -234,12 +234,12 @@
                                 </thead>
                                 <tbody>
 
-                                    <c:forEach var="slider" items="${listS}">
+                                    <c:forEach var="slider" items="${listP}">
                                         <tr>
                                             <td>${slider.id}</td>
                                             <td><img src="${pageContext.request.contextPath}/images/slider/${slider.image_url}" style="width: 80px; height: 50px;" alt="Slider Image" /></td>
                                             <td>${slider.name}</td>
-                                            <td style="color: ${slider.status ? 'red' : 'green'}">${slider.status ? 'Inactive' : 'Active'}</td>
+                                            <td style="color: ${slider.status ? 'green' : 'red'}">${slider.status ? 'Active' : 'Inactive'}</td>
                                             <td>
                                                 <!--nut edit-->
                                                 <a href="sliderdetail?id=${slider.id}">Edit</a>
@@ -268,13 +268,13 @@
                                         </li>
                                     </c:if>
 
-                                    <c:forEach begin="1" end="${noOfPage}" var="i">
+                                    <c:forEach begin="1" end="${endPage}" var="i">
                                         <c:choose>
                                             <c:when test="${currentPage eq i}">
                                                 <li class="active"><span>${i}</span></li>
                                                     </c:when>
                                                     <c:otherwise>
-                                                <li><a href="bloglist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
+                                                <li><a href="sliderlist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
                                                 </c:otherwise>
                                             </c:choose>
                                         </c:forEach>
