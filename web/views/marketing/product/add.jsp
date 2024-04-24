@@ -72,14 +72,14 @@
 
     </head>
     <body>
-        <%@include file="layout/header.jsp" %>
+        <%@include file="../layout/header.jsp" %>
 
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <%@include file="layout/sidebar.jsp" %>
+                <%@include file="../layout/sidebar.jsp" %>
                 <!-- /.sidebar -->
             </aside>
             <aside class="right-side">
@@ -161,12 +161,11 @@
                 </section>  
             </aside>
         </div>
-    </body>
 
-    <%@include file="layout/footer.jsp" %>
+                <%@include file="../layout/footer.jsp" %>
     <script type="text/javascript">
         document.getElementById("backButton").onclick = function () {
-            location.href = "userlist";
+            location.href = "productlist";
         };
     </script>
     <!-- jQuery 2.0.2 -->

@@ -35,7 +35,7 @@ public class SettingDAO extends DBContext {
     private int noOfrecord;
 
     public ArrayList<Brand> getListBrand() {
-        String sql = "SELECT * FROM swp391_g1.setting\n"
+        String sql = "SELECT * FROM swp391_g1_v1.setting\n"
                 + "where type like '%Brand%'";
         ArrayList<Brand> brandList = new ArrayList<>();
         try {
@@ -52,7 +52,7 @@ public class SettingDAO extends DBContext {
     }
 
     public ArrayList<Category> getListCategory() {
-        String sql = "SELECT * FROM swp391_g1.setting\n"
+        String sql = "SELECT * FROM swp391_g1_v1.setting\n"
                 + "where type like '%Category%'";
         ArrayList<Category> categoryList = new ArrayList<>();
         try {
@@ -70,7 +70,7 @@ public class SettingDAO extends DBContext {
 
     public ArrayList<Setting> getBandC() {
         String sql = "SELECT * FROM swp391_g1_v1.setting\n"
-                + "where setting.type = 'Brand' or setting.type = 'Category'\n"
+                + "where setting.type like '%Brand%' or setting.type like '%Category%'\n"
                 + "order by `order` asc";
         ArrayList<Setting> st = new ArrayList<>();
         try {

@@ -81,26 +81,24 @@
                         </div>
                         <div class="pull-left info">
                             <p>Hello, Thanh</p>
-
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
                     </div>  
                     <ul class="sidebar-menu">
-                        <!--                        <li>
-                                                    <a href="#">
-                                                        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                                                    </a>
-                                                </li>-->
-                        <li class="active">
-                            <a href="bloglist">
-                                <i class="fa fa-users"></i> <span>Blog List</span>
+                        <li>
+                            <a href="dashboard">
+                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
                         </li>
-                        <!--                        <li>
-                                                    <a href="bloglist">
-                                                        <i class="fa fa-gear"></i> <span>Settings</span>
-                                                    </a>
-                                                </li>-->
+                        <li class="active">
+                            <a href="bloglist">
+                                <i class="fa fa-tasks"></i> <span>Blog List</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="productlist">
+                                <i class="fa fa-shopping-cart"></i> <span>Product</span>
+                            </a>
+                        </li>
 
                     </ul>
                 </section>
@@ -213,7 +211,7 @@
                                     <tr>
                                         <td>${id}</td>
                                         <td>
-                                            <c:choose>
+                                        <c:choose>
                                             <c:when test="${empty u.imgUrl}">
                                                 <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle" style="width: 80px; height: 50px;">
                                             </c:when>

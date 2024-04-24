@@ -5,9 +5,11 @@
 package dal;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import model.Brand;
@@ -15,71 +17,74 @@ import model.Category;
 import model.Product;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Blog;
 import model.Sale;
 import model.Setting;
+import model.Statistic;
 
 /**
  *
  * @author Admin
  */
-public class ProductDAO extends DBContext{
+public class ProductDAO extends DBContext {
+
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
-    public List<Product> getAllProduct(){
+
+    public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(new Product(rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3), 
-                        rs.getInt(4), 
-                        rs.getDouble(5), 
-                        rs.getString(6), 
-                        rs.getString(7), 
-                        rs.getString(8), 
-                        rs.getBoolean(9), 
-                        rs.getInt(10), 
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getDouble(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getBoolean(9),
+                        rs.getInt(10),
                         rs.getBoolean(11)));
             }
         } catch (Exception e) {
         }
-        
+
         return list;
     }
-    
-    public List<Product> getRecommendItem(){
+
+    public List<Product> getRecommendItem() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product LIMIT 6";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(new Product(rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3), 
-                        rs.getInt(4), 
-                        rs.getDouble(5), 
-                        rs.getString(6), 
-                        rs.getString(7), 
-                        rs.getString(8), 
-                        rs.getBoolean(9), 
-                        rs.getInt(10), 
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getDouble(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getBoolean(9),
+                        rs.getInt(10),
                         rs.getBoolean(11)));
             }
         } catch (Exception e) {
         }
-        
+
         return list;
     }
-    
-    public Product getProductById(String id){
+
+    public Product getProductById(String id) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product where id =?";
         try {
@@ -87,17 +92,17 @@ public class ProductDAO extends DBContext{
             ps = conn.prepareStatement(sql);
             ps.setString(1, id);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 return new Product(rs.getInt(1),
                         rs.getString(2),
-                        rs.getInt(3), 
-                        rs.getInt(4), 
-                        rs.getDouble(5), 
-                        rs.getString(6), 
-                        rs.getString(7), 
-                        rs.getString(8), 
-                        rs.getBoolean(9), 
-                        rs.getInt(10), 
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getDouble(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getBoolean(9),
+                        rs.getInt(10),
                         rs.getBoolean(11));
             }
         } catch (Exception e) {
@@ -112,7 +117,6 @@ public class ProductDAO extends DBContext{
 //        }
 //    }
 
-
     public Product getProduct(int id) {
         String sql = "SELECT\n"
                 + "p.id,\n"
@@ -124,13 +128,13 @@ public class ProductDAO extends DBContext{
                 + "    p.specification,p.status,\n"
                 + "    p.stock\n"
                 + "FROM\n"
-                + "    product p\n"
+                + "    swp391_g1_v1.product as p\n"
                 + "JOIN\n"
-                + "    setting pc\n"
+                + "    swp391_g1_v1.setting as pc\n"
                 + "ON\n"
                 + "    p.product_category_id = pc.id\n"
                 + "JOIN\n"
-                + "    setting b\n"
+                + "    swp391_g1_v1.setting b\n"
                 + "ON\n"
                 + "    p.brand_id = b.id where p.id = ?";
         try {
@@ -169,13 +173,13 @@ public class ProductDAO extends DBContext{
                 + "    p.specification,p.status,\n"
                 + "    p.stock\n"
                 + "FROM\n"
-                + "    product p\n"
+                + "  swp391_g1_v1.product p\n"
                 + "JOIN\n"
-                + "    setting pc\n"
+                + "    swp391_g1_v1.setting pc\n"
                 + "ON\n"
                 + "    p.product_category_id = pc.id\n"
                 + "JOIN\n"
-                + "    setting b\n"
+                + "    swp391_g1_v1.setting b\n"
                 + "ON\n"
                 + "    p.brand_id = b.id;";
         ArrayList<Product> productList = new ArrayList<>();
@@ -306,7 +310,6 @@ public class ProductDAO extends DBContext{
     private final String PRODUCT_Featured = "is_featured";
 
     DBContext context = new DBContext();
-
 
     // get pagination product list with filtered condition
     public List<Product> getProductWithFilter(int offset, int limit, String search,
@@ -476,8 +479,135 @@ public class ProductDAO extends DBContext{
         return p;
     }
 
-    public static void main(String[] args) {
-        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0);
+    public int getNumberOfProducts() {
+        String sql = "SELECT COUNT(*) FROM `swp391_g1_v1`.`product`";
+        int nproduct = 0;
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                nproduct = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return nproduct;
+    }
+
+    public List<Product> getNewestProduct() throws SQLException {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT * FROM `swp391_g1_v1`.`product` ORDER BY product.create_at DESC LIMIT 5;"; // pagination
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int Id = rs.getInt("id");
+                String name = rs.getString("name");
+                int categoryId = rs.getInt("product_category_id");
+                int brandId = rs.getInt("brand_id");
+                double price = rs.getDouble("price");
+                String des = rs.getString("description");
+                String spec = rs.getString("specification");
+                String imgUrl = rs.getString("imageurl");
+                boolean status = rs.getBoolean("status");
+                int stock = rs.getInt("stock");
+                boolean is_featured = rs.getBoolean("is_featured");
+                double saleprice = rs.getDouble("sale_price");
+                boolean is_sale = rs.getBoolean("is_sale");
+                Timestamp createTime = rs.getTimestamp("create_at");
+                Timestamp updateTime = rs.getTimestamp("update_at");
+//            Setting st = stDAO.getSettingById(roleId);
+                Product u = new Product(Id, name, brandId, categoryId, price, des, spec, imgUrl, status, stock, is_featured, saleprice, is_sale, createTime, updateTime);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+        }
+
+        return list;
+    }
+
+    public List<Statistic> getDataLast7Day(Date proDate, String filproductcate, String filbrand) throws SQLException {
+        List<Statistic> list = new ArrayList<>();
+        String sql = "SELECT days.day AS createdtime, COALESCE(COUNT(product.id), 0) AS count "
+                + "FROM ( "
+                + "    SELECT ? AS day "
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 1 DAY) "
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 2 DAY) "
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 3 DAY) "
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 4 DAY) "
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 5 DAY) "
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 6 DAY) "
+                + ") AS days "
+                + "LEFT JOIN `swp391_g1_v1`.`product` ON DATE(product.create_at) = days.day ";
+
+        String whereClause = "WHERE 1 = 1 ";
+        if (filproductcate != null && !filproductcate.isEmpty()) {
+            whereClause += " AND product.product_category_id = ? ";
+        }
+        if (filbrand != null && !filbrand.isEmpty()) {
+            whereClause += " AND product.brand_id = ? ";
+        }
+        sql += whereClause + "GROUP BY days.day ORDER BY days.day ASC;";
+
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            conn = context.getConnection();
+            stm = conn.prepareStatement(sql);
+            int paramIndex = 1;
+            for (int i = 0; i < 7; i++) {
+                stm.setDate(paramIndex++, proDate);  // Set the same date for all placeholders related to dates
+            }
+            if (filproductcate != null && !filproductcate.isEmpty()) {
+                stm.setInt(paramIndex++, Integer.parseInt(filproductcate));
+            }
+            if (filbrand != null && !filbrand.isEmpty()) {
+                stm.setInt(paramIndex++, Integer.parseInt(filbrand));
+            }
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Statistic(rs.getDate("createdtime"), rs.getInt("count")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // Better error handling
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        List<Product> list = new ProductDAO().getNewestProduct();
         for (Product product : list) {
             System.out.println("id: " + product.getId());
             System.out.println("name: " + product.getName());

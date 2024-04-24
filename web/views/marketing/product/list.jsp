@@ -61,17 +61,17 @@
     </head>
 
     <body>
-        <%@include file="layout/header.jsp" %>
+        <%@include file="../layout/header.jsp" %>
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <%@include file="layout/sidebar.jsp" %>
+                <%@include file="../layout/sidebar.jsp" %>
                 <!-- /.sidebar -->
             </aside>
             <aside class="right-side">
                 <section class="content">
-                    <form action="productList" method="get">
+                    <form action="productlist" method="get">
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
                             <span class="input-group-btn">
@@ -121,7 +121,7 @@
                             <thead>
                                 <tr>
                                     <th>ID
-                                        <a href="productList?page=${currentPage}&sort=id&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                        <a href="productlist?page=${currentPage}&sort=id&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
                                             <i class="fa fa-sort"></i>
                                     </th>
                                     <th>Name</th>
@@ -144,9 +144,9 @@
                                         <td>${p.price}</td>
                                         <td>${p.status?"Active":"Inactive"}</td>
                                         <td>${p.stock}</td>
-                                        <td><a href="productDetail?action=view&id=${p.id}">View</a> 
+                                        <td><a href="productdetail?action=view&id=${p.id}">View</a> 
                                             &nbsp;
-                                            <a href="editProduct?id=${p.id}" >Edit </a>
+                                            <a href="editproduct?id=${p.id}" >Edit </a>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -160,7 +160,7 @@
                                 <!--prev page-->
                                 <c:if test="${currentPage > 1}">
                                     <li>
-                                        <a href="productList?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}" aria-label="Previous">
+                                        <a href="productlist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}" aria-label="Previous">
                                             <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
                                         </a>
                                     </li>
@@ -172,29 +172,28 @@
                                             <li class="active"><span>${i}</span></li>
                                                 </c:when>
                                                 <c:otherwise>
-                                            <li><a href="productList?page=${i}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}">${i}</a></li>
+                                            <li><a href="productlist?page=${i}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}">${i}</a></li>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:forEach>
                                 <!--prev page-->
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
-                                        <a href="productList?page=${currentPage+1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}" aria-label="Next">
+                                        <a href="productlist?page=${currentPage+1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}" aria-label="Next">
                                             <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
                                         </a>
                                     </li>
                                 </c:if>
                             </ul>
                         </nav>
-                        no of page ${currentPage}
                     </div>
-                    <a href="addProduct" class="btn btn-warning shadow-0">Add product  </a>
+                    <a href="addproduct" class="btn btn-warning shadow-0">Add product  </a>
                 </section>
             </aside>
         </div>
 
 
-        <%@include file="layout/footer.jsp" %>
+        <%@include file="/layout/footer.jsp" %>
 
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
@@ -239,7 +238,7 @@
             function searchByName(param) {
                 var txtSearch = param.values();
                 $.ajax({
-                    url: "/productList/searchByAjax",
+                    url: "/productlist/searchByAjax",
                     type: "get", //send it through get method
                     data: {
                         txt: txtSearch

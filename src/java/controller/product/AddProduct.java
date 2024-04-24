@@ -23,7 +23,7 @@ import model.Product;
  *
  * @author Admin
  */
-@WebServlet(name="AddProduct", urlPatterns={"/AddProduct"})
+@WebServlet(name="AddProduct", urlPatterns={"/marketing/addproduct"})
 public class AddProduct extends HttpServlet {
    
     /** 
@@ -68,7 +68,7 @@ public class AddProduct extends HttpServlet {
         request.setAttribute("listCate", listCate);
         request.setAttribute("listBrand", listBrand);
 
-        request.getRequestDispatcher("views/marketing/procduct/add.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/marketing/product/add.jsp").forward(request, response);
    
     } 
 
@@ -98,7 +98,7 @@ public class AddProduct extends HttpServlet {
         Product p = new Product(name, raw_brand, stock, raw_price, description, specification, image, raw_status, stock);
         ProductDAO pd =new ProductDAO();
         pd.add(p);
-        response.sendRedirect("productList");
+        response.sendRedirect("productlist");
     }
 
     /** 
