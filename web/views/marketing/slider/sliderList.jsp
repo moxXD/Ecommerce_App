@@ -161,7 +161,7 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="#" method="get">
+                    <form action="searchslider" method="post">
                         <div class="filter-row">
 
                             <!--status select-->
@@ -169,8 +169,8 @@
                                 <label for="filstatus">Filter by Status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
                                     <option value="">All Status</option>
-                                    <option value="show" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Show") ? "selected" : ""}>Show</option>
-                                    <option value="hide" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Hide") ? "selected" : ""}>Hide</option>
+                                    <option value="Active" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Active") ? "selected" : ""}>Active</option>
+                                    <option value="Inactive" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Inactive") ? "selected" : ""}>Inactive</option>
                                 </select>
                             </div>
 
@@ -178,7 +178,7 @@
                             <div class="form-group">
                                 <label for="filauthor">Search: </label>
                                 <div class="input-group">
-                                    <input type="text" name="q" class="form-control" placeholder="Search by title, author, category..." value="${param.q}"/>
+                                    <input type="text" name="q" class="form-control" placeholder="Search by title..." value="${param.q}"/>
                                     <span class="input-group-btn">
                                         <button type='submit' id='search-btn' class="btn btn-flat"
                                                 style="background-color: white;border: 1px solid grey;border-radius: 5px "><i

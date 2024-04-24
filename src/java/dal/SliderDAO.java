@@ -170,9 +170,9 @@ public class SliderDAO extends DBContext {
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, (index-1)*7);
+            ps.setInt(1, (index - 1) * 7);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(new Slider(rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
@@ -185,6 +185,31 @@ public class SliderDAO extends DBContext {
         } catch (Exception e) {
         }
 
+        return list;
+    }
+
+    public List<Slider> getSliderByName(String qSearch, Boolean status) {
+        List<Slider> list = new ArrayList<>();
+        String sql = "SELECT * FROM swp391_g1_v1.slider \n"
+                + "where name LIKE ? and status = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + qSearch + "%");
+            ps.setBoolean(2, status);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Slider(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getBoolean(6),
+                        rs.getInt(7),
+                        rs.getBoolean(8)));
+            }
+        } catch (Exception e) {
+        }
         return list;
     }
 
