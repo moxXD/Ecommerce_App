@@ -92,7 +92,7 @@
                         </li>
                         <li class="active">
                             <a href="userlist">
-                                <i class="fa fa-users"></i> <span>Slider List</span>
+                                <i class="fa fa-users"></i> <span>Add Slider</span>
                             </a>
                         </li>
                         <li>
@@ -109,11 +109,11 @@
                 <section class="content">
                     <div class="container" >
                         <div class="row ">
-                            <form method="POST" action="editdetail">
+                            <form method="POST" action="addslider">
                                 <div class="col">
                                     <div class="col-sm-12">
                                         <div class="blog-post-area">
-                                            <h2 class="title text-center">Slider Details</h2>
+                                            <h2 class="title text-center">Add new Slider</h2>
 
 
                                             <div class="row" style="margin-bottom: 5%; margin-top: 3%">
@@ -146,13 +146,13 @@
                                                         <div class="row form-check-inline">
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="false" ${detail.status == false ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${detail.status == false ? "checked" : ""} >
                                                                     <label class="form-check-label" for="showRadio">Active</label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="true" ${detail.status == true ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Hide" ${detail.status == true ? "checked" : ""} >
                                                                     <label class="form-check-label" for="hideRadio">Inactive</label>
                                                                 </div>
                                                             </div>
@@ -183,7 +183,7 @@
 
                                             <div class="row" style="margin-bottom: 5%">
                                                 <div class="col-md-3">
-                                                    <input type="submit" class="btn btn-primary btn-block" id="saveButton">
+                                                    <input type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)">
                                                 </div>
                                                 <div class="col-md-3">
                                                     <button type="button" class="btn btn-primary btn-block" id="backButton">Back</button>

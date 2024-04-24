@@ -161,7 +161,7 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="sliderlist" method="get">
+                    <form action="#" method="get">
                         <div class="filter-row">
 
                             <!--status select-->
@@ -187,108 +187,111 @@
                                 </div>
                             </div>
                         </div>
+
+
                     </form>
-                    <div class="table-responsive">
-                        <div class="form-group">
-                            <div class="col-md-2" style="float: right; margin-bottom: 1%">
-                                <button type="button" class="btn btn-primary btn-block" onclick="redirectToAddSlider()">Add New Slider</button>
+
+                    <!--Nut add-->
+                    <form action="addslider" method="get">
+                        <div class="table-responsive">
+                            <div class="form-group">
+                                <div class="col-md-2" style="float: right; margin-bottom: 1%">
+                                    <input type="submit" class="btn btn-primary btn-block"  value="Add new Slider">
+                                </div>
                             </div>
-                        </div>
 
-                        <table class="table user-table">
+                            <table class="table user-table">
 
-                            <thead>
-                                <tr>
-                                    <th>ID
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=id">
-                                            <i class="fa fa-sort"></i>
-                                        </a>
-                                    </th>
-
-                                    <th>Thumbnail</th> 
-
-
-
-                                    <th>Tiltle
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=value">
-                                            <i class="fa fa-sort"></i>
-                                        </a></th>   
-
-                                    <th>Url
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
-                                            <i class="fa fa-sort"></i>
-                                        </a></th>
-                                    <th>Status
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
-                                            <i class="fa fa-sort"></i>
-                                        </a></th>
-
-                                    <th>Action
-                                        <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
-                                            <i class="fa fa-sort"></i>
-                                        </a></th>
-                                    <!--<th>Action</th>-->
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <c:forEach var="slider" items="${listS}">
+                                <thead>
                                     <tr>
-                                        <td>${slider.id}</td>
-                                        <td><img src="${pageContext.request.contextPath}/images/slider/${slider.image_url}" style="width: 80px; height: 50px;" alt="Slider Image" /></td>
-                                        <td>${slider.name}</td>
-                                        <td>${slider.url}</td>
-                                        <td style="color: ${slider.status ? 'red' : 'green'}">${slider.status ? 'Inactive' : 'Active'}</td>
-                                        <td>
-                                            <!--nut edit-->
-                                            <a href="sliderdetail?id=${slider.id}">Edit</a>
+                                        <th>ID
+                                            <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=id">
+                                                <i class="fa fa-sort"></i>
+                                            </a>
+                                        </th>
 
-                                            <!-- Nút xóa slider -->
-                                            <a href="deleteSlider?sliderid=${slider.id}" onclick="return confirm('Are you sure you want to delete this slider?'); return false;">Delete</a>
-                                            <form action="deleteSlider" method="post" style="display:inline;">
-                                                <input type="hidden" name="id" value="${slider.id}" />
-                                                <!--                                                <button type="submit" class="btn-link" onclick="return confirm('Are you sure you want to delete this slider?');">Delete</button>-->
-                                            </form>
-                                        </td>
+                                        <th>Thumbnail</th> 
+
+
+
+                                        <th>Tiltle
+                                            <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=value">
+                                                <i class="fa fa-sort"></i>
+                                            </a></th>   
+
+
+                                        <th>Status
+                                            <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
+                                                <i class="fa fa-sort"></i>
+                                            </a></th>
+
+                                        <th>Action
+                                            <a href="bloglist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
+                                                <i class="fa fa-sort"></i>
+                                            </a></th>
+                                        <!--<th>Action</th>-->
                                     </tr>
-                                </c:forEach>
-                                <!-- Thêm nhiều hàng tại đây -->
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
 
-                        <!-- Diplay list of page -->
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <c:if test="${currentPage > 1}">
-                                    <li>
-                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
-                                        </a>
-                                    </li>
-                                </c:if>
+                                    <c:forEach var="slider" items="${listS}">
+                                        <tr>
+                                            <td>${slider.id}</td>
+                                            <td><img src="${pageContext.request.contextPath}/images/slider/${slider.image_url}" style="width: 80px; height: 50px;" alt="Slider Image" /></td>
+                                            <td>${slider.name}</td>
+                                            <td style="color: ${slider.status ? 'red' : 'green'}">${slider.status ? 'Inactive' : 'Active'}</td>
+                                            <td>
+                                                <!--nut edit-->
+                                                <a href="sliderdetail?id=${slider.id}">Edit</a>
 
-                                <c:forEach begin="1" end="${noOfPage}" var="i">
-                                    <c:choose>
-                                        <c:when test="${currentPage eq i}">
-                                            <li class="active"><span>${i}</span></li>
-                                                </c:when>
-                                                <c:otherwise>
-                                            <li><a href="bloglist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
-                                            </c:otherwise>
-                                        </c:choose>
+                                                <!-- Nút xóa slider -->
+                                                <a href="deleteSlider?sliderid=${slider.id}" onclick="return confirm('Are you sure you want to delete this slider?'); return false;">Delete</a>
+                                                <form action="deleteSlider" method="post" style="display:inline;">
+                                                    <input type="hidden" name="id" value="${slider.id}" />
+                                                    <!--                                                <button type="submit" class="btn-link" onclick="return confirm('Are you sure you want to delete this slider?');">Delete</button>-->
+                                                </form>
+                                            </td>
+                                        </tr>
                                     </c:forEach>
+                                    <!-- Thêm nhiều hàng tại đây -->
+                                </tbody>
+                            </table>
 
-                                <c:if test="${currentPage < noOfPage}">
-                                    <li>
-                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
-                                        </a>
-                                    </li>
-                                </c:if>
-                            </ul>
-                        </nav>
+                            <!-- Diplay list of page -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <c:if test="${currentPage > 1}">
+                                        <li>
+                                            <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Previous">
+                                                <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
 
-                    </div>
+                                    <c:forEach begin="1" end="${noOfPage}" var="i">
+                                        <c:choose>
+                                            <c:when test="${currentPage eq i}">
+                                                <li class="active"><span>${i}</span></li>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                <li><a href="bloglist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+
+                                    <c:if test="${currentPage < noOfPage}">
+                                        <li>
+                                            <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
+                                                <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </nav>
+
+                        </div>
+                    </form>
+
 
                     </div>
 
@@ -308,8 +311,8 @@
                     return false;
                 }
             }
-            function redirectToAddSlider() {
-                window.location.href = 'slidedetail?action=add';
+            function redirectToNewSliderPage() {
+                window.location.href = 'addslider';
             }
         </script>
         <!-- jQuery 2.0.2 -->

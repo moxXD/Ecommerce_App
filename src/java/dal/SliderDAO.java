@@ -110,6 +110,41 @@ public class SliderDAO extends DBContext {
         }
         return null;
     }
+
+    public Slider insertSlider(String name, String description, String url, String image_url, boolean status, int featured_item_id, boolean type) {
+
+        String sql = "INSERT INTO `swp391_g1_v3.4`.`slider`\n"
+                + "(`name`,\n"
+                + "`description`,\n"
+                + "`url`,\n"
+                + "`image_url`,\n"
+                + "`status`,\n"
+                + "`featured_item_id`,\n"
+                + "`type`)\n"
+                + "VALUES\n"
+                + "(?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?,\n"
+                + "?)";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, description);
+            ps.setString(3, url);
+            ps.setString(4, image_url);
+            ps.setBoolean(5, status);
+            ps.setInt(6, featured_item_id);
+            ps.setBoolean(7, type);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
 //        public static void main(String[] args) {
 //        SliderDAO dao = new SliderDAO();
 //        Slider list = dao.getSliderById("1");
