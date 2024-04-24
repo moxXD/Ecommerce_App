@@ -5,6 +5,7 @@
 package model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -12,15 +13,29 @@ import java.sql.Date;
  */
 public class User {
 
-    private int id;
+    private int id, categotyid;
     private Setting setting;
     private String email, password, fullname, imgUrl, phone, address;
     private boolean status, gender;
     private Date dob;
+    private Timestamp createtime;
 
     public User() {
     }
-
+    public User(int id, String fullname){
+        this.id = id;
+        this.fullname = fullname;
+    }
+    public User(int id, String email, int categotyid, boolean status, String fullname, String imgUrl, Timestamp createtime){
+        this.id = id;
+        this.email = email;
+        this.categotyid = categotyid;
+        this.status = status;
+        this.fullname = fullname;
+        this.imgUrl = imgUrl;
+        this.createtime = createtime;
+        
+    }
     public User(Setting setting, String email, String password, String fullname, boolean status) {
         this.setting = setting;
         this.email = email;

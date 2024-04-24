@@ -330,46 +330,6 @@ public class BlogDAO extends DBContext {
         return list;
     }
 
-    public List<Blog> getNewestPost() throws SQLException {
-        List<Blog> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v1`.`blog` ORDER BY blog.createdtime DESC LIMIT 5;"; // pagination
-        try {
-            conn = context.getConnection();
-//            System.out.println(sql);
-            PreparedStatement stm = conn.prepareStatement(sql);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                int categoryId = rs.getInt("setting_id");
-                int Id = rs.getInt("id");
-                int authorId = rs.getInt("authorid");
-                String imgUrl = rs.getString("image_url");
-                String title = rs.getString("title");
-                String detail = rs.getString("detail");
-                boolean status = rs.getBoolean("status");
-                boolean is_featured = rs.getBoolean("is_featured");
-                String sumary = rs.getString("sumary");
-                Timestamp createTime = rs.getTimestamp("createdtime");
-                Timestamp updateTime = rs.getTimestamp("lastupdate");
-//            Setting st = stDAO.getSettingById(roleId);
-                Blog u = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, is_featured, sumary);
-                list.add(u);
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
-                }
-            }
-
-        }
-
-        return list;
-    }
-
     public void updateBlog(int id, int cateid, int authorid, String title, String content, boolean status, boolean feature, String sumary, String imgurl) {
         String sql = "update swp391_g1_v1.blog \n"
                 + "set `authorid` = ? , \n"
@@ -494,9 +454,9 @@ public class BlogDAO extends DBContext {
         return nblog;
     }
 
-    public List<Statistic> getDataLast7Day(Date postDate, String filcate, String filauthor) throws SQLException{
+    public List<Statistic> getDataLast7Day(Date postDate, String filcate, String filauthor) throws SQLException {
         List<Statistic> list = new ArrayList<>();
-        
+
         String sql = "SELECT \n"
                 + "    days.day AS createdtime,\n"
                 + "    COALESCE(COUNT(blog.id), 0) AS count\n"
@@ -538,6 +498,47 @@ public class BlogDAO extends DBContext {
         }
         return list;
     }
+
+    public List<Blog> getNewestPost() throws SQLException {
+        List<Blog> list = new ArrayList<>();
+        String sql = "SELECT * FROM `swp391_g1_v1`.`blog` ORDER BY blog.createdtime DESC LIMIT 5;"; // pagination
+        try {
+            conn = context.getConnection();
+//            System.out.println(sql);
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int categoryId = rs.getInt("setting_id");
+                int Id = rs.getInt("id");
+                int authorId = rs.getInt("authorid");
+                String imgUrl = rs.getString("image_url");
+                String title = rs.getString("title");
+                String detail = rs.getString("detail");
+                boolean status = rs.getBoolean("status");
+                boolean is_featured = rs.getBoolean("is_featured");
+                String sumary = rs.getString("sumary");
+                Timestamp createTime = rs.getTimestamp("createdtime");
+                Timestamp updateTime = rs.getTimestamp("lastupdate");
+//            Setting st = stDAO.getSettingById(roleId);
+                Blog u = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, is_featured, sumary);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+        }
+
+        return list;
+    }
+
 //    public static void main(String[] args) throws SQLException {
 //        BlogDAO st = new BlogDAO();
 //        List<Setting> list = st.getAllBlogSetting();

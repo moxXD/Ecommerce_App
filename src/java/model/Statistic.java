@@ -13,6 +13,15 @@ import java.sql.Date;
 public class Statistic {
     private Date date;
     private int count;
+    private Double totalamount;
+
+    public Double getTotalamount() {
+        return totalamount;
+    }
+
+    public void setTotalamount(Double totalamount) {
+        this.totalamount = totalamount;
+    }
 
     public Statistic() {
     }
@@ -20,6 +29,10 @@ public class Statistic {
     public Statistic(Date date, int count) {
         this.date = date;
         this.count = count;
+    }
+    public Statistic(Date date, Double totalamount){
+        this.date = date;
+        this.totalamount = totalamount;
     }
 
     public Date getDate() {

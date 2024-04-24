@@ -5,14 +5,18 @@
 package dal;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Blog;
 import model.Setting;
+import model.Statistic;
 import model.User;
 
 /**
@@ -483,6 +487,134 @@ public class UserDAO {
 //        }
 //        return false;
 //    }
+//data dashboard====================================================================================================================
+    public int getNumberOfUsers() {
+        String sql = "SELECT COUNT(*) FROM `swp391_g1_v1`.`user`";
+        int nuser = 0;
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                nuser = rs.getInt(1);
+            }
 
-  
+        } catch (SQLException e) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return nuser;
+    }
+
+    public List<User> getNewestUser() throws SQLException {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT id, email, setting_id, status, fullname, imageurl, create_at FROM swp391_g1_v1.user "
+                + " ORDER BY user.create_at DESC LIMIT 5;";
+        try {
+            conn = context.getConnection();
+//            System.out.println(sql);
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int Id = rs.getInt("id");
+                String email = rs.getString("email");
+                int categoryId = rs.getInt("setting_id");
+                boolean status = rs.getBoolean("status");
+                String name = rs.getString("fullname");
+                String imgUrl = rs.getString("imageurl");
+                Timestamp createTime = rs.getTimestamp("create_at");
+//            Setting st = stDAO.getSettingById(roleId);
+                User u = new User(Id, email, categoryId, status, name, imgUrl, createTime);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+        }
+
+        return list;
+    }
+
+    public List<Statistic> getDataLast7Day(Date postDate, String filrole) throws SQLException {
+        List<Statistic> list = new ArrayList<>();
+        String sql = "SELECT days.day AS createdtime, COALESCE(COUNT(user.id), 0) AS count\n"
+                + "FROM (SELECT ? AS day\n"
+                + "UNION SELECT DATE_SUB(?, INTERVAL 1 DAY)\n"
+                + "UNION SELECT DATE_SUB(?, INTERVAL 2 DAY)\n"
+                + "UNION SELECT DATE_SUB(?, INTERVAL 3 DAY)\n"
+                + "UNION SELECT DATE_SUB(?, INTERVAL 4 DAY)\n"
+                + "UNION SELECT DATE_SUB(?, INTERVAL 5 DAY)\n"
+                + "UNION SELECT DATE_SUB(?, INTERVAL 6 DAY)) \n"
+                + "AS days LEFT JOIN `swp391_g1_v1`.`user` ON DATE(user.create_at) = days.day \n";
+        if (filrole != null && !filrole.isEmpty()) {
+            sql += " AND user.setting_id = ? ";
+        }
+        sql += " GROUP BY days.day ORDER BY days.day ASC;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            int paramIndex = 1;
+            for (int i = 0; i < 7; i++) {
+                stm.setDate(paramIndex++, postDate);  // Set the same date for all placeholders related to dates
+            }
+            if (filrole != null && !filrole.isEmpty()) {
+                stm.setInt(paramIndex++, Integer.parseInt(filrole));
+            }
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Statistic(rs.getDate(1), rs.getInt(2)));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public List<User> getSaler() throws SQLException {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT t1.id, t1.fullname\n"
+                + " FROM swp391_g1_v1.user as t1 \n"
+                + " INNER JOIN swp391_g1_v1.setting AS t2 on t1.setting_id = t2.id\n"
+                + " WHERE t2.value like 'sale'";
+        try {
+            conn = context.getConnection();
+//            System.out.println(sql);
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int Id = rs.getInt("id");
+                String name = rs.getString("fullname");
+                User u = new User(Id, name);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+        }
+
+        return list;
+    }
 }

@@ -113,11 +113,6 @@ public class DashboardServlet extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(DashboardServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (productlist.isEmpty()) {
-            System.out.println("hehe");
-        } else {
-            System.out.println("hii");
-        }
         request.setAttribute("blogAuthors", user);
         request.setAttribute("settingList", setting);
         request.setAttribute("post7days", postlast7days);

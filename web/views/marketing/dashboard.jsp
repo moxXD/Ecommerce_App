@@ -118,6 +118,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                             <!-- Main row -->
                             <div class="row" >
 
