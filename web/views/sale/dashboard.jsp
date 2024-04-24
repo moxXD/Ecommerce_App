@@ -1,7 +1,7 @@
 <%-- 
-    Document   : dashboard.jsp
-    Created on : Apr 11, 2024, 4:59:01 PM
-    Author     : Duc Le
+    Document   : dashboard
+    Created on : Apr 25, 2024, 2:07:04 AM
+    Author     : Admin
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,7 +12,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Admin | Tech Mart</title>
+        <title>Sale | Tech Mart</title>
 
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="description" content="Developed By M Abdur Rokib Promy">
@@ -42,8 +42,8 @@
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <!-- Theme style -->
         <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" type="text/css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -58,7 +58,7 @@
 
     </head>
     <body>
-        <%@include file="../layout/header.jsp" %>
+        <%@include file="../sale/layout/header.jsp" %>
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
@@ -82,13 +82,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="userlist">
-                                <i class="fa fa-users"></i> <span>User List</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="settinglist">
-                                <i class="fa fa-gear"></i> <span>Settings</span>
+                            <a href="orderlist">
+                                <i class="fa fa-truck"></i> <span>Order List</span>
                             </a>
                         </li>
                     </ul>
@@ -96,20 +91,10 @@
                 <!-- /.sidebar -->
             </aside>
             <aside class="right-side">
+                <c:set var="no" value="${requestScope.norder}" />
                 <form action="dashboard" id="postFilterForm" method="get">
-                    <c:set var="nu" value="${requestScope.nuser}" />
-                    <section class="content">
-                        <div class="row" style="margin-bottom:5px;">
-                            <div class="col-md-3">
-                                <div class="sm-st clearfix">
-                                    <span class="sm-st-icon st-violet"><i class="fa fa-users"></i></span>
-                                    <div class="sm-st-info">
-                                        <span>${nu}</span>
-                                        Total Users
-                                    </div>
-                                </div>
-                            </div>
-                            <c:set var="no" value="${requestScope.norder}" />
+                    <section class="content" style="align-items: center;">
+                        <div class="row" style="margin-bottom:5px; justify-content: center">
                             <div class="col-md-3">
                                 <div class="sm-st clearfix">
                                     <span class="sm-st-icon st-blue"><i class="fa fa-truck"></i></span>
@@ -240,22 +225,17 @@
                                     let orderChart = new Chart(octx, {
                                     type: "bar",
                                             data: {
-                                            labels: [<c:forEach items="${requestScope.cancel7days}" var="od">'<fmt:formatDate pattern="dd/MM/yyyy" value="${od.date}"/>',</c:forEach>],
+                                            labels: [<c:forEach items="${requestScope.total7days}" var="od">'<fmt:formatDate pattern="dd/MM/yyyy" value="${od.date}"/>',</c:forEach>],
                                                     datasets: [
                                                     {
-                                                    label: "Number of Cancel Orders",
-                                                            data: [<c:forEach items="${requestScope.cancel7days}" var="cancel">${cancel.count},</c:forEach>],
-                                                            backgroundColor: "rgba(255, 99, 71, 0.6)"
-                                                    },
-                                                    {
-                                                    label: "Number of Submit Orders",
-                                                            data: [<c:forEach items="${requestScope.submit7days}" var="submit">${submit.count},</c:forEach>],
-                                                            backgroundColor: "rgba(255, 255, 0, 0.3)"
-                                                    },
-                                                    {
-                                                    label: "Number of Success Orders",
+                                                    label: "Number of Success Orders: ",
                                                             data: [<c:forEach items="${requestScope.success7days}" var="success">${success.count},</c:forEach>],
-                                                            backgroundColor: "rgba(128, 225, 41, 0.5)"
+                                                            backgroundColor: "rgba(128, 225, 41, 0.7)"
+                                                    },
+                                                    {
+                                                    label: "Number of Total Orders: ",
+                                                            data: [<c:forEach items="${requestScope.total7days}" var="total">${total.count},</c:forEach>],
+                                                            backgroundColor: "rgba(255, 255, 0, 0.7)"
                                                     }
                                                     ]
                                             }
@@ -310,130 +290,13 @@
                                     </div>
                                 </section>
                             </div>
-                        </div>            
-                        <div class="row" >
-                            <div class="col-md-8">
-                                <!--earning graph start-->
-                                <section class="panel">
-                                    <header class="panel-heading">
-                                        Users Graph
-                                    </header>
-                                    <div class="panel-body">
-                                        <canvas id="userChart" width="500" height="300"></canvas>
-                                    </div>
-                                </section>
-                                <!--earning graph end-->
-                                <script type="text/javascript">
-                                    let uctx = document.getElementById("userChart").getContext("2d");
-                                    let userChart = new Chart(uctx, {
-                                    type: "line",
-                                            data: {
-                                            labels: [<c:forEach items="${requestScope.user7days}" var="b">'<fmt:formatDate pattern="dd/MM/yyyy" value="${b.date}"/>',</c:forEach>],
-                                                    datasets: [
-                                                    {
-                                                    label: "Number of Users",
-                                                            data: [<c:forEach items="${requestScope.user7days}" var="b">${b.count},</c:forEach>],
-                                                            backgroundColor: "rgba(0,0,255,0.2)"
-                                                    }
-                                                    ]
-                                            }
-                                    });
-                                    // Chart.defaults.global.responsive = true;
-                                    </script>
-                                </div>
-                                <div class="col-md-4">
-                                    <section class="panel">
-                                        <header class="panel-heading">
-                                            User Filter
-                                        </header>
-                                        <div class="panel-body" >
-                                            <div class="filter-row">
-                                                <!-- date select -->
-                                                <div class="form-group">
-                                                    <label for="userdatepick"  class="form-check-label">Select Date: </label>
-                                                    <input type="date" name="userdatepick" class="form-control" id="userdatepick"
-                                                           value="" max="<%=java.time.LocalDate.now()%>" onchange="submitForm('userdatepick')">
-                                                <script>
-                                                    document.addEventListener('DOMContentLoaded', function () {
-                                                    var userdateInput = document.getElementById('userdatepick');
-                                                    var userstoredDate = localStorage.getItem('selectedDate'); // Lấy ngày đã lưu
-
-                                                    // Kiểm tra nếu có ngày đã lưu và thiết lập nó làm giá trị cho datepicker
-                                                    if (userstoredDate) {
-                                                    userdateInput.value = userstoredDate;
-                                                    } else {
-                                                    var today = new Date().toISOString().substr(0, 10);
-                                                    userdateInput.value = today;
-                                                    }
-
-                                                    // Khi người dùng thay đổi ngày, lưu ngày mới vào localStorage
-                                                    userdateInput.addEventListener('change', function () {
-                                                    localStorage.setItem('selectedDate', this.value);
-                                                    });
-                                                    });
-                                                </script>
-                                            </div>
-
-                                            <!--role select-->
-                                            <div class="form-group">
-                                                <label for="filrole">Filter by Role:</label>
-                                                <select name="filrole" id="filrole" class="form-control"
-                                                        onchange="submitForm('filrole')">
-                                                    <option value="" >All Roles</option>
-                                                    <!-- Add role options here -->
-                                                    <c:forEach items="${requestScope.settingList}" var="m">
-                                                        <c:if test="${m.type.equals('role')}">
-                                                            <option value="${m.id}" ${param.filrole==m.id?"selected":""}>${m.value}</option>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                            <!--gender select-->
-
-                                            <!--Search-->
-                                        </div>
-                                    </div>
-                                </section>
-                                <div class="panel">
-                                    <header class="panel-heading">
-                                        Newest Users
-                                    </header>
-                                    <c:forEach items="${requestScope.newuser}" var="x">
-                                        <li class="list-group-item">
-                                            <c:choose>
-                                                <c:when test="${empty x.imgUrl}">
-                                                    <a href="userdetail?action=view&id=${x.id}"><img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle" style="width: 50px; height: 50px;"></a>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                    <a href="userdetail?action=view&id=${x.id}"><img src="<c:url value='/uploads/${x.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle"style="width: 50px; height: 50px;"></a>
-                                                    </c:otherwise>
-                                                </c:choose> 
-                                                <c:if test="${fn:length(x.fullname) > 50}">
-                                                    <c:set var="subTitle" value="${fn:substring(x.fullname, 0, 50)}" />
-                                                <a href="userdetail?action=view&id=${x.id}">${subTitle}...</a>
-                                            </c:if>
-                                            <c:if test="${fn:length(x.fullname) <= 50}">
-                                                <a href="userdetail?action=view&id=${x.id}">${x.fullname}</a>
-                                            </c:if>
-                                        </li>
-                                    </c:forEach>
-
-                                    <div class="panel-footer bg-white">
-                                        <!-- <span class="pull-right badge badge-info">32</span> -->
-                                        <a class="btn btn-primary btn-md" href="userdetail?action=add" role="button">
-                                            <i class="fa fa-plus"></i>
-                                            Add New User
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </div>    
                     </section>
                 </form>
             </aside>
         </div>
 
-        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../sale/layout/footer.jsp" %>
         <script type="text/javascript">
 
             function submitForm(elementId) {
@@ -506,42 +369,43 @@
                     radioClass: 'iradio_flat-grey'
             });
         </script>
-        <!--        <script type="text/javascript">
-                    $(function () {
-                    "use strict";
-                    //BAR CHART
-                    var data = {
-                    labels: ["January", "February", "March", "April", "May", "June", "July"],
-                            datasets: [
-                            {
-                            label: "My First dataset",
-                                    fillColor: "rgba(220,220,220,0.2)",
-                                    strokeColor: "rgba(220,220,220,1)",
-                                    pointColor: "rgba(220,220,220,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(220,220,220,1)",
-                                    data: [65, 59, 80, 81, 56, 55, 40]
-                            },
-                            {
-                            label: "My Second dataset",
-                                    fillColor: "rgba(151,187,205,0.2)",
-                                    strokeColor: "rgba(151,187,205,1)",
-                                    pointColor: "rgba(151,187,205,1)",
-                                    pointStrokeColor: "#fff",
-                                    pointHighlightFill: "#fff",
-                                    pointHighlightStroke: "rgba(151,187,205,1)",
-                                    data: [28, 48, 40, 19, 86, 27, 90]
-                            }
-                            ]
-                    };
-                    new Chart(document.getElementById("linechart").getContext("2d")).Line(data, {
-                    responsive: true,
-                            maintainAspectRatio: false,
-                    });
-                    });
-                    // Chart.defaults.global.responsive = true;
-                </script>-->
+        <script type="text/javascript">
+            $(function () {
+            "use strict";
+            //BAR CHART
+            var data = {
+            labels: ["January", "February", "March", "April", "May", "June", "July"],
+                    datasets: [
+                    {
+                    label: "My First dataset",
+                            fillColor: "rgba(220,220,220,0.2)",
+                            strokeColor: "rgba(220,220,220,1)",
+                            pointColor: "rgba(220,220,220,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(220,220,220,1)",
+                            data: [65, 59, 80, 81, 56, 55, 40]
+                    },
+                    {
+                    label: "My Second dataset",
+                            fillColor: "rgba(151,187,205,0.2)",
+                            strokeColor: "rgba(151,187,205,1)",
+                            pointColor: "rgba(151,187,205,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(151,187,205,1)",
+                            data: [28, 48, 40, 19, 86, 27, 90]
+                    }
+                    ]
+            };
+            new Chart(document.getElementById("linechart").getContext("2d")).Line(data, {
+            responsive: true,
+                    maintainAspectRatio: false,
+            });
+            });
+            // Chart.defaults.global.responsive = true;
+        </script>
 
     </body>
 </html>
+

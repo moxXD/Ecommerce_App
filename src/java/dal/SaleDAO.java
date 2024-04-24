@@ -106,18 +106,18 @@ public class SaleDAO {
                 + "    UNION SELECT DATE_SUB(?, INTERVAL 5 DAY)\n"
                 + "    UNION SELECT DATE_SUB(?, INTERVAL 6 DAY)\n"
                 + ") AS days\n"
-                + "LEFT JOIN `swp391_g1_v1`.`order` ON DATE(`order`.create_at) = days.day and `order`.status \n";
+                + "LEFT JOIN `swp391_g1_v1`.`order` ON DATE(`order`.create_at) = days.day \n";
         if (status != null && !status.isEmpty() && status.equalsIgnoreCase("cancel")) {
-            sql += " like 'cancel' ";
+            sql += " and `order`.status like 'cancel' ";
         }
         if (status != null && !status.isEmpty() && status.equalsIgnoreCase("submitted")) {
-            sql += " like 'submitted' ";
+            sql += " and `order`.status like 'submitted' ";
         }
         if (status != null && !status.isEmpty() && status.equalsIgnoreCase("success")) {
-            sql += " NOT IN ('submitted', 'cancel') ";
+            sql += " and `order`.status NOT IN ('submitted', 'cancel') ";
         }
         if (ordersaler != null && !ordersaler.isEmpty()) {
-            sql += " AND `order`.sale_id = ? ";
+            sql += " and `order`.status AND `order`.sale_id = ? ";
         }
         sql += "GROUP BY days.day ORDER BY days.day ASC;";
         try {
@@ -225,7 +225,7 @@ public class SaleDAO {
     public static void main(String[] args) throws SQLException {
         Date date = Date.valueOf("2024-04-24");
         SaleDAO sale = new SaleDAO();
-        List<Statistic> s = sale.getRevenueLast7Day(date, "5", "45");
+        List<Statistic> s = sale.getOrderLast7Day(date, null, null);
         System.out.println("sale: " + s.toString());
     }
 }

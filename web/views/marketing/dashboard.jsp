@@ -70,7 +70,7 @@
                             <img src="${pageContext.request.contextPath}/views/img/26115.jpg" class="img-circle" alt="User Image" />
                         </div>
                         <div class="pull-left info">
-                            <p>Hello, Jane</p>
+                            <p>Hello, Thanh</p>
                         </div>
                     </div>
                     <ul class="sidebar-menu">
@@ -98,9 +98,9 @@
                 <c:set var="nb" value="${requestScope.nblog}" />
                 <c:set var="np" value="${requestScope.nproduct}" />
                 <form action="dashboard" id="postFilterForm" method="get">
-                    <section class="content" style="align-items: center;">
-                        <div class="row" style="margin-bottom:5px;">
-                            <div class="col-md-3 col-md-offset-3">
+                    <section class="content">
+                        <div class="row " style="margin-bottom:5px">
+                            <div class="col-md-3">
                                 <div class="sm-st clearfix">
                                     <span class="sm-st-icon st-violet"><i class="fa fa-shopping-cart"></i></span>
                                     <div class="sm-st-info">
