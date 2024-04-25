@@ -314,13 +314,17 @@ public class UserDAO {
     // get sale 
     public User getSale() {
         User u = null;
-        String sql = "SELECT * FROM " + USER_TABLE + " WHERE " + USER_SETTING_ID + "=5;";
+        Setting role = stDAO.getSettingByTypeAndValue("role", "sale");
+        String sql = "SELECT * FROM " + USER_TABLE + " WHERE " + USER_SETTING_ID + "=? \n"
+                + "ORDER BY RAND()\n"
+                + "LIMIT 1;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, role.getId());
             ResultSet rs = stm.executeQuery();
-            while(rs.next()){
-                u=new User(rs.getInt(USER_ID), rs.getString(USER_PHONE));
+            while (rs.next()) {
+                u = new User(rs.getInt(USER_ID), rs.getString(USER_PHONE));
             }
         } catch (Exception e) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);

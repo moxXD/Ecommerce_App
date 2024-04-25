@@ -83,7 +83,7 @@ public class AddToCartServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String id_raw = request.getParameter("productId"); // Lấy giá trị của tham số "id" từ request
-        System.out.println("id:" + id_raw);
+//        System.out.println("id:" + id_raw);
         ProductDAO pDao = new ProductDAO();
         HttpSession session = request.getSession();
         int id;
