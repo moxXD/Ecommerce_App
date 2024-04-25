@@ -12,44 +12,61 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Marketing | Tech Mart</title>
 
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="description" content="Developed By M Abdur Rokib Promy">
         <meta name="keywords" content="Admin, Bootstrap 3, Template, Theme, Responsive">
         <!-- bootstrap 3.0.2 -->
+        <!-- Include Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"
+        <!-- Include Bootstrap Bundle JS (includes Popper) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <link href="${pageContext.request.contextPath}/views/css/bootstrap.min.css" rel="stylesheet"
               type="text/css" />
 
         <!-- font Awesome -->
-        <link href="${pageContext.request.contextPath}/css/font-awesome.min.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/font-awesome.min.css" rel="stylesheet"
               type="text/css" />
         <!-- Ionicons -->
-        <link href="${pageContext.request.contextPath}/css/ionicons.min.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/ionicons.min.css" rel="stylesheet"
               type="text/css" />
         <!-- Morris chart -->
-        <link href="${pageContext.request.contextPath}/css/morris/morris.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/morris/morris.css" rel="stylesheet"
               type="text/css" />
         <!-- jvectormap -->
-        <link href="${pageContext.request.contextPath}/css/jvectormap/jquery-jvectormap-1.2.2.css"
+        <link href="${pageContext.request.contextPath}/views/css/jvectormap/jquery-jvectormap-1.2.2.css"
               rel="stylesheet" type="text/css" />
         <!-- Date Picker -->
-        <link href="${pageContext.request.contextPath}/css/datepicker/datepicker3.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/datepicker/datepicker3.css" rel="stylesheet"
               type="text/css" />
         <!-- fullCalendar -->
         <!-- <link href="css/fullcalendar/fullcalendar.css" rel="stylesheet" type="text/css" /> -->
         <!-- Daterange picker -->
-        <link href="${pageContext.request.contextPath}/css/daterangepicker/daterangepicker-bs3.css"
+        <link href="${pageContext.request.contextPath}/views/css/daterangepicker/daterangepicker-bs3.css"
               rel="stylesheet" type="text/css" />
         <!-- iCheck for checkboxes and radio inputs -->
-        <link href="${pageContext.request.contextPath}/css/iCheck/all.css" rel="stylesheet"
+        <link href="${pageContext.request.contextPath}/views/css/iCheck/all.css" rel="stylesheet"
               type="text/css" />
         <!-- bootstrap wysihtml5 - text editor -->
         <!-- <link href="css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" /> -->
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <!-- Theme style -->
-        <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="${pageContext.request.contextPath}/views/css/style.css" rel="stylesheet" type="text/css" />
+
+
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        
+  <![endif]-->
+
+
         <style>
             .icon-hover:hover {
                 border-color: #3b71ca !important;
@@ -72,14 +89,14 @@
 
     </head>
     <body>
-        <%@include file="layout/header.jsp" %>
+        <%@include file="../layout/header.jsp" %>
 
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <%@include file="layout/sidebar.jsp" %>
+                <%@include file="../layout/sidebar.jsp" %>
                 <!-- /.sidebar -->
             </aside>
             <aside class="right-side">
@@ -170,7 +187,7 @@
         </div>
     </body>
 
-    <%@include file="layout/footer.jsp" %>
+    <%@include file="../layout/footer.jsp" %>
 
     <!-- jQuery 2.0.2 -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>

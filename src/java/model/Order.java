@@ -148,14 +148,14 @@ public class Order {
             int mobile, String status, Date update_at) {
         this.id = id;
         this.user_id = user_id;
-        this.createAt = createAt;
-        this.name = name;
+        this.createAt = create_at;
+        this.name = fullname;
         this.sale_id = sale_id;
         this.address = address;
         this.email = email;
         this.mobile = mobile;
         this.status = status;
-        this.updateAt = updateAt;
+        this.updateAt = update_at;
     }
 
     public int getId() {
@@ -269,6 +269,5 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
-
 
 }

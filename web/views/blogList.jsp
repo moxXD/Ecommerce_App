@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="left-sidebar">
-                            <form action="blogslist" method="get">
+                            <form action="blogslist" id="filterForm" method="get">
                                 <h2>Search</h2>
                                 <div class="panel-group category-products" id="accordian"><!--category-productsr-->
                                     <div class="panel panel-default">
@@ -66,7 +66,7 @@
                                     <div class="panel panel-default">
                                         <div class="form-group">
                                             <label for="filcate">Filter by Blog Category:</label>
-                                            <select name="filcate" id="filcate" class="form-control">
+                                            <select name="filcate" id="filcate" class="form-control" onchange="submitForm()">
                                                 <option value="" >All Categories</option>
                                                 <!-- Add role options here -->
                                                 <c:forEach items="${requestScope.settingList}" var="r">
@@ -80,7 +80,7 @@
                                     <div class="panel panel-default">
                                         <div class="form-group">
                                             <label for="filauthor">Filter by Author: </label>
-                                            <select name="filauthor" id="filauthor" class="form-control">
+                                            <select name="filauthor" id="filauthor" class="form-control" onchange="submitForm()">
                                                 <option value="">All Authors </option>
                                                 <c:forEach items="${requestScope.blogAuthors}" var="a">
                                                     <option value="${a.fullname}"  ${param.filauthor==a.fullname?"selected":""}>${a.fullname}</option>
@@ -176,6 +176,12 @@
             </div>
         </section>
         <%@ include file="../../../layout/footer.jsp" %>
-
+<script type="text/javascript">
+           
+            function submitForm(){
+                var form=document.getElementById("filterForm");
+                form.submit();
+            }
+        </script>
     </body>
 </html>
