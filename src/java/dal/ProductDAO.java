@@ -70,7 +70,7 @@ public class ProductDAO extends DBContext {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Product(rs.getInt(1),
+                list.add(new Product(rs.getInt(PRODUCT_ID),
                         rs.getString(2),
                         rs.getInt(3),
                         rs.getInt(4),
@@ -488,12 +488,5 @@ public class ProductDAO extends DBContext {
         return p;
     }
 
-    public static void main(String[] args) {
-//        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0, 0);
-//        for (Product product : list) {
-//            System.out.println("id: " + product.getId());
-//            System.out.println("name: " + product.getName());
-//            System.out.println("imgURL: " + product.getImageUrl());
-//        }
-    }
+
 }

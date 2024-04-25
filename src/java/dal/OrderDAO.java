@@ -107,12 +107,12 @@ public class OrderDAO {
                 + "    `swp391_g1_v1`.`order` o ON oi.order_id = o.id\n"
                 + " INNER JOIN \n"
                 + "    `swp391_g1_v1`.`product` p ON oi.product_id = p.id\n"
-                +"  WHERE o.user_id = ?\n"
+                + "  WHERE o.user_id = ?\n"
                 + " GROUP BY \n"
                 + "    o.id, o.user_id, o.create_at, o.fullname, o.sale_id, o.address, o.email, o.status \n"
                 + " ORDER BY o.create_at DESC;";
         try {
-            
+
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setInt(1, userid);
@@ -131,6 +131,7 @@ public class OrderDAO {
         }
         return list;
     }
+
     public Order getOrderByID(int orderID) throws SQLException {
 //        List<Blog> list = new ArrayList<>();
         Order order = null;
@@ -277,6 +278,7 @@ public class OrderDAO {
                 }
             }
         }
+    }
 
     public List<Order> getListOrderBySaleId(int userid) {
         List<Order> list = new ArrayList<>();
@@ -302,16 +304,16 @@ public class OrderDAO {
         } catch (Exception e) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        
+
         return list;
     }
-    
-     //dem so cot trong sql
+
+    //dem so cot trong sql
     public int getTotalSlider() {
         String sql = "SELECT COUNT(*)\n"
                 + "FROM slider;";
         try {
-             conn = context.getConnection();
+            conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
@@ -330,7 +332,7 @@ public class OrderDAO {
                 + "ORDER BY id\n"
                 + "LIMIT ?, 7;";
         try {
-           conn = context.getConnection();
+            conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setInt(1, (index - 1) * 7);
             ResultSet rs = stm.executeQuery();
@@ -380,5 +382,5 @@ public class OrderDAO {
         }
         return list;
     }
-}
+
 }

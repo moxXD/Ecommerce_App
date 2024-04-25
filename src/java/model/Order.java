@@ -144,18 +144,18 @@ public class Order {
         this.total = total;
     }
 
-    public Order(int id, int user_id, Date create_at, String fullname, int sale_id, String address, String email,
+    public Order(int id, int user_id, Date createAt, String name, int sale_id, String address, String email,
             int mobile, String status, Date update_at) {
         this.id = id;
         this.user_id = user_id;
-        this.create_at = create_at;
-        this.fullname = fullname;
+        this.createAt = createAt;
+        this.name = name;
         this.sale_id = sale_id;
         this.address = address;
         this.email = email;
         this.mobile = mobile;
         this.status = status;
-        this.update_at = update_at;
+        this.updateAt = updateAt;
     }
 
     public int getId() {
@@ -222,22 +222,6 @@ public class Order {
         this.user_id = user_id;
     }
 
-    public Date getCreate_at() {
-        return create_at;
-    }
-
-    public void setCreate_at(Date create_at) {
-        this.create_at = create_at;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
     public int getSale_id() {
         return sale_id;
     }
@@ -286,12 +270,5 @@ public class Order {
         this.status = status;
     }
 
-    public Date getUpdate_at() {
-        return update_at;
-    }
-
-    public void setUpdate_at(Date update_at) {
-        this.update_at = update_at;
-    }
 
 }

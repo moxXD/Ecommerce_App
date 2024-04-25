@@ -252,14 +252,12 @@
                                     <c:forEach var="o" items="${listO}">
                                         <tr>
                                             <td>${o.id}</td>
-                                            <td>${o.create_at}</td>
-                                            <td>${o.fullname}</td>
+                                            <td>${o.createAt}</td>
+                                            <td>${o.name}</td>
                                             <td>${o.address}</td>
                                             <td>${o.email}</td>
                                             <td>${o.mobile}</td>
                                             <td>${o.status}</td>
-                                            
-
                                             <td>
                                                 <!--nut edit-->
                                                 <a href="sliderdetail?id=${o.id}">Edit</a>
