@@ -39,18 +39,20 @@
             <div class="container">
                 <div class="row" >
                     <div  style="text-align: center;margin: 0 auto;
-                         width: 300px;">
+                          width: 300px;">
                         <div class="login-form"><!--login form-->
                             <h2>Login to your account</h2>
                             <form action="Login" method="post">
-                                <input type="email" name="gmail" placeholder="Email Address" />						
+                                <input type="email" name="gmail" placeholder="Email Address" />	
+                                <span id=""></span>
                                 <input type="password" name="pass" placeholder="Password" />
+                                <span></span>
                                 <div></div>
                                 <span><a href="ForgotPassword"/>Forgot Password</a></span><br>
                                 <span><a href="Register"/>Sign up account</a></span>
                                 <button type="submit" class="btn btn-default">Login</button>
                             </form>
-                            ${wrong}
+                            ${sessionScope.wrong}
                             ${user_registed}
                             ${confirmSuccess}
                             ${status}
@@ -76,5 +78,9 @@
         <script src="js/bootstrap.min.js"></script>
         <script src="js/jquery.prettyPhoto.js"></script>
         <script src="js/main.js"></script>
+        <script type="text/javascript">
+            
+        </script>
     </body>
+    
 </html>

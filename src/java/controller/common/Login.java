@@ -101,7 +101,7 @@ public class Login extends HttpServlet {
             } else {
                 session.setAttribute("userSession", u);
                 session.setAttribute("id", u.getId());
-                response.sendRedirect("home");
+        request.getRequestDispatcher("authen/login.jsp").forward(request, response);
             }
         } else {
             request.getRequestDispatcher("authen/login.jsp").forward(request, response);

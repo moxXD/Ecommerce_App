@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.Sale;
+package service;
 
-import dal.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +11,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import static service.EmailService.SendGmailToContact;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "SearchOrderListServlet", urlPatterns = {"/marketing/searchorder"})
-public class SearchOrderListServlet extends HttpServlet {
+@WebServlet(name = "SendGmail", urlPatterns = {"/SendGmail"})
+public class SendGmail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,15 +33,13 @@ public class SearchOrderListServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String qSearch = request.getParameter("q");
-        String status = request.getParameter("filstatus");
-        OrderDAO dao = new OrderDAO();
-
-   //     request.setAttribute("listP", list);
-        request.getRequestDispatcher("../views/marketing/slider/sliderList.jsp").forward(request, response);
+        String mess = request.getParameter("mess");
+        String mail = request.getParameter("gmail"); // Corrected parameter name to "gmail"
+        EmailService.SendGmailToContact(mail, mess); // Used "mail" parameter here
+        response.sendRedirect("ContactList");
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

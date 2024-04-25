@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Contact;
 import model.Blog;
 import model.Setting;
 import model.Statistic;
@@ -96,6 +97,7 @@ public class UserDAO {
         }
         return u;
     }
+    //
 
     // get list of user with search and filter
     public List<User> getUserListWithFilter(int offset, int limit, String sortParam,
@@ -473,6 +475,268 @@ public class UserDAO {
                 }
             }
         }
+    }
+
+    public boolean contact(Contact c) {
+        String sql = "INSERT INTO `swp391_g1_v1`.`admin_contact` "
+                + "(`full_name`, `email`, `mobile`, `subject`,"
+                + " `message`, `setting_id`,`owner_id`,`status`) VALUES "
+                + "(?, ?, "
+                + "?, ?,"
+                + " ?, ?, ?,1);";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, c.getU().getFullname());
+            stm.setString(2, c.getU().getEmail());
+            stm.setString(3, c.getU().getPhone());
+            stm.setString(4, c.getS().getValue());
+            stm.setString(5, c.getMessage());
+            stm.setInt(6, c.getS().getId());
+            stm.setInt(7, c.getU().getId());
+            stm.execute();
+            return true;
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean contact(String email, String phone, String name,
+            Setting s, String comment) {
+        String sql = "INSERT INTO `swp391_g1_v1`.`admin_contact`"
+                + " (`full_name`, `email`, `mobile`, `subject`,"
+                + " `message`, `setting_id`, `status`) VALUES "
+                + "(?, ?,?,"
+                + " ?,?, ?, 0);";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, name);
+            stm.setString(2, email);
+            stm.setString(3, phone);
+            stm.setString(4, s.getValue());
+            stm.setString(5, comment);
+            stm.setInt(6, s.getId());
+            stm.execute();
+            return true;
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return false;
+    }
+
+    public void updateContract(String gmail, int check) {
+        String sql = "UPDATE `swp391_g1_v1`.`admin_contact` "
+                + "SET `status` = ? WHERE (`email` = ?);";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, check);
+            stm.setString(2, gmail);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
+    private final String CONTACT_SUBJECT = "subject";
+    private final String USER_FULLNAME_CONTACT = "full_name";
+    private final String USER_PHONE_CONTACT = "mobile";
+    private final String USER_MESSAGE_CONTACT = "message";
+    private final String USER_CONTACT = "owner_id";
+    private final String CONTACT_TABLE = "admin_contact";
+
+    public List<Contact> getContactListWithFilter(int offset, int limit,
+            String sortParam,
+            boolean order, String subjectFilter,
+            String statusFilter, String searchQuery) {
+        List<Contact> list = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "    SQL_CALC_FOUND_ROWS *\n"
+                + " FROM " + CONTACT_TABLE + "\n"
+                + " WHERE 1=1 \n";
+        // add condition for filter
+        if (subjectFilter != null && !subjectFilter.isEmpty()) {
+            sql += " AND " + CONTACT_SUBJECT + "= ? ";
+        }
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            sql += " AND " + USER_STATUS + "= ? ";
+        }
+        // add search to query
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            sql += " AND (" + USER_EMAIL + " LIKE ? OR " + USER_FULLNAME_CONTACT + " LIKE ? OR " + USER_CONTACT + " LIKE ?) ";
+        }
+        // add sort condition 
+        sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY " + sortParam + (order ? " ASC" : " DESC") : "")
+                + " LIMIT ?, ?;"; // pagination
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            int paramIndex = 1;
+
+            if (subjectFilter != null && !subjectFilter.isEmpty()) {
+                stm.setString(paramIndex++, subjectFilter);
+            }
+            if (statusFilter != null && !statusFilter.isEmpty()) {
+                stm.setString(paramIndex++, statusFilter);
+            }
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                String likeParam = "%" + searchQuery + "%";
+                stm.setString(paramIndex++, likeParam);
+                stm.setString(paramIndex++, likeParam);
+                stm.setString(paramIndex++, likeParam);
+            }
+
+            stm.setInt(paramIndex++, offset);
+            stm.setInt(paramIndex++, limit);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(USER_ID);
+                String fullname = rs.getString(USER_FULLNAME_CONTACT);
+                String email = rs.getString(USER_EMAIL);
+                String phone = rs.getString(USER_PHONE_CONTACT);
+                String subject = rs.getString(CONTACT_SUBJECT);
+                String message = rs.getString(USER_MESSAGE_CONTACT);
+                int u_id = rs.getInt(USER_CONTACT);
+                boolean status = rs.getBoolean(USER_STATUS);
+                Contact c = new Contact(message, email, id, fullname, phone, subject, u_id, status);
+                list.add(c);
+            }
+            rs = stm.executeQuery("SELECT FOUND_ROWS()"); // get total number of row found while execute query
+            if (rs.next()) {
+                this.noOfrecord = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return list;
+    }
+
+    public List<Contact> getContactLis() {
+        List<Contact> list = new ArrayList<>();
+        String sql = "SELECT sql_calc_found_rows * "
+                + "FROM swp391_g1_v1.admin_contact"
+                + " where 1=1 \n";
+
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt(USER_ID);
+                String fullname = rs.getString(USER_FULLNAME_CONTACT);
+                String email = rs.getString(USER_EMAIL);
+                String phone = rs.getString(USER_PHONE_CONTACT);
+                String subject = rs.getString(CONTACT_SUBJECT);
+                String message = rs.getString(USER_MESSAGE_CONTACT);
+                int u_id = rs.getInt(USER_CONTACT);
+                boolean status = rs.getBoolean(USER_STATUS);
+                Contact c = new Contact(message, email, id, fullname, phone, subject, u_id, status);
+                list.add(c);
+            }
+            rs = stm.executeQuery("SELECT FOUND_ROWS()"); // get total number of row found while execute query
+            if (rs.next()) {
+                this.noOfrecord = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return list;
+    }
+
+    public Contact getContactByID(int id) {
+        String sql = "SELECT \n"
+                + "    SQL_CALC_FOUND_ROWS *\n"
+                + "FROM " + CONTACT_TABLE + "\n"
+                + "where " + USER_ID + " = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                String fullname = rs.getString(USER_FULLNAME_CONTACT);
+                String email = rs.getString(USER_EMAIL);
+                String phone = rs.getString(USER_PHONE_CONTACT);
+                String subject = rs.getString(CONTACT_SUBJECT);
+                String message = rs.getString(USER_MESSAGE_CONTACT);
+                int u_id = rs.getInt(USER_CONTACT);
+                boolean status = rs.getBoolean(USER_STATUS);
+                Contact c = new Contact(message, email, id, fullname, phone, subject, u_id, status);
+                return c;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        UserDAO ud = new UserDAO();
+        String name = "Nguyen Trong Thanh";
+        String email = "supershen123@gmail.com";
+        String subject = "ordering matter";
+        String query = "Thanh";
+//        List<Contact> list = ud.getContactListWithFilter(0, 10, null, true, null, null, null);
+//        for (Contact contact : list) {
+//            System.out.println(contact);
+//        }
+    Contact c = ud.getContactByID(7);
+        System.out.println(c);
     }
 
     //get user by user gmail 

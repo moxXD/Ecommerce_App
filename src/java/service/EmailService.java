@@ -152,6 +152,39 @@ public class EmailService {
         return null;
     }
 
+    public static void SendGmailToConfirm(String gmail) {
+        String OTP = EmailService.getOTP();
+        String subject = "TechMart confirm email to support";
+        String techMartMail = "service.techmart11@gmail.com";
+        String message = "Dear " + gmail + ",\n"
+                + "\n"
+                + "Thank to contact with TechMart.\n"
+                + "\n"
+                + "Please verify to contact with us .\n"
+                + "<a href=\"http://localhost:9999/SWP391_G1_OnlineShop/ConfirmEmail?email=" + gmail + " \">Confirm email</a>\n"
+                + "Wait for us to check email \n"
+                + "Thank you .\n"
+                + "\n"
+                + "Best regards,\n"
+                + "TechMart";
+        send(gmail, subject, message);
+    }
+
+    public static void SendGmailToContact(String gmail, String mess) {
+        String OTP = EmailService.getOTP();
+        String subject = "TechMart confirm email to support";
+        String techMartMail = "service.techmart11@gmail.com";
+        String message = "Dear " + gmail + ",\n"
+                + "\n"
+                + "Thank to contact with TechMart.\n"
+                + "\n" + mess + "\n"
+                + "Thank you .\n"
+                + "\n"
+                + "Best regards,\n"
+                + "TechMart";
+        send(gmail, subject, message);
+    }
+
     public void sendNewPassword(String name, String email, String password) {
         String subject = "Your New Password for TECHMART";
         String message = "<html><body><p>Dear " + name + ",</p>"
@@ -335,6 +368,7 @@ public class EmailService {
     }
 
     public static void main(String[] args) {
+        String emailTo = "23trongthanh@gmail.com";
 //        String emailTo = "2306trongthanh@gmail.com";
 //        String emailSubjectString = "service.techmart11@gmail.com";
 //        UserDAO ud = new UserDAO();
@@ -342,6 +376,8 @@ public class EmailService {
 //        String otp = EmailService.SendOTPtoSignUp(emailTo);
 //        boolean send = EmailService.send(emailTo, emailSubjectString, otp);
 //        System.out.println(otp);
+        String mess = "test contact 2";
+        SendGmailToContact(emailTo, mess);
 //        new EmailService().sendOrderDetail("ducltse05390@fpt.edu.vn", null, null);
     }
 
