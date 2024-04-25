@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package service;
+package controller.common;
 
 import dal.UserDAO;
 import java.io.IOException;
@@ -13,15 +13,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Setting;
 import model.User;
+import utility.Encode;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "verifyOTP", urlPatterns = {"/verifyOTP"})
-public class verifyOTP extends HttpServlet {
+@WebServlet(name = "Login", urlPatterns = {"/Login"})
+public class Login extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +40,10 @@ public class verifyOTP extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet verifyOTP</title>");
+            out.println("<title>Servlet Login</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet verifyOTP at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,7 +61,7 @@ public class verifyOTP extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("authen/login.jsp").forward(request, response);
     }
 
     /**
@@ -75,38 +75,37 @@ public class verifyOTP extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
+        UserDAO ud = new UserDAO();
         HttpSession session = request.getSession();
-        String action = (String) request.getSession().getAttribute("action");
-        int verifyStatus = EmailService.verifyOTP(action, (String) request.getSession().getAttribute("otp"), request.getParameter("otp"), request);
-        request.getSession().setAttribute("verifyStatus", verifyStatus);
-        switch (verifyStatus) {
-            case 1:
-                out.print("{\"status\":\"success-forgotpassword\"}");
-                break;
-            case 2:
-                UserDAO ud = new UserDAO();
-                User u = (User) request.getSession().getAttribute("user_register");
-                
-                // register
-                u.setSetting(new Setting(4));
-                u.setStatus(true);
-                ud.insertUser(u);
-                session.setAttribute("user_registed_successfull", "Register successfull, please login again for security reason!");
+        String action = request.getParameter("action");
+        String mail = request.getParameter("gmail");
+        String pass = request.getParameter("pass");
+        String name = request.getParameter("name");
+        String enpass = Encode.toSHA1(pass);
+        User check = ud.getUserByEmail(mail);
+        User u = ud.getUser(mail, enpass);
+
+        if (check == null) {
+            session.setAttribute("wrong", "You must register in system");
+            request.getRequestDispatcher("authen/login.jsp").forward(request, response);
+            return;
+        } else if (u == null) {
+            session.setAttribute("wrong", "Login again!");
+            request.getRequestDispatcher("authen/login.jsp").forward(request, response);
+            return;
+        } else if (u != null) {
+            if (u.getSetting().getId() == 1) {
+                session.setAttribute("userSession", u);
                 session.setAttribute("id", u.getId());
-                session.setAttribute("confirmSuccess", "Confirm gmail successed, please login system again for security code ");
-              
-                //=========
-                out.print("{\"status\":\"success-emailverification\"}");
-                break;
-            case -1:
-                out.print("{\"status\":\"error\", \"message\":\"OTP is incorrect\"}");
-                break;
-            case -2:
-                out.print("{\"status\":\"error\", \"message\":\"OTP is expired\"}");
-                break;
-            default:
-                break;
+                response.sendRedirect("admin/dashboard");
+            } else {
+                session.setAttribute("userSession", u);
+                session.setAttribute("id", u.getId());
+                response.sendRedirect("home");
+            }
+        } else {
+            request.getRequestDispatcher("authen/login.jsp").forward(request, response);
+            return;
         }
     }
 

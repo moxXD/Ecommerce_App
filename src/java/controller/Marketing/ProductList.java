@@ -3,10 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package controller.Marketing;
 
-//import controller.Marketing.BlogListServlet;
-import dal.BlogDAO;
+import dal.ProductDAO;
 import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,21 +14,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Blog;
+import model.Brand;
+import model.Category;
+import model.Product;
 import model.Setting;
-import model.User;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="BlogListController", urlPatterns={"/blogslist"})
-public class BlogListServlet extends HttpServlet {
+@WebServlet(name="ProductList", urlPatterns={"/marketing/productList"})
+public class ProductList extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -46,10 +43,10 @@ public class BlogListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BlogListController</title>");  
+            out.println("<title>Servlet ProductList</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BlogListController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ProductList at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -67,18 +64,45 @@ public class BlogListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         int page = 1;
-        int recordPerPage = 5;
-        List<Blog> list = new ArrayList<>();
-        List<Setting> setting = new ArrayList<>();
-        List<User> user = new ArrayList<>();
-        BlogDAO blogDAO = new BlogDAO();
-        SettingDAO settingDAO = new SettingDAO();
-        //filter
+        int recordPerPage = 10;
+        ProductDAO pd = new ProductDAO();
+        SettingDAO sd = new SettingDAO();
+        List<Setting> st = new ArrayList<>();
+        List<Product> listProduct = new ArrayList<>();
+        ArrayList<Category> listCate = sd.getListCategory();
+        ArrayList<Brand> listBrand = sd.getListBrand();
+
+        request.setAttribute("listCate", listCate);
+        request.setAttribute("listBrand", listBrand);
+
         String page_raw = request.getParameter("page");
-        String categoryFilter = request.getParameter("filcate");
-        String authorFilter = request.getParameter("filauthor");
+        String sortColumn = request.getParameter("sort");
+        String roleFilter_raw = request.getParameter("fillrole");
+        String cateFilter = request.getParameter("filCate");
+        String brandFilter = request.getParameter("filBrand");
+        String statusFilter = request.getParameter("filstatus");
         String searchQuery = request.getParameter("q");
-        //mapping filter
+        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
+
+        int roleFilter = 0;
+        String roleSelected = "";
+        if (roleFilter_raw != null && !roleFilter_raw.isEmpty()) {
+            for (Setting s : st) {
+                if (s.getValue().trim().equalsIgnoreCase(roleFilter_raw.trim())) {
+                    roleFilter = s.getId();
+                    roleSelected = s.getValue();
+                }
+            }
+        }
+
+        //mapping filter 
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            if (statusFilter.equalsIgnoreCase("active")) {
+                statusFilter = "1";
+            } else {
+                statusFilter = "0";
+            }
+        }
         if (page_raw != null) {
             try {
                 page = Integer.parseInt(page_raw);
@@ -86,21 +110,27 @@ public class BlogListServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        try {
-            list = blogDAO.getAllBlogPaginationPublic((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, searchQuery);
-            setting = settingDAO.getAllSetting();
-            user = blogDAO.getAllBlogAuthor();
-        } catch (SQLException ex) {
-            Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        int noOfrecord = blogDAO.getNumberOfRecord();
+
+        // get pagination product list
+        listProduct = pd.getProductListWithFilter((page - 1) * recordPerPage,
+                recordPerPage,
+                sortColumn,
+                sortOrder,
+                cateFilter,
+                brandFilter,
+                statusFilter,
+                searchQuery);
+
+        // get number of record found
+        int noOfrecord = pd.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
-        request.setAttribute("blogAuthors", user);
-        request.setAttribute("blogList", list);
-        request.setAttribute("settingList", setting);
+        // set data
         request.setAttribute("currentPage", page);
         request.setAttribute("noOfPage", noOfPage);
-        request.getRequestDispatcher("views/blogList.jsp").forward(request, response); 
+        request.setAttribute("listProduct", listProduct);
+        request.setAttribute("roleList", st);
+        request.setAttribute("sortOrder", sortOrder);
+        request.getRequestDispatcher("../views/marketing/product/list.jsp").forward(request, response);
     } 
 
     /** 

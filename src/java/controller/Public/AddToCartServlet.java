@@ -5,35 +5,27 @@
 package controller.Public;
 
 import dal.ProductDAO;
-import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Cart;
 import model.Product;
-import model.Setting;
 
 /**
  *
  * @author Duc Le
  */
-@WebServlet(name = "ProductListServlet", urlPatterns = {"/productlist"})
-public class ProductListServlet extends HttpServlet {
-
-    SettingDAO settDao = new SettingDAO();
-    ProductDAO pDao = new ProductDAO();
+@WebServlet(name = "AddToCartServlet", urlPatterns = {"/addtocart"})
+public class AddToCartServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,10 +44,10 @@ public class ProductListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductListServlet</title>");
+            out.println("<title>Servlet AddToCartServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductListServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddToCartServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,72 +65,9 @@ public class ProductListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // variable for pagination
-        int page = 1;
-        int recordPerPage = 6;
-        int cateId = 0,brandId=0;
-        // get request parameter
-        String page_raw = request.getParameter("page");
-        String cateId_raw = request.getParameter("categoryId");
-        String search_raw = request.getParameter("searchInput");
-        String brandId_raw=request.getParameter("brandId");
-        List<Product> pList = new ArrayList<>();
-        // parse integer
-        if (page_raw != null && !page_raw.isEmpty()) {
-            try {
-                page = Integer.parseInt(page_raw);
-            } catch (NumberFormatException e) {
-                Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
-            }
-        }// parse integer
-        if (cateId_raw != null && !cateId_raw.isEmpty()) {
-            try {
-                cateId = Integer.parseInt(cateId_raw);
-            } catch (NumberFormatException e) {
-                Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
-            }
-        }
-        if(brandId_raw!=null && !brandId_raw.isEmpty()){
-            try {
-                brandId = Integer.parseInt(brandId_raw);
-            } catch (NumberFormatException e) {
-                Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
-            }
-        }
-        // get pagination production list with added filter
-        pList = pDao.getProductWithFilter((page - 1) * recordPerPage,
-                recordPerPage, search_raw, cateId,brandId);
-
-        int noOfrecord = pDao.getNumberOfRecord();
-        int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
-        // get product category data
-        List<Setting> cates = settDao.getSettingByType("product category");
-        List<Setting> brands = settDao.getBrandList();
-        // set request attribute
-        request.setAttribute("categorys", cates);
-        request.setAttribute("brands", brands);
-        request.setAttribute("products", pList);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("noOfPage", noOfPage);
-        // redirect to productlist.jsp
-//        request.getRequestDispatcher("productlist.jsp").forward(request, response);
-        request.getRequestDispatcher("productlistv2.jsp").forward(request, response);
-
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String id_raw = request.getParameter("productId");
+        String id_raw = request.getParameter("id");
 //        System.out.println("id:" + id_raw);
+        ProductDAO pDao = new ProductDAO();
         HttpSession session = request.getSession();
         int id;
         if (id_raw != null && !id_raw.isEmpty()) {
@@ -173,11 +102,44 @@ public class ProductListServlet extends HttpServlet {
                     session.setAttribute("cartAdded", true);
 
                 }
-                response.sendRedirect("cartdetail");
+                response.sendRedirect("productlist");
             } catch (NumberFormatException e) {
                 Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         }
+//        // Lấy ra giỏ hàng từ session
+//        Map<String, Cart> map = (Map<String, Cart>) session.getAttribute("cart");
+//
+//// In ra giá trị của từng giỏ hàng trong map
+//        if (map != null) {
+//            System.out.println("================");
+//
+//            for (Map.Entry<String, Cart> entry : map.entrySet()) {
+//                String productId = entry.getKey();
+//                Cart cart = entry.getValue();
+//                Product product = cart.getProduct();
+//                int quantity = cart.getQuantity();
+//                System.out.println("Product ID: " + productId);
+//                System.out.println("Product Name: " + product.getName());
+//                System.out.println("Quantity: " + quantity);
+//            }
+//        } else {
+//            System.out.println("No carts found in session.");
+//        }
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

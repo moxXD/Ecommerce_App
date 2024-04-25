@@ -27,6 +27,13 @@ public class ProductDAO extends DBContext{
     PreparedStatement ps = null;
     ResultSet rs = null;
     
+    public static void main(String[] args) {
+        ProductDAO pd = new ProductDAO();
+        List<Product> lp = pd.getAllProduct();
+        for (Product product : lp) {
+            System.out.println(product);
+        }
+    }
     public List<Product> getAllProduct(){
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product";
@@ -310,14 +317,17 @@ public class ProductDAO extends DBContext{
 
     // get pagination product list with filtered condition
     public List<Product> getProductWithFilter(int offset, int limit, String search,
-            int categoryId) {
+            int categoryId,int brandId) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS *\n"
                 + "FROM " + PRODUCT_TABLE
-                + " WHERE 1=1 ";
+                + " WHERE 1=1 AND "+PRODUCT_STOCK+">0 ";
         // add filter condition
         if (categoryId != 0) {
             sql += " AND " + PRODUCT_CATEGORY_ID + "=? ";
+        }
+        if (brandId != 0) {
+            sql += " AND " + PRODUCT_BRAND_ID + "=? ";
         }
         // add search to query
         if (search != null && !search.isEmpty()) {
@@ -330,6 +340,9 @@ public class ProductDAO extends DBContext{
             int index = 1;
             if (categoryId != 0) {
                 stm.setInt(index++, categoryId);
+            }
+            if (brandId != 0) {
+                stm.setInt(index++, brandId);
             }
             if (search != null && !search.isEmpty()) {
                 String likeParam = "%" + search + "%";

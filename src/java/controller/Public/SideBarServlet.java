@@ -10,18 +10,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Cart;
 import model.Product;
 import model.Setting;
 
@@ -29,8 +24,8 @@ import model.Setting;
  *
  * @author Duc Le
  */
-@WebServlet(name = "ProductListServlet", urlPatterns = {"/productlist"})
-public class ProductListServlet extends HttpServlet {
+@WebServlet(name = "SideBarServlet", urlPatterns = {"/sidebar"})
+public class SideBarServlet extends HttpServlet {
 
     SettingDAO settDao = new SettingDAO();
     ProductDAO pDao = new ProductDAO();
@@ -52,10 +47,10 @@ public class ProductListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductListServlet</title>");
+            out.println("<title>Servlet SideBarServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductListServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SideBarServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -76,12 +71,12 @@ public class ProductListServlet extends HttpServlet {
         // variable for pagination
         int page = 1;
         int recordPerPage = 6;
-        int cateId = 0,brandId=0;
+        int cateId = 0, brandId = 0;
         // get request parameter
         String page_raw = request.getParameter("page");
         String cateId_raw = request.getParameter("categoryId");
         String search_raw = request.getParameter("searchInput");
-        String brandId_raw=request.getParameter("brandId");
+        String brandId_raw = request.getParameter("brandId");
         List<Product> pList = new ArrayList<>();
         // parse integer
         if (page_raw != null && !page_raw.isEmpty()) {
@@ -98,7 +93,7 @@ public class ProductListServlet extends HttpServlet {
                 Logger.getLogger(ProductListServlet.class.getName()).log(Level.SEVERE, null, e);
             }
         }
-        if(brandId_raw!=null && !brandId_raw.isEmpty()){
+        if (brandId_raw != null && !brandId_raw.isEmpty()) {
             try {
                 brandId = Integer.parseInt(brandId_raw);
             } catch (NumberFormatException e) {
@@ -107,7 +102,7 @@ public class ProductListServlet extends HttpServlet {
         }
         // get pagination production list with added filter
         pList = pDao.getProductWithFilter((page - 1) * recordPerPage,
-                recordPerPage, search_raw, cateId,brandId);
+                recordPerPage, search_raw, cateId, brandId);
 
         int noOfrecord = pDao.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
@@ -137,47 +132,7 @@ public class ProductListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id_raw = request.getParameter("productId");
-//        System.out.println("id:" + id_raw);
-        HttpSession session = request.getSession();
-        int id;
-        if (id_raw != null && !id_raw.isEmpty()) {
-            try {
-                id = Integer.parseInt(id_raw);
-                Product p = pDao.getProductById(id);
-                Object obj = session.getAttribute("cart");
-                if (obj == null) {// create new
-                    Cart c = new Cart();
-                    c.setProduct(p);
-                    c.setQuantity(1);
-
-                    Map<String, Cart> map = new HashMap<>();
-                    map.put(id_raw, c);
-
-                    session.setAttribute("cart", map);
-                    session.setAttribute("cartAdded", true);
-
-                } else { // add to existing cart
-                    Map<String, Cart> map = (Map<String, Cart>) obj;
-                    Cart c = map.get(id_raw);
-                    if (c == null) { // create new product cart
-                        c = new Cart();
-                        c.setProduct(p);
-                        c.setQuantity(1);
-
-                        map.put(id_raw, c);
-                    } else {// add quantity if cart exist
-                        c.setQuantity(c.getQuantity() + 1);
-                    }
-                    session.setAttribute("cart", map);
-                    session.setAttribute("cartAdded", true);
-
-                }
-                response.sendRedirect("cartdetail");
-            } catch (NumberFormatException e) {
-                Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, e);
-            }
-        }
+        processRequest(request, response);
     }
 
     /**

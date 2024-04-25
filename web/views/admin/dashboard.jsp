@@ -105,11 +105,11 @@
                             </a>
                         </li>
 
-                        <!--                        <li>
-                                                    <a href="simple.html">
-                                                        <i class="fa fa-glass"></i> <span>Simple tables</span>
-                                                    </a>
-                                                </li>-->
+                        <li>
+                            <a href="productlist">
+                                <i class="fa fa-legal"></i> <span>Products</span>
+                            </a>
+                        </li>
 
                     </ul>
                 </section>

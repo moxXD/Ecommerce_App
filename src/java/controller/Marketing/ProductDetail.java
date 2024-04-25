@@ -3,10 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package controller.Marketing;
 
-//import controller.Marketing.BlogListServlet;
-import dal.BlogDAO;
+import dal.ProductDAO;
 import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,21 +14,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Blog;
-import model.Setting;
-import model.User;
+import model.Brand;
+import model.Category;
+import model.Product;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="BlogListController", urlPatterns={"/blogslist"})
-public class BlogListServlet extends HttpServlet {
+@WebServlet(name="ProductDetail", urlPatterns={"/marketing/ProductDetail"})
+public class ProductDetail extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -46,10 +41,10 @@ public class BlogListServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BlogListController</title>");  
+            out.println("<title>Servlet ProductDetail</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet BlogListController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ProductDetail at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,41 +61,23 @@ public class BlogListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int page = 1;
-        int recordPerPage = 5;
-        List<Blog> list = new ArrayList<>();
-        List<Setting> setting = new ArrayList<>();
-        List<User> user = new ArrayList<>();
-        BlogDAO blogDAO = new BlogDAO();
-        SettingDAO settingDAO = new SettingDAO();
-        //filter
-        String page_raw = request.getParameter("page");
-        String categoryFilter = request.getParameter("filcate");
-        String authorFilter = request.getParameter("filauthor");
-        String searchQuery = request.getParameter("q");
-        //mapping filter
-        if (page_raw != null) {
-            try {
-                page = Integer.parseInt(page_raw);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+          String action = request.getParameter("action");
+        ProductDAO pd = new ProductDAO();
+        SettingDAO sd = new SettingDAO();
+        String id_raw = request.getParameter("id");
+        ArrayList<Category> listCate = sd.getListCategory();
+        ArrayList<Brand> listBrand = sd.getListBrand();
+        request.setAttribute("listCate", listCate);
+        request.setAttribute("listBrand", listBrand);
+        int id;
+        Product p = null;
+        if (action.equals("view")) {
+            id = Integer.parseInt(id_raw);
+            p = pd.getProduct(id);
         }
-        try {
-            list = blogDAO.getAllBlogPaginationPublic((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, searchQuery);
-            setting = settingDAO.getAllSetting();
-            user = blogDAO.getAllBlogAuthor();
-        } catch (SQLException ex) {
-            Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        int noOfrecord = blogDAO.getNumberOfRecord();
-        int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
-        request.setAttribute("blogAuthors", user);
-        request.setAttribute("blogList", list);
-        request.setAttribute("settingList", setting);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("noOfPage", noOfPage);
-        request.getRequestDispatcher("views/blogList.jsp").forward(request, response); 
+        request.setAttribute("p", p);
+        request.getRequestDispatcher("views/marketing/procduct/detail.jsp").forward(request, response);
+   
     } 
 
     /** 

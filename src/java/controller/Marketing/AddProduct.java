@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller.product;
+package controller.Marketing;
+
 
 import dal.ProductDAO;
 import dal.SettingDAO;
@@ -23,8 +24,8 @@ import model.Product;
  *
  * @author Admin
  */
-@WebServlet(name="EditProduct", urlPatterns={"/EditProduct"})
-public class EditProduct extends HttpServlet {
+@WebServlet(name="AddProduct", urlPatterns={"/marketing/AddProduct"})
+public class AddProduct extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -41,10 +42,10 @@ public class EditProduct extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditProduct</title>");  
+            out.println("<title>Servlet AddProduct</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditProduct at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet AddProduct at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,12 +66,10 @@ public class EditProduct extends HttpServlet {
         ProductDAO pd = new ProductDAO();
         ArrayList<Category> listCate = sd.getListCategory();
         ArrayList<Brand> listBrand = sd.getListBrand();
-        int id = Integer.parseInt(request.getParameter("id"));
-        Product p = pd.getProduct(id);
-        request.setAttribute("p", p);
         request.setAttribute("listCate", listCate);
         request.setAttribute("listBrand", listBrand);
-        request.getRequestDispatcher("views/marketing/procduct/edit.jsp").forward(request, response);
+
+        request.getRequestDispatcher("views/marketing/procduct/add.jsp").forward(request, response);
    
     } 
 
@@ -84,13 +83,11 @@ public class EditProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-           String id = request.getParameter("id");
-        int id_raw = Integer.parseInt(id);
         String name = request.getParameter("name");
-
-        int raw_brand = Integer.parseInt(request.getParameter("brand"));
-
-        int raw_cate = Integer.parseInt(request.getParameter("cate"));
+        String brandid = request.getParameter("brand");
+        int raw_brand = Integer.parseInt(brandid);
+        String cateid = request.getParameter("cate");
+        int raw_cate = Integer.parseInt(cateid);
         String price = request.getParameter("price");
         float raw_price = Float.parseFloat(price);
         String description = request.getParameter("description");
@@ -99,9 +96,9 @@ public class EditProduct extends HttpServlet {
         String status = request.getParameter("status");
         boolean raw_status = Boolean.parseBoolean(status);
         int stock = Integer.parseInt(request.getParameter("stock"));
-        Product p = new Product(id_raw,name, raw_brand, raw_cate, raw_price, description, specification, image, raw_status, stock);
-        ProductDAO pd = new ProductDAO();
-       // pd.update(p);
+        Product p = new Product(name, raw_brand, stock, raw_price, description, specification, image, raw_status, stock);
+        ProductDAO pd =new ProductDAO();
+        pd.add(p);
         response.sendRedirect("productList");
     }
 
