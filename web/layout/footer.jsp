@@ -9,29 +9,28 @@
 <html>
     <body>
         <div class="container-fluid"
-             style="background-color: #454545; color: white; margin-top: 70px;">
+             style="background-color: #454545; color: white; margin-top: 0;padding-top: 0">
             <div class="container">
                 <h3 class="text-center">Contact</h3>
                 <p class="text-center">
-                    <em>We love our fans!</em>
+                    <em>May our customer have the best experience!</em>
                 </p>
                 <div class="row test">
                     <div class="col-md-4">
-                        <p>Fan? Drop a note.</p>
+                        <p>Please leave a message if you encounter any problem.</p>
                         <p>
-                            <span class="glyphicon glyphicon-map-marker"></span>Bitter Code
+                            <span class="glyphicon glyphicon-map-marker"></span>Hoa Lac Hi-tech Park, km 29, Đại lộ, Thăng Long, Hà Nội
                         </p>
                         <p>
-                            <span class="glyphicon glyphicon-phone"></span>Phone: +91
-                            1515151515
+                            <span class="glyphicon glyphicon-phone"></span>Phone: +024 7300 5588
                         </p>
                         <p>
                             <span class="glyphicon glyphicon-envelope"></span>Email:
-                            thebittercode@gmail.com
+                            fptu@fpt.edu.vn
                         </p>
                         <p>
                             <span class="glyphicon glyphicon-copyright-mark"></span>
-                            BitterCode - 2023
+                            Group 1 - 2024
                         </p>
                     </div>
                     <div class="col-md-8">

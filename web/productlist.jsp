@@ -304,7 +304,25 @@
                 });
             });
             function addToCart(id) {
-                window.location.href = 'addtocart?id=' + id;
+                var formData = new FormData();
+                formData.append('productId', id);
+
+                $.ajax({
+                    url: 'addtocart',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // Xử lý phản hồi từ servlet (nếu cần)
+                        alert("Sản phẩm đã được thêm vào giỏ hàng thành công!");
+                        // Cập nhật giao diện nếu cần
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.error(error);
+                    }
+                });
             }
 
         </script>
@@ -320,6 +338,7 @@
         </script>
 
         <!-- Bootstrap JS and jQuery -->
+        
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

@@ -29,7 +29,6 @@ public class ProductDAO extends DBContext {
     ResultSet rs = null;
 
     // public List<Product> getAllProduct() {
-    
     // public static void main(String[] args) {
     //     ProductDAO pd = new ProductDAO();
     //     List<Product> lp = pd.getAllProduct();
@@ -37,7 +36,7 @@ public class ProductDAO extends DBContext {
     //         System.out.println(product);
     //     }
     // }
-    public List<Product> getAllProduct(){
+    public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product";
         try {
@@ -208,91 +207,88 @@ public class ProductDAO extends DBContext {
         return productList;
     }
 
-    public List<Product> getProductListWithFilter(int offset, int limit, String sortParam,
-            boolean order, String cateFilter, String brandFilter,
-            String statusFilter,
-            String searchQuery) {
+    // get pagination product list with filtered condition
+    public List<Product> getProductListWithFilter(int offset, int limit, String search,
+            int categoryId, int brandId, String status, String sortParam,
+            boolean order) {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT \n"
-                + "SQL_CALC_FOUND_ROWS "
-                + "p.id,\n"
-                + "    p.name,\n"
-                + "    pc.value AS category,\n"
-                + "    b.value AS brand,\n"
-                + "    p.price,\n"
-                + "    p.description,\n"
-                + "    p.specification,p.status,\n"
-                + "    p.stock\n"
-                + "FROM\n"
-                + "    product p\n"
-                + "JOIN\n"
-                + "    setting pc\n"
-                + "ON\n"
-                + "    p.product_category_id = pc.id\n"
-                + "JOIN\n"
-                + "    setting b\n"
-                + "ON\n"
-                + "    p.brand_id = b.id";
-        // add condition for filter
-        if (cateFilter != null && !cateFilter.isEmpty()) {
-            sql += " AND pc.value  = ? ";
+        String sql = "SELECT SQL_CALC_FOUND_ROWS *\n"
+                + "FROM " + PRODUCT_TABLE
+                + " WHERE 1=1 ";
+        // add filter condition
+        if (categoryId!=0) {
+            sql += " AND " + PRODUCT_CATEGORY_ID + "=? ";
         }
-        if (brandFilter != null && !brandFilter.isEmpty()) {
-            sql += " AND b.value  = ? ";
+        if (brandId != 0) {
+            sql += " AND " + PRODUCT_BRAND_ID + "=? ";
         }
-        if (statusFilter != null && !statusFilter.isEmpty()) {
-            sql += " AND p.status = ? ";
+        if (status != null && !status.isEmpty()) {
+            sql += " AND " + PRODUCT_STATUS + "=? ";
         }
-        if (searchQuery != null && !searchQuery.isEmpty()) {
-            sql += " AND p.name like ? ";
+        // add search to query
+        if (search != null && !search.isEmpty()) {
+            sql += " AND " + PRODUCT_NAME + " LIKE ?  ";
         }
-        // add sort condition
-        sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY "
-                + sortParam + (order ? " ASC" : " DESC") : "")
-                + " LIMIT ?, ?;"; // pagination
+        sql += " LIMIT ?,?;";
         try {
-            ps = getConnection().prepareStatement(sql);
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
 
-            int paramIndex = 1;
+            int index = 1;
+            if (categoryId != 0) {
+                stm.setInt(index++, categoryId);
+            }
+            if (brandId != 0) {
+                stm.setInt(index++, brandId);
+            }
+            if (status != null && !status.isEmpty()) {
+                stm.setString(index++, status);
 
-            if (cateFilter != null && !cateFilter.isEmpty()) {
-                ps.setString(paramIndex++, cateFilter);
             }
-            if (brandFilter != null && !brandFilter.isEmpty()) {
-                // System.out.println(roleFilter);
-                ps.setString(paramIndex++, brandFilter);
+            if (search != null && !search.isEmpty()) {
+                String likeParam = "%" + search + "%";
+                stm.setString(index++, likeParam);
             }
-            if (statusFilter != null && !statusFilter.isEmpty()) {
-                ps.setString(paramIndex++, statusFilter);
-            }
-            if (searchQuery != null && !searchQuery.isEmpty()) {
-                String likeParam = "%" + searchQuery + "%";
-                ps.setString(paramIndex++, likeParam);
-            }
-            ps.setInt(paramIndex++, offset);
-            ps.setInt(paramIndex++, limit);
-            System.out.println("ssql: " + ps.toString());
-            rs = ps.executeQuery();
+            stm.setInt(index++, offset);
+            stm.setInt(index++, limit);
+            System.out.println("query: " + stm.toString());
+
+            // System.out.println("sql: " + stm.toString());
+            ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                list.add(new Product(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        new Brand(rs.getString("brand")),
-                        new Category(rs.getString("category")),
-                        rs.getFloat("price"),
-                        rs.getString("description"),
-                        rs.getString("specification"),
-                        rs.getBoolean("status"),
-                        rs.getInt("stock")));
+                SettingDAO stDao = new SettingDAO();
+                Setting cate = stDao.getSettingById(rs.getInt(PRODUCT_CATEGORY_ID));
+                Setting brand = stDao.getSettingById(rs.getInt(PRODUCT_BRAND_ID));
+//                SaleDAO sDao = new SaleDAO();
+//                Sale s = sDao.getSalePriceByProductId(rs.getInt(PRODUCT_ID));
+                Product p = new Product(rs.getInt(PRODUCT_ID),
+                        rs.getString(PRODUCT_NAME),
+                        rs.getString(PRODUCT_DESCRIPTION),
+                        rs.getString(PRODUCT_SPECIFICATION),
+                        rs.getString(PRODUCT_IMAGE_URL),
+                        rs.getInt(PRODUCT_STOCK),
+                        rs.getDouble(PRODUCT_SALE_PRICE),
+                        cate,
+                        brand,
+                        rs.getDouble(PRODUCT_PRICE),
+                        rs.getBoolean(PRODUCT_STATUS),
+                        rs.getBoolean(PRODUCT_Featured));
+                list.add(p);
             }
-            rs = ps.executeQuery("SELECT FOUND_ROWS()"); // get total number of row found while execute query
+            rs = stm.executeQuery("SELECT FOUND_ROWS()"); // get total number of row found while execute query
             if (rs.next()) {
                 this.noOfrecord = rs.getInt(1);
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
-
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
         }
         return list;
     }
@@ -319,12 +315,12 @@ public class ProductDAO extends DBContext {
     DBContext context = new DBContext();
 
     // get pagination product list with filtered condition
-    public List<Product> getProductWithFilter(int offset, int limit, String search,
+    public List<Product> getAvailableProductWithFilter(int offset, int limit, String search,
             int categoryId, int brandId) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS *\n"
                 + "FROM " + PRODUCT_TABLE
-                + " WHERE 1=1 AND " + PRODUCT_STOCK + ">0 ";
+                + " WHERE 1=1 AND " + PRODUCT_STOCK + " >0 AND " + PRODUCT_STATUS + " is true ";
         // add filter condition
         if (categoryId != 0) {
             sql += " AND " + PRODUCT_CATEGORY_ID + "=? ";
@@ -493,11 +489,11 @@ public class ProductDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0, 0);
-        for (Product product : list) {
-            System.out.println("id: " + product.getId());
-            System.out.println("name: " + product.getName());
-            System.out.println("imgURL: " + product.getImageUrl());
-        }
+//        List<Product> list = new ProductDAO().getProductWithFilter(0, 4, null, 0, 0);
+//        for (Product product : list) {
+//            System.out.println("id: " + product.getId());
+//            System.out.println("name: " + product.getName());
+//            System.out.println("imgURL: " + product.getImageUrl());
+//        }
     }
 }

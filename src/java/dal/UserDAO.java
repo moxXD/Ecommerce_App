@@ -288,7 +288,7 @@ public class UserDAO {
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setString(1, u.getEmail());
             stm.setString(2, u.getPassword());
-            stm.setInt(3,u.getSetting().getId() );
+            stm.setInt(3, u.getSetting().getId());
             stm.setBoolean(4, u.isStatus());
             stm.setString(5, u.getFullname());
             stm.setBoolean(6, u.isGender());
@@ -311,6 +311,30 @@ public class UserDAO {
         }
     }
 
+    // get sale 
+    public User getSale() {
+        User u = null;
+        String sql = "SELECT * FROM " + USER_TABLE + " WHERE " + USER_SETTING_ID + "=5;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                u=new User(rs.getInt(USER_ID), rs.getString(USER_PHONE));
+            }
+        } catch (Exception e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return u;
+    }
 
     // update user status
     public void updateUserStatus(int id, boolean status) {

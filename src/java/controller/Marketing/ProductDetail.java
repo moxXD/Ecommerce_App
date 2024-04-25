@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import model.Brand;
 import model.Category;
 import model.Product;
+import model.Setting;
 
 /**
  *
@@ -65,8 +66,8 @@ public class ProductDetail extends HttpServlet {
         ProductDAO pd = new ProductDAO();
         SettingDAO sd = new SettingDAO();
         String id_raw = request.getParameter("id");
-        ArrayList<Category> listCate = sd.getListCategory();
-        ArrayList<Brand> listBrand = sd.getListBrand();
+        ArrayList<Setting> listCate = sd.getListCategory();
+        ArrayList<Setting> listBrand = sd.getListBrand();
         request.setAttribute("listCate", listCate);
         request.setAttribute("listBrand", listBrand);
         int id;

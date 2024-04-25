@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Product Detail</title>
+        <title>Product List</title>
         <!--<link type="text/css"  rel="stylesheet" href="css/sidebar.css"/>-->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -89,6 +89,7 @@
                                                             <p class="card-text">Not on sale</p>
                                                         </c:otherwise>
                                                     </c:choose>
+                                                    <!--<input type="hidden" name="id" value="${p.id}"/>  Sửa đổi tên của input thành "id" -->
 
                                                     <button class="btn btn-info">Buy now</button>
                                                     <button class="btn btn-danger "
@@ -101,6 +102,20 @@
                                     </div>
                                 </form>
                             </c:forEach>
+<!--                            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                    <img src="..." class="rounded mr-2" alt="...">
+                                    <strong class="mr-auto">Thông báo</strong>
+                                    <small>Just now</small>
+                                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="toast-body">
+                                    Sản phẩm đã được thêm vào giỏ hàng thành công!
+                                </div>
+                            </div>-->
+
 
                         </div><!--features_items-->
                         <!-- Pagination -->
@@ -141,25 +156,31 @@
         </section>
         <%@include  file="layout/footer.jsp" %>
         <script type="text/javascript">
-            
-            function addToCart(id) {
-                window.location.href = 'addtocart?id=' + id;
-            }
+
+
+
             function submitForm() {
                 var form = document.getElementById("filterForm");
                 form.submit();
             }
         </script>
-        <script type="text/javascript">
-            
-            // Kiểm tra xem có thuộc tính "cartAdded" trong session không
-            var cartAdded = ${sessionScope.cartAdded};
-            if (cartAdded) {
-                // Hiển thị cảnh báo
-                alert("Sản phẩm đã được thêm vào giỏ hàng thành công!");
-                // Xóa thuộc tính "cartAdded" khỏi session sau khi đã sử dụng
-            ${sessionScope.remove("cartAdded")};
+        <script>
+            function addToCart(id) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "addtocart", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // Xử lý phản hồi từ server nếu cần
+                        alert('product has been add to cart') // Cập nhật tổng chi phí sau khi cập nhật giỏ hàng
+//                        var toastElement = document.querySelector('.toast');
+//                        var toast = new bootstrap.Toast(toastElement);
+//                        toast.show();
+                    }
+                };
+                xhr.send("productId=" + id);
             }
+
         </script>
 
         <!-- Bootstrap JS and jQuery -->

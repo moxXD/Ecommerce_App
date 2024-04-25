@@ -111,20 +111,35 @@
     <%@include file="layout/footer.jsp" %>
     <script type="text/javascript">
         function addToCart(id) {
-            window.location.href = 'addtocart?id=' + id;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "addtocart", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Xử lý phản hồi từ server nếu cần
+                    alert('product has been add to cart') // Cập nhật tổng chi phí sau khi cập nhật giỏ hàng
+//                        var toastElement = document.querySelector('.toast');
+//                        var toast = new bootstrap.Toast(toastElement);
+//                        toast.show();
+                }
+            };
+            xhr.send("productId=" + id);
         }
-    </script>
-    <script type="text/javascript">
 
-        // Kiểm tra xem có thuộc tính "cartAdded" trong session không
-        var cartAdded = ${sessionScope.cartAdded};
-        if (cartAdded) {
-            // Hiển thị cảnh báo
-            alert("Sản phẩm đã được thêm vào giỏ hàng thành công!");
-            // Xóa thuộc tính "cartAdded" khỏi session sau khi đã sử dụng
-        ${sessionScope.remove("cartAdded")};
-        }
     </script>
+    <!--    <script type="text/javascript">
+    
+            // Kiểm tra xem có thuộc tính "cartAdded" trong session không
+            var cartAdded = ${sessionScope.cartAdded};
+            if (cartAdded) {
+                // Hiển thị cảnh báo
+                alert("Sản phẩm đã được thêm vào giỏ hàng thành công!");
+                // Xóa thuộc tính "cartAdded" khỏi session sau khi đã sử dụng
+    ${sessionScope.remove("cartAdded")};
+    }
+</script>-->
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>-->
+
     <script src="js/jquery.js"></script>
     <script src="js/price-range.js"></script>
     <script src="js/jquery.scrollUp.min.js"></script>

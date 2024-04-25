@@ -76,8 +76,6 @@
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav">
                                     <li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-                                    <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-                                    <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                                     <li><a href="cartdetail"><i class="fa fa-shopping-cart"></i> Cart</a></li>
                                         <c:if test="${userSession != null}">
                                         <li><a href="Logout"><i class="fa fa-lock"></i> Logout</a></li>
@@ -106,29 +104,21 @@
                             </div>
                             <div class="mainmenu pull-left">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
-                                    <li><a href="index.html" class="active">Home</a></li>
+                                    <li><a href="home" class="active">Home</a></li>
                                     <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                         <ul role="menu" class="sub-menu">
                                             <li><a href="productlist">Products</a></li>
-                                            <!--<li><a href="product-details.html">Product Details</a></li>--> 
-                                            <!--<li><a href="checkout.html">Checkout</a></li>--> 
                                             <li><a href="cartdetail">Cart</a></li> 
-                                            <li><a href="login.html">Login</a></li> 
                                         </ul>
                                     </li> 
-                                    <li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
-                                        <ul role="menu" class="sub-menu">
-                                            <li><a href="blog.html">Blog List</a></li>
-                                            <li><a href="blog-single.html">Blog Single</a></li>
-                                        </ul>
-                                    </li> 
-                            
+                                    <li><a href="blogslist">Blog List</a></li>
+
+                                    <c:if test="${not empty userSession}">
                                         <li><a href="admin/dashboard">Admin</a></li>
-                                    
+                                        </c:if>
                                 </ul>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div><!--/header-bottom-->

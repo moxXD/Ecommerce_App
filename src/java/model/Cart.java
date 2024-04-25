@@ -28,6 +28,12 @@ public class Cart {
         this.product = product;
     }
 
+    public Cart(int id, int quantity, Product product) {
+        this.id = id;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     @Override
     public String toString() {
         return "Cart{" + "id=" + id + ", quantity=" + quantity + ", user=" + user + ", product=" + product + '}';
@@ -66,7 +72,7 @@ public class Cart {
     }
 
     public double getTotal() {
-        return getPrice()*quantity;
+        return getPrice() * quantity;
     }
 
     public double getPrice() {
