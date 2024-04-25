@@ -14,25 +14,20 @@ import java.util.List;
 public class Order {
 
     private int id;
-    private List<OrderItem> orderItem;
-    private User customer, sale;
-    private Date createAt, updateAt;
+    private List<OrderItem> orderItem; // lech
+    private User customer, sale; // lech
+    private Date createAt, updateAt; // lech
     private String status, name, email, address;
     private int mobile;
-    private double total;
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
+    private double total; // lech
+    private int user_id;
+    private int sale_id;
 
     public Order() {
     }
 
-    public Order(int id, List<OrderItem> orderItem, User customer, User sale, Date createAt, Date updateAt, String status, String name, String email, String address, int mobile) {
+    public Order(int id, List<OrderItem> orderItem, User customer, User sale, Date createAt, Date updateAt,
+            String status, String name, String email, String address, int mobile) {
         this.id = id;
         this.orderItem = orderItem;
         this.customer = customer;
@@ -46,7 +41,8 @@ public class Order {
         this.mobile = mobile;
     }
 
-    public Order(int id, List<OrderItem> orderItem, User customer, User sale, Date updateAt, String status, String name, String email, String address, int mobile) {
+    public Order(int id, List<OrderItem> orderItem, User customer, User sale, Date updateAt, String status, String name,
+            String email, String address, int mobile) {
         this.id = id;
         this.orderItem = orderItem;
         this.customer = customer;
@@ -81,6 +77,20 @@ public class Order {
     public Order(int id, double total) {
         this.id = id;
         this.total = total;
+    }
+
+    public Order(int id, int user_id, Date create_at, String fullname, int sale_id, String address, String email,
+            int mobile, String status, Date update_at) {
+        this.id = id;
+        this.user_id = user_id;
+        this.create_at = create_at;
+        this.fullname = fullname;
+        this.sale_id = sale_id;
+        this.address = address;
+        this.email = email;
+        this.mobile = mobile;
+        this.status = status;
+        this.update_at = update_at;
     }
 
     public int getId() {
@@ -131,14 +141,6 @@ public class Order {
         this.updateAt = updateAt;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getName() {
         return name;
     }
@@ -147,12 +149,36 @@ public class Order {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public Date getCreate_at() {
+        return create_at;
+    }
+
+    public void setCreate_at(Date create_at) {
+        this.create_at = create_at;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public int getSale_id() {
+        return sale_id;
+    }
+
+    public void setSale_id(int sale_id) {
+        this.sale_id = sale_id;
     }
 
     public String getAddress() {
@@ -163,12 +189,44 @@ public class Order {
         this.address = address;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public int getMobile() {
         return mobile;
     }
 
     public void setMobile(int mobile) {
         this.mobile = mobile;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getUpdate_at() {
+        return update_at;
+    }
+
+    public void setUpdate_at(Date update_at) {
+        this.update_at = update_at;
     }
 
 }
