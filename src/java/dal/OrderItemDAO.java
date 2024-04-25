@@ -8,8 +8,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Order;
+import model.OrderItem;
 import model.Product;
 
 /**
@@ -69,4 +74,61 @@ public class OrderItemDAO {
             }
         }
     }
+
+    public List<OrderItem> getOrderItemByID(int orderid) throws SQLException {
+        List<OrderItem> list = new ArrayList<>();
+        String sql = "SELECT t1.*, t2.name, t2.imageurl \n"
+                + "FROM `swp391_g1_v1`.`order_item` AS t1\n"
+                + "INNER JOIN `swp391_g1_v1`.`product` AS t2 ON t1.product_id = t2.id\n"
+                + "WHERE t1.order_id =?";
+        try {
+
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, orderid);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int productid = rs.getInt("product_id");
+                Double price = rs.getDouble("price");
+                Double totalamount = rs.getDouble("total_amount");
+                int quantity = rs.getInt("quantity");
+                String productname = rs.getString("name");
+                String imgurl = rs.getString("imageurl");
+                OrderItem u = new OrderItem(id, productid, price, totalamount, quantity, productname, imgurl);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SaleDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public Double getTotalBillsByID(int orderID) {
+        String sql = "SELECT SUM(total_amount) AS totalbills\n"
+                + "FROM `swp391_g1_v1`.`order_item` WHERE order_id = ?";
+        Double total = null;
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, orderID);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                total = rs.getDouble(1);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return total;
+    }
+    
 }

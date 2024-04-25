@@ -17,10 +17,10 @@ public class DBContext {
 
    
     private final String serverName = "localhost";
-    private final String dbName = "swp391_g1_v3"; // Change accroding database name
+    private final String dbName = "swp391_g1_v1"; // Change accroding database name
     private final String portNumber = "3306";
-    private final String userID = "sa"; // change user name
-    private final String password = "123456"; // change password
+    private final String userID = "root"; // change user name
+    private final String password = "thanh812"; // change password
 
     public DBContext() {
 

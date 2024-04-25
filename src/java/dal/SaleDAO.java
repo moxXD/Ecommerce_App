@@ -9,8 +9,13 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Blog;
+import model.Order;
 import model.Sale;
 
 /**
@@ -41,12 +46,12 @@ public class SaleDAO {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                int sId=rs.getInt(SALE_ID);
-                int pId=rs.getInt(SALE_PRODUCT_ID);
-                Date start=rs.getDate(SALE_START_DATE);
-                Date end=rs.getDate(SALE_END_DATE);
-                double price=rs.getDouble(SALE_PRICE);
-                s=new Sale(sId, pId, price, start, end);
+                int sId = rs.getInt(SALE_ID);
+                int pId = rs.getInt(SALE_PRODUCT_ID);
+                Date start = rs.getDate(SALE_START_DATE);
+                Date end = rs.getDate(SALE_END_DATE);
+                double price = rs.getDouble(SALE_PRICE);
+                s = new Sale(sId, pId, price, start, end);
             }
         } catch (SQLException e) {
             Logger.getLogger(SaleDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -62,8 +67,9 @@ public class SaleDAO {
         return s;
     }
 
+
     public static void main(String[] args) {
-        Sale s=new SaleDAO().getSalePriceByProductId(7);
-        System.out.println("sale: "+s.toString());
+        Sale s = new SaleDAO().getSalePriceByProductId(7);
+        System.out.println("sale: " + s.toString());
     }
 }
