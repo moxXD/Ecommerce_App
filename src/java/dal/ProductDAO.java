@@ -561,14 +561,14 @@ public class ProductDAO extends DBContext {
                 + ") AS days "
                 + "LEFT JOIN `swp391_g1_v1`.`product` ON DATE(product.create_at) = days.day ";
 
-        String whereClause = "WHERE 1 = 1 ";
         if (filproductcate != null && !filproductcate.isEmpty()) {
-            whereClause += " AND product.product_category_id = ? ";
+            sql += " AND product.product_category_id = ? ";
         }
         if (filbrand != null && !filbrand.isEmpty()) {
-            whereClause += " AND product.brand_id = ? ";
+            sql += " AND product.brand_id = ? ";
         }
-        sql += whereClause + "GROUP BY days.day ORDER BY days.day ASC;";
+        sql += " GROUP BY days.day\n"
+                + "ORDER BY days.day ASC";
 
         Connection conn = null;
         PreparedStatement stm = null;

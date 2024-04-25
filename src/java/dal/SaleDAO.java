@@ -169,6 +169,35 @@ public class SaleDAO {
         return nototal;
     }
 
+    public Double getTotalRevenueByID(int id) {
+        String sql = "SELECT SUM(t1.total_amount) AS total_sum\n"
+                + "FROM swp391_g1_v1.order_item AS t1\n"
+                + "INNER JOIN swp391_g1_v1.order AS t2 ON t1.order_id = t2.id\n"
+                + "WHERE t2.status NOT IN ('submitted', 'cancel') AND t2.sale_id = ?;";
+        Double nototal = null;
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                nototal = rs.getDouble(1);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(SaleDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SaleDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return nototal;
+    }
+
     public List<Statistic> getRevenueLast7Day(Date postDate, String cate, String saler) throws SQLException {
         List<Statistic> list = new ArrayList<>();
         String sql = "SELECT \n"

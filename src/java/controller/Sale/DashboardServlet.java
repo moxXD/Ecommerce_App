@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -75,17 +76,29 @@ public class DashboardServlet extends HttpServlet {
         SaleDAO saleDAO = new SaleDAO();
         List<User> saler = new ArrayList<>();
         List<Setting> setting = new ArrayList<>();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("userSession");
         //order
         List<Statistic> totalLast7Days = new ArrayList<>();
         List<Statistic> successLast7Days = new ArrayList<>();
         //revenue
         List<Statistic> revenueLast7Days = new ArrayList<>();
         //
+        //get total data
         int norder = saleDAO.getNumberOfOrder();
-        Double totalrevenue = saleDAO.getTotalRevenue();
+        Double totalrevenue = null;
+        if (user != null) {
+            totalrevenue = saleDAO.getTotalRevenueByID(user.getId());
+        }
+
+        
+        //========================================================
         //get filter order chart
         String orderDate_raw = request.getParameter("orderdatepick");
         String orderSaler = request.getParameter("filordersaler");
+//        if(orderSaler == null && orderSaler.isEmpty()){
+//            orderSaler = String.valueOf(user.getId());
+//        }
         Date orderDate = null;
         if (orderDate_raw != null && !orderDate_raw.trim().isEmpty()) {
             orderDate = Date.valueOf(orderDate_raw);
@@ -97,6 +110,9 @@ public class DashboardServlet extends HttpServlet {
         String pcate = request.getParameter("filpcate");
         String salercate = request.getParameter("filsaler");
         String revDate_raw = request.getParameter("revedatepick");
+//        if(salercate == null && salercate.isEmpty()){
+//            salercate = String.valueOf(user.getId());
+//        }
         Date reveDate = null;
         if (revDate_raw != null && !revDate_raw.trim().isEmpty()) {
             reveDate = Date.valueOf(revDate_raw);
@@ -105,6 +121,9 @@ public class DashboardServlet extends HttpServlet {
         }
         //===========================================
         try {
+            //
+            totalrevenue = saleDAO.getTotalRevenue();
+            //
             //data order chart
             totalLast7Days = saleDAO.getOrderLast7Day(orderDate, null, orderSaler);
             successLast7Days = saleDAO.getOrderLast7Day(orderDate, "success", orderSaler);
