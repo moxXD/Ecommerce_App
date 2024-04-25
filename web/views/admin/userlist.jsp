@@ -111,7 +111,7 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="userlist" method="get">
+                    <form action="userlist" id="filterForm" method="get">
                         <!--search input-->
 
 
@@ -120,7 +120,8 @@
                                 <!--gender select-->
                                 <div class="col-md-4">
                                     <label for="filgender">Filter by gender:</label>
-                                    <select name="filgender" id="filgender" class="form-control">
+                                    <select name="filgender" id="filgender" class="form-control"
+                                            onchange="submitForm()">
                                         <option value="">All genders</option>
                                         <option value="male" ${param.filgender != null && param.filgender.equals("male") ? "selected" : ""}>Male</option>
                                         <option value="female" ${param.filgender != null && param.filgender.equals("female") ? "selected" : ""}>Female</option>
@@ -129,7 +130,8 @@
                                 <!--role select-->
                                 <div class="col-md-4">
                                     <label for="filrole">Filter by role:</label>
-                                    <select name="filrole" id="filrole" class="form-control">
+                                    <select name="filrole" id="filrole" class="form-control"
+                                            onchange="submitForm()">
                                         <option value="">All roles</option>
                                         <!-- Add role options here -->
                                         <c:forEach items="${requestScope.roleList}" var="r">
@@ -140,7 +142,8 @@
                                 <!--status select-->
                                 <div class="col-md-4">
                                     <label for="filstatus">Filter by status:</label>
-                                    <select name="filstatus" id="filstatus" class="form-control">
+                                    <select name="filstatus" id="filstatus" class="form-control"
+                                            onchange="submitForm()">
                                         <option value="">All status</option>
                                         <option value="active" ${param.filstatus != null && param.filstatus.equals("active") ? "selected" : ""}>Active</option>
                                         <option value="inactive" ${param.filstatus != null && param.filstatus.equals("inactive") ? "selected" : ""}>Inactive</option>
@@ -230,6 +233,11 @@
                                         </c:if>
 
                                         <td><a href="userdetail?action=view&id=${u.id}">View</a>
+<!--                                            <form action="userlist" method="post" id="statusChange" onsubmit="handleSubmit(${u.id}, ${u.status ? true : false})">
+                                                <input type="hidden" name="userId" value="${u.id}">
+                                                <input type="hidden" name="status" value="${u.status ? true : false}">
+                                                <input type="submit" value="${!u.status ? 'Activate' : 'Deactivate'}" />
+                                            </form>-->
                                             <form action="userlist" method="post">
                                                 <input type="hidden" name="userId" value="${u.id}">
                                                 <input type="hidden" name="status" value="${u.status?true:false}">
@@ -251,7 +259,7 @@
                                 <c:if test="${currentPage > 1}">
                                     <li>
                                         <a href="userlist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                            <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </li>
                                 </c:if>
@@ -270,13 +278,31 @@
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
                                         <a href="userlist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filgender=${param.filgender}&filrole=${param.filrole}&filstatus=${param.filstatus}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                            <i class="fa fa-arrow-right"></i>
                                         </a>
                                     </li>
                                 </c:if>
                             </ul>
 
                         </nav>
+                        <div id="confirmModal" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Confirm action</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to change this user status?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" id="confirmBtn">Xác nhận</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy bỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </section>
@@ -289,6 +315,35 @@
             function redirectToAddUser() {
                 window.location.href = 'userdetail?action=add';
             }
+            function submitForm() {
+                var form = document.getElementById("filterForm");
+                form.submit();
+            }
+            // Function to show the confirmation modal
+            function showConfirmationModal(userId, status) {
+                $('#confirmModal').modal('show');
+
+                // Capture the user's decision
+                $('#confirmBtn').click(function () {
+                    // Call a function to perform the action based on the user's decision
+                    // For example, you can make an AJAX call to update the user's status
+                    // Here, I'm just logging the user's decision to the console
+                    
+
+                    // Close the modal
+                    $('#confirmModal').modal('hide');
+                });
+            }
+
+// Function to handle the submission of the form
+            function handleSubmit(userId, status) {
+                // Prevent the form from submitting directly
+                event.preventDefault();
+
+                // Show the confirmation modal
+                showConfirmationModal(userId, status);
+            }
+
         </script>
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>

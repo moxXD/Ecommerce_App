@@ -541,7 +541,7 @@ public class BlogDAO extends DBContext {
 
 //    public static void main(String[] args) throws SQLException {
 //        BlogDAO st = new BlogDAO();
-//        List<Setting> list = st.getAllBlogSetting();
-//        System.out.println("list " + list.size());
+//        List<Blog> list = st.getAllBlogPaginationPublic( 1,  1, "SSSS", "fadf", "abfiukab");
+//        System.out.println("list ");
 //    }
 }

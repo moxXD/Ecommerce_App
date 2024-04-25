@@ -14,8 +14,16 @@ import java.sql.Timestamp;
 public class User {
 
     private int id, categotyid;
+    public User(int id, String phone) {
+        this.id = id;
+        this.phone = phone;
+    }
+
+
     private Setting setting;
-    private String email, password, fullname, imgUrl, phone, address;
+    private String email, password, 
+            fullname, imgUrl,
+            phone, address;
     private boolean status, gender;
     private Date dob;
     private Timestamp createtime;
@@ -36,6 +44,11 @@ public class User {
         this.createtime = createtime;
         
     }
+
+    public User(int id) {
+        this.id = id;
+    }
+
     public User(Setting setting, String email, String password, String fullname, boolean status) {
         this.setting = setting;
         this.email = email;
@@ -65,10 +78,9 @@ public class User {
         this.dob = dob;
     }
 
-    public User(int id, Setting setting, String email, String password, String fullname,
-            String imgUrl, String phone, String address, boolean confirmation,
-            boolean status, boolean gender, Date dob) {
-
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", setting=" + setting + ", email=" + email + ", password=" + password + ", fullname=" + fullname + ", imgUrl=" + imgUrl + ", phone=" + phone + ", address=" + address + ", status=" + status + ", gender=" + gender + ", dob=" + dob + '}';
     }
 
 

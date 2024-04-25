@@ -271,6 +271,78 @@ public class UserDAO {
             }
         }
     }
+// update password
+
+    public void update(User u) {
+        String sql = "UPDATE `swp391_g1_v1`.`user`\n"
+                + "SET\n"
+                + "`email` = ?,\n"
+                + "`password` = ?,\n"
+                + "`setting_id` =?,\n"
+                + "`status` = ?,\n"
+                + "`fullname` = ?,\n"
+                + "`gender` = ?,\n"
+                + "`imageurl` =?,\n"
+                + "`dob` =?,\n"
+                + "`phone` =123456789,\n"
+                + "`address` = ?\n"
+                + "WHERE `id` = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, u.getEmail());
+            stm.setString(2, u.getPassword());
+            stm.setInt(3, u.getSetting().getId());
+            stm.setBoolean(4, u.isStatus());
+            stm.setString(5, u.getFullname());
+            stm.setBoolean(6, u.isGender());
+            stm.setString(7, u.getImgUrl());
+            stm.setDate(8, u.getDob());
+            stm.setString(9, u.getPhone());
+            stm.setString(10, u.getAddress());
+            stm.setInt(11, u.getId());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
+    // get sale 
+    public User getSale() {
+        User u = null;
+        Setting role = stDAO.getSettingByTypeAndValue("role", "sale");
+        String sql = "SELECT * FROM " + USER_TABLE + " WHERE " + USER_SETTING_ID + "=? \n"
+                + "ORDER BY RAND()\n"
+                + "LIMIT 1;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, role.getId());
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                u = new User(rs.getInt(USER_ID), rs.getString(USER_PHONE));
+            }
+        } catch (Exception e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return u;
+    }
 
     // update user status
     public void updateUserStatus(int id, boolean status) {

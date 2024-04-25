@@ -154,6 +154,8 @@
                                         <option value="role" ${s.type=="role"?"selected":""}>Role</option>
                                         <option value="product category" ${s.type.trim()=="product category".trim()?"selected":""}>Product Category</option>
                                         <option value="brand" ${s.type=="brand"?"selected":""}>Brand</option>
+                                        <option value="contact" ${s.type=="contact"?"selected":""}>Contact</option>
+
                                     </select>
 
                                     <span id="typeError" class="error-msg"></span>
@@ -209,7 +211,7 @@
                                         <span id="checkboxError" class="error-msg"></span>
                                     </div>
                                 </c:if>
-                                
+
 
                             </div>
 

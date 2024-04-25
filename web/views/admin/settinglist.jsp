@@ -97,13 +97,14 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="settinglist" method="get">
+                    <form action="settinglist" id="filterForm" method="get">
 
                         <!--select type-->
                         <div class="filter-row">
                             <div class="form-group col-md-2">
                                 <label for="filtype">Filter by type:</label>
-                                <select name="filtype" id="filtype" class="form-control">
+                                <select name="filtype" id="filtype" class="form-control"
+                                        onchange="submitForm()">
                                     <option value="">All type</option>
                                     <c:forEach items="${requestScope.settingData}" var="t">
                                         <option value="${t}" ${param.filtype.equals(t)  ? "selected" : ""}>${t}</option>
@@ -113,7 +114,8 @@
                             <!--select  status-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by status:</label>
-                                <select name="filstatus" id="filstatus" class="form-control">
+                                <select name="filstatus" id="filstatus" class="form-control"
+                                        onchange="submitForm()">
                                     <option value="" >All status</option>
                                     <option value="1" ${param.filstatus.equals("1") ? "selected" : ""}>Active</option>
                                     <option value="0" ${ param.filstatus.equals("0") ? "selected" : ""}>Inactive</option>
@@ -124,7 +126,7 @@
                                 <div class="form-group">
                                     <label for="filstatus">Search:</label>
                                     <div class="input-group ">
-                                        <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
+                                        <input type="text" name="q" class="form-control" placeholder="Search by value ..." value="${param.q}"/>
                                         <span class="input-group-btn">
                                             <button type='submit' id='search-btn' class="btn btn-flat"
                                                     style="background-color: white;border: 1px solid grey;border-radius: 5px "><i
@@ -209,7 +211,7 @@
                                 <c:if test="${currentPage > 1}">
                                     <li>
                                         <a href="settinglist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                            <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </li>
                                 </c:if>
@@ -228,7 +230,7 @@
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
                                         <a href="settinglist?page=${currentPage + 1}&sort=${param.sort}&order=${param.order}&q=${param.q}&filtype=${param.filtype}&filstatus=${param.filstatus}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                            <i class="fa fa-arrow-right"></i>
                                         </a>
                                     </li>
                                 </c:if>
@@ -346,6 +348,10 @@
                 });
 
             });
+            function submitForm() {
+                var form = document.getElementById("filterForm");
+                form.submit();
+            }
             // Chart.defaults.global.responsive = true;
         </script>
     </body>

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Setting;
 import model.User;
 
 /**
@@ -75,6 +76,7 @@ public class verifyOTP extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession();
         String action = (String) request.getSession().getAttribute("action");
         int verifyStatus = EmailService.verifyOTP(action, (String) request.getSession().getAttribute("otp"), request.getParameter("otp"), request);
         request.getSession().setAttribute("verifyStatus", verifyStatus);
@@ -84,10 +86,17 @@ public class verifyOTP extends HttpServlet {
                 break;
             case 2:
                 UserDAO ud = new UserDAO();
-                User u = (User) request.getSession().getAttribute("us");
-                ud.updateUserStatus(u.getId(), true);
-                HttpSession session = request.getSession();
+                User u = (User) request.getSession().getAttribute("user_register");
+                
+                // register
+                u.setSetting(new Setting(4));
+                u.setStatus(true);
+                ud.insertUser(u);
+                session.setAttribute("user_registed_successfull", "Register successfull, please login again for security reason!");
+                session.setAttribute("id", u.getId());
                 session.setAttribute("confirmSuccess", "Confirm gmail successed, please login system again for security code ");
+              
+                //=========
                 out.print("{\"status\":\"success-emailverification\"}");
                 break;
             case -1:

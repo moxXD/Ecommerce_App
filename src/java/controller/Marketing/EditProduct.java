@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller.product;
+package controller.Marketing;
 
 import dal.ProductDAO;
 import dal.SettingDAO;
@@ -18,13 +18,14 @@ import java.util.ArrayList;
 import model.Brand;
 import model.Category;
 import model.Product;
+import model.Setting;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="ProductDetail", urlPatterns={"/marketing/productdetail"})
-public class ProductDetail extends HttpServlet {
+@WebServlet(name="EditProduct", urlPatterns={"/marketing/editproduct"})
+public class EditProduct extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -41,10 +42,10 @@ public class ProductDetail extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetail</title>");  
+            out.println("<title>Servlet EditProduct</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetail at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet EditProduct at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,23 +62,16 @@ public class ProductDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-          String action = request.getParameter("action");
-        ProductDAO pd = new ProductDAO();
         SettingDAO sd = new SettingDAO();
-        String id_raw = request.getParameter("id");
-        ArrayList<Category> listCate = sd.getListCategory();
-        ArrayList<Brand> listBrand = sd.getListBrand();
+        ProductDAO pd = new ProductDAO();
+        ArrayList<Setting> listCate = sd.getListCategory();
+        ArrayList<Setting> listBrand = sd.getListBrand();
+        int id = Integer.parseInt(request.getParameter("id"));
+        Product p = pd.getProduct(id);
+        request.setAttribute("p", p);
         request.setAttribute("listCate", listCate);
         request.setAttribute("listBrand", listBrand);
-        int id;
-        Product p = null;
-        if (action.equals("view")) {
-            
-            id = Integer.parseInt(id_raw);
-            p = pd.getProduct(id);
-        }
-        request.setAttribute("p", p);
-        request.getRequestDispatcher("../views/marketing/product/detail.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/marketing/product/edit.jsp").forward(request, response);
    
     } 
 
@@ -91,7 +85,25 @@ public class ProductDetail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+           String id = request.getParameter("id");
+        int id_raw = Integer.parseInt(id);
+        String name = request.getParameter("name");
+
+        int raw_brand = Integer.parseInt(request.getParameter("brand"));
+
+        int raw_cate = Integer.parseInt(request.getParameter("cate"));
+        String price = request.getParameter("price");
+        float raw_price = Float.parseFloat(price);
+        String description = request.getParameter("description");
+        String specification = request.getParameter("specification");
+        String image = request.getParameter("image");
+        String status = request.getParameter("status");
+        boolean raw_status = Boolean.parseBoolean(status);
+        int stock = Integer.parseInt(request.getParameter("stock"));
+        Product p = new Product(id_raw,name, raw_brand, raw_cate, raw_price, description, specification, image, raw_status, stock);
+        ProductDAO pd = new ProductDAO();
+       // pd.update(p);
+        response.sendRedirect("productList");
     }
 
     /** 

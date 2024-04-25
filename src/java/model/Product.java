@@ -12,6 +12,11 @@ import java.sql.Timestamp;
  */
 public class Product {
 
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", brandid=" + brandid + ", categoryProductId=" + categoryProductId + ", settings=" + settings + ", brands=" + brands + ", cate=" + cate + ", description=" + description + ", specification=" + specification + ", imageUrl=" + imageUrl + ", stock=" + stock + ", category=" + category + ", brand=" + brand + ", price=" + price + ", salePrice=" + salePrice + ", imgUrl=" + imgUrl + ", status=" + status + ", isFeatured=" + isFeatured + '}';
+    }
+
     private int id;
     private String name;
     private int brandid;
@@ -23,10 +28,36 @@ public class Product {
     private String specification;
     private String imageUrl;
     private int stock;
-    
+    private double salePrice;
+
+    public double getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(double salePrice) {
+        this.salePrice = salePrice;
+    }
     private Setting category,brand;
     private double price, saleprice;
     private Sale salePrice;
+
+    public Product(int id, String name, String description,
+            String specification, String imageUrl, int stock,
+            double salePrice, Setting category, Setting brand,
+            double price, boolean status, boolean isFeatured) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.specification = specification;
+        this.imageUrl = imageUrl;
+        this.stock = stock;
+        this.salePrice = salePrice;
+        this.category = category;
+        this.brand = brand;
+        this.price = price;
+        this.status = status;
+        this.isFeatured = isFeatured;
+    }
     private String imgUrl;
     private boolean status,isFeatured, isSale;
     private Timestamp createAt, updateAt;
@@ -121,7 +152,7 @@ public class Product {
     
 
     public Product(int id, int stock, String name, Setting category, Setting brand,
-            double price, Sale salePrice, String description,String specification, String imgUrl,
+            double price, String description,String specification, String imgUrl,
             boolean status, boolean isFeatured) {
         this.id = id;
         this.stock = stock;
@@ -130,7 +161,6 @@ public class Product {
         this.brand = brand;
         this.price = price;
         this.specification=specification;
-        this.salePrice = salePrice;
         this.description = description;
         this.imgUrl = imgUrl;
         this.status = status;
@@ -218,13 +248,7 @@ public class Product {
         this.price = price;}
 
 
-    public Sale getSalePrice() {
-        return salePrice;
-    }
-
-    public void setSalePrice(Sale salePrice) {
-        this.salePrice = salePrice;
-    }
+  
 
     public String getDescription() {
         return description;

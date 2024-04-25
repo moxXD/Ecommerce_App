@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller.product;
+package controller.Marketing;
 
 import dal.ProductDAO;
 import dal.SettingDAO;
@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
 import model.Brand;
 import model.Category;
 import model.Product;
@@ -25,8 +24,8 @@ import model.Setting;
  *
  * @author Admin
  */
-@WebServlet(name="ProductList", urlPatterns={"/marketing/productlist"})
-public class ProductList extends HttpServlet {
+@WebServlet(name="ProductDetail", urlPatterns={"/marketing/productdetail"})
+public class ProductDetail extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,10 +42,10 @@ public class ProductList extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductList</title>");  
+            out.println("<title>Servlet ProductDetail</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductList at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ProductDetail at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,74 +62,24 @@ public class ProductList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int page = 1;
-        int recordPerPage = 10;
+          String action = request.getParameter("action");
         ProductDAO pd = new ProductDAO();
         SettingDAO sd = new SettingDAO();
-        List<Setting> st = new ArrayList<>();
-        List<Product> listProduct = new ArrayList<>();
-        ArrayList<Category> listCate = sd.getListCategory();
-        ArrayList<Brand> listBrand = sd.getListBrand();
-
+        String id_raw = request.getParameter("id");
+        ArrayList<Setting> listCate = sd.getListCategory();
+        ArrayList<Setting> listBrand = sd.getListBrand();
         request.setAttribute("listCate", listCate);
         request.setAttribute("listBrand", listBrand);
-
-        String page_raw = request.getParameter("page");
-        String sortColumn = request.getParameter("sort");
-        String roleFilter_raw = request.getParameter("fillrole");
-        String cateFilter = request.getParameter("filCate");
-        String brandFilter = request.getParameter("filBrand");
-        String statusFilter = request.getParameter("filstatus");
-        String searchQuery = request.getParameter("q");
-        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
-
-        int roleFilter = 0;
-        String roleSelected = "";
-        if (roleFilter_raw != null && !roleFilter_raw.isEmpty()) {
-            for (Setting s : st) {
-                if (s.getValue().trim().equalsIgnoreCase(roleFilter_raw.trim())) {
-                    roleFilter = s.getId();
-                    roleSelected = s.getValue();
-                }
-            }
+        int id;
+        Product p = null;
+        if (action.equals("view")) {
+            
+            id = Integer.parseInt(id_raw);
+            p = pd.getProduct(id);
         }
-
-        //mapping filter 
-        if (statusFilter != null && !statusFilter.isEmpty()) {
-            if (statusFilter.equalsIgnoreCase("active")) {
-                statusFilter = "1";
-            } else {
-                statusFilter = "0";
-            }
-        }
-        if (page_raw != null) {
-            try {
-                page = Integer.parseInt(page_raw);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // get pagination product list
-        listProduct = pd.getProductListWithFilter((page - 1) * recordPerPage,
-                recordPerPage,
-                sortColumn,
-                sortOrder,
-                cateFilter,
-                brandFilter,
-                statusFilter,
-                searchQuery);
-
-        // get number of record found
-        int noOfrecord = pd.getNumberOfRecord();
-        int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
-        // set data
-        request.setAttribute("currentPage", page);
-        request.setAttribute("noOfPage", noOfPage);
-        request.setAttribute("listProduct", listProduct);
-        request.setAttribute("roleList", st);
-        request.setAttribute("sortOrder", sortOrder);
-        request.getRequestDispatcher("../views/marketing/product/list.jsp").forward(request, response);
+        request.setAttribute("p", p);
+        request.getRequestDispatcher("../views/marketing/product/detail.jsp").forward(request, response);
+   
     } 
 
     /** 

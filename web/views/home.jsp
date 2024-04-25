@@ -75,71 +75,78 @@
 
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                    <div class="recommended_items"><!--recommended_items-->
+                        <h2 class="title text-center">recommended items</h2>
+
+                        <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+
+                            <div class="carousel-inner">
+
+                                <div class="item active">
+                                    <c:forEach items="${firstList}" var="f">
+                                        <div class="col-sm-4">
+                                            <div class="product-image-wrapper">
+                                                <div class="single-products">
+                                                    <div class="productinfo text-center">
+                                                        <img src="<c:url value='/uploads/${f.imageUrl}'/> alt="" >
+                                                        <h2>${f.name}</h2>
+                                                        <h2>${f.price}</h2>
+                                                        <p>${f.specification}</p>
+                                                        <a href="productdetail?id=${f.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
+                                                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+
+
+                                <div class="item">	
+                                    <c:forEach items="${secondList}" var="s">
+                                        <div class="col-sm-4">
+                                            <div class="product-image-wrapper">
+                                                <div class="single-products">
+                                                    <div class="productinfo text-center">
+                                                        <img src="<c:url value='/uploads/${s.imageUrl}'/> alt="" >
+                                                        <h2>${s.name}</h2>
+                                                        <h2>${s.price}</h2>
+                                                        <p>${s.specification}</p>
+                                                        <a href="productdetail?id=${s.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
+                                                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+
+
+
+
+                            </div>
+                            <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+
+                        </div>
+
+                    </div><!--/recommended_items-->
+                    </div>
+                </div>
             </div>
         </section><!--/slider-->
 
-        <div class="recommended_items"><!--recommended_items-->
-            <h2 class="title text-center">recommended items</h2>
 
-            <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
-
-                <div class="carousel-inner">
-
-                    <div class="item active">
-                        <c:forEach items="${firstList}" var="f">
-                            <div class="col-sm-4">
-                                <div class="product-image-wrapper">
-                                    <div class="single-products">
-                                        <div class="productinfo text-center">
-                                            <img src="${f.imageUrl}" alt="" />
-                                            <h2>${f.name}</h2>
-                                            <h2>${f.price}</h2>
-                                            <p>${f.description}</p>
-                                            <a href="detail?pid=${f.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-
-
-                    <div class="item">	
-                        <c:forEach items="${secondList}" var="s">
-                            <div class="col-sm-4">
-                                <div class="product-image-wrapper">
-                                    <div class="single-products">
-                                        <div class="productinfo text-center">
-                                            <img src="${s.imageUrl}" alt="" />
-                                            <h2>${s.name}</h2>
-                                            <h2>${s.price}</h2>
-                                            <p>${s.description}</p>
-                                            <a href="detail?pid=${s.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-
-
-
-
-                </div>
-                <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-                <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-
-        </div><!--/recommended_items-->
 
 
         <%@ include file="../layout/footer.jsp" %>

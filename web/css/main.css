@@ -1627,6 +1627,8 @@ h2.title {
 
 .cart_product {
   display: block;
+  width: 100px;
+  height: 100px;
   margin: 15px -70px 10px 25px;
 }
 

@@ -146,7 +146,7 @@
                                 <c:if test="${currentPage > 1}">
                                     <li>
                                         <a href="blogslist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Previous">
-                                            <span style="padding: 0" aria-hidden="true"><i class="fa fa-angle-double-left fa-sm"></i></span>
+                                            <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </li>
                                 </c:if>
@@ -165,7 +165,7 @@
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
                                         <a href="blogslist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}" aria-label="Next">
-                                            <span style="padding: 0" aria-hidden="true"><i class="fa fa-angle-double-right fa-sm"></i></span>
+                                            <i class="fa fa-arrow-right"></i>
                                         </a>
                                     </li>
                                 </c:if>

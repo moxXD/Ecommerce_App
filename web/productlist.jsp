@@ -155,19 +155,31 @@
                             <button id="searchBtn" class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
-                    <a href="productlist?searchInput=${param.searchInput}">Clear Category</a>
+                    <!--<a href="productlist?searchInput=${param.searchInput}">Clear Category</a>-->
                     <!--</form>-->
                     <!-- Radio buttons -->
                     <!--<form id="filterForm" action="productlist" method="GET">-->
                     <div class="form-group mt-3 ">
                         <label>Select Category:</label>
                         <div class="custom-control custom-radio">
+
+                            <select name="categoryId">
+                                <option value="">Select Category</option>
+                                <c:forEach items="${requestScope.categorys}" var="c">
+                                    <option value="${c.id}" ${param.categoryId==c.id?"selected":""}>${c.value}</option>
+                                </c:forEach>
+                            </select>
+                            <%--
                             <c:forEach items="${requestScope.categorys}" var="c">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="category"  ${param.categoryId==c.id?"checked":""} name="categoryId" class="custom-control-input" value="${c.id}">
+                                    <input type="radio" id="category"
+                                           ${param.categoryId==c.id?"checked":""}
+                                           name="categoryId" class="custom-control-input"
+                                           value="${c.id}">
                                     <label class="custom-control-label" for="category">${c.value}</label>
                                 </div>
                             </c:forEach>
+                            --%>
                             <!--<button type="submit" style="display: none;"></button>-->
                         </div>
                     </div>
@@ -179,48 +191,65 @@
                 <div class="row">
                     <!-- Product Cards -->
                     <c:forEach items="${requestScope.products}" var="p">
-                        <div class="col-md-4">
-                            <div class="product-card " >
-                                <div class="product-card-image">
-                                    <a href="productdetail?id=${p.id}"style="justify-content: center" >
-                                        <img src="<c:url value='/uploads/${p.imgUrl}'/>" 
-                                             alt="${p.name}">
-                                    </a>    
-                                </div>
-
-                                <div class="card-body row">
-                                    <div class="card-body-content col-md-8">
-                                        <h5 class="card-title">${p.name}</h5>
-                                        <p class="card-text" >${p.specification}</p>
-                                        <!-- product has a sale price-->
-                                        <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
-                                        <c:if test="${not empty p.salePrice}">
-                                            <jsp:useBean id="now" class="java.util.Date"/>
+                        <form action="productlist" method="post">
+                            <div class="col-md-4">
+                                <div class="product-card " >
+                                    <!--<form>-->
+                                    <input type="hidden" name="productId" value="${p.id}"/>
+                                    <div class="product-card-image">
+                                        <a href="productdetail?id=${p.id}"style="justify-content: center" >
                                             <c:choose>
-                                                <c:when test="${p.salePrice.start < now && now < p.salePrice.end}"> 
-                                                    <fmt:formatNumber value="${p.salePrice.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
-                                                    <p class="card-text" style="text-decoration: line-through;color: red">Price: ${formattedPrice}</p>
-                                                    <p class="card-text" style="color: #62f04f">Sale Price: ${formattedSalePrice}</p>
+                                                <c:when test="${not empty p.imgUrl}">
+                                                    <img src="<c:url value='/uploads/${p.imgUrl}'/>" 
+                                                         alt="${p.name}">
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <p class="card-text" style="color: #62f04f">Price: ${formattedPrice}</p>
-                                                    <p class="card-text">Not on sale</p>
+                                                    <img src="${pageContext.request.contextPath}/images/default-product.png" 
+                                                         alt="${p.name}">
                                                 </c:otherwise>
                                             </c:choose>
-                                        </c:if>
-                                        <!--show if product is not on sale-->
-                                        <c:if test="${empty p.salePrice}">
-                                            <p class="card-text" style="color: #62f04f">Price: ${formattedPrice}</p>
-                                            <p class="card-text" >Not on sale</p>
-                                        </c:if>
+                                        </a>    
                                     </div>
-                                    <div class="card-body-button col-md-4"> 
-                                        <button class="btn btn-primary">Buy now</button>
-                                        <button class="btn btn-info">Add to cart</button>
+
+                                    <div class="card-body row">
+                                        <div class="card-body-content col-md-8">
+                                            <h5 class="card-title">${p.name}</h5>
+                                            <p class="card-text" >${p.specification}</p>
+                                            <!-- product has a sale price-->
+                                            <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
+                                            <c:if test="${not empty p.salePrice}">
+                                                <jsp:useBean id="now" class="java.util.Date"/>
+                                                <c:choose>
+                                                    <c:when test="${p.salePrice.start < now && now < p.salePrice.end}"> 
+                                                        <fmt:formatNumber value="${p.salePrice.salePrice}" type="currency" currencySymbol="VNĐ" var="formattedSalePrice" />
+                                                        <p class="card-text" style="text-decoration: line-through;color: red">Price: ${formattedPrice}</p>
+                                                        <p class="card-text" style="color: #62f04f">Sale Price: ${formattedSalePrice}</p>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <p class="card-text" style="color: #62f04f">Price: ${formattedPrice}</p>
+                                                        <p class="card-text">Not on sale</p>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:if>
+                                            <!--show if product is not on sale-->
+                                            <c:if test="${empty p.salePrice}">
+                                                <p class="card-text" style="color: #62f04f">Price: ${formattedPrice}</p>
+                                                <p class="card-text" >Not on sale</p>
+                                            </c:if>
+                                        </div>
+                                        <div class="card-body-button col-md-4"> 
+                                            <button class="btn btn-primary">Buy now</button>
+                                            <button class="btn btn-info "
+                                                    onclick="addToCart(${p.id})"
+                                                    type="button"
+                                                    >Add to cart</button>
+                                        </div>
                                     </div>
+                                    <!--</form>-->
                                 </div>
                             </div>
-                        </div>
+                        </form>
+
                     </c:forEach>
 
                     <!-- Repeat this div for more product cards -->
@@ -251,9 +280,9 @@
                             </c:forEach>
                         <!--prev page-->
                         <c:if test="${currentPage < noOfPage}">
-                            <li >
+                            <li>
                                 <a href="productlist?page=${currentPage + 1}" aria-label="Next" >
-                                    <span aria-hidden="true" ><i class="fa fa-arrow-right" ></i></span>
+                                    <span aria-hidden="true" ><i class="fa fa-arrow-right" style=""></i></span>
                                 </a>
                             </li>
                         </c:if>
@@ -264,7 +293,7 @@
 
         <%@include  file="layout/footer.jsp" %>
         <script type="text/javascript">
-//             Đặt sự kiện change cho tất cả các radio button
+            //             Đặt sự kiện change cho tất cả các radio button
             document.querySelectorAll('input[type="radio"]').forEach(function (radio) {
                 radio.addEventListener('click', function () {
 
@@ -274,11 +303,44 @@
                     form.submit();
                 });
             });
+            function addToCart(id) {
+                var formData = new FormData();
+                formData.append('productId', id);
 
+                $.ajax({
+                    url: 'addtocart',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // Xử lý phản hồi từ servlet (nếu cần)
+                        alert("Sản phẩm đã được thêm vào giỏ hàng thành công!");
+                        // Cập nhật giao diện nếu cần
+                    },
+                    error: function (xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        console.error(error);
+                    }
+                });
+            }
+
+        </script>
+        <script type="text/javascript">
+            // Kiểm tra xem có thuộc tính "cartAdded" trong session không
+            var cartAdded = ${sessionScope.cartAdded};
+            if (cartAdded) {
+                // Hiển thị cảnh báo
+                alert("Sản phẩm đã được thêm vào giỏ hàng thành công!");
+                // Xóa thuộc tính "cartAdded" khỏi session sau khi đã sử dụng
+            ${sessionScope.remove("cartAdded")};
+            }
         </script>
 
         <!-- Bootstrap JS and jQuery -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>

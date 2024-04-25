@@ -129,16 +129,26 @@
                         <!--heading-->
                         <h2 class="mb-4">User Detail</h2>
                         <div class="row">
-                            <form method="post" action="userdetail" enctype="multipart/form-data" onsubmit="return validateForm()">
+                            <form action="userdetail" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                                 <!--avatar-->
                                 <div class="col-md-4">
-                                    <c:if test="${u==null}">
+                                    <c:choose>
+                                        <c:when test="${u!=null}">
+                                            <c:choose >
+                                                <c:when test="${empty u.imgUrl}">
+                                                    <img src="${pageContext.request.contextPath}/images/default-avatar.png" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                                </c:when>
+                                                <c:otherwise>
 
-                                        <img id="img-preview" src="${pageContext.request.contextPath}/views/img/14162.png" alt="Avatar" class="img-fluid rounded-circle mb-4">
-                                    </c:if>
-                                    <c:if test="${u!=null}">
-                                        <img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
-                                    </c:if>
+                                                    <img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${pageContext.request.contextPath}/images/default-avatar.png" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                        </c:otherwise>
+                                    </c:choose>
+
                                     <input type="file" name="file" id="file-input" accept="image/*">
                                 </div>
                                 <div class="col-md-8">
@@ -221,8 +231,7 @@
                                         <div class="error-msg">${err}</div>
                                     </c:if>
                                     <!--button group-->
-                                    <c:if test="${param.action.equals('add') or param.action==null}">
-
+                                    <c:if test="${param.action.equals('add') or empty param.action}">
                                         <input type="hidden" name="formAction" value="add">
                                     </c:if>
                                     <input type="hidden" name="userId" value="${param.id}">
@@ -307,7 +316,8 @@
         addressError.innerHTML = '';
         dobError.innerHTML = '';
         statusError.innerHTML = '';
-
+//        regex mobile limit to 10 number
+        var mobileRegex = /^\d{10}$/;
         // Kiểm tra nếu bất kỳ trường nào là rỗng, hiển thị thông báo lỗi và ngăn việc submit form
         if (fullname.trim() === '') {
             fullnameError.innerHTML = 'Please enter your full name.';
@@ -321,8 +331,8 @@
             emailError.innerHTML = 'Please enter your email.';
             return false;
         }
-        if (mobile.trim() === '') {
-            mobileError.innerHTML = 'Please enter your mobile.';
+        if (mobile.trim() === '' || !mobile.match(mobileRegex)) {
+            mobileError.innerHTML = 'Please enter your mobile with the correct format.';
 
             return false;
         }

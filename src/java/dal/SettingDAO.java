@@ -34,34 +34,69 @@ public class SettingDAO extends DBContext {
     private Connection conn;
     private int noOfrecord;
 
-    public ArrayList<Brand> getListBrand() {
-        String sql = "SELECT * FROM swp391_g1_v1.setting\n"
+    public ArrayList<Setting> getListBrand() {
+        String sql = "SELECT * FROM " + SETTING_TABLE + "\n"
                 + "where type like '%Brand%'";
-        ArrayList<Brand> brandList = new ArrayList<>();
+        ArrayList<Setting> brandList = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                brandList.add(new Brand(rs.getInt("id"),
+                brandList.add(new Setting(rs.getInt("id"),
+                        rs.getInt(SETTING_ORDER),
+                        rs.getString("value"),
                         rs.getString("type"),
-                        rs.getString("value")));
+                        rs.getBoolean(SETTING_STATUS)
+                ));
             }
         } catch (Exception e) {
         }
         return brandList;
     }
 
-    public ArrayList<Category> getListCategory() {
-        String sql = "SELECT * FROM swp391_g1_v1.setting\n"
-                + "where type like '%Category%'";
-        ArrayList<Category> categoryList = new ArrayList<>();
+    public List<Setting> getBrandList() {
+        String sql = "SELECT * FROM " + SETTING_TABLE + "\n"
+                + "where type like '%Brand%'";
+        List<Setting> brandList = new ArrayList<>();
         try {
             ps = getConnection().prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                categoryList.add(new Category(rs.getInt("id"),
+                Setting s = new Setting(rs.getInt("id"),
+                        rs.getInt(SETTING_ORDER),
+                        rs.getString("value"),
                         rs.getString("type"),
-                        rs.getString("value")));
+                        rs.getBoolean(SETTING_STATUS));
+                brandList.add(s);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return brandList;
+    }
+
+    public ArrayList<Setting> getListCategory() {
+        String sql = "SELECT * FROM " + SETTING_TABLE + "\n"
+                + "where type like '%Category%'";
+        ArrayList<Setting> categoryList = new ArrayList<>();
+        try {
+            ps = getConnection().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                categoryList.add(new Setting(rs.getInt("id"),
+                        rs.getInt(SETTING_ORDER),
+                        rs.getString("value"),
+                        rs.getString("type"),
+                        rs.getBoolean(SETTING_STATUS)
+                ));
             }
         } catch (Exception e) {
         }
@@ -394,11 +429,11 @@ public class SettingDAO extends DBContext {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt(SETTING_ID);
-                String value=rs.getString(SETTING_VALUE);
-                int order=rs.getInt(SETTING_ORDER);
-                String t=rs.getString(SETTING_TYPE);
-                boolean status=rs.getBoolean(SETTING_STATUS);
-                Setting st=new Setting(id, order, value, t, status);
+                String value = rs.getString(SETTING_VALUE);
+                int order = rs.getInt(SETTING_ORDER);
+                String t = rs.getString(SETTING_TYPE);
+                boolean status = rs.getBoolean(SETTING_STATUS);
+                Setting st = new Setting(id, order, value, t, status);
                 list.add(st);
             }
         } catch (SQLException e) {
@@ -479,14 +514,15 @@ public class SettingDAO extends DBContext {
 
     public static void main(String[] args) {
         SettingDAO st = new SettingDAO();
-        Setting s = st.getSettingById(1);
-        System.out.println("id: " + s.getId());
-        System.out.println("value: " + s.getValue());
-        System.out.println("s:" + s);
+        List<Setting> s = st.getBrandList();
+//        System.out.println("id: " + s.getId());
+//        System.out.println("value: " + s.getValue());
+//        System.out.println("s:" + s);
 //        List<Setting> list = st.();
-//        for (Setting setting : list) {
-//            System.out.println("id: " + setting.getId());
-//            System.out.println("value: " + setting.getValue());
-//        }
+        for (Setting setting : s) {
+            System.out.println("id: " + setting.getId());
+            System.out.println("value: " + setting.getValue());
+            System.out.println("type: " + setting.getType());
+        }
     }
 }
