@@ -4,6 +4,7 @@
  */
 package service;
 
+import dal.SettingDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Contact;
 import model.Setting;
 import model.User;
 
@@ -20,8 +22,8 @@ import model.User;
  *
  * @author Admin
  */
-@WebServlet(name = "verifyOTP", urlPatterns = {"/verifyOTP"})
-public class verifyOTP extends HttpServlet {
+@WebServlet(name = "ContactController", urlPatterns = {"/ContactController"})
+public class ContactController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +42,10 @@ public class verifyOTP extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet verifyOTP</title>");
+            out.println("<title>Servlet ContactController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet verifyOTP at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ContactController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,40 +77,29 @@ public class verifyOTP extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession();
-        String action = (String) request.getSession().getAttribute("action");
-        int verifyStatus = EmailService.verifyOTP(action, (String) request.getSession().getAttribute("otp"), request.getParameter("otp"), request);
-        request.getSession().setAttribute("verifyStatus", verifyStatus);
-        switch (verifyStatus) {
-            case 1:
-                out.print("{\"status\":\"success-forgotpassword\"}");
-                break;
-            case 2:
-                UserDAO ud = new UserDAO();
-                User u = (User) request.getSession().getAttribute("user_register");
-                
-                // register
-                u.setSetting(new Setting(4));
-                u.setStatus(true);
-                ud.insertUser(u);
-                session.setAttribute("user_registed_successfull", "Register successfull, please login again for security reason!");
-                session.setAttribute("id", u.getId());
-                session.setAttribute("confirmSuccess", "Confirm gmail successed, please login system again for security code ");
-                //=========
-                
-                
-                out.print("{\"status\":\"success-emailverification\"}");
-                break;
-            case -1:
-                out.print("{\"status\":\"error\", \"message\":\"OTP is incorrect\"}");
-                break;
-            case -2:
-                out.print("{\"status\":\"error\", \"message\":\"OTP is expired\"}");
-                break;
-            default:
-                break;
+        UserDAO ud = new UserDAO();
+        SettingDAO sd = new SettingDAO();
+
+        String name = request.getParameter("name");
+        String type = request.getParameter("type");
+        int id_type = Integer.parseInt(type);
+        String email = request.getParameter("email");
+        User ug = ud.getUserByEmail(email);
+        String phone = request.getParameter("phone");
+        String comment = request.getParameter("comments");
+        Setting s = new SettingDAO().getSettingById(id_type);
+
+        if (ug == null) {
+            EmailService.SendGmailToConfirm(email);
+            ud.contact(email, phone, name, s, comment);
+            response.sendRedirect("home");
+        } else {
+            User u = new User(ug.getId(), ug.getEmail(), ug.getFullname(), ug.getPhone());
+            Contact c = new Contact(ug, s, comment);
+            ud.contact(c);
+            response.sendRedirect("home");
         }
+
     }
 
     /**

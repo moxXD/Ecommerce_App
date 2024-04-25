@@ -5,6 +5,7 @@
 package controller;
 
 import dal.ProductDAO;
+import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Product;
+import model.Setting;
 
 /**
  *

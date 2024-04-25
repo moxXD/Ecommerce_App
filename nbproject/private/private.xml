@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0" />
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/OneDrive/Desktop/FPT/SWP391Bl5/g1/web/views/bloglist.jsp</file>
-            <file>
-                file:/C:/Users/Admin/OneDrive/Desktop/FPT/SWP391Bl5/g1/web/views/marketing/blog/list.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/service/ContactDetail.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/controller/admin/UserDetailServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/model/Contact.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/service/ContactList.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/dal/UserDAO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/web/views/admin/userdetail.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/web/views/admin/contactDetail.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/web/views/admin/contactList.jsp</file>
         </group>
     </open-files>
 </project-private>

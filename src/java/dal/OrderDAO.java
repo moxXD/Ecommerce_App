@@ -189,6 +189,7 @@ public class OrderDAO {
             }
         }
     }
+
     public List<Order> getListOrderBySaleId(int userid) {
         List<Order> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.order\n"
@@ -213,16 +214,16 @@ public class OrderDAO {
         } catch (Exception e) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        
+
         return list;
     }
-    
-     //dem so cot trong sql
+
+    //dem so cot trong sql
     public int getTotalSlider() {
         String sql = "SELECT COUNT(*)\n"
                 + "FROM slider;";
         try {
-             conn = context.getConnection();
+            conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
@@ -241,7 +242,7 @@ public class OrderDAO {
                 + "ORDER BY id\n"
                 + "LIMIT ?, 7;";
         try {
-           conn = context.getConnection();
+            conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setInt(1, (index - 1) * 7);
             ResultSet rs = stm.executeQuery();

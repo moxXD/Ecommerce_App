@@ -21,6 +21,11 @@ public class Setting {
         this.id = id;
     }
 
+    public Setting(int id, String value) {
+        this.id = id;
+        this.value = value;
+    }
+
     public Setting(int id, int order, String value, String type, boolean status) {
         this.id = id;
         this.order = order;

@@ -4,6 +4,7 @@
  */
 package service;
 
+import dal.SettingDAO;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,16 +13,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import model.Contact;
 import model.Setting;
-import model.User;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "verifyOTP", urlPatterns = {"/verifyOTP"})
-public class verifyOTP extends HttpServlet {
+@WebServlet(name = "ContactList", urlPatterns = {"/ContactList"})
+public class ContactList extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +42,10 @@ public class verifyOTP extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet verifyOTP</title>");
+            out.println("<title>Servlet ContactList</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet verifyOTP at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ContactList at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,7 +63,57 @@ public class verifyOTP extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int page = 1;
+        int recordPerPage = 10;
+        SettingDAO sd = new SettingDAO();
+        List<Setting> st = sd.getAllSettingTypeContact();
+        List<Contact> listContact = new ArrayList<>();
+
+        request.setAttribute("listSubject", st);
+
+        String page_raw = request.getParameter("page");
+        String sortColumn = request.getParameter("sort");
+
+        String subFilter = request.getParameter("fillSubject");
+
+        String statusFilter = request.getParameter("filstatus");
+        String searchQuery = request.getParameter("q");
+        boolean sortOrder = request.getParameter("order") != null ? Boolean.parseBoolean(request.getParameter("order")) : false;
+
+        //mapping filter 
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            if (statusFilter.equalsIgnoreCase("active")) {
+                statusFilter = "1";
+            } else {
+                statusFilter = "0";
+            }
+        }
+        if (page_raw != null) {
+            try {
+                page = Integer.parseInt(page_raw);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        UserDAO ud = new UserDAO();
+        // get pagination product list
+        listContact = ud.getContactListWithFilter((page - 1) * recordPerPage,
+                recordPerPage,
+                sortColumn,
+                sortOrder,
+                subFilter,
+                statusFilter,
+                searchQuery);
+
+        // get number of record found
+        int noOfrecord = ud.getNumberOfRecord();
+        int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
+        // set data
+        request.setAttribute("currentPage", page);
+        request.setAttribute("noOfPage", noOfPage);
+        request.setAttribute("listContact", listContact);
+        request.setAttribute("sortOrder", sortOrder);
+        request.getRequestDispatcher("views/admin/contactList.jsp").forward(request, response);
     }
 
     /**
@@ -75,40 +127,7 @@ public class verifyOTP extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession();
-        String action = (String) request.getSession().getAttribute("action");
-        int verifyStatus = EmailService.verifyOTP(action, (String) request.getSession().getAttribute("otp"), request.getParameter("otp"), request);
-        request.getSession().setAttribute("verifyStatus", verifyStatus);
-        switch (verifyStatus) {
-            case 1:
-                out.print("{\"status\":\"success-forgotpassword\"}");
-                break;
-            case 2:
-                UserDAO ud = new UserDAO();
-                User u = (User) request.getSession().getAttribute("user_register");
-                
-                // register
-                u.setSetting(new Setting(4));
-                u.setStatus(true);
-                ud.insertUser(u);
-                session.setAttribute("user_registed_successfull", "Register successfull, please login again for security reason!");
-                session.setAttribute("id", u.getId());
-                session.setAttribute("confirmSuccess", "Confirm gmail successed, please login system again for security code ");
-                //=========
-                
-                
-                out.print("{\"status\":\"success-emailverification\"}");
-                break;
-            case -1:
-                out.print("{\"status\":\"error\", \"message\":\"OTP is incorrect\"}");
-                break;
-            case -2:
-                out.print("{\"status\":\"error\", \"message\":\"OTP is expired\"}");
-                break;
-            default:
-                break;
-        }
+        processRequest(request, response);
     }
 
     /**

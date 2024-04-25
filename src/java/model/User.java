@@ -13,15 +13,27 @@ import java.sql.Timestamp;
  */
 public class User {
 
-    private int id, categotyid;
-//    public User(int id, String phone) {
-//        this.id = id;
-//        this.phone = phone;
-//    }
+    public User(int id, String email, String fullname) {
+        this.id = id;
+        this.email = email;
+        this.fullname = fullname;
+    }
 
+    public User(int id, String phone) {
+        this.id = id;
+        this.phone = phone;
+    }
 
+    public User(int id, String email, String fullname, String phone) {
+        this.id = id;
+        this.email = email;
+        this.fullname = fullname;
+        this.phone = phone;
+    }
+
+    private int id;
     private Setting setting;
-    private String email, password, 
+    private String email, password,
             fullname, imgUrl,
             phone, address;
     private boolean status, gender;
@@ -30,11 +42,25 @@ public class User {
 
     public User() {
     }
-    public User(int id, String fullname){
-        this.id = id;
-        this.fullname = fullname;
+    private int categotyid;
+
+    public Timestamp getCreatetime() {
+        return createtime;
     }
-    public User(int id, String email, int categotyid, boolean status, String fullname, String imgUrl, Timestamp createtime){
+
+    public void setCreatetime(Timestamp createtime) {
+        this.createtime = createtime;
+    }
+
+    public int getCategotyid() {
+        return categotyid;
+    }
+
+    public void setCategotyid(int categotyid) {
+        this.categotyid = categotyid;
+    }
+
+    public User(int id, String email, int categotyid, boolean status, String fullname, String imgUrl, Timestamp createtime) {
         this.id = id;
         this.email = email;
         this.categotyid = categotyid;
@@ -42,7 +68,6 @@ public class User {
         this.fullname = fullname;
         this.imgUrl = imgUrl;
         this.createtime = createtime;
-        
     }
 
     public User(int id) {
@@ -82,8 +107,6 @@ public class User {
     public String toString() {
         return "User{" + "id=" + id + ", setting=" + setting + ", email=" + email + ", password=" + password + ", fullname=" + fullname + ", imgUrl=" + imgUrl + ", phone=" + phone + ", address=" + address + ", status=" + status + ", gender=" + gender + ", dob=" + dob + '}';
     }
-
-
 
     public User(int id, String email, String password, String fullname, String imgUrl, String phone, String address,
             boolean status, boolean gender, Date dob) {
