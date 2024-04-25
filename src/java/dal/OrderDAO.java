@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Order;
@@ -63,7 +65,6 @@ public class OrderDAO {
             stm.setString(5, o.getEmail());
             stm.setInt(6, o.getMobile());
             stm.setString(7, o.getStatus());
-            System.out.println("sq;: "+stm.toString());
             stm.executeUpdate();
             String sql1 = "SELECT LAST_INSERT_ID();";
             ResultSet rs = stm.executeQuery(sql1);
@@ -85,5 +86,107 @@ public class OrderDAO {
 
     public int getLastInsertId() {
         return lastInsertID;
+    }
+
+//    // update order total amount
+//    public void updateOrderTotalAmount(double total) {
+//        String sql = ;
+//        try {
+//            conn = context.getConnection();
+//            PreparedStatement stm = conn.prepareStatement(sql);
+//            if (o.getCustomer() == null) {
+//                stm.setInt(1, 0);
+//            } else {
+//                stm.setInt(1, o.getCustomer().getId());
+//            }
+//
+//        } catch (Exception e) {
+//            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, e);
+//        } finally {
+//            if (conn != null) {
+//                try {
+//                    conn.close();
+//                } catch (SQLException e) {
+//                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+//                }
+//            }
+//        }
+//    }
+//    // update order total amount
+//    public void updateOrderTotalAmount() {
+//        String sql = "SELECT o.id AS order_id, SUM(oi.total_amount) AS order_total\n"
+//                + "    FROM `order` o\n"
+//                + "    JOIN order_item oi ON o.id = oi.order_id\n"
+//                + "    GROUP BY o.id;";
+//        try {
+//            conn = context.getConnection();
+//            PreparedStatement stm = conn.prepareStatement(sql);
+//            stm.executeQuery();
+//        } catch (Exception e) {
+//            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, e);
+//        } finally {
+//            if (conn != null) {
+//                try {
+//                    conn.close();
+//                } catch (SQLException e) {
+//                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+//                }
+//            }
+//        }
+//    }
+    // get order total cost by joining table order and orderitem
+    public Order getOrderTotalCost(int id) {
+        Order o = null;
+        String sql = "SELECT o.id AS order_id, SUM(oi.total_amount) AS order_total\n"
+                + "                    FROM `order` o\n"
+                + "                   JOIN order_item oi ON o.id = oi.order_id\n"
+                + "                   WHERE o.id=?\n"
+                + "                    GROUP BY o.id";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                o = new Order(rs.getInt("order_id"), rs.getDouble("order_total"));
+            }
+        } catch (Exception e) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return o;
+    }
+
+    // get order total cost by joining table order and orderitem
+    public void updateOrderTotalAmount(Order o) {
+        String sql = "UPDATE `" + ORDER_TABLE + "` \n"
+                + "SET\n "
+                + ORDER_TABLE_TOTAL_AMOUNT + " = ?\n"
+                + "WHERE " + ORDER_TABLE_ID + " = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(2, o.getId());
+            stm.setDouble(1, o.getTotal());
+//            System.out.println("update query: " + stm.toString());
+            stm.executeUpdate();
+        } catch (Exception e) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
     }
 }

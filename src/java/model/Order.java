@@ -19,6 +19,15 @@ public class Order {
     private Date createAt, updateAt;
     private String status, name, email, address;
     private int mobile;
+    private double total;
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 
     public Order() {
     }
@@ -60,13 +69,18 @@ public class Order {
         this.mobile = mobile;
     }
 
-    public Order( User sale, String status, String name, String email, String address, int mobile) {
+    public Order(User sale, String status, String name, String email, String address, int mobile) {
         this.sale = sale;
         this.status = status;
         this.name = name;
         this.email = email;
         this.address = address;
         this.mobile = mobile;
+    }
+
+    public Order(int id, double total) {
+        this.id = id;
+        this.total = total;
     }
 
     public int getId() {

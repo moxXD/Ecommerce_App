@@ -108,7 +108,7 @@ public class ProductListServlet extends HttpServlet {
         // get pagination production list with added filter
         pList = pDao.getAvailableProductWithFilter((page - 1) * recordPerPage,
                 recordPerPage, search_raw, cateId, brandId);
-        
+       
         int noOfrecord = pDao.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
         // get product category data

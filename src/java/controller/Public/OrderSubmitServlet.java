@@ -4,7 +4,6 @@
  */
 package controller.Public;
 
-import com.google.gson.Gson;
 import dal.OrderDAO;
 import dal.OrderItemDAO;
 import dal.UserDAO;
@@ -16,10 +15,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Cart;
 import model.Order;
 import model.User;
+import static org.eclipse.jdt.internal.compiler.parser.Parser.name;
+import service.EmailService;
 
 /**
  *
@@ -28,8 +34,8 @@ import model.User;
 @WebServlet(name = "OrderSubmitServlet", urlPatterns = {"/submitorder"})
 public class OrderSubmitServlet extends HttpServlet {
 
-    OrderDAO oDao = new OrderDAO();
-    UserDAO uDao = new UserDAO();
+    UserDAO userDao = new UserDAO();
+    OrderDAO orderDao = new OrderDAO();
     OrderItemDAO itemDAO = new OrderItemDAO();
 
     /**
@@ -87,7 +93,7 @@ public class OrderSubmitServlet extends HttpServlet {
         // get parameter
         String name = request.getParameter("name");
         String phone_raw = request.getParameter("phone");
-        String gender = request.getParameter("gender");
+//        String gender = request.getParameter("gender");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         String payment = request.getParameter("payment");
@@ -97,7 +103,7 @@ public class OrderSubmitServlet extends HttpServlet {
         try {
             phone = Integer.parseInt(phone_raw);
         } catch (Exception e) {
-            System.out.println("loi o submit order :" + e);
+            Logger.getLogger(OrderSubmitServlet.class.getName()).log(Level.SEVERE, null, name);
         }
 
         processOrder(name, email, address, phone, payment, request.getSession());
@@ -120,60 +126,71 @@ public class OrderSubmitServlet extends HttpServlet {
         try {
             u = (User) session.getAttribute("userSession");
         } catch (Exception e) {
-
+            Logger.getLogger(OrderSubmitServlet.class.getName()).log(Level.SEVERE, null, name);
         }
         if (u != null) {
             processCustomerOrder(u, name, email, address, phone, payment, session);
-        } else {
-//            processGuestOrder(name, email, address, phone, payment, session);
         }
+//        else {
+//            processGuestOrder(name, email, address, phone, payment, session);
+//        }
     }
 
     private void processCustomerOrder(User user, String name, String email,
-            String address, int phone, String payment, HttpSession session)  {
-        UserDAO userDao = new UserDAO();
-        OrderDAO orderDao = new OrderDAO();
-        OrderItemDAO orderItemDao = new OrderItemDAO();
-        System.out.println("customer");
+            String address, int phone, String payment, HttpSession session) {
         User sale = userDao.getSale();
         String status = payment.equalsIgnoreCase("cod") ? "submitted" : "paid";
-        
+
         Order order = new Order(user, sale, status, name, email, address, phone);
         orderDao.insertNewOrder(order);
+        int orderId = orderDao.getLastInsertId();
 
-//        processOrderItems(session, order.getId());
+        processOrderItems(session, orderId, name, email, address,phone);
     }
 
-    private void processGuestOrder(String name, String email, String address, int phone, String payment, HttpSession session) {
-        UserDAO userDao = new UserDAO();
-        OrderDAO orderDao = new OrderDAO();
-        OrderItemDAO orderItemDao = new OrderItemDAO();
-        System.out.println("guest");
-
-        User sale = userDao.getSale();
-        String status = payment.equalsIgnoreCase("cod") ? "submitted" : "paid";
-
-        Order order = new Order(sale, status, name, email, address, phone);
-        orderDao.insertNewOrder(order);
-
-//        processOrderItems(session, order.getId());
-    }
-
-    private void processOrderItems(HttpSession session, int orderId) {
-        OrderItemDAO orderItemDao = new OrderItemDAO();
-        Map<String, Cart> cart = (Map<String, Cart>) session.getAttribute("cart");
+//    private void processGuestOrder(String name, String email, String address, int phone, String payment, HttpSession session) {
+//        UserDAO userDao = new UserDAO();
+//        OrderDAO orderDao = new OrderDAO();
+//        OrderItemDAO orderItemDao = new OrderItemDAO();
+//        System.out.println("guest");
+//
+//        User sale = userDao.getSale();
+//        String status = payment.equalsIgnoreCase("cod") ? "submitted" : "paid";
+//
+//        Order order = new Order(sale, status, name, email, address, phone);
+//        orderDao.insertNewOrder(order);
+//
+////        processOrderItems(session, order.getId());
+//    }
+    private void processOrderItems(HttpSession session, int orderId, String name, String email,
+            String address,int phone) {
+        Map<String, Cart> cart = new HashMap<>();
+        try {
+            cart = (Map<String, Cart>) session.getAttribute("cart");
+        } catch (Exception e) {
+            Logger.getLogger(OrderSubmitServlet.class.getName()).log(Level.SEVERE, null, name);
+        }
         if (cart != null) {
-            for (Map.Entry<String, Cart> entry : cart.entrySet()) {
-                String key = entry.getKey();
-                Cart cartItem = entry.getValue();
-                try {
-                    int productId = Integer.parseInt(key);
-                    orderItemDao.insertNewOrderItem(orderId, cartItem.getProduct(), cartItem.getQuantity());
-                } catch (NumberFormatException e) {
-                    // Handle parsing error
-                    System.out.println("Error parsing product ID: " + e.getMessage());
-                }
+            Set<String> keys = cart.keySet();
+
+            for (String key : keys) {
+                Cart cartInfo = cart.get(key);
+
+                double totalAmount = cartInfo.getTotal();
+                int quantity = cartInfo.getQuantity();
+                double price = cartInfo.getPrice();
+
+                // Thực hiện insert vào bảng orderitem với các giá trị đã lấy được
+                itemDAO.insertNewOrderItem(orderId, key, totalAmount,
+                        quantity, price, cartInfo.getProduct());
             }
+            // get total price of 1 order insert into order table
+            Order o = orderDao.getOrderTotalCost(orderId);
+
+            orderDao.updateOrderTotalAmount(o);
+            new EmailService().sendOrderDetail(email, cart, name, address,phone);
+            session.removeAttribute("cart");
         }
     }
+
 }

@@ -104,18 +104,25 @@
                             </div>
                             <div class="mainmenu pull-left">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
-                                    <li><a href="home" class="active">Home</a></li>
-                                    <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
-                                        <ul role="menu" class="sub-menu">
-                                            <li><a href="productlist">Products</a></li>
-                                            <li><a href="cartdetail">Cart</a></li> 
-                                        </ul>
+                                    <li>
+                                        <a href="home" class="active">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="productlist">Shop</a>
                                     </li> 
-                                    <li><a href="blogslist">Blog List</a></li>
-
+                                    <li>
+                                        <a href="blogslist">Blog</a>
+                                    </li>
                                     <c:if test="${not empty userSession}">
-                                        <li><a href="admin/dashboard">Admin</a></li>
-                                        </c:if>
+                                        <li>
+                                            <a href="admin/dashboard">Admin</a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${not empty userSession}">
+                                        <li>
+                                            <a href="marketing/dashboard">Marketing</a>
+                                        </li>
+                                    </c:if>
                                 </ul>
                             </div>
                         </div>
