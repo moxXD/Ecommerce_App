@@ -13,15 +13,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Setting;
 import model.User;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "verifyOTP", urlPatterns = {"/verifyOTP"})
-public class verifyOTP extends HttpServlet {
+@WebServlet(name = "ConfirmEmail", urlPatterns = {"/ConfirmEmail"})
+public class ConfirmEmail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +39,10 @@ public class verifyOTP extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet verifyOTP</title>");
+            out.println("<title>Servlet ConfirmEmail</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet verifyOTP at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ConfirmEmail at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,7 +60,10 @@ public class verifyOTP extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         UserDAO ud = new UserDAO();
+        String email = request.getParameter("email");
+        ud.updateContract(email, 1);
+        request.getRequestDispatcher("successRequest.jsp").forward(request, response);
     }
 
     /**
@@ -75,40 +77,7 @@ public class verifyOTP extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession();
-        String action = (String) request.getSession().getAttribute("action");
-        int verifyStatus = EmailService.verifyOTP(action, (String) request.getSession().getAttribute("otp"), request.getParameter("otp"), request);
-        request.getSession().setAttribute("verifyStatus", verifyStatus);
-        switch (verifyStatus) {
-            case 1:
-                out.print("{\"status\":\"success-forgotpassword\"}");
-                break;
-            case 2:
-                UserDAO ud = new UserDAO();
-                User u = (User) request.getSession().getAttribute("user_register");
-                
-                // register
-                u.setSetting(new Setting(4));
-                u.setStatus(true);
-                ud.insertUser(u);
-                session.setAttribute("user_registed_successfull", "Register successfull, please login again for security reason!");
-                session.setAttribute("id", u.getId());
-                session.setAttribute("confirmSuccess", "Confirm gmail successed, please login system again for security code ");
-                //=========
-                
-                
-                out.print("{\"status\":\"success-emailverification\"}");
-                break;
-            case -1:
-                out.print("{\"status\":\"error\", \"message\":\"OTP is incorrect\"}");
-                break;
-            case -2:
-                out.print("{\"status\":\"error\", \"message\":\"OTP is expired\"}");
-                break;
-            default:
-                break;
-        }
+         processRequest(request, response);
     }
 
     /**

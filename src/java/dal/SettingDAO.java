@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Brand;
 import model.Category;
+import model.Contact;
 import model.Setting;
 
 /**
@@ -52,7 +53,7 @@ public class SettingDAO extends DBContext {
     }
 
     public List<Setting> getBrandList() {
-        String sql = "SELECT * FROM "+SETTING_TABLE+"\n"
+        String sql = "SELECT * FROM " + SETTING_TABLE + "\n"
                 + "where type like '%Brand%'";
         List<Setting> brandList = new ArrayList<>();
         try {
@@ -313,6 +314,35 @@ public class SettingDAO extends DBContext {
         return list;
     }
 
+    public List<Setting> getAllSettingTypeContact() {
+        List<Setting> lst = new ArrayList<>();
+        String sql = "SELECT * FROM swp391_g1_v5.setting\n"
+                + "where type like '%contact%'";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                lst.add(new Setting(rs.getInt(1),
+                        rs.getInt(4),
+                        rs.getString(3),
+                        rs.getString(2),
+                        rs.getBoolean(5)));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(SettingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return lst;
+    }
+
     // get all setting type
     public List<String> getAllSettingType() {
         List<String> lst = new ArrayList<>();
@@ -508,15 +538,13 @@ public class SettingDAO extends DBContext {
 
     public static void main(String[] args) {
         SettingDAO st = new SettingDAO();
-        List<Setting> s = st.getBrandList();
+        List<Setting> s = st.getAllSettingTypeContact();
 //        System.out.println("id: " + s.getId());
 //        System.out.println("value: " + s.getValue());
 //        System.out.println("s:" + s);
 //        List<Setting> list = st.();
         for (Setting setting : s) {
-            System.out.println("id: " + setting.getId());
-            System.out.println("value: " + setting.getValue());
-            System.out.println("type: "+setting.getType());
+            System.out.println(setting);
         }
     }
 }

@@ -90,7 +90,6 @@
                                         <option  value="${c.value}" ${param.filCate == c.value?"selected":""}>${c.value}</option>
                                     </c:forEach>
                                 </select>
-
                             </div> 
                             <div class="form-group">
                                 <label for="filgender">Filter by brand:</label>

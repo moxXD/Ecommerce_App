@@ -12,8 +12,21 @@ import java.sql.Date;
  */
 public class User {
 
+    public User(int id, String email, String fullname) {
+        this.id = id;
+        this.email = email;
+        this.fullname = fullname;
+    }
+
     public User(int id, String phone) {
         this.id = id;
+        this.phone = phone;
+    }
+
+    public User(int id, String email, String fullname, String phone) {
+        this.id = id;
+        this.email = email;
+        this.fullname = fullname;
         this.phone = phone;
     }
 

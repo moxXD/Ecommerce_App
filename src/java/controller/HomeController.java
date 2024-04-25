@@ -6,6 +6,7 @@
 package controller;
 
 import dal.ProductDAO;
+import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Product;
+import model.Setting;
 
 /**
  *
@@ -34,6 +36,10 @@ public class HomeController extends HttpServlet {
     throws ServletException, IOException {
         ProductDAO dao = new ProductDAO();
         List<Product> list = dao.getRecommendItem();
+        
+         SettingDAO st = new SettingDAO();
+        List<Setting> contactList = st.getAllSettingTypeContact();
+        request.setAttribute("contactList", contactList);
         
         List<Product> firstList = list.subList(0, Math.min(list.size(), 3));
         List<Product> secondList = list.subList(3, Math.min(list.size(), 6));
