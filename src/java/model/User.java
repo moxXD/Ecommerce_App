@@ -14,10 +14,10 @@ import java.sql.Timestamp;
 public class User {
 
     private int id, categotyid;
-    public User(int id, String phone) {
-        this.id = id;
-        this.phone = phone;
-    }
+//    public User(int id, String phone) {
+//        this.id = id;
+//        this.phone = phone;
+//    }
 
 
     private Setting setting;

@@ -660,9 +660,9 @@ public class UserDAO {
     public List<User> getSaler() throws SQLException {
         List<User> list = new ArrayList<>();
         String sql = "SELECT t1.id, t1.fullname\n"
-                + " FROM swp391_g1_v1.user as t1 \n"
-                + " INNER JOIN swp391_g1_v1.setting AS t2 on t1.setting_id = t2.id\n"
-                + " WHERE t2.value like 'sale'";
+                + " FROM `swp391_g1_v1`.`user` as t1 \n"
+                + " INNER JOIN `swp391_g1_v1`.`setting` AS t2 on t1.setting_id = t2.id\n"
+                + " WHERE t2.value like 'sale';";
         try {
             conn = context.getConnection();
 //            System.out.println(sql);

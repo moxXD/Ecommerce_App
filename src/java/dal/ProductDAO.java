@@ -611,14 +611,14 @@ public class ProductDAO extends DBContext {
         return list;
     }
 
-    public static void main(String[] args) throws SQLException {
-        List<Product> list = new ProductDAO().getNewestProduct();
-        for (Product product : list) {
-            System.out.println("id: " + product.getId());
-            System.out.println("name: " + product.getName());
-            if (product.getSalePrice() != null) {
-                System.out.println("sale: " + product.getSalePrice().toString());
-            }
-        }
-    }
+//    public static void main(String[] args) throws SQLException {
+//        List<Product> list = new ProductDAO().getNewestProduct();
+//        for (Product product : list) {
+//            System.out.println("id: " + product.getId());
+//            System.out.println("name: " + product.getName());
+//            if (product.getSalePrice() != null) {
+//                System.out.println("sale: " + product.getSalePrice().toString());
+//            }
+//        }
+//    }
 }

@@ -131,6 +131,7 @@ public class DashboardServlet extends HttpServlet {
             setting = settingDAO.getAllSetting();
             revenueLast7Days = saleDAO.getRevenueLast7Day(reveDate, pcate, salercate);
             saler = userDAO.getSaler();
+            
         } catch (SQLException ex) {
             Logger.getLogger(controller.admin.DashboardServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

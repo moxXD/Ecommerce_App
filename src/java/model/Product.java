@@ -39,7 +39,7 @@ public class Product {
     }
     private Setting category,brand;
     private double price, saleprice;
-    private Sale salePrice;
+    private Sale salePrice1;
 
     public Product(int id, String name, String description,
             String specification, String imageUrl, int stock,
