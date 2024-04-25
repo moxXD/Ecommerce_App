@@ -22,7 +22,7 @@ import model.Setting;
  *
  * @author Admin
  */
-@WebServlet(name = "ProductList", urlPatterns = {"/marketing/productList"})
+@WebServlet(name="ProductList", urlPatterns={"/marketing/productlist"})
 public class ProductList extends HttpServlet {
 
     ProductDAO pd = new ProductDAO();
@@ -140,7 +140,7 @@ public class ProductList extends HttpServlet {
         request.setAttribute("roleList", st);
         request.setAttribute("sortOrder", sortOrder);
         request.getRequestDispatcher("../views/marketing/product/list.jsp").forward(request, response);
-    }
+    } 
 
     /**
      * Handles the HTTP <code>POST</code> method.

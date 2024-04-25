@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Blog;
 import model.Setting;
+import model.Statistic;
 import model.User;
 
 /**
@@ -50,7 +51,7 @@ public class BlogDAO extends DBContext {
                 + "FROM swp391_g1_v1.blog AS t1\n"
                 + "INNER JOIN swp391_g1_v1.user AS t2 ON t2.id = t1.authorid\n"
                 + "INNER JOIN swp391_g1_v1.setting AS t3 ON t3.id = t1.setting_id\n"
-                + "WHERE t3.type='blog'";
+                + "WHERE t3.type='blog' and t3.status = true";
 //        // add condition for filter
         if (cateFilter != null && !cateFilter.isEmpty()) {
             sql += " AND t3.value = ? ";
@@ -153,7 +154,7 @@ public class BlogDAO extends DBContext {
                 + "FROM swp391_g1_v1.blog AS t1\n"
                 + "INNER JOIN swp391_g1_v1.user AS t2 ON t2.id = t1.authorid\n"
                 + "INNER JOIN swp391_g1_v1.setting AS t3 ON t3.id = t1.setting_id\n"
-                + "WHERE t3.type='blog' and t1.status = true";
+                + "WHERE t3.type='blog' and t1.status = true and t3.status = true";
 //        // add condition for filter
         if (cateFilter != null && !cateFilter.isEmpty()) {
             sql += " AND t3.value = ? ";
@@ -291,35 +292,6 @@ public class BlogDAO extends DBContext {
         return null;
     }
 
-//    public List<Setting> getAllBlogSetting() throws SQLException {
-//        List<Setting> list = new ArrayList<>();
-//        String sql = "SELECT * FROM swp391_g1_v1.setting where `type` = 'blog';";
-//        try {
-//            conn = context.getConnection();
-//            PreparedStatement stm = conn.prepareStatement(sql);
-//            ResultSet rs = stm.executeQuery();
-//            while (rs.next()) {
-//                int id = rs.getInt("id");
-//                int order = rs.getInt("order");
-//                String value = rs.getString("value");
-//                String type = rs.getString("type");
-//                boolean status = rs.getBoolean("status");
-//                Setting u = new Setting(id, order, value, type, status);
-//                list.add(u);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (conn != null) {
-//                try {
-//                    conn.close();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        return list;
-//    }
     public List<User> getAllBlogAuthor() throws SQLException {
         List<User> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS user.*\n"
@@ -455,6 +427,116 @@ public class BlogDAO extends DBContext {
                 }
             }
         }
+    }
+
+    public int getNumberOfBlogs() {
+        String sql = "SELECT COUNT(*) FROM `swp391_g1_v1`.`blog`";
+        int nblog = 0;
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                nblog = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return nblog;
+    }
+
+    public List<Statistic> getDataLast7Day(Date postDate, String filcate, String filauthor) throws SQLException {
+        List<Statistic> list = new ArrayList<>();
+
+        String sql = "SELECT \n"
+                + "    days.day AS createdtime,\n"
+                + "    COALESCE(COUNT(blog.id), 0) AS count\n"
+                + "FROM (\n"
+                + "    SELECT ? AS day\n"
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 1 DAY)\n"
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 2 DAY)\n"
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 3 DAY)\n"
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 4 DAY)\n"
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 5 DAY)\n"
+                + "    UNION SELECT DATE_SUB(?, INTERVAL 6 DAY)\n"
+                + ") AS days\n"
+                + "LEFT JOIN blog ON DATE(blog.createdtime) = days.day \n";
+        if (filcate != null && !filcate.isEmpty()) {
+            sql += " AND blog.setting_id = ? ";
+        }
+        if (filauthor != null && !filauthor.isEmpty()) {
+            sql += " AND blog.authorid = ? ";
+        }
+        sql += "GROUP BY days.day ORDER BY days.day ASC;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            int paramIndex = 1;
+            for (int i = 0; i < 7; i++) {
+                stm.setDate(paramIndex++, postDate);  // Set the same date for all placeholders related to dates
+            }
+            if (filcate != null && !filcate.isEmpty()) {
+                stm.setInt(paramIndex++, Integer.parseInt(filcate));
+            }
+            if (filauthor != null && !filauthor.isEmpty()) {
+                stm.setInt(paramIndex++, Integer.parseInt(filauthor));
+            }
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Statistic(rs.getDate(1), rs.getInt(2)));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
+
+    public List<Blog> getNewestPost() throws SQLException {
+        List<Blog> list = new ArrayList<>();
+        String sql = "SELECT * FROM `swp391_g1_v1`.`blog` ORDER BY blog.createdtime DESC LIMIT 5;"; // pagination
+        try {
+            conn = context.getConnection();
+//            System.out.println(sql);
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int categoryId = rs.getInt("setting_id");
+                int Id = rs.getInt("id");
+                int authorId = rs.getInt("authorid");
+                String imgUrl = rs.getString("image_url");
+                String title = rs.getString("title");
+                String detail = rs.getString("detail");
+                boolean status = rs.getBoolean("status");
+                boolean is_featured = rs.getBoolean("is_featured");
+                String sumary = rs.getString("sumary");
+                Timestamp createTime = rs.getTimestamp("createdtime");
+                Timestamp updateTime = rs.getTimestamp("lastupdate");
+//            Setting st = stDAO.getSettingById(roleId);
+                Blog u = new Blog(categoryId, Id, authorId, imgUrl, title, detail, status, createTime, updateTime, is_featured, sumary);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
+        }
+
+        return list;
     }
 
 //    public static void main(String[] args) throws SQLException {

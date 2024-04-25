@@ -35,10 +35,10 @@ public class SearchOrderListServlet extends HttpServlet {
         String status = request.getParameter("filstatus");
         OrderDAO dao = new OrderDAO();
 
-        request.setAttribute("listP", list);
+//        request.setAttribute("listP", list);
         request.getRequestDispatcher("../views/marketing/slider/sliderList.jsp").forward(request, response);
     } 
-    } 
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 

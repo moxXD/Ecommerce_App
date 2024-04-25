@@ -24,7 +24,7 @@ import model.Setting;
  *
  * @author Admin
  */
-@WebServlet(name="EditProduct", urlPatterns={"/marketing/EditProduct"})
+@WebServlet(name="EditProduct", urlPatterns={"/marketing/editproduct"})
 public class EditProduct extends HttpServlet {
    
     /** 
@@ -71,7 +71,7 @@ public class EditProduct extends HttpServlet {
         request.setAttribute("p", p);
         request.setAttribute("listCate", listCate);
         request.setAttribute("listBrand", listBrand);
-        request.getRequestDispatcher("views/marketing/procduct/edit.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/marketing/product/edit.jsp").forward(request, response);
    
     } 
 

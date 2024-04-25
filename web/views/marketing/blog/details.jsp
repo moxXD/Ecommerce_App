@@ -11,12 +11,17 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Tech Mart Admin</title>
+        <title>Marketing | Tech Mart</title>
 
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="description" content="Developed By M Abdur Rokib Promy">
         <meta name="keywords" content="Admin, Bootstrap 3, Template, Theme, Responsive">
         <!-- bootstrap 3.0.2 -->
+        <!-- Include Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Include Bootstrap Bundle JS (includes Popper) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
         <link href="${pageContext.request.contextPath}/views/css/bootstrap.min.css" rel="stylesheet"
               type="text/css" />
@@ -57,11 +62,17 @@
         <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
   <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        
   <![endif]-->
 
-        <style type="text/css">
 
+        <style type="text/css">
+            .error-msg {
+                color: red;
+                font-size: 12px;
+            }
         </style>
+
     </head>
     <body>
         <%@include file="../../layout/header.jsp" %>
@@ -96,8 +107,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="settinglist">
-                                <i class="fa fa-gear"></i> <span>Settings</span>
+                            <a href="productlist">
+                                <i class="fa fa-gear"></i> <span>Product List</span>
                             </a>
                         </li>
 
@@ -118,17 +129,15 @@
                                             <c:set var="c" value="${requestScope.blogdetails}" />
                                             <div class="row" style="margin-bottom: 5%; margin-top: 3%">
                                                 <div class="col-md-6">
-<!--                                                    <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
-                                                        <label for="inputLabel1">ID: </label>
-                                                        <input type="text" class="form-control" id="id" ${param.action.equals("view")||param.action.equals("update") ? "readonly": "" }  value="${c.id}">
-                                                    </div>-->
                                                     <div class="form-group">
-                                                        <label for="inputLabel1">Title:</label>
-                                                        <input name="title" type="text" class="form-control" id="title" value="${c.title}" >
+                                                        <label for="title">Title:</label>
+                                                        <input name="title" type="text" class="form-control" id="title" value="${c.title}">
+                                                        <span id="titleError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Brief: </label>
-                                                        <input name="sumary" type="text" class="form-control" id="sumary" value="${c.sumary}" >
+                                                        <input  name="sumary" type="text" class="form-control" id="sumary" value="${c.sumary}" >
+                                                        <span id="sumaryError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="gender">Category:</label>
@@ -140,17 +149,19 @@
                                                                 </c:if>
                                                             </c:forEach>
                                                         </select>
+                                                        <span id="cateError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="inputLabel1">Author:</label>
-                                                        <select id="author" name="author" class="form-control">
+                                                        <label for="author">Author:</label>
+                                                        <select  id="author" name="author" class="form-control">
                                                             <option value="" disabled selected hidden>Choose author of your blog</option>
                                                             <c:forEach items="${requestScope.blogAuthors}" var="a">
                                                                 <option value="${a.id}" ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
                                                             </c:forEach>
                                                         </select>
+                                                        <span id="authorError" class="error-msg"></span>
                                                     </div>
-                                                    <div>
+                                                    <div style="margin-bottom: 5%">
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <label for="gender">Status:</label>
@@ -159,17 +170,23 @@
                                                         <div class="row form-check-inline">
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${c.status == true ? "checked" : ""} >
+                                                                    <input  class="form-check-input" type="radio" name="status" id="showRadio" value="Show" ${c.status == true ? "checked" : ""} >
                                                                     <label class="form-check-label" for="showRadio">Show</label>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-3 ">
+                                                            <div class="col-md-3" style="margin-left: 30%;">
                                                                 <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Hide" ${c.status == false ? "checked" : ""} >
                                                                     <label class="form-check-label" for="hideRadio">Hide</label>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <span id="statusError" class="error-msg"></span>
+                                                            </div>
+                                                        </div>
+
 
                                                     </div>
                                                     <div>
@@ -185,24 +202,29 @@
                                                                     <label class="form-check-label" for="showRadio">Yes</label>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-3 ">
-                                                                <div class="form-check form-check-inline">
+                                                            <div class="col-md-3 " style="margin-left: 38%;">
+                                                                <div class="form-check form-check-inline" >
                                                                     <input class="form-check-input" type="radio" name="feature" id="noRadio" value="No" ${c.is_featured == false ? "checked" : ""} >
                                                                     <label class="form-check-label" for="hideRadio">No</label>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <span id="featureError" class="error-msg"></span>
+                                                            </div>
+                                                        </div>
 
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="form-right">
+
+                                                <div class="form-right col-md-6">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="thumbnail">Thumbnail: </label>
                                                             <c:choose>
                                                                 <c:when test="${empty c.imgUrl}">
-                                                                    <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle mb-4">
+                                                                    <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid mb-4">
                                                                 </c:when>
                                                                 <c:otherwise>
                                                                     <img src="<c:url value='/uploads/${c.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
@@ -223,16 +245,20 @@
                                                         resize_enabled: false // Ngăn chặn CKEditor resize
                                                     });
                                                 </script>
+                                                <span id="contentError" class="error-msg"></span>
                                             </div>
                                             <input type="hidden" name="formAction" value="${param.action.equals("add") ? "add": "update" }">
                                             <input type="hidden" name="blogID" value="${param.ID}">
+                                            <c:if test="${not empty err}">
+                                                <div class="error-msg">${err}</div>
+                                            </c:if>
 
                                             <div class="row" style="margin-bottom: 5%">
                                                 <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
-                                                    <button type="submit" class="btn btn-primary btn-block" id="addButton" onclick="validateInputs(event)">Add</button>
+                                                    <button type="submit" class="btn btn-primary btn-block" id="addButton" onclick="validateInputs(event)" >Add</button>
                                                 </div>
                                                 <div class="col-md-3" style="${param.action.equals("add") ? "display: none;": "" }">
-                                                    <button type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)">Save</button>
+                                                    <button type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)" >Save</button>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <button type="button" class="btn btn-primary btn-block" id="backButton">Back</button>
@@ -254,6 +280,104 @@
         document.getElementById("backButton").onclick = function () {
             location.href = "bloglist";
         };
+        //test success
+
+        //////////////////////
+        //test validate
+        function validateInputs(event) {
+            var title = document.getElementById("title").value;
+            var sumary = document.getElementById("sumary").value;
+            var category = document.getElementById("category").value;
+            var author = document.getElementById("author").value;
+            var showRadioChecked = document.getElementById('showRadio').checked;
+            var hideRadioChecked = document.getElementById('hideRadio').checked;
+            var yesRadioChecked = document.getElementById('yesRadio').checked;
+            var noRadioChecked = document.getElementById('noRadio').checked;
+            var content = document.getElementById("content").value;
+
+
+
+            var titleError = document.getElementById("titleError");
+            var sumaryError = document.getElementById("sumaryError");
+            var cateError = document.getElementById("cateError");
+            var authorError = document.getElementById("authorError");
+            var statusError = document.getElementById("statusError");
+            var featureError = document.getElementById("featureError");
+            var contentError = document.getElementById("contentError");
+
+            titleError.innerHTML = '';
+            sumaryError.innerHTML = '';
+            cateError.innerHTML = '';
+            authorError.innerHTML = '';
+            statusError.innerHTML = '';
+            featureError.innerHTML = '';
+            contentError.innerHTML = '';
+            //check empty
+            if (title.trim() === '') {
+                titleError.innerHTML = 'Please enter Title of blog.';
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (sumary.trim() === '') {
+                sumaryError.innerHTML = 'Please enter Brief of blog.';
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (category.trim() === '') {
+                cateError.innerHTML = 'Please choose Category of blog.';
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (author.trim() === '') {
+                authorError.innerHTML = 'Please choose Author of blog.';
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (!showRadioChecked && !hideRadioChecked) {
+                statusError.innerHTML = 'Please choose Status of your blog';
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (!yesRadioChecked && !noRadioChecked) {
+                featureError.innerHTML = 'Please choose Feature of your blog';
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            var editorContent = CKEDITOR.instances.content.getData(); // Lấy nội dung của CKEditor
+            if (!editorContent.trim()) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
+                contentError.innerHTML = 'Please enter Content of blog.'; // Thông báo lỗi
+                event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
+                return;
+            }
+
+//            return true;
+//check length and special character
+            if (title.trim().length > 100) {
+                titleError.innerHTML = "Title must less than 100 characters";
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (sumary.trim().length > 250) {
+                sumaryError.innerHTML = "Title must less than 250 characters";
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+
+            // Kiểm tra input không chứa ký tự đặc biệt
+            var specialCharacters = /[@#$^&*{}|<>]/;
+            if (specialCharacters.test(title)) {
+                titleError.innerHTML = "Title cannot contain special character";
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (editorContent.trim().length > 7000) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
+                contentError.innerHTML = 'Content must less than 7000 character'; // Thông báo lỗi
+                event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
+                return;
+            }
+        }
+
+        //
 
         const input = document.getElementById('file-input');
         const image = document.getElementById('img-preview');
@@ -265,79 +389,9 @@
             }
         });
 
-        function validateInputs(event) {
-            var titleInput = document.getElementById("title");
-            var title = titleInput.value.trim();
-            // Kiểm tra input không được để trống
-            if (title === "") {
-                alert("Please fill Title");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            }
-
-            // Kiểm tra input không ít hơn 10 ký tự
-            if (title.length < 10) {
-                alert("Title must at least 10 characters");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            }
-
-            // Kiểm tra input không chứa ký tự đặc biệt
-            var specialCharacters = /[@#$^&*,"{}|<>]/;
-            if (specialCharacters.test(title)) {
-                alert("Title cannot contain special character");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            }
-
-            var sumaryInput = document.getElementById("sumary");
-            var sumary = sumaryInput.value.trim();
-            // Kiểm tra input không được để trống
-            if (sumary === "") {
-                alert("Please fill Brief");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            }
-            var showRadioChecked = document.getElementById('showRadio').checked;
-            var hideRadioChecked = document.getElementById('hideRadio').checked;
-            var yesRadioChecked = document.getElementById('yesRadio').checked;
-            var noRadioChecked = document.getElementById('noRadio').checked;
-            // Kiểm tra checkbox không được để trống
-            if (!showRadioChecked && !hideRadioChecked) {
-                alert('Please select a Status');
-                event.preventDefault();
-                return;
-            }
-            if (!yesRadioChecked && !noRadioChecked) {
-                alert('Please select a Feature');
-                event.preventDefault();
-                return;
-            }
-            var categoryOption = document.getElementById("category");
-            var category = categoryOption.value.trim();
-            var authorOption = document.getElementById("author");
-            var author = authorOption.value.trim();
-            // Kiểm tra input không được để trống
-            if (category === "") {
-                alert("Please choose Category of your blog");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            }
-            if (author === "") {
-                alert("Please choose Author of your blog");
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            }
-            var editorContent = CKEDITOR.instances.content.getData(); // Lấy nội dung của CKEditor
-            if (!editorContent.trim()) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
-                alert("Please fill Content"); // Thông báo lỗi
-                event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
-                return;
-            }
-            // Nếu tất cả điều kiện đều đúng, không cần ngăn chặn hành động mặc định của button
-        }
 
     </script>
+
     <!-- jQuery 2.0.2 -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/views/js/jquery.min.js"
@@ -357,9 +411,9 @@
     <script src="${pageContext.request.contextPath}/views/js/plugins/chart.js"
     type="text/javascript"></script>
 
-    datepicker
+    <!--datepicker-->
     <script src="js/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
-    Bootstrap WYSIHTML5
+    <!--Bootstrap WYSIHTML5-->
     <script src="js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
     <!-- iCheck -->
     <script src="${pageContext.request.contextPath}/views/js/plugins/iCheck/icheck.min.js"
@@ -459,3 +513,92 @@
     <label for="update_time">Updated Time:</label>
     <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.updateTime}">
 </div>-->
+<!-- function validateInputs(event) {
+//            var titleError = document.getElementById("titleError");
+//            var sumaryError = document.getElementById("sumaryError");
+//            var cateError = document.getElementById("cateError");
+//            var authorError = document.getElementById("authorError");
+//            var statusError = document.getElementById("statusError");
+//            var featureError = document.getElementById("featureError");
+//            var contentError = document.getElementById("contentError");
+//
+//            titleError.innerHTML = '';
+//            sumaryError.innerHTML = '';
+//            cateError.innerHTML = '';
+//            authorError.innerHTML = '';
+//            statusError.innerHTML = '';
+//            featureError.innerHTML = '';
+//            contentError.innerHTML = '';
+//
+//            var titleInput = document.getElementById("title").value.trim();
+//            var title = titleInput.value.trim();
+//            // Kiểm tra input không được để trống
+//            if (titleInput === "") {
+//                titleError.innerHTML = 'Please enter your title.';
+//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+//                return;
+//            }
+//
+//            // Kiểm tra input không ít hơn 10 ký tự
+//            if (title.length < 10) {
+//                titleError.innerHTML = "Title must at least 10 characters";
+//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+//                return;
+//            }
+//
+//            // Kiểm tra input không chứa ký tự đặc biệt
+//            var specialCharacters = /[@#$^&*{}|<>]/;
+//            if (specialCharacters.test(title)) {
+//                titleError.innerHTML = "Title cannot contain special character";
+//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+//                return;
+//            }
+//
+//            var sumaryInput = document.getElementById("sumary");
+//            var sumary = sumaryInput.value.trim();
+//            // Kiểm tra input không được để trống
+//            if (sumary === "") {
+//                sumaryError.innerHTML = "Please fill Brief";
+//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+//                return;
+//            }
+//            var categoryOption = document.getElementById("category");
+//            var category = categoryOption.value.trim();
+//            var authorOption = document.getElementById("author");
+//            var author = authorOption.value.trim();
+//            // Kiểm tra input không được để trống
+//            if (category === "") {
+//                cateError.innerHTML = "Please choose Category of your blog";
+//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+//                return;
+//            }
+//            if (author === "") {
+//                authorError.innerHTML = "Please choose Author of your blog";
+//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+//                return;
+//            }
+//            var showRadioChecked = document.getElementById('showRadio').checked;
+//            var hideRadioChecked = document.getElementById('hideRadio').checked;
+//            var yesRadioChecked = document.getElementById('yesRadio').checked;
+//            var noRadioChecked = document.getElementById('noRadio').checked;
+//            // Kiểm tra checkbox không được để trống
+//            if (!showRadioChecked && !hideRadioChecked) {
+//                statusError.innerHTML = 'Please select a Status';
+//                event.preventDefault();
+//                return;
+//            }
+//            if (!yesRadioChecked && !noRadioChecked) {
+//                featureError.innerHTML = 'Please select a Feature';
+//                event.preventDefault();
+//                return;
+//            }
+//
+//            var editorContent = CKEDITOR.instances.content.getData(); // Lấy nội dung của CKEditor
+//            if (!editorContent.trim()) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
+//                alert("Please fill Content"); // Thông báo lỗi
+//                event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
+//                return;
+//            }
+//            // Nếu tất cả điều kiện đều đúng, không cần ngăn chặn hành động mặc định của button
+//            
+//        }-->

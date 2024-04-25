@@ -24,7 +24,7 @@ import model.Setting;
  *
  * @author Admin
  */
-@WebServlet(name="ProductDetail", urlPatterns={"/marketing/ProductDetail"})
+@WebServlet(name="ProductDetail", urlPatterns={"/marketing/productdetail"})
 public class ProductDetail extends HttpServlet {
    
     /** 
@@ -73,11 +73,12 @@ public class ProductDetail extends HttpServlet {
         int id;
         Product p = null;
         if (action.equals("view")) {
+            
             id = Integer.parseInt(id_raw);
             p = pd.getProduct(id);
         }
         request.setAttribute("p", p);
-        request.getRequestDispatcher("views/marketing/procduct/detail.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/marketing/product/detail.jsp").forward(request, response);
    
     } 
 

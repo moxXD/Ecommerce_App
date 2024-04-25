@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author Admin
@@ -36,7 +38,8 @@ public class Product {
         this.salePrice = salePrice;
     }
     private Setting category,brand;
-    private double price;
+    private double price, saleprice;
+    private Sale salePrice1;
 
     public Product(int id, String name, String description,
             String specification, String imageUrl, int stock,
@@ -56,7 +59,8 @@ public class Product {
         this.isFeatured = isFeatured;
     }
     private String imgUrl;
-    private boolean status,isFeatured;
+    private boolean status,isFeatured, isSale;
+    private Timestamp createAt, updateAt;
     public Product(int id, String name, Brand brand, Category cate, double price, String description, String specification, String imageUrl, boolean status, int stock) {
         this.id = id;
         this.name = name;
@@ -79,6 +83,25 @@ public class Product {
     public Product() {
     }
 
+    public Product(int id, String name, int brandid, int categoryProductId, Double price, String description, String specification, String imageUrl, boolean status, int stock , boolean isFeatured, Double saleprice, Boolean isSale, Timestamp createAt, Timestamp updateAt) {
+        this.id = id;
+        this.name = name;
+        this.brandid = brandid;
+        this.categoryProductId = categoryProductId;
+        this.price = price;
+        this.description = description;
+        this.specification = specification;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.stock = stock;
+        this.isFeatured = isFeatured;
+        this.saleprice=saleprice;
+        this.isSale = isSale;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+    }
+
+    
     public Product(int id, String name, int categoryProductId, int brandid, double price, String description, String specification, String imageurl, boolean status, int stock, boolean isFeatured) {
         this.id = id;
         this.name = name;

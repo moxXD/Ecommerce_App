@@ -105,7 +105,7 @@ public class SettingDAO extends DBContext {
 
     public ArrayList<Setting> getBandC() {
         String sql = "SELECT * FROM swp391_g1_v1.setting\n"
-                + "where setting.type = 'Brand' or setting.type = 'Category'\n"
+                + "where setting.type like '%Brand%' or setting.type like '%Category%'\n"
                 + "order by `order` asc";
         ArrayList<Setting> st = new ArrayList<>();
         try {
