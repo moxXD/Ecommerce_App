@@ -118,6 +118,7 @@
                                     </li> 
 
                                     <li><a href="contact-us.html">Contact</a></li>
+                                    <li><a href="saleList">Sale</a></li>
                                 </ul>
                             </div>
                         </div>
