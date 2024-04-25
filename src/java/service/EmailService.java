@@ -170,6 +170,21 @@ public class EmailService {
         send(gmail, subject, message);
     }
 
+    public static void SendGmailToContact(String gmail, String mess) {
+        String OTP = EmailService.getOTP();
+        String subject = "TechMart confirm email to support";
+        String techMartMail = "service.techmart11@gmail.com";
+        String message = "Dear " + gmail + ",\n"
+                + "\n"
+                + "Thank to contact with TechMart.\n"
+                + "\n" + mess + "\n"
+                + "Thank you .\n"
+                + "\n"
+                + "Best regards,\n"
+                + "TechMart";
+        send(gmail, subject, message);
+    }
+
     public void sendNewPassword(String name, String email, String password) {
         String subject = "Your New Password for TECHMART";
         String message = "<html><body><p>Dear " + name + ",</p>"
@@ -182,14 +197,15 @@ public class EmailService {
     }
 
     public static void main(String[] args) {
-        String emailTo = "2306trongthanh@gmail.com";
+        String emailTo = "23trongthanh@gmail.com";
 //        String emailSubjectString = "service.techmart11@gmail.com";
 //        UserDAO ud = new UserDAO();
 //        User u = ud.getUserByEmail(emailTo);
 //        String otp = EmailService.SendOTPtoSignUp(emailTo);
 //        boolean send = EmailService.send(emailTo, emailSubjectString, otp);
 //        System.out.println(otp);
-        SendGmailToConfirm(emailTo);
+        String mess = "test contact 2";
+        SendGmailToContact(emailTo, mess);
     }
 
 }

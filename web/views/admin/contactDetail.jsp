@@ -66,8 +66,6 @@
     </head>
     <body>
         <%@include file="../layout/header.jsp" %>
-
-
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
@@ -85,16 +83,6 @@
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
                     </div>
-                    <!--                 search form 
-                        <form action="#" method="get" class="sidebar-form">
-                            <div class="input-group">
-                                <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                                <span class="input-group-btn">
-                                    <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                                </span>
-                            </div>
-                        </form>-->
-                    <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li>
@@ -107,11 +95,6 @@
                                 <i class="fa fa-users"></i> <span>User List</span>
                             </a>
                         </li>
-                        <!--                    <li>
-                                    <a href="userdetail.jsp">
-                                        <i class="fa fa-user"></i> <span>User Detail</span>
-                                    </a>
-                                </li>-->
                         <li>
                             <a href="settinglist">
                                 <i class="fa fa-gear"></i> <span>Settings</span>
@@ -129,82 +112,64 @@
                         <!--heading-->
                         <h2 class="mb-4">Contact Detail</h2>
                         <div class="row">
-                            <form action="userdetail" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">                                
+                            <form action="ContactList" method="get" enctype="multipart/form-data" onsubmit="return validateForm()">                                
                                 <div class="col-md">
-
                                     <div class="row"  style="margin-bottom: 1%">
                                         <!--full name-->
                                         <div class=" col-md-6">
                                             <label for="fullname">Full Name:</label>
-                                            <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view")?"disabled":""}>
+                                            <input type="text" class="form-control" name="fullname" id="fullname" value="${c.fullname}" disabled}>
                                             <span id="fullnameError" class="error-msg"></span>
                                         </div>
                                         <div class=" col-md-6">
                                             <label for="fullname">Email:</label>
-                                            <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view")?"disabled":""}>
+                                            <input type="text" class="form-control" name="mail" id="mail" value="${c.email}"disabled}>
                                             <span id="fullnameError" class="error-msg"></span>
                                         </div>
                                         <div class=" col-md-6">
                                             <label for="fullname">Mobile:</label>
-                                            <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view")?"disabled":""}>
+                                            <input type="text" class="form-control" name="phone" id="phone" value="${c.phone}" disabled}>
                                             <span id="fullnameError" class="error-msg"></span>
                                         </div>
                                         <div class=" col-md-6">
                                             <label for="fullname">Subject: </label>
-                                            <input type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view")?"disabled":""}>
+                                            <input type="text" class="form-control" name="subject" id="subject" value="${c.subject}" disabled}>
                                             <span id="fullnameError" class="error-msg"></span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <!--role-->
-                                    <div class="col-md">
-                                        <label for="role">Message of customer</label>
-                                        <textarea style="    width: 1184px;
-                                                  height: 138px;" type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view")?"disabled":""}></textarea>  
-                                    </div>
-                                    <div class="col-md">
-                                        <label for="role">Message to customer</label>
-                                        <textarea style="    width: 1184px;
-                                                  height: 138px;" type="text" class="form-control" name="fullname" id="fullname" value="${u.fullname}" ${param.action.equals("view")?"disabled":""}></textarea>  
-                                    </div>
-
                                 </div>
 
                                 <c:if test="${not empty err}">
                                     <div class="error-msg">${err}</div>
                                 </c:if>
-                                <!--button group-->
-                                <c:if test="${param.action.equals('add') or empty param.action}">
-                                    <input type="hidden" name="formAction" value="add">
-                                </c:if>
-                                <input type="hidden" name="userId" value="${param.id}">
-                                <div class="row text-center" style="margin: 3% 0  3% 0">
-                                    <div class="col-sm-6 ">
-                                        <button type="submit" class="btn btn-primary btn-block" >Save</button>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <label for="role">Message of customer</label>
+                                        <input  type="text" class="form-control" name="mess" id="mess" value="${c.message}" disabled}></input>  
                                     </div>
-
-                                    <c:if test="${!param.action.equals('add')}">
-                                        <div class="col-sm-6 ">
-                                            <button type="button" class="btn btn-primary btn-block" onclick="redirectToAdd()">Add</button>
-                                        </div>
-                                    </c:if>
-
-
-                                    <c:if test="${!param.action.equals('add')}">
-                                        <div class="col-sm-12 " style="margin:1% 0 5% 0">
-                                            <button type="button" class="btn btn-danger btn-block " onclick="redirectToUserList()">Back</button>
-                                        </div>
-                                    </c:if>
-                                    <c:if test="${param.action.equals('add')}">
-                                        <div class="col-sm-6 " >
-                                            <button type="button" class="btn btn-danger btn-block " onclick="redirectToUserList()">Back</button>
-                                        </div>
-                                    </c:if>
-
                                 </div>
                         </div>
                         </form>
+                        <div class="row text-center" style="margin: 3% 0  3% 0">
+                            <div class="col-sm-12 ">
+                                <button type="submit" class="btn btn-primary btn-block" onclick="redirectToContactList()">Back</button>
+                            </div>
+
+
+                            <form action="SendGmail" method="POST">
+                                <div class="col-md-11">
+                                    <label for="role">Message to customer</label>
+                                    <input type="text" class="form-control" name="mess" id="mess_to_send">
+                                </div>
+                                <input type="hidden" id="mail_to_Send" value="${mail}">
+                                <div class="col-sm-12" style="margin: 1% 0 5% 0">
+                                    <button type="button" class="btn btn-success btn-block" onclick="sendEmail()">Send</button>
+                                </div>
+                            </form><!-- comment -->
+
+
+
+                        </div>
                     </div>
                     </div>
                 </section>
@@ -215,15 +180,18 @@
 
 <%@include file="../layout/footer.jsp" %>
 <script type="text/javascript">
-
-    function redirectToUserList() {
-        window.location.href = "userlist";
+    function redirectToContactList() {
+        window.location.href = "ContactList";
     }
-    function redirectToAdd() {
-        window.location.href = "userdetail?action=add";
+    function sendEmail() {
+        // Get the values when the button is clicked
+        var mail = document.getElementById("mail_to_Send").value;
+        var mess = document.getElementById("mess_to_send").value;
+
+        // Redirect with the values
+        window.location.href = "SendGmail?gmail=" + mail + "&mess=" + mess;
 
     }
-
     const input = document.getElementById('file-input');
     const image = document.getElementById('img-preview');
     // preview image
