@@ -15,6 +15,9 @@ import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -100,7 +103,9 @@ public class Authentication implements Filter {
 	if (debug) log("Authentication:doFilter()");
 
 	doBeforeProcessing(request, response);
-	
+	 HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+        HttpSession session = req.getSession();
 	Throwable problem = null;
 	try {
 	    chain.doFilter(request, response);
