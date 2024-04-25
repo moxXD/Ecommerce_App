@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import model.Brand;
 import model.Category;
 import model.Product;
+import model.Setting;
 
 /**
  *
@@ -63,8 +64,8 @@ public class EditProduct extends HttpServlet {
     throws ServletException, IOException {
         SettingDAO sd = new SettingDAO();
         ProductDAO pd = new ProductDAO();
-        ArrayList<Category> listCate = sd.getListCategory();
-        ArrayList<Brand> listBrand = sd.getListBrand();
+        ArrayList<Setting> listCate = sd.getListCategory();
+        ArrayList<Setting> listBrand = sd.getListBrand();
         int id = Integer.parseInt(request.getParameter("id"));
         Product p = pd.getProduct(id);
         request.setAttribute("p", p);

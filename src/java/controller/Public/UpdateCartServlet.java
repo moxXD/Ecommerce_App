@@ -4,7 +4,6 @@
  */
 package controller.Public;
 
-import dal.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,19 +12,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Cart;
-import model.Product;
 
 /**
  *
  * @author Duc Le
  */
-@WebServlet(name = "AddToCartServlet", urlPatterns = {"/addtocart"})
-public class AddToCartServlet extends HttpServlet {
+@WebServlet(name = "UpdateCartServlet", urlPatterns = {"/updatecart"})
+public class UpdateCartServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +39,10 @@ public class AddToCartServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AddToCartServlet</title>");
+            out.println("<title>Servlet UpdateCartServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AddToCartServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateCartServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -79,56 +74,41 @@ public class AddToCartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/plain"); // Đặt kiểu phản hồi là text/plain
-        PrintWriter out = response.getWriter();
-
-        String id_raw = request.getParameter("productId"); // Lấy giá trị của tham số "id" từ request
-//        System.out.println("id:" + id_raw);
-        ProductDAO pDao = new ProductDAO();
         HttpSession session = request.getSession();
-        int id;
-        if (id_raw != null && !id_raw.isEmpty()) {
-            try {
-                id = Integer.parseInt(id_raw);
-                Product p = pDao.getProductById(id);
-                Object obj = session.getAttribute("cart");
-                if (obj == null) {
-                    Cart c = new Cart();
-                    c.setProduct(p);
-                    c.setQuantity(1);
+        String productId = request.getParameter("productId");
+        String action = request.getParameter("action");
+        if (action != null && !action.isEmpty()) {
 
-                    Map<String, Cart> map = new HashMap<>();
-                    map.put(id_raw, c);
+            // Lấy giỏ hàng từ session
+            Map<String, Cart> cartMap = (Map<String, Cart>) session.getAttribute("cart");
 
-                    session.setAttribute("cart", map);
-                    session.setAttribute("cartAdded", true);
+            // Kiểm tra nếu giỏ hàng tồn tại và sản phẩm cần xóa có trong giỏ hàng
+            if (cartMap != null && cartMap.containsKey(productId)) {
+                // Xóa sản phẩm khỏi giỏ hàng
+                cartMap.remove(productId);
 
-                } else {
-                    Map<String, Cart> map = (Map<String, Cart>) obj;
-                    Cart c = map.get(id_raw);
-                    if (c == null) {
-                        c = new Cart();
-                        c.setProduct(p);
-                        c.setQuantity(1);
-
-                        map.put(id_raw, c);
-                    } else {
-                        c.setQuantity(c.getQuantity() + 1);
-                    }
-                    session.setAttribute("cart", map);
-//                    session.setAttribute("cartAdded", true);
-                }
-                // Phản hồi về Ajax
-                out.print("success");
-            } catch (NumberFormatException e) {
-                Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, e);
-                // Phản hồi lỗi về Ajax
-                out.print("error");
+                // Cập nhật giỏ hàng trong session
+                session.setAttribute("cart", cartMap);
             }
         } else {
-            // Phản hồi lỗi về Ajax nếu không có id
-            out.print("error");
+            String quantity_raw = request.getParameter("quantity");
+            int quantity = 0;
+            try {
+                quantity = Integer.parseInt(quantity_raw);
+            } catch (Exception e) {
+            }
+            // Lấy giỏ hàng từ session
+            Map<String, Cart> cartMap = (Map<String, Cart>) session.getAttribute("cart");
+
+            // Kiểm tra nếu giỏ hàng tồn tại và sản phẩm có trong giỏ hàng
+            if (cartMap != null && cartMap.containsKey(productId)) {
+                // Cập nhật số lượng sản phẩm trong giỏ hàng
+                cartMap.get(productId).setQuantity(quantity);
+                // Cập nhật giỏ hàng trong session
+                session.setAttribute("cart", cartMap);
+            }
         }
+
     }
 
     /**

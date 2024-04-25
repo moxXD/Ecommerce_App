@@ -3,10 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller.Marketing;
+package controller.Sale;
 
-import dal.ProductDAO;
-import dal.SettingDAO;
+import dal.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,18 +13,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import model.Brand;
-import model.Category;
-import model.Product;
-import model.Setting;
+import java.util.List;
+import model.Order;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="ProductDetail", urlPatterns={"/marketing/ProductDetail"})
-public class ProductDetail extends HttpServlet {
+@WebServlet(name="SaleListSevlet", urlPatterns={"/saleList"})
+public class SaleListSevlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -42,10 +38,10 @@ public class ProductDetail extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetail</title>");  
+            out.println("<title>Servlet SaleListSevlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetail at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet SaleListSevlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,23 +58,15 @@ public class ProductDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-          String action = request.getParameter("action");
-        ProductDAO pd = new ProductDAO();
-        SettingDAO sd = new SettingDAO();
-        String id_raw = request.getParameter("id");
-        ArrayList<Setting> listCate = sd.getListCategory();
-        ArrayList<Setting> listBrand = sd.getListBrand();
-        request.setAttribute("listCate", listCate);
-        request.setAttribute("listBrand", listBrand);
-        int id;
-        Product p = null;
-        if (action.equals("view")) {
-            id = Integer.parseInt(id_raw);
-            p = pd.getProduct(id);
-        }
-        request.setAttribute("p", p);
-        request.getRequestDispatcher("views/marketing/procduct/detail.jsp").forward(request, response);
-   
+        int userid = 5;
+        OrderDAO dao = new OrderDAO();
+        List<Order> list = dao.getListOrderBySaleId(userid);
+//        if(list.isEmpty()){
+//            System.out.println("aaaaaa");
+//        }
+        
+        request.setAttribute("listO", list);
+        request.getRequestDispatcher("views/sale/saleList.jsp").forward(request, response);
     } 
 
     /** 

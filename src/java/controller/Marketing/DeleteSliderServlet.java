@@ -5,27 +5,19 @@
 
 package controller.Marketing;
 
-import dal.ProductDAO;
-import dal.SettingDAO;
+import dal.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import model.Brand;
-import model.Category;
-import model.Product;
-import model.Setting;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="ProductDetail", urlPatterns={"/marketing/ProductDetail"})
-public class ProductDetail extends HttpServlet {
+public class DeleteSliderServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,19 +29,12 @@ public class ProductDetail extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductDetail</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductDetail at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
+        String sid = request.getParameter("sliderid");
+        int sliderId = Integer.parseInt(sid);
+        SliderDAO dao = new SliderDAO();
+        dao.deleteSlider(sliderId);
+        response.sendRedirect("/SWP391_G1_OnlineShop/marketing/sliderlist");
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -62,23 +47,7 @@ public class ProductDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-          String action = request.getParameter("action");
-        ProductDAO pd = new ProductDAO();
-        SettingDAO sd = new SettingDAO();
-        String id_raw = request.getParameter("id");
-        ArrayList<Setting> listCate = sd.getListCategory();
-        ArrayList<Setting> listBrand = sd.getListBrand();
-        request.setAttribute("listCate", listCate);
-        request.setAttribute("listBrand", listBrand);
-        int id;
-        Product p = null;
-        if (action.equals("view")) {
-            id = Integer.parseInt(id_raw);
-            p = pd.getProduct(id);
-        }
-        request.setAttribute("p", p);
-        request.getRequestDispatcher("views/marketing/procduct/detail.jsp").forward(request, response);
-   
+        processRequest(request, response);
     } 
 
     /** 

@@ -5,8 +5,7 @@
 
 package controller.Marketing;
 
-import dal.ProductDAO;
-import dal.SettingDAO;
+import dal.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,18 +13,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import model.Brand;
-import model.Category;
-import model.Product;
-import model.Setting;
+import java.util.List;
+import model.Slider;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="ProductDetail", urlPatterns={"/marketing/ProductDetail"})
-public class ProductDetail extends HttpServlet {
+@WebServlet(name="SliderListServlet", urlPatterns={"/marketing/sliderlist"})
+public class SliderListServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -42,10 +38,10 @@ public class ProductDetail extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetail</title>");  
+            out.println("<title>Servlet SliderListServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetail at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet SliderListServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,23 +58,27 @@ public class ProductDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-          String action = request.getParameter("action");
-        ProductDAO pd = new ProductDAO();
-        SettingDAO sd = new SettingDAO();
-        String id_raw = request.getParameter("id");
-        ArrayList<Setting> listCate = sd.getListCategory();
-        ArrayList<Setting> listBrand = sd.getListBrand();
-        request.setAttribute("listCate", listCate);
-        request.setAttribute("listBrand", listBrand);
-        int id;
-        Product p = null;
-        if (action.equals("view")) {
-            id = Integer.parseInt(id_raw);
-            p = pd.getProduct(id);
+        response.setContentType("text/html;charset=UTF-8");
+        String indexPage = request.getParameter("page");
+        if(indexPage==null){
+            indexPage="1";
         }
-        request.setAttribute("p", p);
-        request.getRequestDispatcher("views/marketing/procduct/detail.jsp").forward(request, response);
-   
+        int page = Integer.parseInt(indexPage);
+        
+        SliderDAO dao = new SliderDAO();
+        List<Slider> listSlider = dao.getAllSlider();
+        //get total slider
+        int count = dao.getTotalSlider();
+        int endPage = count/7;
+        if(count % 7 != 0){
+            endPage++;
+        }
+        List<Slider> list = dao.pagingSlider(page);
+        
+        request.setAttribute("listP", list);
+        request.setAttribute("endPage", endPage);
+        request.setAttribute("listS", listSlider);
+        request.getRequestDispatcher("../views/marketing/slider/sliderList.jsp").forward(request, response);
     } 
 
     /** 
