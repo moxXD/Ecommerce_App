@@ -20,8 +20,8 @@ import model.Order;
  *
  * @author Admin
  */
-@WebServlet(name="SaleListSevlet", urlPatterns={"/marketing/salelist"})
-public class SaleListSevlet extends HttpServlet {
+@WebServlet(name="SearchOrderServlet", urlPatterns={"/marketing/searchorder"})
+public class SearchOrderServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,18 +33,13 @@ public class SaleListSevlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SaleListSevlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SaleListSevlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        
+            String qSearch = request.getParameter("qSearch");
+            OrderDAO dao =new OrderDAO();
+            List<Order> list = dao.getOrderByName(qSearch);
+            request.setAttribute("listOrder", list);
+            request.getRequestDispatcher("../views/marketing/sale/saleList.jsp").forward(request, response);
+            
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,31 +53,7 @@ public class SaleListSevlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String indexPage = request.getParameter("page");
-        if(indexPage==null){
-            indexPage="1";
-        }
-        int page = Integer.parseInt(indexPage);
-        
-        
-        int userid = 5;
-        OrderDAO dao = new OrderDAO();
-        List<Order> list = dao.getListOrderBySaleId(userid);
-        int count = dao.getTotalOrder();
-        int endPage = count/5;
-        if(count % 5 != 0){
-            endPage++;
-        }
-        List<Order> listOrder = dao.pagingOrder(page);
-//        if(list.isEmpty()){
-//            System.out.println("aaaaaa");
-//        }
-        
-        request.setAttribute("listOrder", listOrder);
-        request.setAttribute("endO", endPage);
-        request.setAttribute("listO", list);
-        request.getRequestDispatcher("../views/marketing/sale/saleList.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 

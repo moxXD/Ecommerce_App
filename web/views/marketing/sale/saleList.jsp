@@ -117,7 +117,7 @@
     </head>
 
     <body>
-        <%@include file="../layout/header.jsp" %>
+        <%@include file="../../layout/header.jsp" %>
 
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
@@ -145,7 +145,7 @@
                                                 </li>-->
                         <li class="active">
                             <a href="bloglist">
-                                <i class="fa fa-users"></i> <span>Slider List</span>
+                                <i class="fa fa-users"></i> <span>Sale List</span>
                             </a>
                         </li>
                         <!--                        <li>
@@ -161,7 +161,7 @@
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="searchslider" method="post">
+                    <form action="searchorder" method="post">
                         <div class="filter-row">
 
                             <!--status select-->
@@ -169,8 +169,12 @@
                                 <label for="filstatus">Filter by Status:</label>
                                 <select name="filstatus" id="filstatus" class="form-control">
                                     <option value="">All Status</option>
-                                    <option value="Active" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Active") ? "selected" : ""}>Active</option>
-                                    <option value="Inactive" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Inactive") ? "selected" : ""}>Inactive</option>
+                                    <option value="Submitted" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Active") ? "selected" : ""}>Submitted</option>
+                                    <option value="Confirm" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Inactive") ? "selected" : ""}>Confirm</option>
+                                    <option value="Paid" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Inactive") ? "selected" : ""}>Paid</option>
+                                    <option value="Delivery" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Inactive") ? "selected" : ""}>Delivery</option>
+                                    <option value="Successful" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Inactive") ? "selected" : ""}>Successful</option>
+                                    <option value="Cancel" ${param.filstatus != null && param.filstatus.equalsIgnoreCase("Inactive") ? "selected" : ""}>Cancel</option>
                                 </select>
                             </div>
 
@@ -178,7 +182,7 @@
                             <div class="form-group">
                                 <label for="filauthor">Search: </label>
                                 <div class="input-group">
-                                    <input type="text" name="q" class="form-control" placeholder="Search by title..." value="${param.q}"/>
+                                    <input type="text" name="qSearch" class="form-control" placeholder="Search by title..." value="${param.q}"/>
                                     <span class="input-group-btn">
                                         <button type='submit' id='search-btn' class="btn btn-flat"
                                                 style="background-color: white;border: 1px solid grey;border-radius: 5px "><i
@@ -249,7 +253,7 @@
                                 </thead>
                                 <tbody>
 
-                                    <c:forEach var="o" items="${listO}">
+                                    <c:forEach var="o" items="${listOrder}">
                                         <tr>
                                             <td>${o.id}</td>
                                             <td>${o.create_at}</td>
@@ -262,7 +266,7 @@
 
                                             <td>
                                                 <!--nut edit-->
-                                                <a href="sliderdetail?id=${o.id}">Edit</a>
+                                                <a href="orderdetail?id=${o.id}">Edit</a>
 
                                                 <!-- Nút xóa slider -->
                                                 <a href="deleteSlider?sliderid=${o.id}" onclick="return confirm('Are you sure you want to delete this slider?'); return false;">Delete</a>
@@ -288,13 +292,13 @@
                                         </li>
                                     </c:if>
 
-                                    <c:forEach begin="1" end="${endPage}" var="i">
+                                    <c:forEach begin="1" end="${endO}" var="i">
                                         <c:choose>
                                             <c:when test="${currentPage eq i}">
                                                 <li class="active"><span>${i}</span></li>
                                                     </c:when>
                                                     <c:otherwise>
-                                                <li><a href="sliderlist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
+                                                <li><a href="salelist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
                                                 </c:otherwise>
                                             </c:choose>
                                         </c:forEach>
@@ -321,7 +325,7 @@
         </div>
 
 
-        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../../layout/footer.jsp" %>
         <script type="text/javascript">
             function confirmSubmit() {
                 if (confirm("Are you sure you want to Change this status?")) {

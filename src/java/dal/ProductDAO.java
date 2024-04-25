@@ -111,13 +111,13 @@ public class ProductDAO extends DBContext{
         }
         return null;
     }
-    public static void main(String[] args) {
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getRecommendItem();
-        for (Product o : list) {
-            System.out.println(o.getImageUrl());
-        }
-    }
+//    public static void main(String[] args) {
+//        ProductDAO dao = new ProductDAO();
+//        List<Product> list = dao.getRecommendItem();
+//        for (Product o : list) {
+//            System.out.println(o.getImageUrl());
+//        }
+//    }
 
 
     public Product getProduct(int id) {

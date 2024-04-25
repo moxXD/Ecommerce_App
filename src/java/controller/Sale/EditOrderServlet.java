@@ -18,8 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name="SearchOrderListServlet", urlPatterns={"/marketing/searchorder"})
-public class SearchOrderListServlet extends HttpServlet {
+@WebServlet(name="EditOrderServlet", urlPatterns={"/marketing/editorderdetail"})
+public class EditOrderServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,13 +31,18 @@ public class SearchOrderListServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String qSearch = request.getParameter("q");
-        String status = request.getParameter("filstatus");
-        OrderDAO dao = new OrderDAO();
-
-        request.setAttribute("listP", list);
-        request.getRequestDispatcher("../views/marketing/slider/sliderList.jsp").forward(request, response);
-    } 
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet EditOrderServlet</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet EditOrderServlet at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,7 +69,12 @@ public class SearchOrderListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String address = request.getParameter("address");
+        String status = request.getParameter("status");
+        String id = request.getParameter("id");
+        OrderDAO dao = new OrderDAO();
+        dao.editOrder(address, status, Integer.parseInt(id));
+        response.sendRedirect("/SWP391_G1_OnlineShop/marketing/salelist");
     }
 
     /** 

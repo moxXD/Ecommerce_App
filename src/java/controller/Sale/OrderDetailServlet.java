@@ -13,15 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import model.Order;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="SaleListSevlet", urlPatterns={"/marketing/salelist"})
-public class SaleListSevlet extends HttpServlet {
+@WebServlet(name="OrderDetailServlet", urlPatterns={"/marketing/orderdetail"})
+public class OrderDetailServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -38,10 +37,10 @@ public class SaleListSevlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SaleListSevlet</title>");  
+            out.println("<title>Servlet OrderDetailServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SaleListSevlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet OrderDetailServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,31 +57,17 @@ public class SaleListSevlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String indexPage = request.getParameter("page");
-        if(indexPage==null){
-            indexPage="1";
-        }
-        int page = Integer.parseInt(indexPage);
-        
-        
-        int userid = 5;
+        String id = request.getParameter("id");
         OrderDAO dao = new OrderDAO();
-        List<Order> list = dao.getListOrderBySaleId(userid);
-        int count = dao.getTotalOrder();
-        int endPage = count/5;
-        if(count % 5 != 0){
-            endPage++;
-        }
-        List<Order> listOrder = dao.pagingOrder(page);
-//        if(list.isEmpty()){
-//            System.out.println("aaaaaa");
+        Order order = dao.getOrderById(id);
+//        String o = slider.getDescription();
+//        
+//        if(!a.isEmpty()){
+//            System.out.println(a);
 //        }
         
-        request.setAttribute("listOrder", listOrder);
-        request.setAttribute("endO", endPage);
-        request.setAttribute("listO", list);
-        request.getRequestDispatcher("../views/marketing/sale/saleList.jsp").forward(request, response);
+        request.setAttribute("detail", order);
+        request.getRequestDispatcher("../views/marketing/sale/orderDetails.jsp").forward(request, response);
     } 
 
     /** 
