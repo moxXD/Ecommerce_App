@@ -122,6 +122,9 @@
                                             <li><a href="blog-single.html">Blog Single</a></li>
                                         </ul>
                                     </li> 
+
+                                  
+                                    <li><a href="saleList">Sale</a></li>
                             
                                         <li><a href="admin/dashboard">Admin</a></li>
                                     
