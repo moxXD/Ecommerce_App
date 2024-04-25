@@ -55,11 +55,11 @@
                         </thead>
                         <tbody>
                             <c:forEach var="entry" items="${requestScope.cartMap}">
-                          
+
                                 <fmt:formatNumber value="${entry.value.getPrice()}" pattern="###,###.##" var="formattedPrice" />
                                 <tr>
                                     <td class="cart_product">
-                                        <a href=""><img style="width: 100px;height: 100px" src="<c:url value='/uploads/${entry.value.product.imgUrl}'/>" alt=""></a>
+                                        <a href=""><img style="width: 100px;height: 100px" src="<c:url value='/uploads/${entry.value.product.imageUrl}'/>" alt=""></a>
                                     </td>
                                     <td class="cart_description">
                                         <h4 style="margin-left: 30px"><a href="productdetail?id=${entry.value.product.id}">${entry.value.product.name}</a></h4>
@@ -86,7 +86,7 @@
                                     </td>
                                     <td class="cart_delete">
                                         <!-- Here you can add functionality to delete the item from the cart -->
-                                        <form  action="cartdetail" method="post">
+                                        <form action="cartdetail" method="post">
                                             <input type="hidden" name="productId" value="${entry.key}"/>
                                             <button type="submit" ><i class="fa fa-times"></i></button>
                                         </form>
@@ -102,20 +102,46 @@
                 </div>
                 <div class="container" >
                     <button class="btn btn-info" onclick="redirectToProductList()">Continue Shopping</button>
-                    <button class="btn btn-primary" style="margin-bottom: 2rem">Check Out</button>
+                    <button class="btn btn-danger" type="button" onclick="redirectToCheckOut()"
+                            ${empty requestScope.cartMap    ?"disabled":""}>Check Out</button>
                 </div>
             </div>
         </section> <!--/#cart_items-->
         <%@include  file="layout/footer.jsp" %>
         <script type="text/javascript">
-            function redirectToProductList(){
-                window.location.href='productlist';
+            function redirectToProductList() {
+                window.location.href = 'productlist';
+            }
+            let redirectToCheckOut = () => {
+                // Kiểm tra xem có thông tin người dùng trong HttpSession hay không
+            <%-- Assume "userSession" is the attribute name storing user information in the session --%>
+            <% if (session.getAttribute("userSession") != null) { %>
+                // Nếu có, chuyển hướng đến trang thanh toán
+                window.location.href = 'cartcompletion';
+            <% } else { %>
+                // Nếu không, hiển thị thông báo cảnh báo và yêu cầu người dùng đăng nhập
+                alert('Please login to proceed to checkout!');
+                // Sau đó, chuyển hướng người dùng đến trang đăng nhập
+                window.location.href = 'Login'; // Thay 'login' bằng URL của trang đăng nhập thực tế
+            <% } %>
+
             }
             function updateTotal(input, price, productId) {
                 var quantity = parseInt(input.value);
                 var total = price * quantity;
                 var totalElement = document.getElementById('total_' + productId);
                 totalElement.textContent = total.toLocaleString('vi');
+                // Gửi yêu cầu AJAX để cập nhật số lượng sản phẩm trong giỏ hàng
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "updatecart", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        // Xử lý phản hồi từ server nếu cần
+                        updateTotalCostOfAll(); // Cập nhật tổng chi phí sau khi cập nhật giỏ hàng
+                    }
+                };
+                xhr.send("productId=" + productId + "&quantity=" + quantity);
                 updateTotalCostOfAll();
             }
             function updateTotalCostOfAll() {
@@ -130,7 +156,21 @@
 
                 document.getElementById('totalAmount').textContent = 'Total Cost: ' + totalCost.toLocaleString('vi');
             }
-
+//            let deleteItem=(id)=>{
+//                var xhr = new XMLHttpRequest();
+//                xhr.open("POST", "addtocart", true);
+//                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//                xhr.onreadystatechange = function () {
+//                    if (xhr.readyState == 4 && xhr.status == 200) {
+//                        // Xử lý phản hồi từ server nếu cần
+////                        alert('product has been add to cart') // Cập nhật tổng chi phí sau khi cập nhật giỏ hàng
+////                        var toastElement = document.querySelector('.toast');
+////                        var toast = new bootstrap.Toast(toastElement);
+////                        toast.show();
+//                    }
+//                };
+//                xhr.send("productId=" + id);
+//            }
             window.onload = updateTotalCostOfAll();
         </script>
         <!-- Bootstrap JS and jQuery -->

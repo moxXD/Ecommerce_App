@@ -71,7 +71,7 @@
             </aside>
             <aside class="right-side">
                 <section class="content">
-                    <form action="productList" method="get">
+                    <form action="productList" id="filterForm" method="get">
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search..." value="${param.q}"/>
                             <span class="input-group-btn">
@@ -84,26 +84,32 @@
                         <div class="filter-row">
                             <div class="form-group">
                                 <label >Filter by category:</label>
-                                <select name="filCate"  class="form-control" >
-                                    <option  value="" >Select Category</option>
+                                <select name="filCate"  class="form-control" 
+                                        onchange="submitForm()">
+                                    <option value="">Select category</option> 
                                     <c:forEach var="c" items="${requestScope.listCate}">
-                                        <option  value="${c.value}" ${param.filCate == c.value?"selected":""}>${c.value}</option>
+                                        <option  value="${c.id}" 
+                                                 ${param.filCate==c.id?"selected":""}>${c.value}</option>
                                     </c:forEach>
                                 </select>
 
                             </div> 
                             <div class="form-group">
                                 <label for="filgender">Filter by brand:</label>
-                                <select name="filBrand"class="form-control" >
+                                <select name="filBrand"class="form-control" 
+                                        onchange="submitForm()">
                                     <option  value="" >Select Brand</option>
                                     <c:forEach var="b" items="${requestScope.listBrand}">
-                                        <option value="${b.value}" >${b.value}</option>
+                                        <option value="${b.id}"
+                                                ${param.filBrand == b.id?"selected":""}>${b.value}</option>
                                     </c:forEach>
                                 </select>
                             </div> 
                             <div class="form-group">
                                 <label for="filstatus">Filter by status:</label>
-                                <select name="filstatus"  class="form-control">
+                                <select name="filstatus"  class="form-control"
+                                        onchange="submitForm()">
+                                    <option  value="" >Select status</option>
                                     <option value="active" ${param.filstatus != null && param.filstatus.equals("active") ? "selected" : ""}>Active</option>
                                     <option value="inactive" ${param.filstatus != null && param.filstatus.equals("inactive") ? "selected" : ""}>Inactive</option>
 
@@ -116,44 +122,44 @@
 
                     <!-- Table for displaying user data -->
                     <div class="table-responsive">
-
-                        <table id="content" class="table user-table">
-                            <thead>
-                                <tr>
-                                    <th>ID
-                                        <a href="productList?page=${currentPage}&sort=id&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
-                                            <i class="fa fa-sort"></i>
-                                    </th>
-                                    <th>Name</th>
-                                    <th>Brand</th>
-                                    <th>Category</th>
-                                    <th>Price</th>                                  
-                                    <th>Status</th>
-                                    <th>Stock</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach items="${listProduct}" var="p">
-
+                        <form action="productList" method="post">
+                            <table id="content" class="table user-table">
+                                <thead>
                                     <tr>
-                                        <td>${p.id}</td>
-                                        <td>${p.name}</td>
-                                        <td>${p.brand.value}</td>
-                                        <td>${p.cate.value}</td>
-                                        <td>${p.price}</td>
-                                        <td>${p.status?"Active":"Inactive"}</td>
-                                        <td>${p.stock}</td>
-                                        <td><a href="productDetail?action=view&id=${p.id}">View</a> 
-                                            &nbsp;
-                                            <a href="editProduct?id=${p.id}" >Edit </a>
-                                        </td>
+                                        <th>ID
+                                            <a href="productList?page=${currentPage}&sort=id&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                                <i class="fa fa-sort"></i>
+                                        </th>
+                                        <th>Name</th>
+                                        <th>Brand</th>
+                                        <th>Category</th>
+                                        <th>Price</th>                                  
+                                        <th>Status</th>
+                                        <th>Stock</th>
+                                        <th>Action</th>
                                     </tr>
-                                </c:forEach>
-                                <!-- Add more rows here -->
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${listProduct}" var="p">
 
+                                        <tr>
+                                            <td>${p.id}</td>
+                                            <td>${p.name}</td>
+                                            <td>${p.brand.value}</td>
+                                            <td>${p.category.value}</td>
+                                            <td>${p.price}</td>
+                                            <td>${p.status?"Active":"Inactive"}</td>
+                                            <td>${p.stock}</td>
+                                            <td><a href="productDetail?action=view&id=${p.id}">View</a> 
+                                                &nbsp;
+                                                <a href="editProduct?id=${p.id}" >Edit </a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                    <!-- Add more rows here -->
+                                </tbody>
+                            </table>
+                        </form>
                         <!-- Diplay list of page -->
                         <nav aria-label="Page navigation">
                             <ul class="pagination">
@@ -161,7 +167,7 @@
                                 <c:if test="${currentPage > 1}">
                                     <li>
                                         <a href="productList?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}" aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                            <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </li>
                                 </c:if>
@@ -180,13 +186,12 @@
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
                                         <a href="productList?page=${currentPage+1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                            <i class="fa fa-arrow-right"></i>
                                         </a>
                                     </li>
                                 </c:if>
                             </ul>
                         </nav>
-                        no of page ${currentPage}
                     </div>
                     <a href="addProduct" class="btn btn-warning shadow-0">Add product  </a>
                 </section>
@@ -236,89 +241,32 @@
 
         <!-- Director for demo purposes -->
         <script>
-            function searchByName(param) {
-                var txtSearch = param.values();
-                $.ajax({
-                    url: "/productList/searchByAjax",
-                    type: "get", //send it through get method
-                    data: {
-                        txt: txtSearch
-                    },
-                    success: function (data) {
-                        // do sth
-                        var row = document.getElementById("content");
-                        row.innerHTML = data;
-                    },
-                    error: function (xhr) {
-                        //Do Something to handle error
-                    }
-                });
+//            function searchByName(param) {
+//                var txtSearch = param.values();
+//                $.ajax({
+//                    url: "/productList/searchByAjax",
+//                    type: "get", //send it through get method
+//                    data: {
+//                        txt: txtSearch
+//                    },
+//                    success: function (data) {
+//                        // do sth
+//                        var row = document.getElementById("content");
+//                        row.innerHTML = data;
+//                    },
+//                    error: function (xhr) {
+//                        //Do Something to handle error
+//                    }
+//                });
+//            }
+        </script>
+        <script type="text/javascript">
+            let submitForm = () => {
+                let form = document.getElementById('filterForm');
+                form.submit();
             }
         </script>
-        <script type="text/javascript">
-            $('input').on('ifChecked', function (event) {
-                // var element = $(this).parent().find('input:checkbox:first');
-                // element.parent().parent().parent().addClass('highlight');
-                $(this).parents('li').addClass("task-done");
-                console.log('ok');
-            });
-            $('input').on('ifUnchecked', function (event) {
-                // var element = $(this).parent().find('input:checkbox:first');
-                // element.parent().parent().parent().removeClass('highlight');
-                $(this).parents('li').removeClass("task-done");
-                console.log('not');
-            });
 
-        </script>
-        <script>
-            $('#noti-box').slimScroll({
-                height: '400px',
-                size: '5px',
-                BorderRadius: '5px'
-            });
-
-            $('input[type="checkbox"].flat-grey, input[type="radio"].flat-grey').iCheck({
-                checkboxClass: 'icheckbox_flat-grey',
-                radioClass: 'iradio_flat-grey'
-            });
-        </script>
-        <script type="text/javascript">
-            $(function () {
-                "use strict";
-                //BAR CHART
-                var data = {
-                    labels: ["January", "February", "March", "April", "May", "June", "July"],
-                    datasets: [
-                        {
-                            label: "My First dataset",
-                            fillColor: "rgba(220,220,220,0.2)",
-                            strokeColor: "rgba(220,220,220,1)",
-                            pointColor: "rgba(220,220,220,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(220,220,220,1)",
-                            data: [65, 59, 80, 81, 56, 55, 40]
-                        },
-                        {
-                            label: "My Second dataset",
-                            fillColor: "rgba(151,187,205,0.2)",
-                            strokeColor: "rgba(151,187,205,1)",
-                            pointColor: "rgba(151,187,205,1)",
-                            pointStrokeColor: "#fff",
-                            pointHighlightFill: "#fff",
-                            pointHighlightStroke: "rgba(151,187,205,1)",
-                            data: [28, 48, 40, 19, 86, 27, 90]
-                        }
-                    ]
-                };
-                new Chart(document.getElementById("linechart").getContext("2d")).Line(data, {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                });
-
-            });
-            // Chart.defaults.global.responsive = true;
-        </script>
     </body>
 
 </html>

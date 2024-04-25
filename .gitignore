@@ -25,3 +25,5 @@ src/java/dal/FakeData.java
 /web/META-INF
 /nbproject
 /nbproject
+src/java/controller/Public/DemoVnPayServlet.java
+web/vnpay.jsp

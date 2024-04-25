@@ -319,30 +319,30 @@
                 var form = document.getElementById("filterForm");
                 form.submit();
             }
-//            // Function to show the confirmation modal
-//            function showConfirmationModal(userId, status) {
-//                $('#confirmModal').modal('show');
-//
-//                // Capture the user's decision
-//                $('#confirmBtn').click(function () {
-//                    // Call a function to perform the action based on the user's decision
-//                    // For example, you can make an AJAX call to update the user's status
-//                    // Here, I'm just logging the user's decision to the console
-//                    
-//
-//                    // Close the modal
-//                    $('#confirmModal').modal('hide');
-//                });
-//            }
-//
-//// Function to handle the submission of the form
-//            function handleSubmit(userId, status) {
-//                // Prevent the form from submitting directly
-//                event.preventDefault();
-//
-//                // Show the confirmation modal
-//                showConfirmationModal(userId, status);
-//            }
+            // Function to show the confirmation modal
+            function showConfirmationModal(userId, status) {
+                $('#confirmModal').modal('show');
+
+                // Capture the user's decision
+                $('#confirmBtn').click(function () {
+                    // Call a function to perform the action based on the user's decision
+                    // For example, you can make an AJAX call to update the user's status
+                    // Here, I'm just logging the user's decision to the console
+                    
+
+                    // Close the modal
+                    $('#confirmModal').modal('hide');
+                });
+            }
+
+// Function to handle the submission of the form
+            function handleSubmit(userId, status) {
+                // Prevent the form from submitting directly
+                event.preventDefault();
+
+                // Show the confirmation modal
+                showConfirmationModal(userId, status);
+            }
 
         </script>
         <!-- jQuery 2.0.2 -->

@@ -28,6 +28,12 @@ public class Cart {
         this.product = product;
     }
 
+    public Cart(int id, int quantity, Product product) {
+        this.id = id;
+        this.quantity = quantity;
+        this.product = product;
+    }
+
     @Override
     public String toString() {
         return "Cart{" + "id=" + id + ", quantity=" + quantity + ", user=" + user + ", product=" + product + '}';
@@ -66,30 +72,14 @@ public class Cart {
     }
 
     public double getTotal() {
-        return getPrice()*quantity;
+        return getPrice() * quantity;
     }
 
     public double getPrice() {
-        if (product.getSalePrice() == null) {
+        if (product.getSalePrice() == 0) {
             return product.getPrice();
         } else {
-            Date startDateFromSQL = product.getSalePrice().getStart();
-            Date endDateFromSQL = product.getSalePrice().getEnd();   // Lấy từ SQL
-            // Chuyển đổi java.sql.Date thành java.time.LocalDate
-            LocalDate startDate = startDateFromSQL.toLocalDate();
-            LocalDate endDate = endDateFromSQL.toLocalDate();
-            // Lấy ngày hiện tại
-            LocalDate currentDate = LocalDate.now();
-
-            // So sánh ngày hiện tại với start date và end date
-            boolean isAfterStart = currentDate.isAfter(startDate);
-            boolean isBeforeEnd = currentDate.isBefore(endDate);
-            // Kiểm tra nếu ngày hiện tại nằm giữa start date và end date
-            if (isAfterStart && isBeforeEnd) {
-                return product.getSalePrice().getSalePrice();
-            } else {
-                return product.getPrice();
-            }
+            return product.getSalePrice();
         }
     }
 

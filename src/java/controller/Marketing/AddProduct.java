@@ -16,9 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import model.Brand;
-import model.Category;
 import model.Product;
+import model.Setting;
 
 /**
  *
@@ -64,8 +63,8 @@ public class AddProduct extends HttpServlet {
     throws ServletException, IOException {
         SettingDAO sd = new SettingDAO();
         ProductDAO pd = new ProductDAO();
-        ArrayList<Category> listCate = sd.getListCategory();
-        ArrayList<Brand> listBrand = sd.getListBrand();
+        ArrayList<Setting> listCate = sd.getListCategory();
+        ArrayList<Setting> listBrand = sd.getListBrand();
         request.setAttribute("listCate", listCate);
         request.setAttribute("listBrand", listBrand);
 
