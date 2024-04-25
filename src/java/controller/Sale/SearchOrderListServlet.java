@@ -13,15 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Order;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name="SaleListSevlet", urlPatterns={"/saleList"})
-public class SaleListSevlet extends HttpServlet {
+@WebServlet(name="SearchOrderListServlet", urlPatterns={"/marketing/searchorder"})
+public class SearchOrderListServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,18 +31,13 @@ public class SaleListSevlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SaleListSevlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SaleListSevlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        String qSearch = request.getParameter("q");
+        String status = request.getParameter("filstatus");
+        OrderDAO dao = new OrderDAO();
+
+        request.setAttribute("listP", list);
+        request.getRequestDispatcher("../views/marketing/slider/sliderList.jsp").forward(request, response);
+    } 
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,15 +51,7 @@ public class SaleListSevlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int userid = 5;
-        OrderDAO dao = new OrderDAO();
-        List<Order> list = dao.getListOrderBySaleId(userid);
-//        if(list.isEmpty()){
-//            System.out.println("aaaaaa");
-//        }
-        
-        request.setAttribute("listO", list);
-        request.getRequestDispatcher("views/sale/saleList.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 

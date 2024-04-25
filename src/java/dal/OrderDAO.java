@@ -45,9 +45,81 @@ public class OrderDAO extends DBContext {
                         rs.getDate(10)));
             }
         } catch (Exception e) {
-            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, e);
+            
         }
         
+        return list;
+    }
+    
+     //dem so cot trong sql
+    public int getTotalSlider() {
+        String sql = "SELECT COUNT(*)\n"
+                + "FROM slider;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+
+        return 0;
+    }
+
+    public List<Order> pagingOrder(int index) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM `swp391_g1_v1`.slider\n"
+                + "ORDER BY id\n"
+                + "LIMIT ?, 7;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, (index - 1) * 7);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Order(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getDate(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getString(9),
+                        rs.getDate(10)));
+            }
+        } catch (Exception e) {
+        }
+
+        return list;
+    }
+
+    public List<Order> getSliderByName(String qSearch, Boolean status) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT * FROM swp391_g1_v1.slider \n"
+                + "where name LIKE ? and status = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + qSearch + "%");
+            ps.setBoolean(2, status);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Order(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getDate(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getString(9),
+                        rs.getDate(10)));
+            }
+        } catch (Exception e) {
+        }
         return list;
     }
 }
