@@ -157,8 +157,6 @@ public class Order {
         this.user_id = user_id;
     }
 
-    
-
     public int getSale_id() {
         return sale_id;
     }

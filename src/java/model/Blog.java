@@ -37,6 +37,21 @@ public class Blog {
         this.is_featured = is_featured;
         this.sumary = sumary;
     }
+    
+    public Blog(int categoryId, int Id, int authorId, String imgUrl, String title, String detail, boolean status, Timestamp createTime, Timestamp updateTime, boolean is_featured, String sumary) {
+        this.categoryId = categoryId;
+        this.Id = Id;
+        this.authorId = authorId;
+        this.imgUrl = imgUrl;
+        this.title = title;
+        this.detail = detail;
+        this.status = status;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.is_featured = is_featured;
+        this.sumary = sumary;
+    }
+    
 
     public boolean isIs_featured() {
         return is_featured;

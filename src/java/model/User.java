@@ -5,6 +5,7 @@
 package model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -30,17 +31,43 @@ public class User {
         this.phone = phone;
     }
 
-
-
     private int id;
     private Setting setting;
-    private String email, password, 
+    private String email, password,
             fullname, imgUrl,
             phone, address;
     private boolean status, gender;
     private Date dob;
+    private Timestamp createtime;
 
     public User() {
+    }
+    private int categotyid;
+
+    public Timestamp getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Timestamp createtime) {
+        this.createtime = createtime;
+    }
+
+    public int getCategotyid() {
+        return categotyid;
+    }
+
+    public void setCategotyid(int categotyid) {
+        this.categotyid = categotyid;
+    }
+
+    public User(int id, String email, int categotyid, boolean status, String fullname, String imgUrl, Timestamp createtime) {
+        this.id = id;
+        this.email = email;
+        this.categotyid = categotyid;
+        this.status = status;
+        this.fullname = fullname;
+        this.imgUrl = imgUrl;
+        this.createtime = createtime;
     }
 
     public User(int id) {
@@ -80,8 +107,6 @@ public class User {
     public String toString() {
         return "User{" + "id=" + id + ", setting=" + setting + ", email=" + email + ", password=" + password + ", fullname=" + fullname + ", imgUrl=" + imgUrl + ", phone=" + phone + ", address=" + address + ", status=" + status + ", gender=" + gender + ", dob=" + dob + '}';
     }
-
-
 
     public User(int id, String email, String password, String fullname, String imgUrl, String phone, String address,
             boolean status, boolean gender, Date dob) {
