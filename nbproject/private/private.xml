@@ -3,14 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/service/ContactDetail.java</file>
-            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/controller/admin/UserDetailServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/model/Contact.java</file>
-            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/service/ContactList.java</file>
-            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/src/java/dal/UserDAO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/web/views/admin/userdetail.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/web/views/admin/contactDetail.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/g1/web/views/admin/contactList.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/New%20folder/g1/src/java/service/EmailService.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/New%20folder/g1/src/java/controller/common/Register.java</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/New%20folder/g1/web/authen/EnterOTP.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/SWP391_BL5/New%20folder/g1/src/java/service/verifyOTP.java</file>
         </group>
     </open-files>
 </project-private>

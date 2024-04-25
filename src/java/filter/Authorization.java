@@ -23,8 +23,10 @@ import model.User;
  *
  * @author Admin
  */
-public class Authentication implements Filter {
+public class Authorization implements Filter {
 
+    private static final String LOGIN = "/Login";
+    private static final String ERROR401 = "/404.jsp";
     private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
@@ -32,13 +34,13 @@ public class Authentication implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public Authentication() {
+    public Authorization() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("Authentication:DoBeforeProcessing");
+            log("Authorization:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -66,7 +68,7 @@ public class Authentication implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("Authentication:DoAfterProcessing");
+            log("Authorization:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -102,7 +104,7 @@ public class Authentication implements Filter {
             throws IOException, ServletException {
 
         if (debug) {
-            log("Authentication:doFilter()");
+            log("Authorization:doFilter()");
         }
 
         doBeforeProcessing(request, response);
@@ -111,17 +113,65 @@ public class Authentication implements Filter {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("userSession");
         String url = req.getRequestURI() + "?" + req.getQueryString();
-        if (url.contains("Profile") || url.contains("user?action=updateprofile")
-                || url.contains("user?action=update_image") || url.contains("Changepassword")) {
+        if (url.contains("admin") || url.contains("marketing") || url.contains("sale")) {
             if (user != null) {
-                chain.doFilter(request, response);
+                if (url.contains("admin")) {
+                    if (user.getSetting().getId() == 1) {
+                        chain.doFilter(request, response);
+                    } else {
+                        res.sendRedirect(req.getContextPath() + ERROR401);
+                    }
+                } else if (url.contains("marketing")) {
+                    if (user.getSetting().getId() == 5) {
+                        chain.doFilter(request, response);
+                    } else {
+                        res.sendRedirect(req.getContextPath() + ERROR401);
+                    }
+                } else {
+                    if (user.getSetting().getId() == 2 || user.getSetting().getId() == 3) {
+                        chain.doFilter(request, response);
+                    } else {
+                        res.sendRedirect(req.getContextPath() + ERROR401);
+                    }
+                }
             } else {
-                res.sendRedirect(req.getContextPath() + "/Login");
+                res.sendRedirect(req.getContextPath() + LOGIN);
             }
-        } else {
-            chain.doFilter(request, response);
+//        } else if (url.contains("user?action=history")) {
+//            if (user != null) {
+//                if (user.getRole().getRole_id() == 2) {
+//                    filterChain.doFilter(servletRequest, servletResponse);
+//                } else {
+//                    response.sendRedirect(request.getContextPath() + ERROR401);
+//                }
+//            } else {
+//                res.sendRedirect(req.getContextPath() + LOGIN);
+//            }
+//        } else if (url.contains("doctor?action=myfeedback") || url.contains("doctor?action=mypatient")
+//                || url.contains("doctor?action=myappointment") || url.contains("doctor?action=detailpatient")) {
+//            if (user != null) {
+//                if (user.getRole().getRole_id() == 3) {
+//                    filterChain.doFilter(servletRequest, servletResponse);
+//                } else {
+//                    response.sendRedirect(request.getContextPath() + ERROR401);
+//                }
+//            } else {
+//                response.sendRedirect(request.getContextPath() + LOGIN);
+//            }
+//        } else if (url.contains("book") || url.contains("rate")) {
+//            if (user != null) {
+//                if (user.getRole().getRole_id() == 2) {
+//                    filterChain.doFilter(servletRequest, servletResponse);
+//                } else {
+//                    response.sendRedirect(request.getContextPath() + ERROR401);
+//                }
+//            } else {
+//                response.sendRedirect(request.getContextPath() + LOGIN);
+//            }
+//        } else {
+//            filterChain.doFilter(servletRequest, servletResponse);
+//        }
         }
-
         Throwable problem = null;
         try {
             chain.doFilter(request, response);
@@ -177,7 +227,7 @@ public class Authentication implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("Authentication:Initializing filter");
+                log("Authorization:Initializing filter");
             }
         }
     }
@@ -188,9 +238,9 @@ public class Authentication implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("Authentication()");
+            return ("Authorization()");
         }
-        StringBuffer sb = new StringBuffer("Authentication(");
+        StringBuffer sb = new StringBuffer("Authorization(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

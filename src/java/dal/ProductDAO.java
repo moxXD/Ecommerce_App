@@ -32,6 +32,55 @@ public class ProductDAO extends DBContext {
     PreparedStatement ps = null;
     ResultSet rs = null;
 
+    public static void main(String[] args) {
+        ProductDAO productDAO = new ProductDAO();
+
+        // Example values
+        int productId = 3;
+        String name = "Updated Product Name";
+        int categoryId = 1;
+        int brandId = 2;
+        double price = 99.99;
+        String description = "Updated product description";
+        String specification = "Updated product specification";
+        boolean status = true;
+        int stock = 100;
+        String imageUrl = "http://example.com/image.jpg";
+
+        // Update the product
+        boolean success = productDAO.updateProduct(productId, name, categoryId, brandId, price, description,
+                specification, status, stock, imageUrl);
+
+        if (success) {
+            System.out.println("Product updated successfully.");
+        } else {
+            System.out.println("Failed to update product.");
+        }
+    }
+
+    public void updateProductStatus(int id, boolean status) {
+        String sql = "update swp391_g1_v1.product \n"
+                + "set `status` = ? \n"
+                + "where `id` = ?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setBoolean(1, status);
+            stm.setInt(2, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
     public List<Product> getAllProduct() {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM swp391_g1_v1.product";
@@ -84,31 +133,6 @@ public class ProductDAO extends DBContext {
         return list;
     }
 
-    public Product getProductById(String id) {
-        List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM swp391_g1_v1.product where id =?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, id);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                return new Product(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getInt(3),
-                        rs.getInt(4),
-                        rs.getDouble(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getString(8),
-                        rs.getBoolean(9),
-                        rs.getInt(10),
-                        rs.getBoolean(11));
-            }
-        } catch (Exception e) {
-        }
-        return null;
-    }
 //    public static void main(String[] args) {
 //        ProductDAO dao = new ProductDAO();
 //        List<Product> list = dao.getAllProduct();
@@ -116,7 +140,6 @@ public class ProductDAO extends DBContext {
 //            System.out.println(o);
 //        }
 //    }
-
     public Product getProduct(int id) {
         String sql = "SELECT\n"
                 + "p.id,\n"
@@ -126,7 +149,7 @@ public class ProductDAO extends DBContext {
                 + "    p.price,\n"
                 + "    p.description,\n"
                 + "    p.specification,p.status,\n"
-                + "    p.stock\n"
+                + "    p.stock,p.imageurl\n"
                 + "FROM\n"
                 + "    swp391_g1_v1.product as p\n"
                 + "JOIN\n"
@@ -154,6 +177,7 @@ public class ProductDAO extends DBContext {
                 product.setImageUrl(rs.getString("imageurl"));
                 product.setStatus(rs.getBoolean("status"));
                 product.setStock(rs.getInt("stock"));
+                product.setImgUrl(rs.getString("imageurl"));
                 return product;
             }
         } catch (SQLException e) {
@@ -161,6 +185,65 @@ public class ProductDAO extends DBContext {
         }
         return null;
     }
+    private static final String UPDATE_PRODUCT_QUERY = "UPDATE swp391_g1_v1.product p \" +\n"
+            + "            \"JOIN swp391_g1_v1.setting pc ON p.product_category_id = pc.id \" +\n"
+            + "            \"JOIN swp391_g1_v1.setting b ON p.brand_id = b.id \" +\n"
+            + "            \"SET \" +\n"
+            + "            \"    p.name = ?, \" +\n"
+            + "            \"    p.product_category_id = ?, \" +\n"
+            + "            \"    p.brand_id = ?, \" +\n"
+            + "            \"    p.price = ?, \" +\n"
+            + "            \"    p.description = ?, \" +\n"
+            + "            \"    p.specification = ?, \" +\n"
+            + "            \"    p.status = ?, \" +\n"
+            + "            \"    p.stock = ?, \" +\n"
+            + "            \"    p.imageurl = ? \" +\n"
+            + "            \"WHERE \" +\n"
+            + "            \"    p.id = ?";
+
+   public boolean updateProduct(int productId, String name, int categoryId, int brandId, double price,
+            String description, String specification, boolean status, int stock, String imageUrl) {
+        String sql = "UPDATE `swp391_g1_v1`.`product`\n"
+                + "SET\n"
+                + "`name` = ?,\n"
+                + "`product_category_id` = ?,\n"
+                + "`brand_id` = ?,\n"
+                + "`price` = ?,\n"
+                + "`description` = ?,\n"
+                + "`specification` = ?,\n"
+                + "`imageurl` = ?,\n"
+                + "`status` = ?,\n"
+                + "`stock` = ?\n"  // Removed comma here
+                + "WHERE `id` = ?;"; // Removed quotes around '?'
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, name);
+            stm.setInt(2, categoryId);
+            stm.setInt(3, brandId);
+            stm.setDouble(4, price);
+            stm.setString(5, description);
+            stm.setString(6, specification);
+            stm.setString(7, imageUrl);
+            stm.setBoolean(8, status);
+            stm.setInt(9, stock);
+            stm.setInt(10, productId);
+            stm.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return false;
+    }
+
 
     public ArrayList<Product> getListProduct() {
         String sql = "SELECT\n"
@@ -204,15 +287,17 @@ public class ProductDAO extends DBContext {
     }
 
     // get pagination product list with filtered condition
-    public List<Product> getProductListWithFilter(int offset, int limit, String search,
-            int categoryId, int brandId, String status, String sortParam,
+    public List<Product> getProductListWithFilter(int offset, int limit,
+            String search,
+            int categoryId, int brandId,
+            String status, String sortParam,
             boolean order) {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS *\n"
                 + "FROM " + PRODUCT_TABLE
                 + " WHERE 1=1 ";
         // add filter condition
-        if (categoryId!=0) {
+        if (categoryId != 0) {
             sql += " AND " + PRODUCT_CATEGORY_ID + "=? ";
         }
         if (brandId != 0) {

@@ -43,9 +43,9 @@
                         <div class="login-form"><!--login form-->
                             <h2>Login to your account</h2>
                             <form action="Login" method="post">
-                                <input type="email" name="gmail" placeholder="Email Address" />	
+                                <input type="email" name="gmail" placeholder="Email Address" required=""/>	
                                 <span id=""></span>
-                                <input type="password" name="pass" placeholder="Password" />
+                                <input type="password" name="pass" placeholder="Password" required="" />
                                 <span></span>
                                 <div></div>
                                 <span><a href="ForgotPassword"/>Forgot Password</a></span><br>
@@ -53,10 +53,10 @@
                                 <button type="submit" class="btn btn-default">Login</button>
                             </form>
                             ${sessionScope.wrong}
-                            ${user_registed}
-                            ${confirmSuccess}
-                            ${status}
-                            ${user_registed_successfull}
+                            ${sessionScope.user_registed}
+                            ${sessionScope.confirmSuccess}
+                            ${sessionScope.status}
+                            ${sessionScope.user_registed_successfull}
                         </div><!--/login form-->
                     </div>
 

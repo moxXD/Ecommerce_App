@@ -89,20 +89,19 @@ public class Login extends HttpServlet {
             session.setAttribute("wrong", "You must register in system");
             request.getRequestDispatcher("authen/login.jsp").forward(request, response);
             return;
+        } else if (check.isStatus() == false) {
+            session.setAttribute("wrong", "Your account is locked!!");
+            request.getRequestDispatcher("authen/login.jsp").forward(request, response);
         } else if (u == null) {
             session.setAttribute("wrong", "Login again!");
             request.getRequestDispatcher("authen/login.jsp").forward(request, response);
             return;
         } else if (u != null) {
-            if (u.getSetting().getId() == 1) {
-                session.setAttribute("userSession", u);
-                session.setAttribute("id", u.getId());
-                response.sendRedirect("admin/dashboard");
-            } else {
-                session.setAttribute("userSession", u);
-                session.setAttribute("id", u.getId());
-        request.getRequestDispatcher("authen/login.jsp").forward(request, response);
-            }
+
+            session.setAttribute("userSession", u);
+            session.setAttribute("id", u.getId());
+            response.sendRedirect("home");
+
         } else {
             request.getRequestDispatcher("authen/login.jsp").forward(request, response);
             return;
