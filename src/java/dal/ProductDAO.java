@@ -511,7 +511,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getNewestProduct() throws SQLException {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v1`.`product` ORDER BY product.create_at DESC LIMIT 5;"; // pagination
+        String sql = "SELECT * FROM `swp391_g1_v1`.`product` ORDER BY product.create_at DESC LIMIT 5;"; 
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);

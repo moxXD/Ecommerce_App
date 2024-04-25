@@ -102,7 +102,7 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="userlist">
+                            <a href="bloglist">
                                 <i class="fa fa-users"></i> <span>Blog List</span>
                             </a>
                         </li>
@@ -227,7 +227,7 @@
                                                                     <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid mb-4">
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <img src="<c:url value='/uploads/${c.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                                                    <img src="<c:url value='/uploads/${c.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid mb-4">
                                                                 </c:otherwise>
                                                             </c:choose>                                                           
                                                             <input type="file" name="file" id="file-input" accept="image/*">

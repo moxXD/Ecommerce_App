@@ -242,7 +242,7 @@
                                                                 <c:when test="${empty u.imgUrl}">
                                                                     <img id="img-preview"
                                                                         src="${pageContext.request.contextPath}/images/blog/images1.jpg"
-                                                                        alt="Thumbnail" class="img-fluid rounded-circle"
+                                                                        alt="Thumbnail" class="img-fluid"
                                                                         style="width: 80px; height: 50px;">
                                                                 </c:when>
                                                                 <c:otherwise>
