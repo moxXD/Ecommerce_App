@@ -4,9 +4,17 @@
         <servlet-name>DetailController</servlet-name>
         <servlet-class>controller.DetailController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DeleteSliderServlet</servlet-name>
+        <servlet-class>controller.Marketing.DeleteSliderServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DetailController</servlet-name>
         <url-pattern>/detail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteSliderServlet</servlet-name>
+        <url-pattern>/marketing/deleteSlider</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

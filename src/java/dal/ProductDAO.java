@@ -64,7 +64,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getRecommendItem() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM swp391_g1_v1.product LIMIT 6";
+        String sql = "SELECT * FROM `swp391_g1_v1`.product LIMIT 6";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -113,13 +113,13 @@ public class ProductDAO extends DBContext {
         }
         return null;
     }
-//    public static void main(String[] args) {
-//        ProductDAO dao = new ProductDAO();
-//        List<Product> list = dao.getAllProduct();
-//        for (Product o : list) {
-//            System.out.println(o);
-//        }
-//    }
+    public static void main(String[] args) {
+        ProductDAO dao = new ProductDAO();
+        List<Product> list = dao.getRecommendItem();
+        for (Product o : list) {
+            System.out.println(o.getImageUrl());
+        }
+    }
 
     public Product getProduct(int id) {
         String sql = "SELECT\n"
@@ -251,7 +251,7 @@ public class ProductDAO extends DBContext {
             }
             stm.setInt(index++, offset);
             stm.setInt(index++, limit);
-            System.out.println("query: " + stm.toString());
+//            System.out.println("query: " + stm.toString());
 
             // System.out.println("sql: " + stm.toString());
             ResultSet rs = stm.executeQuery();
@@ -320,7 +320,7 @@ public class ProductDAO extends DBContext {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT SQL_CALC_FOUND_ROWS *\n"
                 + "FROM " + PRODUCT_TABLE
-                + " WHERE 1=1 AND " + PRODUCT_STOCK + " >0 AND " + PRODUCT_STATUS + " is true ";
+                + " WHERE 1=1 AND " + PRODUCT_STOCK + " >0 AND `" + PRODUCT_STATUS + "` is true ";
         // add filter condition
         if (categoryId != 0) {
             sql += " AND " + PRODUCT_CATEGORY_ID + "=? ";
@@ -349,7 +349,7 @@ public class ProductDAO extends DBContext {
             }
             stm.setInt(index++, offset);
             stm.setInt(index++, limit);
-            // System.out.println("sql: " + stm.toString());
+//            System.out.println("sql: " +stm.toString());
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 SettingDAO stDao = new SettingDAO();

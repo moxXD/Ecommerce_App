@@ -32,6 +32,9 @@
     </head>
     <body>
         <%@include file="layout/header.jsp" %>
+        <div class="alert alert-success" id="toastInfo" style="margin-bottom: 0;display: none">
+            <strong>Success!</strong> Order has been submit successfully
+        </div>
         <c:set value="${requestScope.user}" var="u"/>
         <div class=" cart-container row">
             <!--cart detail-->
@@ -179,7 +182,9 @@
                         <span  id="paymentError" class="error-msg "></span>
                     </div>
                     <div class="col-md-12">
-
+<!--                        <div class="spinner-border text-warning" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>-->
 
                         <span  id="errorMsg" class="error-msg "></span>
 
@@ -199,9 +204,7 @@
                 </div>
             </form>
         </div>
-        <div class="alert alert-success" id="toastInfo" style="margin-bottom: 0;display: none">
-            <strong>Success!</strong> Order has been submit successfully
-        </div>
+
         <%@include file="layout/footer.jsp" %>
         <script type="text/javascript">
             function redirectBack() {
