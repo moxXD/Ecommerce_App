@@ -16,6 +16,10 @@ public class Brand {
     public Brand() {
     }
 
+    public Brand(int id) {
+        this.id = id;
+    }
+
     public Brand(String type) {
         this.type = type;
     }

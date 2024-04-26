@@ -332,7 +332,7 @@
                     // Call a function to perform the action based on the user's decision
                     // For example, you can make an AJAX call to update the user's status
                     // Here, I'm just logging the user's decision to the console
-                    
+
 
                     // Close the modal
                     $('#confirmModal').modal('hide');

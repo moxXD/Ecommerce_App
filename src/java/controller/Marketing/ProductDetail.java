@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller.Marketing;
 
 import dal.ProductDAO;
@@ -14,7 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Brand;
 import model.Category;
 import model.Product;
@@ -24,36 +28,39 @@ import model.Setting;
  *
  * @author Admin
  */
-@WebServlet(name="ProductDetail", urlPatterns={"/marketing/productdetail"})
+@WebServlet(name = "ProductDetail", urlPatterns = {"/marketing/productdetail"})
 public class ProductDetail extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetail</title>");  
+            out.println("<title>Servlet ProductDetail</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetail at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ProductDetail at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -61,29 +68,43 @@ public class ProductDetail extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-          String action = request.getParameter("action");
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
         ProductDAO pd = new ProductDAO();
         SettingDAO sd = new SettingDAO();
         String id_raw = request.getParameter("id");
-        ArrayList<Setting> listCate = sd.getListCategory();
-        ArrayList<Setting> listBrand = sd.getListBrand();
-        request.setAttribute("listCate", listCate);
-        request.setAttribute("listBrand", listBrand);
+        List<Setting> list = new ArrayList<>();
+        list = sd.getAllSetting();
         int id;
         Product p = null;
-        if (action.equals("view")) {
-            
-            id = Integer.parseInt(id_raw);
-            p = pd.getProduct(id);
+        try {
+            if (action.equals("update")||action.equals("view")) {
+                id = Integer.parseInt(id_raw);
+                p = pd.getProduct(id);
+                int categoryid = pd.getProduct(id).getCategoryProductId();
+                int brandid = pd.getProduct(id).getBrandid();
+                String imgURL = pd.getProduct(id).getImageUrl();
+                String name = pd.getProduct(id).getName();
+                int stock = pd.getProduct(id).getStock();
+                double price = pd.getProduct(id).getPrice();
+                boolean status = pd.getProduct(id).isStatus();
+                String description = pd.getProduct(id).getDescription();
+                String specification = pd.getProduct(id).getSpecification();
+                p = new Product(name, brandid, categoryid, price, description, specification, imgURL, status, stock);
+                //=========================================
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        request.setAttribute("p", p);
+        request.setAttribute("productdetail", p);
+        request.setAttribute("settingList", list);
         request.getRequestDispatcher("../views/marketing/product/detail.jsp").forward(request, response);
-   
-    } 
 
-    /** 
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -91,17 +112,117 @@ public class ProductDetail extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException {
+        String action = request.getParameter("formAction");
+        String id_raw = request.getParameter("productID");
+        try {
+            String fileName = "";
+            Part filePart = request.getPart("file");
+            if (filePart != null && filePart.getSize() > 0) {
+                fileName = extractFileName(filePart);
+                // refines the fileName in case it is an absolute path
+                fileName = new File(fileName).getName();
+                filePart.write(this.getFolderUpload().getAbsolutePath() + File.separator + fileName);
+            }
+
+            if (action != null && action.equalsIgnoreCase("add")) {
+
+                addNewProduct(request, response, fileName);
+            } else if (action != null && action.equalsIgnoreCase("update")) {
+
+                updateProduct(request, response, fileName, id_raw);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(ProductDetail.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void addNewProduct(HttpServletRequest request,
+            HttpServletResponse response, String imgUrl) throws IOException, ServletException {
+        // get input data
+        ProductDAO pd = new ProductDAO();
+        boolean status;
+        String name = request.getParameter("name");
+        int categoryid = Integer.parseInt(request.getParameter("category"));
+        int brandid = Integer.parseInt(request.getParameter("brand"));
+        double price = Double.parseDouble(request.getParameter("price"));
+        String description = request.getParameter("description");
+        String specification = request.getParameter("specification");
+        String imageUrl = request.getParameter("imageUrl");
+        String status_raw = request.getParameter("status");
+        int stock = Integer.parseInt(request.getParameter("stock"));
+        if (status_raw.equals("Active")) {
+            status = true;
+        } else {
+            status = false;
+        }
+        try {
+            pd.add(new Product(name, brandid, categoryid, price, description, specification, imageUrl, status, stock));
+
+        } catch (NumberFormatException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        response.sendRedirect("productlist");
+    }
+
+    private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+        }
+        return "";
+    }
+
+    private void updateProduct(HttpServletRequest request,
+            HttpServletResponse response, String imgUrl, String id_raw) throws IOException, ServletException {
+        ProductDAO pd = new ProductDAO();
+        boolean status;
+        int id = Integer.parseInt(id_raw);
+        String name = request.getParameter("name");
+        int categoryid = Integer.parseInt(request.getParameter("category"));
+        int brandid = Integer.parseInt(request.getParameter("brand"));
+        double price = Double.parseDouble(request.getParameter("price"));
+        String description = request.getParameter("description");
+        String specification = request.getParameter("specification");
+        String imageUrl = request.getParameter("imageUrl");
+        String status_raw = request.getParameter("status");
+        int stock = Integer.parseInt(request.getParameter("stock"));
+        if (status_raw.equalsIgnoreCase("Active")) {
+            status = true;
+        } else {
+            status = false;
+        }
+
+        try {
+            pd.updateProduct(id, name, categoryid, brandid, price, description, specification, status, stock, imageUrl);
+
+        } catch (NumberFormatException e) {
+            Logger.getLogger(BlogDetailServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+        response.sendRedirect("productlist");
+
+    }
+
+    public File getFolderUpload() {
+        File folderUpload = new File(getServletContext().getRealPath("/") + "/" + UPLOAD_DIRECTORY);
+        if (!folderUpload.exists()) {
+            folderUpload.mkdirs();
+        }
+        return folderUpload;
+    }
+    private final String UPLOAD_DIRECTORY = "uploads";
 
 }

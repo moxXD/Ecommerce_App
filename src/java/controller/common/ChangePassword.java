@@ -61,8 +61,9 @@ public class ChangePassword extends HttpServlet {
                 pst.setInt(2, (Integer) session.getAttribute("id"));
                 int rowCount = pst.executeUpdate();
                 if (rowCount > 0) {
-                    request.setAttribute("status", "resetSuccess");
-                    response.sendRedirect("Login_Register");
+                    request.setAttribute("status", "reset password Success");
+            request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
+                  
                 } else {
                     dispatcher = request.getRequestDispatcher("404.html");
                 }

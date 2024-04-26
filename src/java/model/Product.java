@@ -17,6 +17,18 @@ public class Product {
         return "Product{" + "id=" + id + ", name=" + name + ", brandid=" + brandid + ", categoryProductId=" + categoryProductId + ", settings=" + settings + ", brands=" + brands + ", cate=" + cate + ", description=" + description + ", specification=" + specification + ", imageUrl=" + imageUrl + ", stock=" + stock + ", category=" + category + ", brand=" + brand + ", price=" + price + ", salePrice=" + salePrice + ", imgUrl=" + imgUrl + ", status=" + status + ", isFeatured=" + isFeatured + '}';
     }
 
+    public Product(int id, String name, String description, String specification, int stock, Setting category, Setting brand, double price, String imgUrl) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.specification = specification;
+        this.stock = stock;
+        this.category = category;
+        this.brand = brand;
+        this.price = price;
+        this.imgUrl = imgUrl;
+    }
+
     private int id;
     private String name;
     private int brandid;
