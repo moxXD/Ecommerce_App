@@ -156,172 +156,152 @@
                                 <a class="list-group-item list-group-item-action active" data-toggle="list"
                                    href="#account-general">General</a>
                                 <a class="list-group-item list-group-item-action" data-toggle="list"
-                                   href="#account-change-password">Change password</a>
-                                <a class="list-group-item list-group-item-action" data-toggle="list"
                                    href="#account-info">Info</a>
                                 <a class="list-group-item list-group-item-action" data-toggle="list"
                                    href="#order-history">Orders History</a>
-                                                 
+
                             </div>
                         </div>
                         <div class="col-md-9">
-                            <div class="tab-content">
-                                <div class="tab-pane  active show" id="account-general">
-                                    <c:if test="${us.status eq true}">
-                                        <div class="card-body media align-items-center">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
-                                                 class="d-block ui-w-80">
-                                            <div class="media-body ml-4">
-                                                <label class="btn btn-outline-primary">
-                                                    Upload new photo
-                                                    <input type="file" class="account-settings-fileinput">
-                                                </label> &nbsp;
-                                                <button type="button" class="btn btn-default md-btn-flat">Reset</button>
-                                                <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                            <div class="tab-content">  ${status} 
+                                <p style="color: red"> ${passMin}${passMax}</p> 
+                                <form action="Profile" method="post">
+
+                                    <div class="tab-pane  active show" id="account-general">
+                                        <c:if test="${us.status eq true}">
+                                            <div class="card-body media align-items-center">
+                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
+                                                     class="d-block ui-w-80">
+                                                <div class="media-body ml-4">
+                                                    <label class="btn btn-outline-primary">
+                                                        Upload new photo
+                                                        <input type="file" class="account-settings-fileinput">
+                                                    </label> &nbsp;
+                                                    <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+                                                    <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                                                </div>
+                                            </div>
+                                        </c:if> 
+                                        <hr class="border-light m-0">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label class="form-label">Username</label> 
+                                                <input type="text"  class="form-control mb-1" name="name"  value="${us.fullname}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">E-mail</label>
+                                                <input type="text" class="form-control mb-1" value="${us.email}" disabled >
+
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Phone</label>
+                                                <input type="text" class="form-control" name="phone" value="${us.phone}">
                                             </div>
                                         </div>
-                                    </c:if>
-                                    <p style="color: green">  ${status}</p>  
-                                    <p style="color: red">  ${falsePass}</p>  
-                                    <hr class="border-light m-0">
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label class="form-label">Username</label> 
-                                            <input type="text" class="form-control mb-1" value="${us.fullname}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">E-mail</label>
-                                            <input type="text" class="form-control mb-1" value="${us.email}" disabled >
-
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Company</label>
-                                            <input type="text" class="form-control" value="Company Ltd.">
-                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="tab-pane " id="account-change-password">
+
 
                                     <form action="ChangePassword" method="post">
+                                        <div class="tab-pane " id="account-change-password">
+                                            <div class="card-body pb-2">
+                                                <div class="form-group col-md-6">
+                                                    <label class="form-label">Current password</label>
+                                                    <input type="password" name="curPass" class="form-control">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="form-label">New password</label>
+                                                    <input type="password" name="newPass" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Repeat new password</label>
+                                                    <input type="password" name="rePass" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <button class="btn btn-primary" >Change Password</button>
+                                        </div><!-- comment -->
+                                    </form>
+                                    <div class="tab-pane " id="account-info">
+                                        <div class="card-body pb-2">
+
+                                            <div class="form-group">
+                                                <label class="form-label">Birthday</label>
+                                                <input type="text" class="form-control" name="dob" value="${us.dob}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Address</label>
+                                                <input type="text" class="form-control" name="address" value="${us.address}">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane " id="order-history">
                                         <div class="card-body pb-2">
                                             <div class="form-group">
-                                                <label class="form-label">Current password</label>
-                                                <input type="password" name="curPass" class="form-control">
+                                                <label class="form-label">Twitter</label>
+                                                <input type="text" class="form-control" value="https://twitter.com/user">
                                             </div>
                                             <div class="form-group">
-                                                <label class="form-label">New password</label>
-                                                <input type="password" name="newPass" class="form-control">
+                                                <label class="form-label">Facebook</label>
+                                                <input type="text" class="form-control" value="https://www.facebook.com/user">
                                             </div>
                                             <div class="form-group">
-                                                <label class="form-label">Repeat new password</label>
-                                                <input type="password" name="rePass" class="form-control">
+                                                <label class="form-label">Google+</label>
+                                                <input type="text" class="form-control" value>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">LinkedIn</label>
+                                                <input type="text" class="form-control" value>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Instagram</label>
+                                                <input type="text" class="form-control" value="https://www.instagram.com/user">
                                             </div>
                                         </div>
-                                        <button class="btn btn-primary" >Change Password</button>
-                                    </form>
-                                </div>
-                                ${falsePass}
-                                <div class="tab-pane " id="account-info">
-                                    <div class="card-body pb-2">
-                                        <div class="form-group">
-                                            <label class="form-label">Bio</label>
-                                            <textarea class="form-control"
-                                                      rows="5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nunc arcu, dignissim sit amet sollicitudin iaculis, vehicula id urna. Sed luctus urna nunc. Donec fermentum, magna sit amet rutrum pretium, turpis dolor molestie diam, ut lacinia diam risus eleifend sapien. Curabitur ac nibh nulla. Maecenas nec augue placerat, viverra tellus non, pulvinar risus.</textarea>
+                                    </div>
+                                    <div class="tab-pane " id="account-connections">
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-twitter">Connect to
+                                                <strong>Twitter</strong></button>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Birthday</label>
-                                            <input type="text" class="form-control" value="${us.getDob()}">
+                                        <hr class="border-light m-0">
+                                        <div class="card-body">
+                                            <h5 class="mb-2">
+                                                <a href="javascript:void(0)" class="float-right text-muted text-tiny"><i
+                                                        class="ion ion-md-close"></i> Remove</a>
+                                                <i class="ion ion-logo-google text-google"></i>
+                                                You are connected to Google:
+                                            </h5>
+                                            <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                                               data-cfemail="f9979498818e9c9595b994989095d79a9694">[email&#160;protected]</a>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Country</label>
-                                            <select class="custom-select">
-                                                <option>USA</option>
-                                                <option selected>Canada</option>
-                                                <option>UK</option>
-                                                <option>Germany</option>
-                                                <option>France</option>
-                                            </select>
+                                        <hr class="border-light m-0">
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-facebook">Connect to
+                                                <strong>Facebook</strong></button>
+                                        </div>
+                                        <hr class="border-light m-0">
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-instagram">Connect to
+                                                <strong>Instagram</strong></button>
                                         </div>
                                     </div>
-                                    <hr class="border-light m-0">
-                                    <div class="card-body pb-2">
-                                        <h6 class="mb-4">Contacts</h6>
-                                        <div class="form-group">
-                                            <label class="form-label">Phone</label>
-                                            <input type="text" class="form-control" value="${us.getPhone()}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Website</label>
-                                            <input type="text" class="form-control" value>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane " id="order-history">
-                                    <div class="card-body pb-2">
-                                        <div class="form-group">
-                                            <label class="form-label">Twitter</label>
-                                            <input type="text" class="form-control" value="https://twitter.com/user">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Facebook</label>
-                                            <input type="text" class="form-control" value="https://www.facebook.com/user">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Google+</label>
-                                            <input type="text" class="form-control" value>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">LinkedIn</label>
-                                            <input type="text" class="form-control" value>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Instagram</label>
-                                            <input type="text" class="form-control" value="https://www.instagram.com/user">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane " id="account-connections">
-                                    <div class="card-body">
-                                        <button type="button" class="btn btn-twitter">Connect to
-                                            <strong>Twitter</strong></button>
-                                    </div>
-                                    <hr class="border-light m-0">
-                                    <div class="card-body">
-                                        <h5 class="mb-2">
-                                            <a href="javascript:void(0)" class="float-right text-muted text-tiny"><i
-                                                    class="ion ion-md-close"></i> Remove</a>
-                                            <i class="ion ion-logo-google text-google"></i>
-                                            You are connected to Google:
-                                        </h5>
-                                        <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                                           data-cfemail="f9979498818e9c9595b994989095d79a9694">[email&#160;protected]</a>
-                                    </div>
-                                    <hr class="border-light m-0">
-                                    <div class="card-body">
-                                        <button type="button" class="btn btn-facebook">Connect to
-                                            <strong>Facebook</strong></button>
-                                    </div>
-                                    <hr class="border-light m-0">
-                                    <div class="card-body">
-                                        <button type="button" class="btn btn-instagram">Connect to
-                                            <strong>Instagram</strong></button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="text-right mt-3">
                     <button type="button" class="btn btn-default">Save changes</button>&nbsp;
-                    <button type="button" class="btn btn-default">Cancel</button>
+                    <button type="reset" class="btn btn-default">Cancel</button>
                 </div>
+                </form>
             </div>
         </section>
         <%@include file="../layout/footer.jsp" %>
         <script type="text/javascript">
-            
+
             let redirectToCheckOut = () => {
                 // Kiểm tra xem có thông tin người dùng trong HttpSession hay không
             <%-- Assume "userSession" is the attribute name storing user information in the session --%>
