@@ -126,6 +126,20 @@ public class Product {
         this.status = status;
         this.stock = stock;
         this.isFeatured = isFeatured;}
+    public Product(int id, String name, int categoryProductId, int brandid, double price, String description, String specification, String imageurl, boolean status, int stock, boolean isFeatured, Double saleprice) {
+        this.id = id;
+        this.name = name;
+        this.categoryProductId = categoryProductId;
+        this.brandid = brandid;
+        this.price = price;
+        this.description = description;
+        this.specification = specification;
+        this.imageUrl = imageurl;
+        this.status = status;
+        this.stock = stock;
+        this.isFeatured = isFeatured;
+        this.salePrice = saleprice;
+    }
     public Product(String name, int brandid, int categoryProductId, double price, String description, String specification, String imageUrl, boolean status, int stock) {
         this.name = name;
         this.brandid = brandid;

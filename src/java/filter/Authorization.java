@@ -123,8 +123,10 @@ public static final String ERROR404 = "/404.jsp";
                 } else if (url.contains("marketing")) {
                     if (user.getSetting().getId() == 5) {
                         chain.doFilter(request, response);
+                        return;
                     } else {
                         res.sendRedirect(req.getContextPath() + ERROR404);
+                        return;
                     }
                 } else {
                     if (user.getSetting().getId() == 2 || user.getSetting().getId() == 3) {
@@ -133,8 +135,10 @@ public static final String ERROR404 = "/404.jsp";
                         res.sendRedirect(req.getContextPath() + ERROR404);
                     }
                 }
+                return;
             } else {
                 res.sendRedirect(req.getContextPath() + LOGIN);
+                return;
             }
         }
         Throwable problem = null;

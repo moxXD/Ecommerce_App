@@ -109,7 +109,9 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getRecommendItem() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v1`.product LIMIT 6";
+        String sql = "SELECT * FROM `swp391_g1_v1`.`product`\n"
+                + " WHERE is_featured = true\n"
+                + " ORDER BY product.create_at DESC LIMIT 6;";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -125,7 +127,8 @@ public class ProductDAO extends DBContext {
                         rs.getString(8),
                         rs.getBoolean(9),
                         rs.getInt(10),
-                        rs.getBoolean(11)));
+                        rs.getBoolean(11),
+                        rs.getDouble(12)));
             }
         } catch (Exception e) {
         }
@@ -201,7 +204,7 @@ public class ProductDAO extends DBContext {
             + "            \"WHERE \" +\n"
             + "            \"    p.id = ?";
 
-   public boolean updateProduct(int productId, String name, int categoryId, int brandId, double price,
+    public boolean updateProduct(int productId, String name, int categoryId, int brandId, double price,
             String description, String specification, boolean status, int stock, String imageUrl) {
         String sql = "UPDATE `swp391_g1_v1`.`product`\n"
                 + "SET\n"
@@ -213,7 +216,7 @@ public class ProductDAO extends DBContext {
                 + "`specification` = ?,\n"
                 + "`imageurl` = ?,\n"
                 + "`status` = ?,\n"
-                + "`stock` = ?\n"  // Removed comma here
+                + "`stock` = ?\n" // Removed comma here
                 + "WHERE `id` = ?;"; // Removed quotes around '?'
         try {
             conn = context.getConnection();
@@ -243,7 +246,6 @@ public class ProductDAO extends DBContext {
         }
         return false;
     }
-
 
     public ArrayList<Product> getListProduct() {
         String sql = "SELECT\n"
@@ -594,9 +596,13 @@ public class ProductDAO extends DBContext {
         return nproduct;
     }
 
-    public List<Product> getNewestProduct() throws SQLException {
+    public List<Product> getNewestProduct(String manage) throws SQLException {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v1`.`product` ORDER BY product.create_at DESC LIMIT 5;"; 
+        String sql = "SELECT * FROM `swp391_g1_v1`.`product`\n";
+        if (manage != null || !manage.isEmpty()) {
+            sql += "WHERE status = true\n";
+        }
+        sql += "ORDER BY product.create_at DESC LIMIT 6;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);

@@ -499,12 +499,15 @@ public class BlogDAO extends DBContext {
         return list;
     }
 
-    public List<Blog> getNewestPost() throws SQLException {
+    public List<Blog> getNewestPost(String manage) throws SQLException {
         List<Blog> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v1`.`blog` ORDER BY blog.createdtime DESC LIMIT 5;"; // pagination
+        String sql = "SELECT * FROM `swp391_g1_v1`.`blog` ";
+        if(manage != null || !manage.isEmpty()){
+            sql += " WHERE status = true ";
+        }
+        sql += " ORDER BY blog.createdtime DESC LIMIT 5;"; // pagination
         try {
             conn = context.getConnection();
-//            System.out.println(sql);
             PreparedStatement stm = conn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
