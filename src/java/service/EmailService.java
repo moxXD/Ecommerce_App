@@ -1,4 +1,3 @@
-
 package service;
 
 import dal.SettingDAO;
@@ -25,7 +24,6 @@ import model.Product;
 import model.User;
 import org.apache.tomcat.util.codec.binary.Base64;
 import utility.Encode;
-
 
 /**
  *
@@ -348,7 +346,6 @@ public class EmailService {
         // Định dạng số tiền
         String currencyString = decimalFormat.format(total);
 
-        
         // Add total row
         messageBuilder.append("<tr>\n")
                 .append("<td colspan=\"2\" align=\"right\"><strong>Total</strong></td>\n")

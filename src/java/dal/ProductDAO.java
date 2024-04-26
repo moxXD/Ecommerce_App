@@ -109,7 +109,9 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getRecommendItem() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v1`.product LIMIT 6";
+        String sql = "SELECT * FROM `swp391_g1_v1`.`product`\n"
+                + " WHERE is_featured = true\n"
+                + " ORDER BY product.create_at DESC LIMIT 6;";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -125,7 +127,8 @@ public class ProductDAO extends DBContext {
                         rs.getString(8),
                         rs.getBoolean(9),
                         rs.getInt(10),
-                        rs.getBoolean(11)));
+                        rs.getBoolean(11),
+                        rs.getDouble(12)));
             }
         } catch (Exception e) {
         }
@@ -665,9 +668,13 @@ public class ProductDAO extends DBContext {
         return nproduct;
     }
 
-    public List<Product> getNewestProduct() throws SQLException {
+    public List<Product> getNewestProduct(String manage) throws SQLException {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v1`.`product` ORDER BY product.create_at DESC LIMIT 5;";
+        String sql = "SELECT * FROM `swp391_g1_v1`.`product`\n";
+        if (manage != null) {
+            sql += "WHERE status = true\n";
+        }
+        sql += "ORDER BY product.create_at DESC LIMIT 6;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);

@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.BlogDAO;
 import dal.ProductDAO;
 import dal.SettingDAO;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Blog;
 import model.Product;
 import model.Setting;
 
@@ -54,15 +56,14 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getRecommendItem();
+        ProductDAO productDAO = new ProductDAO();
+        BlogDAO blogDAO = new BlogDAO();
+        List<Product> list = productDAO.getRecommendItem();
         List<Product> firstList = new ArrayList<>();
         List<Product> secondList = new ArrayList<>();
+        List<Product> newestProduct = new ArrayList<>();
+        List<Blog> newestBlog = new ArrayList<>();
         
-        for (Product product : list) {
-            System.out.println("name: "+product.getName());
-            System.out.println("image: "+product.getImgUrl());
-        }
         try {
             if (list.size() >= 3) {
                 firstList = list.subList(0, 3);
@@ -75,13 +76,17 @@ public class HomeController extends HttpServlet {
                     // Thực hiện công việc với firstList và secondList ở đây
                 }
             }
+            newestProduct = productDAO.getNewestProduct("public");
+            newestBlog = blogDAO.getNewestPost("public");
             
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        request.setAttribute("newpost", newestBlog);
+        request.setAttribute("newestproduct", newestProduct);
         request.setAttribute("firstList", firstList);
         request.setAttribute("secondList", secondList);
+        
         request.getRequestDispatcher("views/home.jsp").forward(request, response);
 
     }

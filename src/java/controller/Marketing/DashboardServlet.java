@@ -104,8 +104,8 @@ public class DashboardServlet extends HttpServlet {
             posDate = new Date(System.currentTimeMillis());
         }
         try {
-            postlist = blogDAO.getNewestPost();
-            productlist = productDAO.getNewestProduct();
+            postlist = blogDAO.getNewestPost(null);
+            productlist = productDAO.getNewestProduct(null);
             postlast7days = blogDAO.getDataLast7Day(posDate, categoryFilter, authorFilter);
             productlast7days = productDAO.getDataLast7Day(proDate, productFilter, brandFilter);
             setting = settingDAO.getAllSetting();

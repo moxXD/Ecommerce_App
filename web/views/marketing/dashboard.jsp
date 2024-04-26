@@ -424,7 +424,7 @@
                                                                     <a
                                                                         href="blogdetail?action=update&ID=${u.id}">${subTitle}...</a>
                                                                 </c:if>
-                                                                <c:if test="${fn:length(u.title) <= 50}">
+                                                                <c:if test="${fn:length(u.title) <= 30}">
                                                                     <a
                                                                         href="blogdetail?action=update&ID=${u.id}">${u.title}</a>
                                                                 </c:if>
