@@ -123,14 +123,13 @@ public class ProductList extends HttpServlet {
         System.out.println("bramd: " + brandId);
 
         // get pagination product list
-        listProduct = pd.getProductListWithFilter((page - 1) * recordPerPage,
+        listProduct = pd.getAllProductList((page - 1) * recordPerPage,
                 recordPerPage,
-                searchQuery,
                 cateId,
                 brandId,
                 statusFilter,
                 sortColumn,
-                sortOrder);
+                sortOrder,searchQuery);
 
         // get number of record found
         int noOfrecord = pd.getNumberOfRecord();
@@ -157,7 +156,7 @@ public class ProductList extends HttpServlet {
             throws ServletException, IOException {
         ProductDAO pd = new ProductDAO();
         String id_raw = request.getParameter("productID");
-          try {
+        try {
             boolean status = Boolean.parseBoolean(request.getParameter("status"));
             int id = Integer.parseInt(id_raw);
             pd.updateProductStatus(id, !status);

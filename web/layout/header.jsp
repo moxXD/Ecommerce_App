@@ -19,9 +19,9 @@
                 <link href="css/main.css" rel="stylesheet">
                 <link href="css/responsive.css" rel="stylesheet">
                 <!--[if lt IE 9]>
-        <script src="js/html5shiv.js"></script>
-        <script src="js/respond.min.js"></script>
-        <![endif]-->
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
                 <link rel="shortcut icon" href="images/ico/favicon.ico">
                 <link rel="apple-touch-icon-precomposed" sizes="144x144"
                     href="images/ico/apple-touch-icon-144-precomposed.png">
@@ -74,17 +74,23 @@
                                 <div class="col-sm-8">
                                     <div class="shop-menu pull-right">
                                         <ul class="nav navbar-nav">
-                                            <li><a href="${pageContext.request.contextPath}/Profile"><i class="fa fa-user"></i> Account</a></li>
-                                            <c:if test="${userSession != null}">
-                                                <li><a href="${pageContext.request.contextPath}/customer/orderlist"><i class="fa fa-lock"></i> My Order</a></li>
+                                            <li><a href="${pageContext.request.contextPath}/Profile"><i
+                                                        class="fa fa-user"></i> Account</a></li>
+                                            <c:if test="${userSession.setting.id eq 4}">
+                                                <li><a href="${pageContext.request.contextPath}/customer/orderlist"><i
+                                                            class="fa fa-lock"></i> My Order</a></li>
+
+                                                <li><a href="${pageContext.request.contextPath}/cartdetail"><i
+                                                            class="fa fa-shopping-cart"></i>
+                                                        Cart</a></li>
                                             </c:if>
-                                                <li><a href="${pageContext.request.contextPath}/cartdetail"><i class="fa fa-shopping-cart"></i>
-                                                    Cart</a></li>
                                             <c:if test="${userSession != null}">
-                                                <li><a href="${pageContext.request.contextPath}/Logout"><i class="fa fa-lock"></i> Logout</a></li>
+                                                <li><a href="${pageContext.request.contextPath}/Logout"><i
+                                                            class="fa fa-lock"></i> Logout</a></li>
                                             </c:if>
                                             <c:if test="${userSession == null}">
-                                                <li><a href="${pageContext.request.contextPath}/Login"><i class="fa fa-lock"></i> Login</a></li>
+                                                <li><a href="${pageContext.request.contextPath}/Login"><i
+                                                            class="fa fa-lock"></i> Login</a></li>
                                             </c:if>
                                         </ul>
                                     </div>
@@ -108,7 +114,8 @@
                                     <div class="mainmenu pull-left">
                                         <ul class="nav navbar-nav collapse navbar-collapse">
                                             <li>
-                                                <a href="${pageContext.request.contextPath}/home" class="active">Home</a>
+                                                <a href="${pageContext.request.contextPath}/home"
+                                                    class="active">Home</a>
                                             </li>
                                             <li>
                                                 <a href="${pageContext.request.contextPath}/productlist">Shop</a>
@@ -116,18 +123,19 @@
                                             <li>
                                                 <a href="${pageContext.request.contextPath}/blogslist">Blog</a>
                                             </li>
-                                            <c:if test="${not empty userSession}">
+                                            <c:if test="${userSession.setting.id eq 1}">
                                                 <li>
                                                     <a
                                                         href="${pageContext.request.contextPath}/admin/dashboard">Admin</a>
                                                 </li>
                                             </c:if>
-                                            <c:if test="${not empty userSession}">
+                                            <c:if test="${userSession.setting.id eq 5}">
                                                 <li>
-                                                    <a href="${pageContext.request.contextPath}/marketing/dashboard">Marketing</a>
+                                                    <a
+                                                        href="${pageContext.request.contextPath}/marketing/dashboard">Marketing</a>
                                                 </li>
                                             </c:if>
-                                            <c:if test="${not empty userSession}">
+                                            <c:if test="${userSession.setting.id eq 2 || userSession.setting.id eq 3}">
                                                 <li>
                                                     <a href="${pageContext.request.contextPath}/sale/dashboard">Sale</a>
                                                 </li>

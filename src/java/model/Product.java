@@ -152,7 +152,10 @@ public class Product {
         this.stock = stock;
     }
 
-    public Product(int id, String name, int brandid, int categoryProductId, double price, String description, String specification, String imageUrl, boolean status, int stock) {
+    public Product(int id, String name, int brandid,
+            int categoryProductId, double price,
+            String description, String specification,
+            String imageUrl, boolean status, int stock) {
         this.id = id;
         this.name = name;
         this.brandid = brandid;

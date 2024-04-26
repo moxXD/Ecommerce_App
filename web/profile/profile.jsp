@@ -13,12 +13,12 @@
     </head>
 
     <body>
-        <div class="container light-style flex-grow-1 container-p-y">
+        <div class="container dark-style flex-grow-1 container-p-y">
             <h4 class="font-weight-bold py-3 mb-4">
                 Account settings
             </h4>
             <div class="card overflow-hidden">
-                <div class="row no-gutters row-bordered row-border-light">
+                <div class="row no-gutters row-bordered row-bordered">
                     <div class="col-md-3 pt-0">
                         <div class="list-group list-group-flush account-settings-links">
                             <a class="list-group-item list-group-item-action active" data-toggle="list"

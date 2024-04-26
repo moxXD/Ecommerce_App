@@ -112,15 +112,17 @@ public static final String ERROR404 = "/404.jsp";
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("userSession");
         String url = req.getRequestURI() + "?" + req.getQueryString();
-        if (url.contains("admin") || url.contains("marketing") || url.contains("sale")) {
+        if (url.contains("admin") || url.contains("marketing") || url.contains("sale") ) {
             if (user != null) {
-                if (url.contains("admin")) {
+                if (url.contains("admin") ) {
                     if (user.getSetting().getId() == 1) {
                         chain.doFilter(request, response);
+                        return;
                     } else {
                         res.sendRedirect(req.getContextPath() + ERROR404);
+                        return;
                     }
-                } else if (url.contains("marketing")) {
+                } else if (url.contains("marketing") ) {
                     if (user.getSetting().getId() == 5) {
                         chain.doFilter(request, response);
                         return;
@@ -129,10 +131,15 @@ public static final String ERROR404 = "/404.jsp";
                         return;
                     }
                 } else {
-                    if (user.getSetting().getId() == 2 || user.getSetting().getId() == 3) {
+                    if (user.getSetting().getId() == 2 || user.getSetting().getId() == 3 ) {
                         chain.doFilter(request, response);
+                        return;
+                    } else if (user.getSetting().getId() == 4 ) {
+                        chain.doFilter(request, response);
+                        return;
                     } else {
                         res.sendRedirect(req.getContextPath() + ERROR404);
+                        return;
                     }
                 }
                 return;
