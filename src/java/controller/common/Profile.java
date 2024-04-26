@@ -66,13 +66,13 @@ public class Profile extends HttpServlet {
 
         User us = (User) session.getAttribute("userSession");
         User ur = (User) session.getAttribute("user_register");
-        if (us == null && ur == null) {
+        if (us == null) {
             response.sendRedirect("Login");
+        } else {
+            session.setAttribute("us", us);
+            session.setAttribute("ur", ur);
+            request.getRequestDispatcher("views/profile.jsp").forward(request, response);
         }
-        session.setAttribute("us", us);
-        session.setAttribute("ur", ur);
-        request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
-
     }
 
     /**
@@ -86,22 +86,15 @@ public class Profile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String name = request.getParameter("name");
         String email = request.getParameter("email");
         User user = new UserDAO().getUserByEmail(email);
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
-
-        if (action.equals("confirm")) {
-            String OTP = EmailService.SendOTPConfirmEmail(user);
-            if (OTP != null) {
-                session.setAttribute("otp", OTP);
-                session.setAttribute("user", user);
-                session.setAttribute("user-confirm", user);
-                session.setAttribute("expireTime", System.currentTimeMillis() + 300000);
-                session.setAttribute("action", "confirm-email");
-                request.getRequestDispatcher("authen/EnterOTP.jsp").forward(request, response);
-            }
-        }
+        String phone = request.getParameter("phone");
+        String dob = request.getParameter("dob");
+        String address = request.getParameter("address");
+        
     }
 
     /**

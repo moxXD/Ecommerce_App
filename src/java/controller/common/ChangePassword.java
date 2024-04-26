@@ -43,11 +43,11 @@ public class ChangePassword extends HttpServlet {
         RequestDispatcher dispatcher = null;
         if (newPassword.length() < defaultInputIntMin) {
             request.setAttribute("passMin", "Pass can not less than " + defaultInputIntMin + " character");
-            request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
+            request.getRequestDispatcher("views/profile.jsp").forward(request, response);
 
         } else if (newPassword.length() > defaultInputIntMax) {
             request.setAttribute("passMax", "Pass can not lagger than " + defaultInputIntMin + " character");
-            request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
+            request.getRequestDispatcher("views/profile.jsp").forward(request, response);
             return;
         } else if (newPassword != null && rePassword != null && newPassword.equals(rePassword)) {
             try {
@@ -62,8 +62,8 @@ public class ChangePassword extends HttpServlet {
                 int rowCount = pst.executeUpdate();
                 if (rowCount > 0) {
                     request.setAttribute("status", "reset password Success");
-            request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
-                  
+                    request.getRequestDispatcher("views/profile.jsp").forward(request, response);
+
                 } else {
                     dispatcher = request.getRequestDispatcher("404.html");
                 }
@@ -72,8 +72,8 @@ public class ChangePassword extends HttpServlet {
                 e.printStackTrace();
             }
         } else {
-            request.setAttribute("falsePass", "Re-enter new pass");
-            request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
+            request.setAttribute("status", "Re-enter new pass");
+            request.getRequestDispatcher("views/profile.jsp").forward(request, response);
             return;
         }
     }
