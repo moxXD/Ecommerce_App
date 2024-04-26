@@ -109,10 +109,10 @@ public class ProductDetailServlet extends HttpServlet {
         User u = (User) session.getAttribute("userSession");
         if (u != null) {
             processWithUser(id_raw, u);
-            response.sendRedirect("cartcompletion");
+            response.sendRedirect("cartcontact");
         } else {
             processWithoutUser(session, id_raw);
-            response.sendRedirect("cartcompletion");
+            response.sendRedirect("cartcontact");
         }
     }
 

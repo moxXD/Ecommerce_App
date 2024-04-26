@@ -4,7 +4,10 @@
  */
 package controller.Public;
 
-import dal.CartDAO;
+import controller.Customer.OrderDetailsServlet;
+import controller.Customer.OrderListServlet;
+import dal.OrderDAO;
+import dal.OrderItemDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,19 +16,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
-import model.Cart;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Order;
+import model.OrderItem;
 import model.User;
 
 /**
  *
  * @author Duc Le
  */
-@WebServlet(name = "CartContactServlet", urlPatterns = {"/cartcompletion"})
-public class CartCompletionServlet extends HttpServlet {
-
-    CartDAO cDao = new CartDAO();
+@WebServlet(name = "CartFinalServlet", urlPatterns = {"/cartcompletion"})
+public class CartCompletion extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +49,10 @@ public class CartCompletionServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CartContactServlet</title>");
+            out.println("<title>Servlet CartFinalServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CartContactServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CartFinalServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,23 +70,27 @@ public class CartCompletionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // check if user is logged in
-        // get user data 
-        // send user data thru request
+        OrderDAO orderDAO = new OrderDAO();
+        OrderItemDAO orderitemDAO = new OrderItemDAO();
+        Order order = null;
+        List<OrderItem> orderitem = new ArrayList<>();
+        int orderID = 0;
+        Double totalbill = null;
+        String orderID_raw = request.getParameter("orderID");
+        if (orderID_raw != null && !orderID_raw.isEmpty()) {
+            orderID = Integer.parseInt(orderID_raw);
+            try {
+                totalbill = orderitemDAO.getTotalBillsByID(orderID);
+                orderitem = orderitemDAO.getOrderItemByID(orderID);
+                order = orderDAO.getOrderByID(orderID);
 
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("userSession");
-        Map<String, Cart> cartMap = new HashMap<>();
-        if (u != null) {
-            cartMap = cDao.getCartByUserId(u.getId());
-        } else {
-            cartMap = (Map<String, Cart>) session.getAttribute("cart");
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderDetailsServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
-        // Đặt giỏ hàng vào thuộc tính của request để truy cập trong JSP
-        request.setAttribute("cartMap", cartMap);
-        request.setAttribute("user", u);
-
+        request.setAttribute("totalbill", totalbill);
+        request.setAttribute("orderitem", orderitem);
+        request.setAttribute("orderdetail", order);
         request.getRequestDispatcher("cartcompletion.jsp").forward(request, response);
     }
 
