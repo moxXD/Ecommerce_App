@@ -7,6 +7,7 @@ package controller;
 import dal.BlogDAO;
 import dal.ProductDAO;
 import dal.SettingDAO;
+import dal.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 import model.Blog;
 import model.Product;
 import model.Setting;
+import model.Slider;
 
 /**
  *
@@ -58,10 +60,12 @@ public class HomeController extends HttpServlet {
             throws ServletException, IOException {
         ProductDAO productDAO = new ProductDAO();
         BlogDAO blogDAO = new BlogDAO();
+        SliderDAO sliderDAO = new SliderDAO();
         List<Product> list = productDAO.getRecommendItem();
         List<Product> firstList = new ArrayList<>();
         List<Product> secondList = new ArrayList<>();
         List<Product> newestProduct = new ArrayList<>();
+        List<Slider> slider  = new ArrayList<>();
         List<Blog> newestBlog = new ArrayList<>();
         
         try {
@@ -76,12 +80,15 @@ public class HomeController extends HttpServlet {
                     // Thực hiện công việc với firstList và secondList ở đây
                 }
             }
+            slider = sliderDAO.getAllSliderForHomePage();
             newestProduct = productDAO.getNewestProduct("public");
             newestBlog = blogDAO.getNewestPost("public");
             
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        request.setAttribute("slider", slider);
         request.setAttribute("newpost", newestBlog);
         request.setAttribute("newestproduct", newestProduct);
         request.setAttribute("firstList", firstList);

@@ -78,7 +78,7 @@ public class SliderListServlet extends HttpServlet {
         request.setAttribute("listP", list);
         request.setAttribute("endPage", endPage);
         request.setAttribute("listS", listSlider);
-        request.getRequestDispatcher("../views/marketing/slider/sliderList.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/marketing/slider/list.jsp").forward(request, response);
     } 
 
     /** 

@@ -171,13 +171,11 @@ public class ProductDAO extends DBContext {
                 Product product = new Product();
                 product.setId(rs.getInt("id"));
                 product.setName(rs.getString("name"));
-                product.setCate(new Category(rs.getInt("category")));
-                product.setBrand(new Brand(
-                        rs.getInt("brand")));
+                product.setCategoryProductId(rs.getInt("category"));
+                product.setBrandid(rs.getInt("brand"));
                 product.setPrice(rs.getFloat("price"));
                 product.setDescription(rs.getString("description"));
                 product.setSpecification(rs.getString("specification"));
-                product.setImageUrl(rs.getString("imageurl"));
                 product.setStatus(rs.getBoolean("status"));
                 product.setStock(rs.getInt("stock"));
                 product.setImgUrl(rs.getString("imageurl"));
@@ -304,6 +302,10 @@ public class ProductDAO extends DBContext {
                         rs.getBoolean(PRODUCT_STATUS),
                         rs.getInt(PRODUCT_STOCK));
                 list.add(p);
+            }
+            rs = stm.executeQuery("SELECT FOUND_ROWS()"); // get total number of row found while execute query
+            if (rs.next()) {
+                this.noOfrecord = rs.getInt(1);
             }
         } catch (SQLException e) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -769,6 +771,36 @@ public class ProductDAO extends DBContext {
             }
             if (conn != null) {
                 conn.close();
+            }
+        }
+        return list;
+    }
+
+    public List<Product> getFeatureProduct() {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT product.id, product.name \n"
+                + "FROM `swp391_g1_v1`.`product`\n"
+                + "WHERE product.is_featured = 1\n"
+                + "ORDER BY product.create_at DESC";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Product p = new Product(
+                        rs.getInt("id"),
+                        rs.getString("name"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
             }
         }
         return list;

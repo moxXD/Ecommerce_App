@@ -502,7 +502,7 @@ public class BlogDAO extends DBContext {
     public List<Blog> getNewestPost(String manage) throws SQLException {
         List<Blog> list = new ArrayList<>();
         String sql = "SELECT * FROM `swp391_g1_v1`.`blog` ";
-        if(manage != null ){
+        if (manage != null) {
             sql += " WHERE status = true ";
         }
         sql += " ORDER BY blog.createdtime DESC LIMIT 5;"; // pagination
@@ -539,6 +539,36 @@ public class BlogDAO extends DBContext {
 
         }
 
+        return list;
+    }
+
+    public List<Blog> getFeatureBlog() {
+        List<Blog> list = new ArrayList<>();
+        String sql = "SELECT blog.id, blog.title \n"
+                + "FROM `swp391_g1_v1`.`blog`\n"
+                + "WHERE blog.is_featured = 1\n"
+                + "ORDER BY blog.createdtime DESC;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Blog p = new Blog(
+                        rs.getInt("id"),
+                        rs.getString("title"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
         return list;
     }
 

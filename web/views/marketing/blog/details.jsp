@@ -82,42 +82,7 @@
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
-                                 class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>Hello, Jane</p>
-
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                        </div>
-                    </div>
-                    <ul class="sidebar-menu">
-                        <li>
-                            <a href="dashboard">
-                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="bloglist">
-                                <i class="fa fa-users"></i> <span>Blog List</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="productlist">
-                                <i class="fa fa-gear"></i> <span>Product List</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="${pageContext.request.contextPath}/home" >
-                                <i class="fa fa-arrow-left"></i> <span>Home</span>
-                            </a>
-                        </li>
-                    </ul>
-                </section>
+                <%@include file="../layout/sidebar.jsp" %>
                 <!-- /.sidebar -->
             </aside>
             <aside class="right-side">
@@ -248,9 +213,6 @@
                                                     CKEDITOR.replace('content', {
                                                         resize_enabled: false // Ngăn chặn CKEditor resize
                                                     });
-//                                                    CKEDITOR.replace('sumary', {
-//                                                        resize_enabled: false // Cho phép CKEditor thứ hai có thể resize
-//                                                    });
                                                 </script>
                                                 <span id="contentError" class="error-msg"></span>
                                             </div>
@@ -261,10 +223,10 @@
                                             </c:if>
 
                                             <div class="row" style="margin-bottom: 5%">
-                                                <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
+                                                <div class="col-md-3" style="${param.action.equals("add") ? "display: none;": "" }">
                                                     <button type="submit" class="btn btn-primary btn-block" id="addButton" onclick="validateInputs(event)" >Add</button>
                                                 </div>
-                                                <div class="col-md-3" style="${param.action.equals("add") ? "display: none;": "" }">
+                                                <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
                                                     <button type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)" >Save</button>
                                                 </div>
                                                 <div class="col-md-3">

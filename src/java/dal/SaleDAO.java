@@ -110,17 +110,17 @@ public class SaleDAO {
                 + "    UNION SELECT DATE_SUB(?, INTERVAL 6 DAY)\n"
                 + ") AS days\n"
                 + "LEFT JOIN `swp391_g1_v1`.`order` ON DATE(`order`.create_at) = days.day \n";
-        if (status != null && !status.isEmpty() && status.equalsIgnoreCase("cancel")) {
+        if (status != null && status.equalsIgnoreCase("cancel")) {
             sql += " and `order`.status like 'cancel' ";
         }
-        if (status != null && !status.isEmpty() && status.equalsIgnoreCase("submitted")) {
+        if (status != null && status.equalsIgnoreCase("submitted")) {
             sql += " and `order`.status like 'submitted' ";
         }
-        if (status != null && !status.isEmpty() && status.equalsIgnoreCase("success")) {
+        if (status != null && status.equalsIgnoreCase("success")) {
             sql += " and `order`.status NOT IN ('submitted', 'cancel') ";
         }
         if (ordersaler != null && !ordersaler.isEmpty()) {
-            sql += " and `order`.status AND `order`.sale_id = ? ";
+            sql += " and `order`.sale_id = ? ";
         }
         sql += "GROUP BY days.day ORDER BY days.day ASC;";
         try {

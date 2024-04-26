@@ -70,40 +70,7 @@
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
-                                 class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>Hello, Thanh</p>
-                        </div>
-                    </div>
-                    <ul class="sidebar-menu">
-                        <li>
-                            <a href="dashboard">
-                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="bloglist">
-                                <i class="fa fa-tasks"></i> <span>Blog List</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="productlist">
-                                <i class="fa fa-shopping-cart"></i> <span>Product</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="${pageContext.request.contextPath}/home">
-                                <i class="fa fa-arrow-left"></i> <span>Home</span>
-                            </a>
-                        </li>
-                    </ul>
-                </section>
+                <%@include file="../layout/sidebar.jsp" %>
                 <!-- /.sidebar -->
             </aside>
 
@@ -191,9 +158,7 @@
                                         onclick="redirectToAddBlog()">Add New Blog</button>
                             </div>
                         </div>
-
                         <table class="table user-table">
-
                             <thead>
                                 <tr>
                                     <th>ID
@@ -281,13 +246,12 @@
                                                 <input id="changeStatus"
                                                        onclick="return confirmSubmit()" type="submit"
                                                        value="${!u.status?" Hide":"Show"}"
-                                                       style="color: ${!u.status?" Red":"Green"}; border:
-                                                       none" />
+                                                       style="color: ${!u.status?" Red":"Green"}; border:none" />
                                                 <a href="blogdetail?action=update&ID=${id}"
                                                    style="margin-left: 20px">Edit</a>
+                                            </form>
                                         </td>
-                                        </form>
-                                        </td>
+
                                         <!--<td>-->
                                         <!--<a href="blogdetail?action=view&ID=${id}">View</a>-->
 
@@ -332,12 +296,8 @@
                                 </c:if>
                             </ul>
                         </nav>
-
                     </div>
-
                     </div>
-
-
                 </section>
             </aside>
         </div>

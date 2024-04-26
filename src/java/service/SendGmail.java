@@ -18,7 +18,7 @@ import static service.EmailService.SendGmailToContact;
  *
  * @author Admin
  */
-@WebServlet(name = "SendGmail", urlPatterns = {"/SendGmail"})
+@WebServlet(name = "SendGmail", urlPatterns = {"/admin/SendGmail"})
 public class SendGmail extends HttpServlet {
 
     /**

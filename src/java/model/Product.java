@@ -42,6 +42,11 @@ public class Product {
     private int stock;
     private double salePrice;
 
+    public Product(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
+    
     public double getSalePrice() {
         return salePrice;
     }

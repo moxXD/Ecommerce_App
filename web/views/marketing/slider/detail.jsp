@@ -60,7 +60,10 @@
   <![endif]-->
 
         <style type="text/css">
-
+            .error-msg {
+                color: red;
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
@@ -71,72 +74,76 @@
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
-                                 class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>Hello, Jane</p>
-
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                        </div>
-                    </div>
-                    <ul class="sidebar-menu">
-                        <li>
-                            <a href="dashboard">
-                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="userlist">
-                                <i class="fa fa-users"></i> <span>Slider List</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="settinglist">
-                                <i class="fa fa-gear"></i> <span>Settings</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </section>
+                <%@include file="../layout/sidebar.jsp" %>
                 <!-- /.sidebar -->
             </aside>
             <aside class="right-side">
                 <section class="content">
                     <div class="container" >
                         <div class="row ">
-                            <form method="POST" action="editdetail">
+                            <form method="post" action="sliderdetail" enctype="multipart/form-data">
                                 <div class="col">
                                     <div class="col-sm-12">
                                         <div class="blog-post-area">
                                             <h2 class="title text-center">Slider Details</h2>
-
-
+                                            <c:set var="detail" value="${requestScope.detail}" />
                                             <div class="row" style="margin-bottom: 5%; margin-top: 3%">
                                                 <div class="col-md-6">
-<!--                                                    <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
-                                                        <label for="inputLabel1">ID: </label>
-                                                        <input type="text" class="form-control" id="id" ${param.action.equals("view")||param.action.equals("update") ? "readonly": "" }  value="${c.id}">
-                                                    </div>-->
-                                                    <input name="id" type="hidden" class="form-control" value="${detail.id}" >
-
+                                                    <!--<input name="id" type="hidden" class="form-control" value="${detail.id}">-->
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Title:</label>
-                                                        <input name="name" type="text" class="form-control"  value="${detail.name}" >
+                                                        <input id="title" name="title" type="text" class="form-control"  value="${detail.name}" >
+                                                        <span id="titleError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputLabel1">Description: </label>
-                                                        <input name="description" type="text" class="form-control"  value="${detail.description}" >
+                                                        <input id="sliderdescription" name="sliderdescription" type="text" class="form-control"  value="${detail.description}" >
+                                                        <span id="descriptionError" class="error-msg"></span>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="inputLabel1">Url: </label>
-                                                        <input name="url" type="text" class="form-control" value="${detail.url}" >
+                                                    <!-- Slider Target -->
+                                                    <div class="form-group" style="${param.action.equals("update") ? "display: none;": "" }">
+                                                        <!-- Row mới cho mỗi cột col-md-6 -->
+                                                        <div class="row" style="margin-bottom: 5%">
+                                                            <div class="col-md-12">
+                                                                <div class="form-check form-check-inline">
+                                                                    <label class="form-check-label" for="">Slider for Post: </label>
+                                                                    <div class="col-md-1">
+                                                                        <input class="form-check-input" type="radio" name="target" id="postTarget" value="post">
+                                                                    </div>
+                                                                    <div class="col-md-11">
+                                                                        <select  id="postTargetSelect" name="postTargetSelect" class="form-control" disabled >
+                                                                            <option value="" disabled selected hidden>Choose Target Post of your Slider</option>
+                                                                            <c:forEach items="${requestScope.bloglist}" var="bloglist">
+                                                                                <option value="${bloglist.id}" >${bloglist.title}</option>
+                                                                            </c:forEach>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-check form-check-inline">
+                                                                    <label class="form-check-label" for="hideRadio">Slider for Product: </label>
+                                                                    <div class="col-md-1">
+                                                                        <input class="form-check-input" type="radio" name="target" id="productTarget" value="product">
+                                                                    </div>
+                                                                    <div class="col-md-11">
+                                                                        <select id="productTargetSelect" name="productTargetSelect" class="form-control" disabled>
+                                                                            <option value="" disabled selected hidden>Choose Target Product of your Slider</option>
+                                                                            <c:forEach items="${requestScope.productlist}" var="productlist">
+                                                                                <option value="${productlist.id}">${productlist.name}</option>
+                                                                            </c:forEach>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <span id="targetError" class="error-msg"></span>
                                                     </div>
-
+                                                    <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
+                                                        <a href="${pageContext.request.contextPath}/${detail.url}" class="btn btn-info">To the Target of Slider <i class="fa fa-arrow-right"></i></a>
+                                                    </div>
                                                     <div>
                                                         <div class="row">
                                                             <div class="col-md-12">
@@ -146,31 +153,31 @@
                                                         <div class="row form-check-inline">
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="true" ${detail.status == true ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="showRadio" value="Active" ${detail.status == true ? "checked" : ""} >
                                                                     <label class="form-check-label" for="showRadio">Active</label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-3 ">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="false" ${detail.status == false ? "checked" : ""} >
+                                                                    <input class="form-check-input" type="radio" name="status" id="hideRadio" value="Inactive" ${detail.status == false ? "checked" : ""} >
                                                                     <label class="form-check-label" for="hideRadio">Inactive</label>
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                                        <span id="statusError" class="error-msg"></span>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-right">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="thumbnail">Thumbnail: </label>
+                                                            <label for="thumbnail">Slider Image: </label>
                                                             <c:choose>
-                                                                <c:when test="${empty c.imgUrl}">
+                                                                <c:when test="${empty detail.image_url}">
                                                                     <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle mb-4">
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <img src="<c:url value='/uploads/${c.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                                                    <img src="<c:url value='/uploads/${detail.image_url}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
                                                                 </c:otherwise>
                                                             </c:choose>                                                           
                                                             <input type="file" name="file" id="file-input" accept="image/*">
@@ -179,11 +186,17 @@
                                                 </div>
                                             </div>
                                             <!-- -->
-
-
+                                            <input type="hidden" name="formAction" value="${param.action.equals("add") ? "add": "update" }">
+                                            <input type="hidden" name="sliderID" value="${param.id}">
+                                            <c:if test="${not empty err}">
+                                                <div class="error-msg">${err}</div>
+                                            </c:if>
                                             <div class="row" style="margin-bottom: 5%">
-                                                <div class="col-md-3">
-                                                    <input type="submit" class="btn btn-primary btn-block" id="saveButton">
+                                                <div class="col-md-3" style="${param.action.equals("add") ? "display: none;": "" }">
+                                                    <button type="submit" class="btn btn-primary btn-block" id="addButton"  onclick="validateInputs(event)">Add</button>
+                                                </div>
+                                                <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
+                                                    <button type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)">Save</button>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <button type="button" class="btn btn-primary btn-block" id="backButton">Back</button>
@@ -201,90 +214,110 @@
         <%@include file="../../layout/footer.jsp" %>
         <script type="text/javascript">
             document.getElementById("backButton").onclick = function () {
-                location.href = "bloglist";
+                location.href = "sliderlist";
             };
+            document.addEventListener("DOMContentLoaded", function () {
+                const postTargetRadio = document.getElementById("postTarget");
+                const productTargetRadio = document.getElementById("productTarget");
+                const postTargetSelect = document.getElementById("postTargetSelect");
+                const productTargetSelect = document.getElementById("productTargetSelect");
+
+                // Hàm để cập nhật trạng thái của các select box
+                function updateSelectState() {
+                    if (postTargetRadio.checked) {
+                        postTargetSelect.disabled = false;
+                        productTargetSelect.disabled = true;
+                    } else if (productTargetRadio.checked) {
+                        postTargetSelect.disabled = true;
+                        productTargetSelect.disabled = false;
+                    } else {
+                        postTargetSelect.disabled = true;
+                        productTargetSelect.disabled = true;
+                    }
+                }
+
+                // Gắn lắng nghe sự kiện cho các radio button
+                postTargetRadio.addEventListener("change", updateSelectState);
+                productTargetRadio.addEventListener("change", updateSelectState);
+
+                // Gọi hàm cập nhật lần đầu để set trạng thái ban đầu
+                updateSelectState();
+            });
 
             const input = document.getElementById('file-input');
             const image = document.getElementById('img-preview');
-            // preview image
+
             input.addEventListener('change', (e) => {
                 if (e.target.files.length) {
                     const src = URL.createObjectURL(e.target.files[0]);
                     image.src = src;
                 }
             });
+        </script>
 
+        <script type="text/javascript">
             function validateInputs(event) {
-                var titleInput = document.getElementById("title");
-                var title = titleInput.value.trim();
-                // Kiểm tra input không được để trống
-                if (title === "") {
-                    alert("Please fill Title");
-                    event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                var title = document.getElementById("title").value;
+                var sliderdescription = document.getElementById("sliderdescription").value;
+                var postTarget = document.getElementById("postTarget").value;
+                var productTarget = document.getElementById("productTarget").value;
+                var showRadioChecked = document.getElementById('showRadio').checked;
+                var hideRadioChecked = document.getElementById('hideRadio').checked;
+
+
+
+                var titleError = document.getElementById("titleError");
+                var descriptionError = document.getElementById("sumaryError");
+                var targetError = document.getElementById("cateError");
+                var statusError = document.getElementById("authorError");
+
+                titleError.innerHTML = '';
+                descriptionError.innerHTML = '';
+                targetError.innerHTML = '';
+                statusError.innerHTML = '';
+                //check empty
+                if (title.trim() === '') {
+                    titleError.innerHTML = 'Please enter Title of Slider.';
+                    event.preventDefault();
                     return;
                 }
-
-                // Kiểm tra input không ít hơn 10 ký tự
-                if (title.length < 10) {
-                    alert("Title must at least 10 characters");
-                    event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                if (sliderdescription.trim() === '') {
+                    descriptionError.innerHTML = 'Please enter Desciption of Slider.';
+                    event.preventDefault();
+                    return;
+                }
+                if (!showRadioChecked && !hideRadioChecked) {
+                    statusError.innerHTML = 'Please choose Status of Slider';
+                    event.preventDefault();
+                    return;
+                }
+                if (!postTarget && !productTarget) {
+                    targetError.innerHTML = 'Please choose Target of Slider';
+                    event.preventDefault();
+                    return;
+                }
+                //check length and special character
+                if (title.trim().length > 100) {
+                    titleError.innerHTML = "Title must less than 100 characters";
+                    event.preventDefault();
+                    return;
+                }
+                if (sliderdescription.trim().length > 300) {
+                    descriptionError.innerHTML = "Title must less than 300 characters";
+                    event.preventDefault();
                     return;
                 }
 
                 // Kiểm tra input không chứa ký tự đặc biệt
-                var specialCharacters = /[@#$^&*,"{}|<>]/;
+                var specialCharacters = /[@#$^&*{}|<>]/;
                 if (specialCharacters.test(title)) {
-                    alert("Title cannot contain special character");
-                    event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                    return;
-                }
-
-                var sumaryInput = document.getElementById("sumary");
-                var sumary = sumaryInput.value.trim();
-                // Kiểm tra input không được để trống
-                if (sumary === "") {
-                    alert("Please fill Brief");
-                    event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                    return;
-                }
-                var showRadioChecked = document.getElementById('showRadio').checked;
-                var hideRadioChecked = document.getElementById('hideRadio').checked;
-                var yesRadioChecked = document.getElementById('yesRadio').checked;
-                var noRadioChecked = document.getElementById('noRadio').checked;
-                // Kiểm tra checkbox không được để trống
-                if (!showRadioChecked && !hideRadioChecked) {
-                    alert('Please select a Status');
+                    titleError.innerHTML = "Title cannot contain special character";
                     event.preventDefault();
                     return;
                 }
-                if (!yesRadioChecked && !noRadioChecked) {
-                    alert('Please select a Feature');
-                    event.preventDefault();
-                    return;
-                }
-                var categoryOption = document.getElementById("category");
-                var category = categoryOption.value.trim();
-                var authorOption = document.getElementById("author");
-                var author = authorOption.value.trim();
-                // Kiểm tra input không được để trống
-                if (category === "") {
-                    alert("Please choose Category of your blog");
-                    event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                    return;
-                }
-                if (author === "") {
-                    alert("Please choose Author of your blog");
-                    event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                    return;
-                }
-                var editorContent = CKEDITOR.instances.content.getData(); // Lấy nội dung của CKEditor
-                if (!editorContent.trim()) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
-                    alert("Please fill Content"); // Thông báo lỗi
-                    event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
-                    return;
-                }
-                // Nếu tất cả điều kiện đều đúng, không cần ngăn chặn hành động mặc định của button
+                return true;
             }
+
 
         </script>
         <!-- jQuery 2.0.2 -->

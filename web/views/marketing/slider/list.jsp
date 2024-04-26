@@ -117,53 +117,21 @@
     </head>
 
     <body>
-        <%@include file="../../layout/header.jsp" %>
+        <%@include file="../layout/header.jsp" %>
 
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
-                                 class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>Hello, Thanh</p>
-
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                        </div>
-                    </div>  
-                    <ul class="sidebar-menu">
-                        <!--                        <li>
-                                                    <a href="#">
-                                                        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                                                    </a>
-                                                </li>-->
-                        <li class="active">
-                            <a href="bloglist">
-                                <i class="fa fa-users"></i> <span>Slider List</span>
-                            </a>
-                        </li>
-                        <!--                        <li>
-                                                    <a href="bloglist">
-                                                        <i class="fa fa-gear"></i> <span>Settings</span>
-                                                    </a>
-                                                </li>-->
-
-                    </ul>
-                </section>
+                <%@include file="../layout/sidebar.jsp" %>
                 <!-- /.sidebar -->
             </aside>
 
             <aside class="right-side">
                 <section class="content">
-                    <form action="searchslider" method="post">
+                    <form action="slider list" method="get" id="filterForm">
                         <div class="filter-row">
-
                             <!--status select-->
                             <div class="form-group">
                                 <label for="filstatus">Filter by Status:</label>
@@ -192,116 +160,116 @@
                     </form>
 
                     <!--Nut add-->
-                    <form action="addslider" method="post">
-                        <div class="table-responsive">
-                            <div class="form-group">
-                                <div class="col-md-2" style="float: right; margin-bottom: 1%">
-                                    <input type="submit" class="btn btn-primary btn-block"  value="Add new Slider">
-                                </div>
+
+                    <div class="table-responsive">
+                        <div class="form-group">
+                            <div class="col-md-2" style="float: right; margin-bottom: 1%">
+                                <button type="button" class="btn btn-primary btn-block"
+                                        onclick="redirectToAddSlider()">Add New Slider</button>
                             </div>
+                        </div>
+                        <table class="table user-table">
+                            <thead>
+                                <tr>
+                                    <th>ID
+                                        <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=id">
+                                            <i class="fa fa-sort"></i>
+                                        </a>
+                                    </th>
 
-                            <table class="table user-table">
+                                    <th>Thumbnail</th> 
 
-                                <thead>
+
+
+                                    <th>Tiltle
+                                        <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=value">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>   
+                                    <th>Status
+                                        <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <th>Action
+                                        <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
+                                            <i class="fa fa-sort"></i>
+                                        </a></th>
+                                    <!--<th>Action</th>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <c:forEach var="slider" items="${listP}">
                                     <tr>
-                                        <th>ID
-                                            <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=id">
-                                                <i class="fa fa-sort"></i>
-                                            </a>
-                                        </th>
-
-                                        <th>Thumbnail</th> 
-
-
-
-                                        <th>Tiltle
-                                            <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=value">
-                                                <i class="fa fa-sort"></i>
-                                            </a></th>   
-
-
-                                        <th>Status
-                                            <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=fullname">
-                                                <i class="fa fa-sort"></i>
-                                            </a></th>
-
-                                        <th>Action
-                                            <a href="sliderlist?page=${currentPage}&q=${param.q}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${not param.order}&sort=status">
-                                                <i class="fa fa-sort"></i>
-                                            </a></th>
-                                        <!--<th>Action</th>-->
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <c:forEach var="slider" items="${listP}">
-                                        <tr>
-                                            <td>${slider.id}</td>
-                                            <td><img src="${pageContext.request.contextPath}/images/slider/${slider.image_url}" style="width: 80px; height: 50px;" alt="Slider Image" /></td>
-                                            <td>${slider.name}</td>
-                                            <td style="color: ${slider.status ? 'green' : 'red'}">${slider.status ? 'Active' : 'Inactive'}</td>
-                                            <td>
-                                                <!--nut edit-->
-                                                <a href="sliderdetail?id=${slider.id}">Edit</a>
-
-                                                <!-- Nút xóa slider -->
-                                                <a href="deleteSlider?sliderid=${slider.id}" onclick="return confirm('Are you sure you want to delete this slider?'); return false;">Delete</a>
-                                                <form action="deleteSlider" method="post" style="display:inline;">
-                                                    <input type="hidden" name="id" value="${slider.id}" />
-                                                    <!--                                                <button type="submit" class="btn-link" onclick="return confirm('Are you sure you want to delete this slider?');">Delete</button>-->
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                    <!-- Thêm nhiều hàng tại đây -->
-                                </tbody>
-                            </table>
-
-                            <!-- Diplay list of page -->
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination">
-                                    <c:if test="${currentPage > 1}">
-                                        <li>
-                                            <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Previous">
-                                                <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
-                                            </a>
-                                        </li>
-                                    </c:if>
-
-                                    <c:forEach begin="1" end="${endPage}" var="i">
-                                        <c:choose>
-                                            <c:when test="${currentPage eq i}">
-                                                <li class="active"><span>${i}</span></li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                <li><a href="sliderlist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
+                                        <td>${slider.id}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${empty slider.image_url}">
+                                                    <img id="img-preview"
+                                                         src="${pageContext.request.contextPath}/images/blog/images1.jpg"
+                                                         alt="Thumbnail" class="img-fluid"
+                                                         style="width: 80px; height: 50px;">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="<c:url value='/uploads/${slider.image_url}'/>"
+                                                         id="img-preview" alt="Avatar"
+                                                         class="img-fluid rounded-circle"
+                                                         style="width: 80px; height: 50px;">
                                                 </c:otherwise>
                                             </c:choose>
-                                        </c:forEach>
+                                        </td>
+                                        <td>${slider.name}</td>
+                                        <td style="color: ${slider.status ? 'green' : 'red'}">${slider.status ? 'Active' : 'Inactive'}</td>
+                                        <td>
+                                            <!--nut edit-->
+                                            <a href="sliderdetail?action=update&id=${slider.id}">Edit</a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                <!-- Thêm nhiều hàng tại đây -->
+                            </tbody>
+                        </table>
 
-                                    <c:if test="${currentPage < noOfPage}">
-                                        <li>
-                                            <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
-                                                <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
-                                            </a>
-                                        </li>
-                                    </c:if>
-                                </ul>
-                            </nav>
+                        <!-- Diplay list of page -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <c:if test="${currentPage > 1}">
+                                    <li>
+                                        <a href="bloglist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
 
-                        </div>
-                    </form>
+                                <c:forEach begin="1" end="${endPage}" var="i">
+                                    <c:choose>
+                                        <c:when test="${currentPage eq i}">
+                                            <li class="active"><span>${i}</span></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                            <li><a href="sliderlist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
 
+                                <c:if test="${currentPage < noOfPage}">
+                                    <li>
+                                        <a href="bloglist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </nav>
 
                     </div>
 
-
+                    </div>
                 </section>
             </aside>
         </div>
 
 
-        <%@include file="../../layout/footer.jsp" %>
+        <%@include file="../layout/footer.jsp" %>
         <script type="text/javascript">
             function confirmSubmit() {
                 if (confirm("Are you sure you want to Change this status?")) {
@@ -311,8 +279,8 @@
                     return false;
                 }
             }
-            function redirectToNewSliderPage() {
-                window.location.href = 'addslider';
+            function redirectToAddSlider() {
+                window.location.href = 'sliderdetail?action=add';
             }
         </script>
         <!-- jQuery 2.0.2 -->

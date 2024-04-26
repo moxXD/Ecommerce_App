@@ -119,95 +119,96 @@
                                     <!-- Add status options here -->
                                 </select>
                             </div>
+
                         </div>
-
                     </form>
-
                     <!-- Table for displaying user data -->
                     <div class="table-responsive">
-                        <form action="productList" method="post">
-                            <table id="content" class="table user-table">
-                                <thead>
+                        <div class="form-group">
+                            <div class="col-md-2" style="float: right; margin-bottom: 1%">
+                                <button type="button" class="btn btn-primary btn-block"
+                                        onclick="redirectToAddProduct()">Add New Blog</button>
+                            </div>
+                        </div>
+                        <table id="content" class="table user-table">
+                            <thead>
+                                <tr>
+                                    <th>ID
+                                        <a
+                                            href="productlist?page=${currentPage}&sort=id&sort=id&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i>
+                                    </th>
+                                    <th>Name<a
+                                            href="productlist?page=${currentPage}&sort=name&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i></th>
+                                    <th>Brand<a
+                                            href="productlist?page=${currentPage}&sort=brand&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i></th></th>
+                                    <th>Category
+                                        <a
+                                            href="productlist?page=${currentPage}&sort=category&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i></th></th>
+                                    <th>Price
+                                        <a
+                                            href="productlist?page=${currentPage}&sort=price&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i></th></th>
+                                    <th>Status
+                                        <a
+                                            href="productlist?page=${currentPage}&sort=status&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i></th></th>
+                                    <th>Stock
+                                        <a
+                                            href="productlist?page=${currentPage}&sort=stock&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                            <i class="fa fa-sort"></i></th></th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${listProduct}" var="p">
+                                    <c:set var="id" value="${p.id}" />
+                                    <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
                                     <tr>
-                                        <th>ID
-                                            <a
-                                                href="productlist?page=${currentPage}&sort=id&sort=id&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
-                                                <i class="fa fa-sort"></i>
-                                        </th>
-                                        <th>Name<a
-                                                href="productlist?page=${currentPage}&sort=name&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
-                                                <i class="fa fa-sort"></i></th>
-                                        <th>Brand<a
-                                                href="productlist?page=${currentPage}&sort=brand&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
-                                                <i class="fa fa-sort"></i></th></th>
-                                        <th>Category
-                                        <a
-                                                href="productlist?page=${currentPage}&sort=category&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
-                                                <i class="fa fa-sort"></i></th></th>
-                                        <th>Price
-                                        <a
-                                                href="productlist?page=${currentPage}&sort=price&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
-                                                <i class="fa fa-sort"></i></th></th>
-                                        <th>Status
-                                        <a
-                                                href="productlist?page=${currentPage}&sort=status&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
-                                                <i class="fa fa-sort"></i></th></th>
-                                        <th>Stock
-                                        <a
-                                                href="productlist?page=${currentPage}&sort=stock&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
-                                                <i class="fa fa-sort"></i></th></th>
-                                        <th>Action
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${listProduct}" var="p">
-                                        <c:set var="id" value="${p.id}" />
-                                        <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
-                                        <tr>
-                                            <td>${id}</td>
-                                            <td>${p.name}</td>
-                                            <td>${p.brand.value}</td>
-                                            <td>${p.category.value}</td>
-                                            <td>${formattedPrice}</td>
-                                            <td><form action="productlist" method="post">
-                                                    <input type="hidden" name="productID" value="${id}">
-                                                    <input type="hidden" name="status"
-                                                           value="${p.status?true:false}">
-                                                    <input id="changeStatus"
-                                                           onclick="return confirmSubmit()" type="submit"
-                                                           value="${!p.status?" Active":"Inactive"}"
-                                                           style="color: ${!p.status?" Red":"Green"}; border:
-                                                           none" />
+                                        <td>${id}</td>
+                                        <td>${p.name}</td>
+                                        <td>${p.brand.value}</td>
+                                        <td>${p.category.value}</td>
+                                        <td>${formattedPrice}</td>
+                                        <td><form action="productlist" method="post">
+                                                <input type="hidden" name="productID" value="${id}">
+                                                <input type="hidden" name="status"
+                                                       value="${p.status?true:false}">
+                                                <input id="changeStatus"
+                                                       onclick="return confirmSubmit()" type="submit"
+                                                       value="${!p.status?" Active":"Inactive"}"
+                                                       style="color: ${!p.status?" Red":"Green"}; border:
+                                                       none" />
 
-                                                </form>
-                                            <td>
-                                                ${p.stock}
-                                            </td>
-                                            <td><a href="productdetail?action=view&id=${id}">View</a>
-                                                &nbsp;
-                                                <a href="productdetail?action=update&id=${id}"
-                                                   style="margin-left: 20px">Edit</a></td>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                    <!-- Add more rows here -->
-                                </tbody>
-                            </table>
-                        </form>
+                                            </form>
+                                        <td>
+                                            ${p.stock}
+                                        </td>
+                                        <td>
+                                            <a href="productdetail?action=update&id=${id}"
+                                               style="margin-left: 20px">Edit</a></td>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                <!-- Add more rows here -->
+                            </tbody>
+                        </table>
                         <!-- Diplay list of page -->
                         <nav aria-label="Page navigation">
                             <ul class="pagination">
-                                <!--prev page-->
                                 <c:if test="${currentPage > 1}">
                                     <li>
-                                        <a href="productlist?page=${currentPage - 1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}"
+                                        <a href="productlist?page=${currentPage - 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}"
                                            aria-label="Previous">
                                             <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </li>
                                 </c:if>
-                                <!--page list-->
+
                                 <c:forEach begin="1" end="${noOfPage}" var="i">
                                     <c:choose>
                                         <c:when test="${currentPage eq i}">
@@ -215,15 +216,15 @@
                                                 </c:when>
                                                 <c:otherwise>
                                             <li><a
-                                                    href="productlist?page=${i}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}">${i}</a>
+                                                    href="productlist?page=${i}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}">${i}</a>
                                             </li>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
-                                <!--prev page-->
+
                                 <c:if test="${currentPage < noOfPage}">
                                     <li>
-                                        <a href="productlist?page=${currentPage+1}&sort=${param.sort}&order=${param.sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&statusFilter=${param.filstatus}"
+                                        <a href="productlist?page=${currentPage + 1}&q=${param.q}&filfeature=${param.filfeature}&filstatus=${param.filstatus}&filcate=${param.filcate}&filauthor=${param.filauthor}&order=${param.order}&sort=${param.sort}"
                                            aria-label="Next">
                                             <i class="fa fa-arrow-right"></i>
                                         </a>
@@ -232,14 +233,28 @@
                             </ul>
                         </nav>
                     </div>
-                    <a href="addproduct" class="btn btn-warning shadow-0">Add product </a>
+                    </div>
                 </section>
             </aside>
         </div>
-
-
-        <%@include file="/layout/footer.jsp" %>
-
+        <%@include file="../layout/footer.jsp" %>
+        <script type="text/javascript">
+            function confirmSubmit() {
+                if (confirm("Are you sure you want to Change this status?")) {
+                    document.getElementById("myForm").submit();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            function redirectToAddProduct() {
+                window.location.href = 'productdetail?action=add';
+            }
+            function submitForm() {
+                var form = document.getElementById("filterForm");
+                form.submit();
+            }
+        </script>
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <script src="${pageContext.request.contextPath}/views/js/jquery.min.js"
@@ -280,24 +295,24 @@
 
         <!-- Director for demo purposes -->
         <script>
-                                                               //            function searchByName(param) {
-                                                               //                var txtSearch = param.values();
-                                                               //                $.ajax({
-                                                               //                    url: "/productList/searchByAjax",
-                                                               //                    type: "get", //send it through get method
-                                                               //                    data: {
-                                                               //                        txt: txtSearch
-                                                               //                    },
-                                                               //                    success: function (data) {
-                                                               //                        // do sth
-                                                               //                        var row = document.getElementById("content");
-                                                               //                        row.innerHTML = data;
-                                                               //                    },
-                                                               //                    error: function (xhr) {
-                                                               //                        //Do Something to handle error
-                                                               //                    }
-                                                               //                });
-                                                               //            }
+            //            function searchByName(param) {
+            //                var txtSearch = param.values();
+            //                $.ajax({
+            //                    url: "/productList/searchByAjax",
+            //                    type: "get", //send it through get method
+            //                    data: {
+            //                        txt: txtSearch
+            //                    },
+            //                    success: function (data) {
+            //                        // do sth
+            //                        var row = document.getElementById("content");
+            //                        row.innerHTML = data;
+            //                    },
+            //                    error: function (xhr) {
+            //                        //Do Something to handle error
+            //                    }
+            //                });
+            //            }
         </script>
         <script type="text/javascript">
             let submitForm = () => {
