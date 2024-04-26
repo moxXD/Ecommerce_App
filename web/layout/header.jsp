@@ -58,8 +58,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    </div>
                     </div><!--/header_top-->
-
                     <div class="header-middle"><!--header-middle-->
                         <div class="container">
                             <div class="row">
@@ -69,14 +70,13 @@
                                             <h2><span>Tech </span>Mart</h2>
                                         </div>
                                     </div>
-
-
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="shop-menu pull-right">
                                         <ul class="nav navbar-nav">
                                             <li><a href="Profile"><i class="fa fa-user"></i> Account</a></li>
-                                            <li><a href="cartdetail"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                                            <li><a href="cartdetail"><i class="fa fa-shopping-cart"></i>
+                                                    Cart</a></li>
                                             <c:if test="${userSession != null}">
                                                 <li><a href="Logout"><i class="fa fa-lock"></i> Logout</a></li>
                                             </c:if>
@@ -89,7 +89,6 @@
                             </div>
                         </div>
                     </div><!--/header-middle-->
-
                     <div class="header-bottom"><!--header-bottom-->
                         <div class="container">
                             <div class="row">
@@ -116,7 +115,8 @@
                                             </li>
                                             <c:if test="${not empty userSession}">
                                                 <li>
-                                                    <a href="admin/dashboard">Admin</a>
+                                                    <a
+                                                        href="${pageContext.request.contextPath}/admin/dashboard">Admin</a>
                                                 </li>
                                             </c:if>
                                             <c:if test="${not empty userSession}">
@@ -134,7 +134,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div><!--/header-bottom-->
+                    </div>
                 </header><!--/header-->
                 <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------->
                 <script src="js/jquery.js"></script>

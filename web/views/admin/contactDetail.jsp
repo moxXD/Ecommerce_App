@@ -65,7 +65,7 @@
         </style>
     </head>
     <body>
-        <%@include file="../layout/header.jsp" %>
+        <%@include file="../admin/layout/header.jsp" %>
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
@@ -103,6 +103,11 @@
                         <li>
                             <a href="ContactList">
                                 <i class="fa fa-gear"></i> <span>Contacts</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="${pageContext.request.contextPath}/home" >
+                                <i class="fa fa-arrow-left"></i> <span>Home</span>
                             </a>
                         </li>
                     </ul>
@@ -182,7 +187,7 @@
     </div>
 </body>
 
-<%@include file="../layout/footer.jsp" %>
+<%@include file="../admin/layout/footer.jsp" %>
 <script type="text/javascript">
     function redirectToContactList() {
         window.location.href = "ContactList";

@@ -122,7 +122,7 @@ public class Product {
         this.price = price;
         this.description = description;
         this.specification = specification;
-        this.imageUrl = imageUrl;
+        this.imageUrl = imageurl;
         this.status = status;
         this.stock = stock;
         this.isFeatured = isFeatured;}

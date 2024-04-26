@@ -54,9 +54,9 @@
                     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
                     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
                     <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-  <![endif]-->
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
 
                     <style type="text/css">
                     </style>
@@ -97,7 +97,11 @@
                                                 <i class="fa fa-shopping-cart"></i> <span>Product</span>
                                             </a>
                                         </li>
-
+                                        <li class="">
+                                            <a href="${pageContext.request.contextPath}/home">
+                                                <i class="fa fa-arrow-left"></i> <span>Home</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </section>
                                 <!-- /.sidebar -->
@@ -254,7 +258,7 @@
                                                             </c:choose>
                                                         </td>
                                                         <!--                                            <img src="${pageContext.request.contextPath}/images/blog/images.jpg"
-                                                 style="width: 80px; height: 50px;" alt="User Image" /></td>-->
+                                 style="width: 80px; height: 50px;" alt="User Image" /></td>-->
                                                         <!--                                        <td>${u.title}</td>-->
                                                         <c:if test="${fn:length(u.title) > 30}">
                                                             <c:set var="subTitle"
@@ -339,7 +343,7 @@
                         </div>
 
 
-                        <%@include file="../../marketing/layout/footer.jsp" %>
+                        <%@include file="../../layout/footer.jsp" %>
                             <script type="text/javascript">
                                 function confirmSubmit() {
                                     if (confirm("Are you sure you want to Change this status?")) {
@@ -377,9 +381,9 @@
                                 type="text/javascript"></script>
 
                             <!-- datepicker
-                                                                                            <script src="js/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>-->
+                                                                        <script src="js/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>-->
                             <!-- Bootstrap WYSIHTML5
-                                                                                            <script src="js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>-->
+                                                                        <script src="js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>-->
                             <!-- iCheck -->
                             <script src="${pageContext.request.contextPath}/admin/js/plugins/iCheck/icheck.min.js"
                                 type="text/javascript"></script>

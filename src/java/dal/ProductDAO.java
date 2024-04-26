@@ -115,7 +115,7 @@ public class ProductDAO extends DBContext {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Product(rs.getInt(1),
+                list.add(new Product(rs.getInt(PRODUCT_ID),
                         rs.getString(2),
                         rs.getInt(3),
                         rs.getInt(4),

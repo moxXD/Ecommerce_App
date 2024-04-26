@@ -90,7 +90,7 @@
                                             <div class="product-image-wrapper">
                                                 <div class="single-products">
                                                     <div class="productinfo text-center">
-                                                        <img src="<c:url value='/uploads/${f.imageUrl}'/> alt="" >
+                                                        <img src="<c:url value='/uploads/${f.imageUrl}'/>" alt="" >
                                                         <h2>${f.name}</h2>
                                                         <h2>${f.price}</h2>
                                                         <p>${f.specification}</p>

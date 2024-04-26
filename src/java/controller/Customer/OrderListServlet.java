@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.common;
+package controller.Customer;
 
-import dal.UserDAO;
+import controller.Marketing.BlogListServlet;
+import dal.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,15 +14,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Order;
 import model.User;
-import service.EmailService;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "Profile", urlPatterns = {"/Profile"})
-public class Profile extends HttpServlet {
+@WebServlet(name = "CustomerOrderList", urlPatterns = {"/customer/orderlist"})
+public class OrderListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +46,10 @@ public class Profile extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Profile</title>");
+            out.println("<title>Servlet CustomerOrderList</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Profile at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CustomerOrderList at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,18 +67,43 @@ public class Profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        UserDAO ud = new UserDAO();
-        HttpSession session = request.getSession();
-
-        User us = (User) session.getAttribute("userSession");
-        User ur = (User) session.getAttribute("user_register");
-        if (us == null && ur == null) {
-            response.sendRedirect("Login");
+//        processRequest(request, response);
+        OrderDAO orderDAO = new OrderDAO();
+        int page = 1;
+        int recordPerPage = 6;
+        String page_raw = request.getParameter("page");
+// parse integer
+        if (page_raw != null && !page_raw.isEmpty()) {
+            try {
+                page = Integer.parseInt(page_raw);
+            } catch (NumberFormatException e) {
+                Logger.getLogger(OrderListServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
         }
-        session.setAttribute("us", us);
-        session.setAttribute("ur", ur);
-        request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
-
+        List<Order> order = new ArrayList<>();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("userSession");
+        int userID = 0, noOfPage=0;
+//        try {
+//                order = orderDAO.getOrderByUser(userID);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(OrderListServlet.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        if (user != null) {
+            userID = user.getId();
+            try {
+                order = orderDAO.getOrderByUser(userID, (page - 1) * recordPerPage,
+                        recordPerPage);
+                int noOfrecord = orderDAO.getNumberOfRecord();
+                noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderListServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        request.setAttribute("orderlist", order);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("noOfPage", noOfPage);
+        request.getRequestDispatcher("../views/customer/orderlist.jsp").forward(request, response);
     }
 
     /**
@@ -86,22 +117,7 @@ public class Profile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email");
-        User user = new UserDAO().getUserByEmail(email);
-        String action = request.getParameter("action");
-        HttpSession session = request.getSession();
-
-        if (action.equals("confirm")) {
-            String OTP = EmailService.SendOTPConfirmEmail(user);
-            if (OTP != null) {
-                session.setAttribute("otp", OTP);
-                session.setAttribute("user", user);
-                session.setAttribute("user-confirm", user);
-                session.setAttribute("expireTime", System.currentTimeMillis() + 300000);
-                session.setAttribute("action", "confirm-email");
-                request.getRequestDispatcher("authen/EnterOTP.jsp").forward(request, response);
-            }
-        }
+        processRequest(request, response);
     }
 
     /**

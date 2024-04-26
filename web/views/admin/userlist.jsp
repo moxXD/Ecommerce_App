@@ -51,7 +51,7 @@
     </head>
 
     <body>
-        <%@include file="../layout/header.jsp" %>
+        <%@include file="../admin/layout/header.jsp" %>
 
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
@@ -93,11 +93,6 @@
                                 <i class="fa fa-users"></i> <span>User List</span>
                             </a>
                         </li>
-                        <!--                    <li>
-                                    <a href="userdetail.jsp">
-                                        <i class="fa fa-user"></i> <span>User Detail</span>
-                                    </a>
-                                </li>-->
                         <li>
                             <a href="settinglist">
                                 <i class="fa fa-gear"></i> <span>Settings</span>
@@ -106,6 +101,11 @@
                         <li>
                             <a href="ContactList">
                                 <i class="fa fa-gear"></i> <span>Contacts</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="${pageContext.request.contextPath}/home" >
+                                <i class="fa fa-arrow-left"></i> <span>Home</span>
                             </a>
                         </li>
                     </ul>
@@ -314,7 +314,7 @@
         </div>
 
 
-        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../admin/layout/footer.jsp" %>
         <script type="text/javascript">
             function redirectToAddUser() {
                 window.location.href = 'userdetail?action=add';
