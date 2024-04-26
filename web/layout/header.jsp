@@ -74,14 +74,17 @@
                                 <div class="col-sm-8">
                                     <div class="shop-menu pull-right">
                                         <ul class="nav navbar-nav">
-                                            <li><a href="Profile"><i class="fa fa-user"></i> Account</a></li>
-                                            <li><a href="cartdetail"><i class="fa fa-shopping-cart"></i>
+                                            <li><a href="${pageContext.request.contextPath}/Profile"><i class="fa fa-user"></i> Account</a></li>
+                                            <c:if test="${userSession != null}">
+                                                <li><a href="${pageContext.request.contextPath}/customer/orderlist"><i class="fa fa-lock"></i> My Order</a></li>
+                                            </c:if>
+                                                <li><a href="${pageContext.request.contextPath}/cartdetail"><i class="fa fa-shopping-cart"></i>
                                                     Cart</a></li>
                                             <c:if test="${userSession != null}">
-                                                <li><a href="Logout"><i class="fa fa-lock"></i> Logout</a></li>
+                                                <li><a href="${pageContext.request.contextPath}/Logout"><i class="fa fa-lock"></i> Logout</a></li>
                                             </c:if>
                                             <c:if test="${userSession == null}">
-                                                <li><a href="Login"><i class="fa fa-lock"></i> Login</a></li>
+                                                <li><a href="${pageContext.request.contextPath}/Login"><i class="fa fa-lock"></i> Login</a></li>
                                             </c:if>
                                         </ul>
                                     </div>
@@ -105,13 +108,13 @@
                                     <div class="mainmenu pull-left">
                                         <ul class="nav navbar-nav collapse navbar-collapse">
                                             <li>
-                                                <a href="home" class="active">Home</a>
+                                                <a href="${pageContext.request.contextPath}/home" class="active">Home</a>
                                             </li>
                                             <li>
-                                                <a href="productlist">Shop</a>
+                                                <a href="${pageContext.request.contextPath}/productlist">Shop</a>
                                             </li>
                                             <li>
-                                                <a href="blogslist">Blog</a>
+                                                <a href="${pageContext.request.contextPath}/blogslist">Blog</a>
                                             </li>
                                             <c:if test="${not empty userSession}">
                                                 <li>
@@ -121,12 +124,12 @@
                                             </c:if>
                                             <c:if test="${not empty userSession}">
                                                 <li>
-                                                    <a href="marketing/dashboard">Marketing</a>
+                                                    <a href="${pageContext.request.contextPath}/marketing/dashboard">Marketing</a>
                                                 </li>
                                             </c:if>
                                             <c:if test="${not empty userSession}">
                                                 <li>
-                                                    <a href="sale/dashboard">Sale</a>
+                                                    <a href="${pageContext.request.contextPath}/sale/dashboard">Sale</a>
                                                 </li>
                                             </c:if>
                                         </ul>
