@@ -102,7 +102,7 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="userlist">
+                            <a href="bloglist">
                                 <i class="fa fa-users"></i> <span>Blog List</span>
                             </a>
                         </li>
@@ -111,7 +111,11 @@
                                 <i class="fa fa-gear"></i> <span>Product List</span>
                             </a>
                         </li>
-
+                        <li class="">
+                            <a href="${pageContext.request.contextPath}/home" >
+                                <i class="fa fa-arrow-left"></i> <span>Home</span>
+                            </a>
+                        </li>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -130,17 +134,17 @@
                                             <div class="row" style="margin-bottom: 5%; margin-top: 3%">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="title">Title:</label>
+                                                        <label for="title">Title <span style="color: red">*</span>:</label>
                                                         <input name="title" type="text" class="form-control" id="title" value="${c.title}">
                                                         <span id="titleError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="inputLabel1">Brief: </label>
+                                                        <label for="inputLabel1">Brief <span style="color: red">*</span>: </label>
                                                         <input  name="sumary" type="text" class="form-control" id="sumary" value="${c.sumary}" >
                                                         <span id="sumaryError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="gender">Category:</label>
+                                                        <label for="gender">Category <span style="color: red">*</span>:</label>
                                                         <select  name="category" id="category" class="form-control ">
                                                             <option value="" disabled selected hidden>Choose category of your blog</option>
                                                             <c:forEach items="${requestScope.settingList}" var="s">
@@ -152,8 +156,8 @@
                                                         <span id="cateError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="author">Author:</label>
-                                                        <select  id="author" name="author" class="form-control">
+                                                        <label for="author">Author <span style="color: red">*</span>:</label>
+                                                        <select  id="author" name="author" class="form-control" >
                                                             <option value="" disabled selected hidden>Choose author of your blog</option>
                                                             <c:forEach items="${requestScope.blogAuthors}" var="a">
                                                                 <option value="${a.id}" ${c.authorName == a.fullname ? "selected" : ""} >${a.fullname}</option>
@@ -164,7 +168,7 @@
                                                     <div style="margin-bottom: 5%">
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                                <label for="gender">Status:</label>
+                                                                <label for="gender">Status <span style="color: red">*</span>:</label>
                                                             </div>
                                                         </div>
                                                         <div class="row form-check-inline">
@@ -192,7 +196,7 @@
                                                     <div>
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                                <label for="gender">Feature:</label>
+                                                                <label for="gender">Feature <span style="color: red">*</span>:</label>
                                                             </div>
                                                         </div>
                                                         <div class="row form-check-inline">
@@ -224,10 +228,10 @@
                                                             <label for="thumbnail">Thumbnail: </label>
                                                             <c:choose>
                                                                 <c:when test="${empty c.imgUrl}">
-                                                                    <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid mb-4">
+                                                                    <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid mb-4 thumbnail">
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <img src="<c:url value='/uploads/${c.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                                                    <img src="<c:url value='/uploads/${c.imgUrl}'/>"id="img-preview" alt="Avatar" class="img-fluid mb-4 thumbnail">
                                                                 </c:otherwise>
                                                             </c:choose>                                                           
                                                             <input type="file" name="file" id="file-input" accept="image/*">
@@ -238,12 +242,15 @@
                                             <!-- -->
 
                                             <div class="col-md-12" style="margin-bottom: 5%">
-                                                <label for="content">Content:</label>
+                                                <label for="content">Content <span style="color: red">*</span>:</label>
                                                 <textarea id="content" name="content" style="height: 500px; resize: none;" class="form-control">${c.detail}</textarea>
                                                 <script>
                                                     CKEDITOR.replace('content', {
                                                         resize_enabled: false // Ngăn chặn CKEditor resize
                                                     });
+//                                                    CKEDITOR.replace('sumary', {
+//                                                        resize_enabled: false // Cho phép CKEditor thứ hai có thể resize
+//                                                    });
                                                 </script>
                                                 <span id="contentError" class="error-msg"></span>
                                             </div>
@@ -350,14 +357,21 @@
                 return;
             }
 
-//            return true;
+            var editorBrief = CKEDITOR.instances.sumary.getData(); // Lấy nội dung của CKEditor
+            if (!editorBrief.trim()) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
+                contentError.innerHTML = 'Please enter Brief of blog.'; // Thông báo lỗi
+                event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
+                return;
+            }
+
+
 //check length and special character
             if (title.trim().length > 100) {
                 titleError.innerHTML = "Title must less than 100 characters";
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
-            if (sumary.trim().length > 250) {
+            if (sumary.trim().length > 500) {
                 sumaryError.innerHTML = "Title must less than 250 characters";
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
@@ -375,9 +389,14 @@
                 event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
                 return;
             }
+            if (editorBrief.trim().length > 500) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
+                contentError.innerHTML = 'Content must less than 500 character'; // Thông báo lỗi
+                event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
+                return;
+            }
         }
 
-        //
+
 
         const input = document.getElementById('file-input');
         const image = document.getElementById('img-preview');

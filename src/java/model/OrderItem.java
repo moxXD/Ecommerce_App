@@ -10,18 +10,62 @@ package model;
  */
 public class OrderItem {
     private Product product;
-    private int quantity,id;
+    private int quantity,id, orderid, productid;
     private double total,price;
+    private String productname, imgurl;
+    
 
     public OrderItem() {
     }
 
+    public OrderItem(int id, int productid, double price, double total, int quantity, String productname, String imgurl) {
+        this.quantity = quantity;
+        this.id = id;
+        this.productid = productid;
+        this.total = total;
+        this.price = price;
+        this.productname = productname;
+        this.imgurl = imgurl;
+    }
+    
     public OrderItem(Product product, int quantity, int id, double total, double price) {
         this.product = product;
         this.quantity = quantity;
         this.id = id;
         this.total = total;
         this.price = price;
+    }
+
+    public int getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(int orderid) {
+        this.orderid = orderid;
+    }
+
+    public int getProductid() {
+        return productid;
+    }
+
+    public void setProductid(int productid) {
+        this.productid = productid;
+    }
+
+    public String getProductname() {
+        return productname;
+    }
+
+    public void setProductname(String productname) {
+        this.productname = productname;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 
     public Product getProduct() {

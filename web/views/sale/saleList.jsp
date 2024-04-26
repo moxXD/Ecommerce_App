@@ -153,7 +153,11 @@
                                                         <i class="fa fa-gear"></i> <span>Settings</span>
                                                     </a>
                                                 </li>-->
-
+                        <li class="">
+                            <a href="${pageContext.request.contextPath}/home" >
+                                <i class="fa fa-arrow-left"></i> <span>Home</span>
+                            </a>
+                        </li>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -252,14 +256,12 @@
                                     <c:forEach var="o" items="${listO}">
                                         <tr>
                                             <td>${o.id}</td>
-                                            <td>${o.create_at}</td>
-                                            <td>${o.fullname}</td>
+                                            <td>${o.createAt}</td>
+                                            <td>${o.name}</td>
                                             <td>${o.address}</td>
                                             <td>${o.email}</td>
                                             <td>${o.mobile}</td>
                                             <td>${o.status}</td>
-                                            
-
                                             <td>
                                                 <!--nut edit-->
                                                 <a href="sliderdetail?id=${o.id}">Edit</a>

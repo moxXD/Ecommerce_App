@@ -89,7 +89,11 @@
                                 <i class="fa fa-shopping-cart"></i> <span>Product</span>
                             </a>
                         </li>
-
+                        <li class="">
+                            <a href="${pageContext.request.contextPath}/home" >
+                                <i class="fa fa-arrow-left"></i> <span>Home</span>
+                            </a>
+                        </li>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -119,263 +123,263 @@
                                 </div>
                             </div>
                         </div>
-                            <!-- Main row -->
-                            <div class="row" >
+                        <!-- Main row -->
+                        <div class="row" >
 
-                                <div class="col-md-8">
-                                    <!--earning graph start-->
+                            <div class="col-md-8">
+                                <!--earning graph start-->
+                                <section class="panel">
+                                    <header class="panel-heading">
+                                        Products Graph
+                                    </header>
+                                    <div class="panel-body">
+                                        <canvas id="productChart" width="500" height="300"></canvas>
+                                    </div>
+                                </section>
+                                <!--earning graph end-->
+                                <script type="text/javascript">
+                                    let pctx = document.getElementById("productChart").getContext("2d");
+                                    let productChart = new Chart(pctx, {
+                                    type: "line",
+                                            data: {
+                                            labels: [<c:forEach items="${requestScope.product7days}" var="b">'<fmt:formatDate pattern="dd/MM/yyyy" value="${b.date}"/>',</c:forEach>],
+                                                    datasets: [
+                                                    {
+                                                    label: "Number of products",
+                                                            data: [<c:forEach items="${requestScope.product7days}" var="b">${b.count},</c:forEach>],
+                                                            backgroundColor: "rgba(0,0,255,0.2)"
+                                                    }
+                                                    ]
+                                            }
+                                    });
+                                    // Chart.defaults.global.responsive = true;
+                                    </script>
+                                </div>
+                                <div class="col-lg-4">
                                     <section class="panel">
                                         <header class="panel-heading">
-                                            Products Graph
+                                            Product Filter
                                         </header>
-                                        <div class="panel-body">
-                                            <canvas id="productChart" width="500" height="300"></canvas>
-                                        </div>
-                                    </section>
-                                    <!--earning graph end-->
-                                    <script type="text/javascript">
-                                        let pctx = document.getElementById("productChart").getContext("2d");
-                                        let productChart = new Chart(pctx, {
-                                        type: "line",
-                                                data: {
-                                                labels: [<c:forEach items="${requestScope.product7days}" var="b">'<fmt:formatDate pattern="dd/MM/yyyy" value="${b.date}"/>',</c:forEach>],
-                                                        datasets: [
-                                                        {
-                                                        label: "Number of products",
-                                                                data: [<c:forEach items="${requestScope.product7days}" var="b">${b.count},</c:forEach>],
-                                                                backgroundColor: "rgba(0,0,255,0.2)"
-                                                        }
-                                                        ]
+                                        <div class="panel-body" >
+                                            <!-- date select -->
+                                            <div class="form-group">
+                                                <label for="productdatepick"  class="form-check-label">Select Date: </label>
+                                                <input type="date" name="productdatepick" class="form-control" id="productdatepick"
+                                                       value="" max="<%=java.time.LocalDate.now()%>" onchange="submitForm('productdatepick')">
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function () {
+                                                var productdateInput = document.getElementById('productdatepick');
+                                                var prostoredDate = localStorage.getItem('selectedDate'); // Lấy ngày đã lưu
+
+                                                // Kiểm tra nếu có ngày đã lưu và thiết lập nó làm giá trị cho datepicker
+                                                if (prostoredDate) {
+                                                productdateInput.value = prostoredDate;
+                                                } else {
+                                                var today = new Date().toISOString().substr(0, 10);
+                                                productdateInput.value = today;
                                                 }
-                                        });
-                                        // Chart.defaults.global.responsive = true;
-                                        </script>
+
+                                                // Khi người dùng thay đổi ngày, lưu ngày mới vào localStorage
+                                                productdateInput.addEventListener('change', function() {
+                                                localStorage.setItem('selectedDate', this.value);
+                                                });
+                                                });
+                                            </script>
+                                        </div>
+                                        <div class="filter-row">
+                                            <!--product category select-->
+                                            <div class="form-group">
+                                                <label for="filproductcate">Filter by Product Category:</label>
+                                                <select name="filproductcate" id="filproductcate" class="form-control"
+                                                        onchange="submitForm('filproductcate')">
+                                                    <option value="" >All Category</option>
+                                                    <!-- Add role options here -->
+                                                    <c:forEach items="${requestScope.settingList}" var="m">
+                                                        <c:if test="${m.type.equals('product category')}">
+                                                            <option value="${m.id}" ${param.filproductcate==m.id?"selected":""}>${m.value}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <!--brand select-->
+                                            <div class="form-group">
+                                                <label for="filbrand">Filter by Brand: </label>
+                                                <select name="filbrand" id="filbrand" class="form-control" onchange="submitForm('filbrand')">
+                                                    <option value="">All Brand </option>
+                                                    <c:forEach items="${requestScope.settingList}" var="n">
+                                                        <c:if test="${n.type.equals('brand')}">
+                                                            <option value="${n.id}" ${param.filbrand==n.id?"selected":""}>${n.value}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <!--Search-->
+                                        </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <section class="panel">
-                                            <header class="panel-heading">
-                                                Product Filter
-                                            </header>
-                                            <div class="panel-body" >
-                                                <!-- date select -->
-                                                <div class="form-group">
-                                                    <label for="productdatepick"  class="form-check-label">Select Date: </label>
-                                                    <input type="date" name="productdatepick" class="form-control" id="productdatepick"
-                                                           value="" max="<%=java.time.LocalDate.now()%>" onchange="submitForm('productdatepick')">
-                                                <script>
-                                                    document.addEventListener('DOMContentLoaded', function () {
-                                                    var productdateInput = document.getElementById('productdatepick');
-                                                    var prostoredDate = localStorage.getItem('selectedDate'); // Lấy ngày đã lưu
+                                </section>
+                                <!--chat start-->
+                                <div class="panel">
+                                    <header class="panel-heading">
+                                        Newest Products
+                                    </header>
+                                    <c:forEach items="${requestScope.newproduct}" var="x">
+                                        <li class="list-group-item">
+                                            <c:choose>
+                                                <c:when test="${empty x.imgUrl}">
+                                                    <a href="editproduct?id=${x.id}"><img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle" style="width: 50px; height: 50px;"></a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                    <a href="editproduct?id=${x.id}"><img src="<c:url value='/uploads/${x.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle"style="width: 50px; height: 50px;"></a>
+                                                    </c:otherwise>
+                                                </c:choose> 
+                                                <c:if test="${fn:length(x.name) > 50}">
+                                                    <c:set var="subTitle" value="${fn:substring(x.name, 0, 50)}" />
+                                                <a href="editproduct?id=${x.id}">${subTitle}...</a>
+                                            </c:if>
+                                            <c:if test="${fn:length(x.name) <= 50}">
+                                                <a href="editproduct?id=${x.id}">${x.name}</a>
+                                            </c:if>
+                                        </li>
+                                    </c:forEach>
 
-                                                    // Kiểm tra nếu có ngày đã lưu và thiết lập nó làm giá trị cho datepicker
-                                                    if (prostoredDate) {
-                                                    productdateInput.value = prostoredDate;
-                                                    } else {
-                                                    var today = new Date().toISOString().substr(0, 10);
-                                                    productdateInput.value = today;
-                                                    }
-
-                                                    // Khi người dùng thay đổi ngày, lưu ngày mới vào localStorage
-                                                    productdateInput.addEventListener('change', function() {
-                                                    localStorage.setItem('selectedDate', this.value);
-                                                    });
-                                                    });
-                                                </script>
-                                            </div>
-                                            <div class="filter-row">
-                                                <!--product category select-->
-                                                <div class="form-group">
-                                                    <label for="filproductcate">Filter by Product Category:</label>
-                                                    <select name="filproductcate" id="filproductcate" class="form-control"
-                                                            onchange="submitForm('filproductcate')">
-                                                        <option value="" >All Category</option>
-                                                        <!-- Add role options here -->
-                                                        <c:forEach items="${requestScope.settingList}" var="m">
-                                                            <c:if test="${m.type.equals('product category')}">
-                                                                <option value="${m.id}" ${param.filproductcate==m.id?"selected":""}>${m.value}</option>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-                                                <!--brand select-->
-                                                <div class="form-group">
-                                                    <label for="filbrand">Filter by Brand: </label>
-                                                    <select name="filbrand" id="filbrand" class="form-control" onchange="submitForm('filbrand')">
-                                                        <option value="">All Brand </option>
-                                                        <c:forEach items="${requestScope.settingList}" var="n">
-                                                            <c:if test="${n.type.equals('brand')}">
-                                                                <option value="${n.id}" ${param.filbrand==n.id?"selected":""}>${n.value}</option>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-                                                <!--Search-->
-                                            </div>
-                                        </div>
-                                    </section>
-                                    <!--chat start-->
-                                    <div class="panel">
-                                        <header class="panel-heading">
-                                            Newest Products
-                                        </header>
-                                        <c:forEach items="${requestScope.newproduct}" var="x">
-                                            <li class="list-group-item">
-                                                <c:choose>
-                                                    <c:when test="${empty x.imgUrl}">
-                                                        <a href="editproduct?id=${x.id}"><img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle" style="width: 50px; height: 50px;"></a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                        <a href="editproduct?id=${x.id}"><img src="<c:url value='/uploads/${x.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle"style="width: 50px; height: 50px;"></a>
-                                                        </c:otherwise>
-                                                    </c:choose> 
-                                                    <c:if test="${fn:length(x.name) > 50}">
-                                                        <c:set var="subTitle" value="${fn:substring(x.name, 0, 50)}" />
-                                                    <a href="editproduct?id=${x.id}">${subTitle}...</a>
-                                                </c:if>
-                                                <c:if test="${fn:length(x.name) <= 50}">
-                                                    <a href="editproduct?id=${x.id}">${x.name}</a>
-                                                </c:if>
-                                            </li>
-                                        </c:forEach>
-
-                                        <div class="panel-footer bg-white">
-                                            <!-- <span class="pull-right badge badge-info">32</span> -->
-                                            <a class="btn btn-primary btn-md" href="addproduct" role="button">
-                                                <i class="fa fa-plus"></i>
-                                                Add New Product
-                                            </a>
-                                        </div>
+                                    <div class="panel-footer bg-white">
+                                        <!-- <span class="pull-right badge badge-info">32</span> -->
+                                        <a class="btn btn-primary btn-md" href="addproduct" role="button">
+                                            <i class="fa fa-plus"></i>
+                                            Add New Product
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <!--post chart-->
-                            <div class="row" >
-                                <div class="col-md-8">
-                                    <!--earning graph start-->
+                        </div>
+                        <!--post chart-->
+                        <div class="row" >
+                            <div class="col-md-8">
+                                <!--earning graph start-->
+                                <section class="panel">
+                                    <header class="panel-heading">
+                                        Posts Graph
+                                    </header>
+                                    <div class="panel-body">
+                                        <canvas id="postChart" width="500" height="300"></canvas>
+                                    </div>
+                                </section>
+                                <!--earning graph end-->
+                                <script type="text/javascript">
+                                    let bctx = document.getElementById("postChart").getContext("2d");
+                                    let postChart = new Chart(bctx, {
+                                    type: "line",
+                                            data: {
+                                            labels: [<c:forEach items="${requestScope.post7days}" var="a">'<fmt:formatDate pattern="dd/MM/yyyy" value="${a.date}"/>',</c:forEach>],
+                                                    datasets: [
+                                                    {
+                                                    label: "Number of posts",
+                                                            data: [<c:forEach items="${requestScope.post7days}" var="a">${a.count},</c:forEach>],
+                                                            backgroundColor: "rgba(35, 193, 229, 0.6)"
+                                                    }
+                                                    ]
+                                            }
+                                    });
+                                    // Chart.defaults.global.responsive = true;
+                                    </script>
+                                </div>
+                                <div class="col-lg-4">
                                     <section class="panel">
                                         <header class="panel-heading">
-                                            Posts Graph
+                                            Post Filter
                                         </header>
-                                        <div class="panel-body">
-                                            <canvas id="postChart" width="500" height="300"></canvas>
-                                        </div>
-                                    </section>
-                                    <!--earning graph end-->
-                                    <script type="text/javascript">
-                                        let bctx = document.getElementById("postChart").getContext("2d");
-                                        let postChart = new Chart(bctx, {
-                                        type: "line",
-                                                data: {
-                                                labels: [<c:forEach items="${requestScope.post7days}" var="a">'<fmt:formatDate pattern="dd/MM/yyyy" value="${a.date}"/>',</c:forEach>],
-                                                        datasets: [
-                                                        {
-                                                        label: "Number of posts",
-                                                                data: [<c:forEach items="${requestScope.post7days}" var="a">${a.count},</c:forEach>],
-                                                                backgroundColor: "rgba(35, 193, 229, 0.6)"
-                                                        }
-                                                        ]
+                                        <div class="panel-body" >
+                                            <div class="form-group">
+                                                <label for="postdatepick"  class="form-check-label">Select Date: </label>
+                                                <input type="date" name="postdatepick" class="form-control" id="postdatepick"
+                                                       value="" max="<%=java.time.LocalDate.now()%>" onchange="submitForm('postdatepick')">
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function () {
+                                                var postdateInput = document.getElementById('postdatepick');
+                                                var poststoredDate = localStorage.getItem('selectedDate'); // Lấy ngày đã lưu
+
+                                                // Kiểm tra nếu có ngày đã lưu và thiết lập nó làm giá trị cho datepicker
+                                                if (poststoredDate) {
+                                                postdateInput.value = poststoredDate;
+                                                } else {
+                                                var today = new Date().toISOString().substr(0, 10);
+                                                postdateInput.value = today;
                                                 }
-                                        });
-                                        // Chart.defaults.global.responsive = true;
-                                        </script>
+
+                                                // Khi người dùng thay đổi ngày, lưu ngày mới vào localStorage
+                                                postdateInput.addEventListener('change', function() {
+                                                localStorage.setItem('selectedDate', this.value);
+                                                });
+                                                });
+                                            </script>
+                                        </div>
+                                        <div class="filter-row">
+                                            <!--category select-->
+                                            <div class="form-group">
+                                                <label for="filcate">Filter by Blog Category:</label>
+                                                <select name="filcate" id="filcate" class="form-control"
+                                                        onchange="submitForm('filcate')">
+                                                    <option value="" >All Category</option>
+                                                    <!-- Add role options here -->
+                                                    <c:forEach items="${requestScope.settingList}" var="r">
+                                                        <c:if test="${r.type.equals('blog')}">
+                                                            <option value="${r.id}" ${param.filcate==r.id?"selected":""}>${r.value}</option>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <!--author select-->
+                                            <div class="form-group">
+                                                <label for="filauthor">Filter by Author: </label>
+                                                <select name="filauthor" id="filauthor" class="form-control" onchange="submitForm('filauthor')">
+                                                    <option value="">All Author </option>
+                                                    <c:forEach items="${requestScope.blogAuthors}" var="s">
+                                                        <option value="${s.id}"  ${param.filauthor==s.id?"selected":""}>${s.fullname}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <!--Search-->
+
+                                        </div>
+
                                     </div>
-                                    <div class="col-lg-4">
-                                        <section class="panel">
-                                            <header class="panel-heading">
-                                                Post Filter
-                                            </header>
-                                            <div class="panel-body" >
-                                                <div class="form-group">
-                                                    <label for="postdatepick"  class="form-check-label">Select Date: </label>
-                                                    <input type="date" name="postdatepick" class="form-control" id="postdatepick"
-                                                           value="" max="<%=java.time.LocalDate.now()%>" onchange="submitForm('postdatepick')">
-                                                <script>
-                                                    document.addEventListener('DOMContentLoaded', function () {
-                                                    var postdateInput = document.getElementById('postdatepick');
-                                                    var poststoredDate = localStorage.getItem('selectedDate'); // Lấy ngày đã lưu
-
-                                                    // Kiểm tra nếu có ngày đã lưu và thiết lập nó làm giá trị cho datepicker
-                                                    if (poststoredDate) {
-                                                    postdateInput.value = poststoredDate;
-                                                    } else {
-                                                    var today = new Date().toISOString().substr(0, 10);
-                                                    postdateInput.value = today;
-                                                    }
-
-                                                    // Khi người dùng thay đổi ngày, lưu ngày mới vào localStorage
-                                                    postdateInput.addEventListener('change', function() {
-                                                    localStorage.setItem('selectedDate', this.value);
-                                                    });
-                                                    });
-                                                </script>
-                                            </div>
-                                            <div class="filter-row">
-                                                <!--category select-->
-                                                <div class="form-group">
-                                                    <label for="filcate">Filter by Blog Category:</label>
-                                                    <select name="filcate" id="filcate" class="form-control"
-                                                            onchange="submitForm('filcate')">
-                                                        <option value="" >All Category</option>
-                                                        <!-- Add role options here -->
-                                                        <c:forEach items="${requestScope.settingList}" var="r">
-                                                            <c:if test="${r.type.equals('blog')}">
-                                                                <option value="${r.id}" ${param.filcate==r.id?"selected":""}>${r.value}</option>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-                                                <!--author select-->
-                                                <div class="form-group">
-                                                    <label for="filauthor">Filter by Author: </label>
-                                                    <select name="filauthor" id="filauthor" class="form-control" onchange="submitForm('filauthor')">
-                                                        <option value="">All Author </option>
-                                                        <c:forEach items="${requestScope.blogAuthors}" var="s">
-                                                            <option value="${s.id}"  ${param.filauthor==s.id?"selected":""}>${s.fullname}</option>
-                                                        </c:forEach>
-                                                    </select>
-                                                </div>
-                                                <!--Search-->
-
-                                            </div>
-
-                                        </div>
-                                    </section>
-                                    <!--new post-->
-                                    <div class="panel">
-                                        <header class="panel-heading">
-                                            Newest Posts
-                                        </header>
-                                        <c:forEach items="${requestScope.newpost}" var="u">
-                                            <li class="list-group-item">
-                                                <c:choose>
-                                                    <c:when test="${empty u.imgUrl}">
-                                                        <a href="blogdetail?action=update&ID=${u.id}"><img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle" style="width: 50px; height: 50px;"></a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                        <a href="blogdetail?action=update&ID=${u.id}"><img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle"style="width: 50px; height: 50px;"></a>
-                                                        </c:otherwise>
-                                                    </c:choose> 
-                                                    <c:if test="${fn:length(u.title) > 50}">
-                                                        <c:set var="subTitle" value="${fn:substring(u.title, 0, 50)}" />
-                                                    <a href="blogdetail?action=update&ID=${u.id}">${subTitle}...</a>
-                                                </c:if>
-                                                <c:if test="${fn:length(u.title) <= 50}">
-                                                    <a href="blogdetail?action=update&ID=${u.id}">${u.title}</a>
-                                                </c:if>
-                                            </li>
-                                        </c:forEach>
-                                        <div class="panel-footer bg-white">
-                                            <!-- <span class="pull-right badge badge-info">32</span> -->
-                                            <a class="btn btn-primary btn-md" href="blogdetail?action=add" role="button">
-                                                <i class="fa fa-plus"></i>
-                                                Add New Post
-                                            </a>
-                                        </div>
+                                </section>
+                                <!--new post-->
+                                <div class="panel">
+                                    <header class="panel-heading">
+                                        Newest Posts
+                                    </header>
+                                    <c:forEach items="${requestScope.newpost}" var="u">
+                                        <li class="list-group-item">
+                                            <c:choose>
+                                                <c:when test="${empty u.imgUrl}">
+                                                    <a href="blogdetail?action=update&ID=${u.id}"><img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid rounded-circle" style="width: 50px; height: 50px;"></a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                    <a href="blogdetail?action=update&ID=${u.id}"><img src="<c:url value='/uploads/${u.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle"style="width: 50px; height: 50px;"></a>
+                                                    </c:otherwise>
+                                                </c:choose> 
+                                                <c:if test="${fn:length(u.title) > 50}">
+                                                    <c:set var="subTitle" value="${fn:substring(u.title, 0, 50)}" />
+                                                <a href="blogdetail?action=update&ID=${u.id}">${subTitle}...</a>
+                                            </c:if>
+                                            <c:if test="${fn:length(u.title) <= 50}">
+                                                <a href="blogdetail?action=update&ID=${u.id}">${u.title}</a>
+                                            </c:if>
+                                        </li>
+                                    </c:forEach>
+                                    <div class="panel-footer bg-white">
+                                        <!-- <span class="pull-right badge badge-info">32</span> -->
+                                        <a class="btn btn-primary btn-md" href="blogdetail?action=add" role="button">
+                                            <i class="fa fa-plus"></i>
+                                            Add New Post
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <!--post chart-->
-                            <!-- row end -->
+                        </div>
+                        <!--post chart-->
+                        <!-- row end -->
                     </section><!-- /.content -->
                 </form>
             </aside>

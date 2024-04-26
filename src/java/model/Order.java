@@ -5,6 +5,7 @@
 package model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -13,17 +14,41 @@ import java.util.List;
  */
 public class Order {
 
-    private int id;
-    private List<OrderItem> orderItem; // lech
-    private User customer, sale; // lech
-    private Date createAt, updateAt; // lech
-    private String status, name, email, address;
+    private int id, userid, saleid;
+    private List<OrderItem> orderItem;
+    private User customer, sale;
+    private Date createAt, updateAt;
+    private String status, name, email, address, orderspec;
     private int mobile;
+    private Timestamp createtime;
+    private Double totalamount;
     private double total; // lech
     private int user_id;
     private int sale_id;
 
     public Order() {
+    }
+
+    public Order(int id, int userid, Timestamp createtime, String name, int saleid, String address, String email,
+            int mobile, String status, Double totalamount) {
+        this.id = id;
+        this.userid = userid;
+        this.createtime = createtime;
+        this.name = name;
+        this.saleid = saleid;
+        this.address = address;
+        this.email = email;
+        this.mobile = mobile;
+        this.status = status;
+        this.totalamount = totalamount;
+    }
+
+    public Order(int id, Timestamp createtime, String status, String orderspec, Double totalamount) {
+        this.id = id;
+        this.createtime = createtime;
+        this.status = status;
+        this.orderspec = orderspec;
+        this.totalamount = totalamount;
     }
 
     public Order(int id, List<OrderItem> orderItem, User customer, User sale, Date createAt, Date updateAt,
@@ -74,17 +99,57 @@ public class Order {
         this.mobile = mobile;
     }
 
+    public int getSaleid() {
+        return saleid;
+    }
+
+    public void setSaleid(int saleid) {
+        this.saleid = saleid;
+    }
+
+    public String getOrderspec() {
+        return orderspec;
+    }
+
+    public void setOrderspec(String orderspec) {
+        this.orderspec = orderspec;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    public Timestamp getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Timestamp createtime) {
+        this.createtime = createtime;
+    }
+
+    public Double getTotalamount() {
+        return totalamount;
+    }
+
+    public void setTotalamount(Double totalamount) {
+        this.totalamount = totalamount;
+    }
+
     public Order(int id, double total) {
         this.id = id;
         this.total = total;
     }
 
-    public Order(int id, int user_id, Date create_at, String fullname, int sale_id, String address, String email,
+    public Order(int id, int user_id, Date createAt, String name, int sale_id, String address, String email,
             int mobile, String status, Date update_at) {
         this.id = id;
         this.user_id = user_id;
-        this.createAt = create_at;
-        this.name = fullname;
+        this.createAt = createAt;
+        this.name = name;
         this.sale_id = sale_id;
         this.address = address;
         this.email = email;

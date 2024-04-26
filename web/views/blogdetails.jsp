@@ -109,7 +109,7 @@
                                 <hr class="my-4">
                                 <div class="post-meta">
                                     <ul>
-                                        <li><i class="fa fa-user"></i> ${c.authorName}</li>
+                                        <li><i class="fa fa-user"></i><a href="blogslist?filauthor=${c.authorName}">${c.authorName}</a></li>
                                         <!--/get time and date-->
                                         <%@ page import="java.util.Date" %>
                                         <%@ page import="java.text.SimpleDateFormat" %>
@@ -128,7 +128,7 @@
                                         <li><i class="fa fa-clock-o"></i> <%= formattedTime %></li>
                                         <li><i class="fa fa-calendar"></i> <%= formattedDate %></li>
                                         <!---------------------->
-                                        <li><i class="fa fa-cog"></i> ${c.categoryName}</li>
+                                        <li><i class="fa fa-cog"></i><a href="blogslist?filcate=${c.categoryName}">${c.categoryName}</a></li>
                                     </ul>
                                 </div>
 <!--                                <img class="img-fluid img-thumbnail"  src="${pageContext.request.contextPath}/images/blog/blog-one.jpg" alt="" style="margin-bottom: 5%">-->

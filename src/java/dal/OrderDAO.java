@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -82,6 +83,106 @@ public class OrderDAO {
                 }
             }
         }
+    }
+
+    public List<Order> getOrderByUser(int userid, int offset, int limit) throws SQLException {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT SQL_CALC_FOUND_ROWS\n"
+                + "    o.id,\n"
+                + "    o.create_at,\n"
+                + "    o.status,\n"
+                + "    \n"
+                + "    CONCAT(\n"
+                + "        SUBSTRING_INDEX(GROUP_CONCAT(CONCAT(p.`name`, ' x ', oi.quantity) ORDER BY oi.product_id), ',', 1),\n"
+                + "        CASE\n"
+                + "            WHEN (SUM(oi.quantity) - SUBSTRING_INDEX(GROUP_CONCAT(oi.quantity ORDER BY oi.product_id), ',', 1)) > 0 THEN \n"
+                + "                CONCAT(' and ', (SUM(oi.quantity) - SUBSTRING_INDEX(GROUP_CONCAT(oi.quantity ORDER BY oi.product_id), ',', 1)), ' other products')\n"
+                + "            ELSE ''\n"
+                + "        END\n"
+                + "    ) AS product_wname,\n"
+                + "    SUM(oi.total_amount) AS total_amount_sum\n"
+                + " FROM \n"
+                + "    `swp391_g1_v1`.`order_item` oi\n"
+                + " INNER JOIN \n"
+                + "    `swp391_g1_v1`.`order` o ON oi.order_id = o.id\n"
+                + " INNER JOIN \n"
+                + "    `swp391_g1_v1`.`product` p ON oi.product_id = p.id\n"
+                + "  WHERE o.user_id = ?\n"
+                + " GROUP BY \n"
+                + "    o.id, o.user_id, o.create_at, o.fullname, o.sale_id, o.address, o.email, o.status \n"
+                + " ORDER BY o.create_at DESC LIMIT ?,?;";
+        try {
+
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, userid);
+            stm.setInt(2, offset);
+            stm.setInt(3, limit);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Timestamp createTime = rs.getTimestamp("create_at");
+                String status = rs.getString("status");
+                String orderspec = rs.getString("product_wname");
+                Double totalbill = rs.getDouble("total_amount_sum");
+                Order u = new Order(id, createTime, status, orderspec, totalbill);
+                list.add(u);
+            }
+            rs = stm.executeQuery("SELECT FOUND_ROWS()"); // get total number of row found while execute query
+            if (rs.next()) {
+                this.noOfrecord = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SaleDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+    private int noOfrecord;
+
+    public int getNumberOfRecord() {
+        return noOfrecord;
+    }
+
+    public Order getOrderByID(int orderID) throws SQLException {
+//        List<Blog> list = new ArrayList<>();
+        Order order = null;
+        String sql = "SELECT * FROM swp391_g1_v1.order WHERE id = ?;";
+//        
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, orderID);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int userid = rs.getInt("user_id");
+                Timestamp createTime = rs.getTimestamp("create_at");
+                String fullname = rs.getString("fullname");
+                int saleid = rs.getInt("sale_id");
+                String address = rs.getString("address");
+                String email = rs.getString("email");
+                int mobile = rs.getInt("mobile");
+                String status = rs.getString("status");
+                Double totalamount = rs.getDouble("total_amount");
+//              Setting st = stDAO.getSettingById(roleId);
+                order = new Order(id, userid, createTime, fullname, saleid, address, email, mobile, status, totalamount);
+                return order;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+
+                }
+            }
+
+        }
+
+        return null;
     }
 
     public int getLastInsertId() {
@@ -292,4 +393,5 @@ public class OrderDAO {
         }
         return list;
     }
+
 }

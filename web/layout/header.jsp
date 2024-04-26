@@ -45,21 +45,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="social-icons pull-right">
-                                <ul class="nav navbar-nav">
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div><!--/header_top-->
-
             <div class="header-middle"><!--header-middle-->
                 <div class="container">
                     <div class="row">
@@ -76,8 +64,9 @@
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav">
                                     <li><a href="Profile"><i class="fa fa-user"></i> Account</a></li>
-                                    <li><a href="cartdetail"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-                                        <c:if test="${userSession != null}">
+                                    <li><a href="cartdetail"><i class="fa fa-shopping-cart"></i>
+                                            Cart</a></li>
+                                            <c:if test="${userSession != null}">
                                         <li><a href="Logout"><i class="fa fa-lock"></i> Logout</a></li>
                                         </c:if>
                                         <c:if test="${userSession == null}">
@@ -89,7 +78,6 @@
                     </div>
                 </div>
             </div><!--/header-middle-->
-
             <div class="header-bottom"><!--header-bottom-->
                 <div class="container">
                     <div class="row">
@@ -115,36 +103,36 @@
                                         <a href="blogslist">Blog</a>
                                     </li>
                                     <c:if test="${not empty userSession}">
-                                        <c:if test="${userSession.setting.id == 1}">
-                                            <li>
-                                                <a href="admin/dashboard">Admin</a>
-                                            </li>
-                                        </c:if>
-                                        <c:if test="${userSession.setting.id == 5}">
-                                            <li>
-                                                <a href="marketing/dashboard">Marketing</a>
-                                            </li>
-                                        </c:if>
-                                        <c:if test="${userSession.setting.id == 3 || userSession.setting.id == 2}">
-                                            <li>
-                                                <a href="saleList">Sale</a>
-                                            </li>
-                                        </c:if>
+                                        <li>
+                                            <a href="${pageContext.request.contextPath}/admin/dashboard">Admin</a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${not empty userSession}">
+                                        <li>
+                                            <a href="marketing/dashboard">Marketing</a>
+                                        </li>
+                                    </c:if>
+                                    <c:if test="${not empty userSession}">
+                                        <li>
+                                            <a href="sale/dashboard">Sale</a>
+                                        </li>
                                     </c:if>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div><!--/header-bottom-->
-        </header><!--/header-->
-        <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-        <script src="js/jquery.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.scrollUp.min.js"></script>
-        <script src="js/price-range.js"></script>
-        <script src="js/jquery.prettyPhoto.js"></script>
-        <script src="js/main.js"></script>
-    </body>
+            </div>
+        </div><!--/header-bottom-->
+    </div>
+</header><!--/header-->
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.scrollUp.min.js"></script>
+<script src="js/price-range.js"></script>
+<script src="js/jquery.prettyPhoto.js"></script>
+<script src="js/main.js"></script>
+</body>
 
 </html>

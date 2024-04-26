@@ -59,7 +59,10 @@ public class HomeController extends HttpServlet {
         List<Product> firstList = new ArrayList<>();
         List<Product> secondList = new ArrayList<>();
         
-
+        for (Product product : list) {
+            System.out.println("name: "+product.getName());
+            System.out.println("image: "+product.getImgUrl());
+        }
         try {
             if (list.size() >= 3) {
                 firstList = list.subList(0, 3);
