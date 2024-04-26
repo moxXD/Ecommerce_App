@@ -105,7 +105,11 @@
                                 <i class="fa fa-gear"></i> <span>Settings</span>
                             </a>
                         </li>
-
+<li>
+                            <a href="ContactList">
+                                <i class="fa fa-gear"></i> <span>Contacts</span>
+                            </a>
+                        </li>
                         <!--                        <li>
                                                     <a href="simple.html">
                                                         <i class="fa fa-glass"></i> <span>Simple tables</span>

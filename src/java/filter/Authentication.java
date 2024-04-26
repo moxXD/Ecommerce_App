@@ -18,6 +18,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
@@ -106,6 +107,18 @@ public class Authentication implements Filter {
 	 HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("userSession");
+        String url = req.getRequestURI() + "?" + req.getQueryString();
+        if (url.contains("Profile") || url.contains("user?action=updateprofile")
+                || url.contains("user?action=update_image") || url.contains("Changepassword")) {
+            if (user != null) {
+                chain.doFilter(request, response);
+            } else {
+                res.sendRedirect(req.getContextPath() + "/Login");
+            }
+        } else {
+            chain.doFilter(request, response);
+        }
 	Throwable problem = null;
 	try {
 	    chain.doFilter(request, response);

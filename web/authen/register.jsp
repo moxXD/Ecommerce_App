@@ -43,16 +43,16 @@
                         <div class="signup-form"><!--sign up form-->
                             <h2>New User Signup!</h2>
                             <form action="Register" method="post">
-                                <input type="text" name="name" placeholder="Name"/>
-                                <input type="email" name="gmail" placeholder="Email Address"/>
-                                <input type="password" name="pass" placeholder="Password"/>
+                                <input type="text" name="name" placeholder="Name" required=""/>
+                                <input type="email" name="gmail" placeholder="Email Address" required=""/>
+                                <input type="password" name="pass" placeholder="Password" required=""/>
                                 <button type="submit" class="btn btn-default">Signup</button>
-                            </form> ${nullInput}
-                            ${nameMax}
-                            ${nameMin}
-                            ${passMin}
-                            ${passMax}
-                            ${exitstedMail}
+                            </form> ${requestScope.nullInput}
+                            ${requestScope.nameMax}
+                            ${requestScope.nameMin}
+                            ${requestScope.passMin}
+                            ${requestScope.passMax}
+                            ${requestScope.exitstedMail}
                         </div>
                     </div>
 

@@ -21,7 +21,7 @@ import model.Contact;
  *
  * @author Admin
  */
-@WebServlet(name = "ContactDetail", urlPatterns = {"/ContactDetail"})
+@WebServlet(name = "ContactDetail", urlPatterns = {"/admin/ContactDetail"})
 public class ContactDetail extends HttpServlet {
 
     /**
@@ -80,7 +80,7 @@ public class ContactDetail extends HttpServlet {
         request.setAttribute("contactData", c);
         HttpSession session = request.getSession();
         session.setAttribute("mail", c.getEmail());
-        request.getRequestDispatcher("views/admin/contactDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/admin/contactDetail.jsp").forward(request, response);
     }
 
     /**
