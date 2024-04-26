@@ -26,7 +26,6 @@ import model.Blog;
 import model.Setting;
 import model.User;
 
-
 /**
  *
  * @author Admin
@@ -138,16 +137,12 @@ public class BlogDetailServlet extends HttpServlet {
             Part filePart = request.getPart("file");
             if (filePart != null && filePart.getSize() > 0) {
                 fileName = extractFileName(filePart);
-                // refines the fileName in case it is an absolute path
                 fileName = new File(fileName).getName();
                 filePart.write(this.getFolderUpload().getAbsolutePath() + File.separator + fileName);
             }
-            
             if (action != null && action.equalsIgnoreCase("add")) {
-                
                 addNewBlog(request, response, fileName);
             } else if (action != null && action.equalsIgnoreCase("update")) {
-                
                 updateBlog(request, response, fileName, id_raw);
             }
         } catch (Exception e) {
@@ -256,7 +251,6 @@ public class BlogDetailServlet extends HttpServlet {
         }
         try {
             blogDAO.addNewBlog(categoryid, authorid, imgUrl, title, content, status, feature, sumary);
-
         } catch (NumberFormatException e) {
             Logger.getLogger(BlogDetailServlet.class.getName()).log(Level.SEVERE, null, e);
         }

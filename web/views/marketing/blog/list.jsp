@@ -63,7 +63,7 @@
                 </head>
 
                 <body>
-                    <%@include file="../../layout/header.jsp" %>
+                    <%@include file="../../marketing/layout/header.jsp" %>
 
 
                         <div class="wrapper row-offcanvas row-offcanvas-left">
@@ -339,7 +339,7 @@
                         </div>
 
 
-                        <%@include file="../../layout/footer.jsp" %>
+                        <%@include file="../../marketing/layout/footer.jsp" %>
                             <script type="text/javascript">
                                 function confirmSubmit() {
                                     if (confirm("Are you sure you want to Change this status?")) {

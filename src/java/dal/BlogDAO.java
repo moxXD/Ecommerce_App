@@ -356,13 +356,13 @@ public class BlogDAO extends DBContext {
             stm.setInt(9, id);
             stm.executeUpdate();
         } catch (SQLException e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }
@@ -394,13 +394,13 @@ public class BlogDAO extends DBContext {
             stm.setString(8, sumary);
             stm.executeUpdate();
         } catch (SQLException e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                    Logger.getLogger(BlogDAO.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
         }
