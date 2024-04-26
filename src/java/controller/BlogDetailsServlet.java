@@ -70,6 +70,7 @@ public class BlogDetailsServlet extends HttpServlet {
         SettingDAO settingDAo = new SettingDAO();
         List<Setting> list = new ArrayList<>();
         List<User> user = new ArrayList<>();
+        List<Blog> newestBlog = new ArrayList<>();
         Blog blog = null;
         try {
                 id = Integer.parseInt(id_raw);
@@ -92,10 +93,12 @@ public class BlogDetailsServlet extends HttpServlet {
             //Setting information
             list = settingDAo.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
+            newestBlog = blogDAO.getNewestPost("public");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        request.setAttribute("newpost", newestBlog);
         request.setAttribute("blogAuthors", user);
         request.setAttribute("settingList", list);
         request.setAttribute("blogdetails", blog);

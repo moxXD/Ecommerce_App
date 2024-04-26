@@ -9,6 +9,7 @@ import dal.SettingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +30,13 @@ import model.Setting;
  * @author Admin
  */
 @WebServlet(name = "ProductDetail", urlPatterns = {"/marketing/productdetail"})
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class ProductDetail extends HttpServlet {
+
+    ProductDAO pd = new ProductDAO();
+    SettingDAO sd = new SettingDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,17 +77,14 @@ public class ProductDetail extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        ProductDAO pd = new ProductDAO();
-        SettingDAO sd = new SettingDAO();
         String id_raw = request.getParameter("id");
         List<Setting> list = new ArrayList<>();
         list = sd.getAllSetting();
         int id;
         Product p = null;
         try {
-            if (action.equals("update")||action.equals("view")) {
+            if (action.equals("update") || action.equals("view")) {
                 id = Integer.parseInt(id_raw);
-                p = pd.getProduct(id);
                 int categoryid = pd.getProduct(id).getCategoryProductId();
                 int brandid = pd.getProduct(id).getBrandid();
                 String imgURL = pd.getProduct(id).getImageUrl();
@@ -90,6 +94,16 @@ public class ProductDetail extends HttpServlet {
                 boolean status = pd.getProduct(id).isStatus();
                 String description = pd.getProduct(id).getDescription();
                 String specification = pd.getProduct(id).getSpecification();
+//                System.out.println("id: "+id_raw);
+//                System.out.println("cate: "+String.valueOf(categoryid));
+//                System.out.println("brand: "+String.valueOf(brandid));
+//                System.out.println("img: " +imgURL);
+//                System.out.println("name: "+name);
+//                System.out.println("stock: "+String.valueOf(stock));
+//                System.out.println("price: "+String.valueOf(price));
+//                System.out.println("status: "+String.valueOf(status));
+//                System.out.println("des: "+description);
+//                System.out.println("spec: "+specification);
                 p = new Product(name, brandid, categoryid, price, description, specification, imgURL, status, stock);
                 //=========================================
             }
@@ -152,13 +166,13 @@ public class ProductDetail extends HttpServlet {
         // get input data
         ProductDAO pd = new ProductDAO();
         boolean status;
+        String price_raw = request.getParameter("price");
         String name = request.getParameter("name");
         int categoryid = Integer.parseInt(request.getParameter("category"));
         int brandid = Integer.parseInt(request.getParameter("brand"));
-        double price = Double.parseDouble(request.getParameter("price"));
+        double price = Double.parseDouble(price_raw);
         String description = request.getParameter("description");
         String specification = request.getParameter("specification");
-        String imageUrl = request.getParameter("imageUrl");
         String status_raw = request.getParameter("status");
         int stock = Integer.parseInt(request.getParameter("stock"));
         if (status_raw.equals("Active")) {
@@ -167,7 +181,7 @@ public class ProductDetail extends HttpServlet {
             status = false;
         }
         try {
-            pd.add(new Product(name, brandid, categoryid, price, description, specification, imageUrl, status, stock));
+            pd.add(new Product(name, brandid, categoryid, price, description, specification, imgUrl, status, stock));
 
         } catch (NumberFormatException e) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -190,16 +204,17 @@ public class ProductDetail extends HttpServlet {
             HttpServletResponse response, String imgUrl, String id_raw) throws IOException, ServletException {
         ProductDAO pd = new ProductDAO();
         boolean status;
+        double price = 0.0;
         int id = Integer.parseInt(id_raw);
+//        String price_raw = request.getParameter("price");
         String name = request.getParameter("name");
         int categoryid = Integer.parseInt(request.getParameter("category"));
         int brandid = Integer.parseInt(request.getParameter("brand"));
-        double price = Double.parseDouble(request.getParameter("price"));
+        price = Double.parseDouble(request.getParameter("price"));
         String description = request.getParameter("description");
         String specification = request.getParameter("specification");
-        String imageUrl = request.getParameter("imageUrl");
-        String status_raw = request.getParameter("status");
-        int stock = Integer.parseInt(request.getParameter("stock"));
+        String status_raw = request.getParameter("status").trim();
+        int stock = Integer.parseInt(request.getParameter("stock").trim());
         if (status_raw.equalsIgnoreCase("Active")) {
             status = true;
         } else {
@@ -207,7 +222,7 @@ public class ProductDetail extends HttpServlet {
         }
 
         try {
-            pd.updateProduct(id, name, categoryid, brandid, price, description, specification, status, stock, imageUrl);
+            pd.updateProduct(id, name, categoryid, brandid, price, description, specification, status, stock, imgUrl);
 
         } catch (NumberFormatException e) {
             Logger.getLogger(BlogDetailServlet.class.getName()).log(Level.SEVERE, null, e);

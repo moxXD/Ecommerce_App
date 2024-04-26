@@ -58,18 +58,7 @@
                             </ol>
 
                             <div class="carousel-inner">
-                                <div class="item active">
-                                    <div class="col-sm-6">
-                                        <h2>Free E-Commerce Template</h2>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                                        <button type="button" class="btn btn-default get">Get it now</button>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <img src="images/home/girl1.jpg" class="girl img-responsive" alt="" />
-                                        <img src="images/home/pricing.png"  class="pricing" alt="" />
-                                    </div>
-                                </div>
-                                <div class="item">
+<!--                                <div class="item active">
                                     <div class="col-sm-6">
                                         <h2>100% Responsive Design</h2>
                                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
@@ -77,21 +66,38 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <img src="images/home/girl2.jpg" class="girl img-responsive" alt="" />
-                                        <img src="images/home/pricing.png"  class="pricing" alt="" />
+                                        
                                     </div>
-                                </div>
+                                </div>-->
 
-                                <div class="item">
-                                    <div class="col-sm-6">
-                                        <h2>Free Ecommerce Template</h2>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                                        <button type="button" class="btn btn-default get">Get it now</button>
+                                <c:forEach var="slider" items="${requestScope.slider}" varStatus="status">
+                                    <div class="${status.first ? 'item active' : 'item'}">
+                                        <div class="col-sm-6">
+                                            <h1><span>TECH</span> MART</h1>
+                                            <h2>${slider.name}</h2>
+                                            <p>${slider.description}</p>
+                                            <a href="${pageContext.request.contextPath}/${slider.url}" type="button" class="btn btn-default get">View more</a>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <c:choose>
+                                                <c:when test="${empty slider.image_url}">
+                                                    <img id="img-preview"
+                                                         src="${pageContext.request.contextPath}/images/blog/images1.jpg"
+                                                         alt="Thumbnail" class="img-fluid"
+                                                         style="height: 440px; width: 480px">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="<c:url value='/uploads/${slider.image_url}'/>"
+                                                         id="img-preview" alt="Avatar"
+                                                         class="img-fluid rounded-circle"
+                                                         style="height: 440px; width: 480px">
+                                                </c:otherwise>
+                                            </c:choose>
+
+                                        </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <img src="images/home/girl3.jpg" class="girl img-responsive" alt="" />
-                                        <img src="images/home/pricing.png" class="pricing" alt="" />
-                                    </div>
-                                </div>
+                                </c:forEach>
+
 
                             </div>
 
@@ -129,11 +135,11 @@
                                                                     </c:otherwise>
                                                                 </c:choose>
                                                             </a>
-                                                            <c:if test="${fn:length(f.name) > 15}">
-                                                                <c:set var="subFeature" value="${fn:substring(f.name, 0, 15)}" />
+                                                            <c:if test="${fn:length(f.name) > 25}">
+                                                                <c:set var="subFeature" value="${fn:substring(f.name, 0, 25)}" />
                                                                 <a href="productdetail?id=${f.id}"><h2>${subFeature}...<h2></a>
                                                                         </c:if>
-                                                                        <c:if test="${fn:length(f.name) <= 15}">
+                                                                        <c:if test="${fn:length(f.name) <= 25}">
                                                                             <a href="productdetail?id=${f.id}"><h2>${f.name}</h2></a>
                                                                                 </c:if>
                                                                                 <fmt:formatNumber value="${f.price}" type="currency" currencySymbol="VNĐ" var="featurePrice" />
@@ -155,8 +161,8 @@
                                                                         <c:if test="${fn:length(f.specification) <= 75}">
                                                                             <a href="productdetail?id=${f.id}"><p>${f.specification}</p></a>
                                                                                 </c:if>
-                                                                        <a href="productdetail?id=${f.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
-                                                                        <button class="btn btn-default add-to-cart" onclick="addToCart(${f.id}) > <i class="fa fa-shopping-cart"></i>Add to cart</button>
+                                                                        <a href="productdetail?id=${f.id}" class="btn btn-default add-to-cart"><i class="fa fa-info-circle"></i>Details</a>
+                                                                        <button class="btn btn-default add-to-cart" onclick="addToCart(${f.id})" > <i class="fa fa-shopping-cart"></i>Add to cart</button>
                                                                         </div>
 
                                                                         </div>
@@ -209,8 +215,8 @@
                                                                                                         <c:if test="${fn:length(s.specification) <= 75}">
                                                                                                             <a href="productdetail?id=${s.id}"><p>${s.specification}</p></a>
                                                                                                                 </c:if>
-                                                                                                        <a href="productdetail?id=${s.id}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Details</a>
-                                                                                                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                                                                                        <a href="productdetail?id=${s.id}" class="btn btn-default add-to-cart"><i class="fa fa-info-circle"></i>Details</a>
+                                                                                                        <button class="btn btn-default add-to-cart" onclick="addToCart(${s.id})" > <i class="fa fa-shopping-cart"></i>Add to cart</button>
                                                                                                         </div>
 
                                                                                                         </div>
@@ -279,7 +285,7 @@
 
                                                                                                                                                             <button class="btn btn-info">Buy now</button>
                                                                                                                                                             <button class="btn btn-danger "
-                                                                                                                                                            onclick="addToCart(${p.id})"
+                                                                                                                                                                    onclick="addToCart(${p.id})"
                                                                                                                                                                     type="button"
                                                                                                                                                                     >Add to cart</button>
                                                                                                                                                             </div>
@@ -346,29 +352,29 @@
                                                                                                                                                         </div>
                                                                                                                                                         </section>
                                                                                                                                                         <%@ include file="../layout/footer.jsp" %>
-<script>
-                                                                                                                                                            function addToCart(id) 
-            {
-                        var xhr = new XMLHttpRequest();
-                xhr.open("POST", "addtocart", true);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        // Xử lý phản hồi từ server nếu cần
-                        alert('product has been add to cart') // Cập nhật tổng chi phí sau khi cập nhật giỏ hàng
-                        //                        var toastElement = document.querySelector('.toast');
-                        //                        var toast = new bootstrap.Toast(toastElement);
-                        //                        toast.show();
-            }
-        };
-        xhr.send("productId=" + id);
-        }
-        
-        
-                                                                                                                                                            </script>
-                                                                                                                                                            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-                                                                                                                                                            <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
-                                                                                                                                                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-                                                                                                                                                            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-                                                                                                                                                            </body>
-                                                                                                                                                            </html>
+                                                                                                                                                        <script>
+                                                                                                                                                            function addToCart(id)
+                                                                                                                                                            {
+                                                                                                                                                                var xhr = new XMLHttpRequest();
+                                                                                                                                                                xhr.open("POST", "addtocart", true);
+                                                                                                                                                                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                                                                                                                                                xhr.onreadystatechange = function () {
+                                                                                                                                                                    if (xhr.readyState == 4 && xhr.status == 200) {
+                                                                                                                                                                        // Xử lý phản hồi từ server nếu cần
+                                                                                                                                                                        alert('product has been add to cart') // Cập nhật tổng chi phí sau khi cập nhật giỏ hàng
+                                                                                                                                                                        //                        var toastElement = document.querySelector('.toast');
+                                                                                                                                                                        //                        var toast = new bootstrap.Toast(toastElement);
+                                                                                                                                                                        //                        toast.show();
+                                                                                                                                                                    }
+                                                                                                                                                                };
+                                                                                                                                                                xhr.send("productId=" + id);
+                                                                                                                                                            }
+
+
+                                                                                                                                                        </script>
+                                                                                                                                                        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+                                                                                                                                                        <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+                                                                                                                                                        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+                                                                                                                                                        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                                                                                                                                                        </body>
+                                                                                                                                                        </html>

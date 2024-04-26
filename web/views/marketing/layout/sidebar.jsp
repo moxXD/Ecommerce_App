@@ -59,14 +59,19 @@
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="active">
+                <li class="">
                     <a href="bloglist">
                         <i class="fa fa-tasks"></i> <span>Blog List</span>
                     </a>
                 </li>
                 <li>
                     <a href="productlist">
-                        <i class="fa fa-shopping-cart"></i> <span>Product</span>
+                        <i class="fa fa-shopping-cart"></i> <span>Product List</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="sliderlist">
+                        <i class="fa fa-list"></i> <span>Slider List</span>
                     </a>
                 </li>
                 <li class="">

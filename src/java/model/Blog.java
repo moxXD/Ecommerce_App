@@ -21,7 +21,10 @@ public class Blog {
     
     public Blog() {
     }
-
+    public Blog(int Id, String title){
+        this.Id = Id;
+        this.title = title;
+    }
     public Blog(int categoryId, int Id, int authorId, String imgUrl, String title, String detail, boolean status, Timestamp createTime, Timestamp updateTime, String authorName, String categoryName, boolean is_featured, String sumary) {
         this.categoryId = categoryId;
         this.Id = Id;

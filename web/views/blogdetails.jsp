@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
     <%@include file="../../../layout/header.jsp" %>
@@ -94,10 +95,44 @@
                                             </select>
                                         </div>
                                     </div>
-                                    
+
                                 </div><!--/category-products-->
 
                             </form>
+                        </div>
+                        <div class="left-sidebar">
+                            <h2>New Blogs</h2>
+                            <!--<div class="panel-group category-products" id="accordian">category-productsr-->
+                            <c:forEach items="${requestScope.newpost}" var="u">
+                                <li class="list-group-item">
+                                    <c:choose>
+                                        <c:when test="${empty u.imgUrl}">
+                                            <a href="blogdetails?id=${u.id}"><img
+                                                    id="img-preview"
+                                                    src="${pageContext.request.contextPath}/images/blog/images1.jpg"
+                                                    alt="Thumbnail"
+                                                    class="img-fluid rounded-circle"
+                                                    style="width: 50px; height: 50px;"></a>
+                                            </c:when>
+                                            <c:otherwise>
+                                            <a href="blogdetails?id=${u.id}"><img
+                                                    src="<c:url value='/uploads/${u.imgUrl}'/>"
+                                                    id="img-preview" alt="Avatar"
+                                                    class="img-fluid rounded-circle"
+                                                    style="width: 50px; height: 50px;"></a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:if test="${fn:length(u.title) > 20}">
+                                            <c:set var="subTitle"
+                                                   value="${fn:substring(u.title, 0, 20)}" />
+                                        <a href="blogdetails?id=${u.id}">${subTitle}...</a>
+                                    </c:if>
+                                    <c:if test="${fn:length(u.title) <= 20}">
+                                        <a href="blogdetails?id=${u.id}">${u.title}</a>
+                                    </c:if>
+                                </li>
+                            </c:forEach>   
+
                         </div>
                     </div>
                     <div class="col-sm-9">

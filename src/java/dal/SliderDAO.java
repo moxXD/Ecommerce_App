@@ -7,8 +7,11 @@ package dal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Slider;
 
 /**
@@ -34,12 +37,35 @@ public class SliderDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getBoolean(6),
-                        rs.getInt(7),
-                        rs.getBoolean(8)));
+                        rs.getBoolean(6)));
             }
         } catch (Exception e) {
-            System.out.println("list");
+            System.err.println(e);
+        }
+
+        return list;
+    }
+
+    public List<Slider> getAllSliderForHomePage() {
+        List<Slider> list = new ArrayList<>();
+        String sql = "SELECT * FROM `swp391_g1_v1`.`slider` \n"
+                + "WHERE slider.status = true\n"
+                + "ORDER BY slider.id DESC \n"
+                + "LIMIT 3;";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Slider(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getBoolean(6)));
+            }
+        } catch (Exception e) {
+            System.err.println(e);
         }
 
         return list;
@@ -54,7 +80,8 @@ public class SliderDAO extends DBContext {
             ps.setInt(1, sid);
             ps.executeUpdate();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -73,62 +100,51 @@ public class SliderDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getBoolean(6),
-                        rs.getInt(7),
-                        rs.getBoolean(8));
+                        rs.getBoolean(6));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return null;
     }
 
-    public Slider editSlider(String name, String description, String url, String image_url, boolean status, int featured_item_id, boolean type, int id) {
+    public Slider editSlider(String name, String description, String image_url, boolean status, int id) {
 
         String sql = "UPDATE `swp391_g1_v1`.`slider`\n"
-                + "SET\n"
-                + "`name` = ?,\n"
-                + "`description` = ?,\n"
-                + "`url` = ?,\n"
-                + "`image_url` = ?,\n"
-                + "`status` = ?,\n"
-                + "`featured_item_id` = ?,\n"
-                + "`type` = ?\n"
-                + "WHERE `id` = ?";
+                + " SET\n"
+                + " `name` = ?,\n"
+                + " `description` = ?,\n"
+                + " `image_url` = ?,\n"
+                + " `status` = ?\n"
+                + " WHERE `id` = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, name);
             ps.setString(2, description);
-            ps.setString(3, url);
-            ps.setString(4, image_url);
-            ps.setBoolean(5, status);
-            ps.setInt(6, featured_item_id);
-            ps.setBoolean(7, type);
-            ps.setInt(8, id);
+            ps.setString(3, image_url);
+            ps.setBoolean(4, status);
+            ps.setInt(5, id);
             ps.executeUpdate();
         } catch (Exception e) {
         }
         return null;
     }
 
-    public Slider insertSlider(String name, String description, String url, String image_url, boolean status, int featured_item_id, boolean type) {
+    public Slider insertSlider(String name, String description, String url, String image_url, boolean status) {
 
         String sql = "INSERT INTO `swp391_g1_v1`.`slider`\n"
-                + "(`name`,\n"
-                + "`description`,\n"
-                + "`url`,\n"
-                + "`image_url`,\n"
-                + "`status`,\n"
-                + "`featured_item_id`,\n"
-                + "`type`)\n"
-                + "VALUES\n"
-                + "(?,\n"
-                + "?,\n"
-                + "?,\n"
-                + "?,\n"
-                + "?,\n"
-                + "?,\n"
-                + "?)";
+                + " (`name`,\n"
+                + " `description`,\n"
+                + " `url`,\n"
+                + " `image_url`,\n"
+                + " `status`)\n"
+                + " VALUES\n"
+                + " (?,\n"
+                + " ?,\n"
+                + " ?,\n"
+                + " ?,\n"
+                + " ?)";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(sql);
@@ -137,10 +153,9 @@ public class SliderDAO extends DBContext {
             ps.setString(3, url);
             ps.setString(4, image_url);
             ps.setBoolean(5, status);
-            ps.setInt(6, featured_item_id);
-            ps.setBoolean(7, type);
             ps.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return null;
     }
@@ -178,9 +193,7 @@ public class SliderDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getBoolean(6),
-                        rs.getInt(7),
-                        rs.getBoolean(8)));
+                        rs.getBoolean(6)));
             }
         } catch (Exception e) {
         }
@@ -204,9 +217,7 @@ public class SliderDAO extends DBContext {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5),
-                        rs.getBoolean(6),
-                        rs.getInt(7),
-                        rs.getBoolean(8)));
+                        rs.getBoolean(6)));
             }
         } catch (Exception e) {
         }

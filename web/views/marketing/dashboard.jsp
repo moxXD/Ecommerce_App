@@ -72,40 +72,7 @@
                                 <!-- Left side column. contains the logo and sidebar -->
                                 <aside class="left-side sidebar-offcanvas">
                                     <!-- sidebar: style can be found in sidebar.less -->
-                                    <section class="sidebar">
-                                        <!-- Sidebar user panel -->
-                                        <div class="user-panel">
-                                            <div class="pull-left image">
-                                                <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
-                                                    class="img-circle" alt="User Image" />
-                                            </div>
-                                            <div class="pull-left info">
-                                                <p>Hello, Thanh</p>
-                                            </div>
-                                        </div>
-                                        <ul class="sidebar-menu">
-                                            <li>
-                                                <a href="dashboard">
-                                                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                                                </a>
-                                            </li>
-                                            <li class="active">
-                                                <a href="bloglist">
-                                                    <i class="fa fa-tasks"></i> <span>Blog List</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="productlist">
-                                                    <i class="fa fa-shopping-cart"></i> <span>Product</span>
-                                                </a>
-                                            </li>
-                                            <li class="">
-                                                <a href="${pageContext.request.contextPath}/home">
-                                                    <i class="fa fa-arrow-left"></i> <span>Home</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </section>
+                                    <%@include file="../marketing/layout/sidebar.jsp" %>
                                     <!-- /.sidebar -->
                                 </aside>
                                 <aside class="right-side">

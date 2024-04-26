@@ -119,9 +119,6 @@ public class ProductList extends HttpServlet {
             }
         }
 
-        System.out.println("cate: " + cateId);
-        System.out.println("bramd: " + brandId);
-
         // get pagination product list
         listProduct = pd.getAllProductList((page - 1) * recordPerPage,
                 recordPerPage,
@@ -130,7 +127,7 @@ public class ProductList extends HttpServlet {
                 statusFilter,
                 sortColumn,
                 sortOrder,searchQuery);
-
+        
         // get number of record found
         int noOfrecord = pd.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);

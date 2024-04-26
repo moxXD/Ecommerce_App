@@ -82,45 +82,14 @@
             <!-- Left side column. contains the logo and sidebar -->
             <aside class="left-side sidebar-offcanvas">
                 <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
-                                 class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>Hello, Jane</p>
-
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                        </div>
-                    </div>
-                    <ul class="sidebar-menu">
-                        <li>
-                            <a href="dashboard">
-                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="userlist">
-                                <i class="fa fa-users"></i> <span>Blog List</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="productlist">
-                                <i class="fa fa-gear"></i> <span>Product List</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </section>
+                <%@include file="../layout/sidebar.jsp" %>
                 <!-- /.sidebar -->
             </aside>
             <aside class="right-side">
                 <section class="content">
                     <div class="container" >
                         <div class="row ">
-                            <form method="post" action="blogdetail" enctype="multipart/form-data">
+                            <form method="post" action="productdetail" enctype="multipart/form-data">
                                 <div class="col">
                                     <div class="col-sm-12">
                                         <div class="blog-post-area">
@@ -130,20 +99,20 @@
                                             <div class="row" style="margin-bottom: 5%; margin-top: 3%">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="title">Name:</label> ${p.categoryProductId}
-                                                        <input name="title" type="text" class="form-control" id="title" value="${p.name}">
-                                                        <span id="titleError" class="error-msg"></span>
+                                                        <label for="title">Product Name:</label>
+                                                        <input name="name" type="text" class="form-control" id="name" value="${p.name}">
+                                                        <span id="nameError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group ">
                                                         <div class="form-group col-md-3 ">
-                                                            <label for="inputLabel1">Stock  </label>
-                                                            <input  name="sumary" type="text" class="form-control " id="sumary" value="${p.stock} " >
-                                                            <span id="sumaryError" class="error-msg"></span>
+                                                            <label for="inputLabel1">Stock</label>
+                                                            <input name="stock" type="number" class="form-control" id="stock" value="${p.stock}" >
+                                                            <span id="stockError" class="error-msg"></span>
                                                         </div> 
                                                         <div class="form-group col-md-3 ">
                                                             <label for="inputLabel1">Price</label>
-                                                            <input  name="sumary" type="text" class="form-control col-md-3" id="sumary" value="${p.price}" >
-                                                            <span id="sumaryError" class="error-msg"></span>
+                                                            <input  name="price" type="text" class="form-control col-md-3" id="price" value="${p.price}" >
+                                                            <span id="priceError" class="error-msg"></span>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
@@ -152,23 +121,23 @@
                                                             <option value="" disabled selected hidden>Choose category of your product</option>
                                                             <c:forEach items="${requestScope.settingList}" var="s">
                                                                 <c:if test="${s.type.equals('product category')}">
-                                                                    <option value="${s.id}" ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
+                                                                    <option value="${s.id}" ${p.categoryProductId == s.id ? "selected" : ""} >${s.value}</option>
                                                                 </c:if>
                                                             </c:forEach>
                                                         </select>
                                                         <span id="cateError" class="error-msg"></span>
                                                     </div>
                                                     <div class="form-group col-md-12">
-                                                        <label for="author">Brand:</label>
-                                                        <select  id="author" name="brand" class="form-control">
+                                                        <label for="author">Brand: </label>
+                                                        <select  id="brand" name="brand" class="form-control">
                                                             <option value="" disabled selected hidden>Choose brand of your product</option>
                                                             <c:forEach items="${requestScope.settingList}" var="s">
                                                                 <c:if test="${s.type.equals('brand')}">
-                                                                    <option value="${s.id}" ${c.categoryName == s.value ? "selected" : ""} >${s.value}</option>
+                                                                    <option value="${s.id}" ${p.brandid == s.id ? "selected" : ""} >${s.value}</option>
                                                                 </c:if>
                                                             </c:forEach>
                                                         </select>
-                                                        <span id="authorError" class="error-msg"></span>
+                                                        <span id="brandError" class="error-msg"></span>
                                                     </div> 
                                                     <div style="margin-bottom: 5%">
                                                         <div class="row">
@@ -177,67 +146,64 @@
                                                             </div>
                                                         </div>
                                                         <div class="row form-check-inline">
-                                                            <div class="col-md-3 ">
+                                                            <div class="col-md-8 ">
                                                                 <div class="form-check form-check-inline">
                                                                     <input  class="form-check-input" type="radio" name="status" id="showRadio" value="Active" ${p.status == true ? "checked" : ""} >
                                                                     <label class="form-check-label" for="showRadio">Active</label>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-3" style="margin-left: 30%;">
+                                                            <div class="col-md-4">
                                                                 <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio" name="status" id="hideRadio" value="InActice" ${p.status == false ? "checked" : ""} >
                                                                     <label class="form-check-label" for="hideRadio">InActice</label>
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
-
-                                                    </div>
-                                                    <div> <div class="row">
+                                                        <div class="row">
                                                             <div class="col-md-12">
-                                                                <span id="featureError" class="error-msg"></span>
+                                                                <span style="height: 20px" id="statusError" class="error-msg"></span>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
-
                                                 <div class="form-right col-md-6">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="thumbnail">Image: </label>
                                                             <c:choose>
-                                                                <c:when test="${empty p.imgUrl}">
-                                                                    <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid mb-4">
+                                                                <c:when test="${empty p.imageUrl}">
+                                                                    <img id="img-preview" src="${pageContext.request.contextPath}/images/blog/images1.jpg" alt="Thumbnail" class="img-fluid mb-4 thumbnail">
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <img src="<c:url value='/uploads/${p.imgUrl}'/>" id="img-preview" alt="Avatar" class="img-fluid rounded-circle mb-4">
+                                                                    <img src="<c:url value='/uploads/${p.imageUrl}'/>"id="img-preview" alt="Avatar" class="img-fluid mb-4 thumbnail">
                                                                 </c:otherwise>
-                                                            </c:choose>                                                           
+                                                            </c:choose> 
                                                             <input type="file" name="file" id="file-input" accept="image/*">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <!-- -->
-
                                             <div class="col-md-12" style="margin-bottom: 5%">
-                                                <label for="content">Description</label>
-                                                <input id="content" name="description" style="height: 250px; resize: none;" value="${c.description}" class="form-control"/>
-                                                <span id="contentError" class="error-msg"></span>
+                                                <label for="specification">Specification: </label>
+                                                <textarea id="specification" name="specification" style="height: 100px; resize: none;"class="form-control">${p.specification}</textarea>
+                                                <span id="specificationError" class="error-msg"></span>
                                             </div>
                                             <div class="col-md-12" style="margin-bottom: 5%">
-                                                <label for="content">Specificatoin</label>
-                                                <input id="content" name="specification" style="height: 250px; resize: none;"value="${p.specification}" class="form-control"/>
-                                                <span id="contentError" class="error-msg"></span>
+                                                <label for="description">Description</label>
+                                                <textarea id="description" name="description" style="height: 250px; resize: none;" value="${c.description}" class="form-control">${p.description}</textarea>
+                                                <script>
+                                                    CKEDITOR.replace('description', {
+                                                        resize_enabled: false // Ngăn chặn CKEditor resize
+                                                    });
+                                                </script>
+                                                <span id="descriptionError" class="error-msg"></span>
                                             </div>
                                             <input type="hidden" name="formAction" value="${param.action.equals("add") ? "add": "update" }">
-                                            <input type="hidden" name="blogID" value="${param.ID}">
+                                            <input type="hidden" name="productID" value="${param.id}">
                                             <c:if test="${not empty err}">
                                                 <div class="error-msg">${err}</div>
                                             </c:if>
-
                                             <div class="row" style="margin-bottom: 5%">
                                                 <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
                                                     <button type="submit" class="btn btn-primary btn-block" id="addButton" onclick="validateInputs(event)" >Add</button>
@@ -270,96 +236,115 @@
         //////////////////////
         //test validate
         function validateInputs(event) {
-            var title = document.getElementById("name").value;
-            var sumary = document.getElementById("description").value;
-            var category = document.getElementById("category").value;
-            var author = document.getElementById("brand").value;
+            var name = document.getElementById("name").value;
+            var price = document.getElementById("price").value;
+            var stock = document.getElementById("stock").value;
+            var brand = document.getElementById("brand").value;
             var showRadioChecked = document.getElementById('showRadio').checked;
             var hideRadioChecked = document.getElementById('hideRadio').checked;
-            var yesRadioChecked = document.getElementById('yesRadio').checked;
-            var noRadioChecked = document.getElementById('noRadio').checked;
-            var content = document.getElementById("content").value;
+            var specification = document.getElementById("specification").value;
+            var description = document.getElementById("description").value;
+            var category = document.getElementById("category").value;
 
 
 
-            var titleError = document.getElementById("titleError");
-            var sumaryError = document.getElementById("sumaryError");
-            var cateError = document.getElementById("cateError");
-            var authorError = document.getElementById("authorError");
+            var nameError = document.getElementById("nameError");
+            var priceError = document.getElementById("priceError");
+            var stockError = document.getElementById("stockError");
+            var brandError = document.getElementById("brandError");
             var statusError = document.getElementById("statusError");
-            var featureError = document.getElementById("featureError");
-            var contentError = document.getElementById("contentError");
+            var specificationError = document.getElementById("specificationError");
+            var descriptionError = document.getElementById("descriptionError");
+            var cateError = document.getElementById("cateError");
 
-            titleError.innerHTML = '';
-            sumaryError.innerHTML = '';
-            cateError.innerHTML = '';
-            authorError.innerHTML = '';
+            nameError.innerHTML = '';
+            priceError.innerHTML = '';
+            stockError.innerHTML = '';
+            brandError.innerHTML = '';
             statusError.innerHTML = '';
-            featureError.innerHTML = '';
-            contentError.innerHTML = '';
+            specificationError.innerHTML = '';
+            descriptionError.innerHTML = '';
+            cateError.innerHTML = '';
             //check empty
-            if (title.trim() === '') {
-                titleError.innerHTML = 'Please enter Title of blog.';
+            if (name.trim() === '') {
+                nameError.innerHTML = 'Please Enter Name of Product.';
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
-            if (sumary.trim() === '') {
-                sumaryError.innerHTML = 'Please enter Brief of blog.';
+            if (price.trim() === '') {
+                priceError.innerHTML = 'Please Enter Price of Product.';
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            if (stock.trim() === '') {
+                stockError.innerHTML = 'Please Enter Stock of Product.';
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
             if (category.trim() === '') {
-                cateError.innerHTML = 'Please choose Category of blog.';
+                cateError.innerHTML = 'Please Choose Category of Product.';
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
-            if (author.trim() === '') {
-                authorError.innerHTML = 'Please choose Author of blog.';
+            if (brand.trim() === '') {
+                brandError.innerHTML = 'Please Choose Brand of Product.';
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
             if (!showRadioChecked && !hideRadioChecked) {
-                statusError.innerHTML = 'Please choose Status of your blog';
+                statusError.innerHTML = 'Please Choose Status of Product';
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
-            if (!yesRadioChecked && !noRadioChecked) {
-                featureError.innerHTML = 'Please choose Feature of your blog';
+            if (specification.trim() === '') {
+                specificationError.innerHTML = 'Please Enter Specification of Product.';
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
-            var editorContent = CKEDITOR.instances.content.getData(); // Lấy nội dung của CKEditor
+            var editorContent = CKEDITOR.instances.description.getData(); // Lấy nội dung của CKEditor
             if (!editorContent.trim()) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
-                contentError.innerHTML = 'Please enter Content of blog.'; // Thông báo lỗi
+                descriptionError.innerHTML = 'Please Enter Desciption of Product.'; // Thông báo lỗi
                 event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
                 return;
             }
 
 //            return true;
 //check length and special character
-            if (title.trim().length > 100) {
-                titleError.innerHTML = "Title must less than 100 characters";
+            if (name.trim().length > 100) {
+                nameError.innerHTML = "Name must less than 100 characters";
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
-            if (sumary.trim().length > 250) {
-                sumaryError.innerHTML = "Title must less than 250 characters";
-                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-                return;
-            }
-
-            // Kiểm tra input không chứa ký tự đặc biệt
-            var specialCharacters = /[@#$^&*{}|<>]/;
-            if (specialCharacters.test(title)) {
-                titleError.innerHTML = "Title cannot contain special character";
+            if (specification.trim().length > 250) {
+                specificationError.innerHTML = "Specification must less than 250 characters";
                 event.preventDefault(); // Ngăn chặn hành động mặc định của button
                 return;
             }
             if (editorContent.trim().length > 7000) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
-                contentError.innerHTML = 'Content must less than 7000 character'; // Thông báo lỗi
+                descriptionError.innerHTML = 'Desciption must less than 7000 character'; // Thông báo lỗi
                 event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
                 return;
             }
+            // Kiểm tra input không chứa ký tự đặc biệt
+            var specialCharacters = /[@#$^&*{}|<>]/;
+            if (specialCharacters.test(name)) {
+                nameError.innerHTML = "Name of Product cannot contain special character";
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            var stockValue = parseInt(stock, 10);
+            if (stockValue < 0) {
+                stockError.innerHTML = "Stock must be greater than 0";
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+            var stockValue = parseInt(price, 10);
+            if (stockValue < 0) {
+                priceError.innerHTML = "Price must be greater than 0";
+                event.preventDefault(); // Ngăn chặn hành động mặc định của button
+                return;
+            }
+
         }
 
         //
@@ -448,142 +433,7 @@
                     radioClass: 'iradio_flat-grey'
                 });
     </script>
-    <script type="text/javascript">
-        $(function ()
-        {
-            "use strict";
-            //BAR CHART
-            var data = {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        fillColor: "rgba(220,220,220,0.2)",
-                        strokeColor: "rgba(220,220,220,1)",
-                        pointColor: "rgba(220,220,220,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(220,220,220,1)",
-                        data: [65, 59, 80, 81, 56, 55, 40]
-                    },
-                    {
-                        label: "My Second dataset",
-                        fillColor: "rgba(151,187,205,0.2)",
-                        strokeColor: "rgba(151,187,205,1)",
-                        pointColor: "rgba(151,187,205,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(151,187,205,1)",
-                        data: [28, 48, 40, 19, 86, 27, 90]
-                    }
-                ]
-            };
-            new Chart(document.getElementById("linechart").getContext("2d")).Line(data, {
-                responsive: true,
-                maintainAspectRatio: false,
-            });
 
-        });
-        // Chart.defaults.global.responsive = true;
-    </script>
 </body>
 </html>
 
-
-<!--                                                        <div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
-    <label for="create_time">Create Time:</label>
-    <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.createTime}">
-</div>
-<div class="form-group" style="${param.action.equals("add") ? "display: none;": "" }">
-    <label for="update_time">Updated Time:</label>
-    <input type="text" class="form-control" id="inputLabel1" readonly="true" value="${c.updateTime}">
-</div>-->
-<!-- function validateInputs(event) {
-//            var titleError = document.getElementById("titleError");
-//            var sumaryError = document.getElementById("sumaryError");
-//            var cateError = document.getElementById("cateError");
-//            var authorError = document.getElementById("authorError");
-//            var statusError = document.getElementById("statusError");
-//            var featureError = document.getElementById("featureError");
-//            var contentError = document.getElementById("contentError");
-//
-//            titleError.innerHTML = '';
-//            sumaryError.innerHTML = '';
-//            cateError.innerHTML = '';
-//            authorError.innerHTML = '';
-//            statusError.innerHTML = '';
-//            featureError.innerHTML = '';
-//            contentError.innerHTML = '';
-//
-//            var titleInput = document.getElementById("title").value.trim();
-//            var title = titleInput.value.trim();
-//            // Kiểm tra input không được để trống
-//            if (titleInput === "") {
-//                titleError.innerHTML = 'Please enter your title.';
-//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-//                return;
-//            }
-//
-//            // Kiểm tra input không ít hơn 10 ký tự
-//            if (title.length < 10) {
-//                titleError.innerHTML = "Title must at least 10 characters";
-//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-//                return;
-//            }
-//
-//            // Kiểm tra input không chứa ký tự đặc biệt
-//            var specialCharacters = /[@#$^&*{}|<>]/;
-//            if (specialCharacters.test(title)) {
-//                titleError.innerHTML = "Title cannot contain special character";
-//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-//                return;
-//            }
-//
-//            var sumaryInput = document.getElementById("sumary");
-//            var sumary = sumaryInput.value.trim();
-//            // Kiểm tra input không được để trống
-//            if (sumary === "") {
-//                sumaryError.innerHTML = "Please fill Brief";
-//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-//                return;
-//            }
-//            var categoryOption = document.getElementById("category");
-//            var category = categoryOption.value.trim();
-//            var authorOption = document.getElementById("author");
-//            var author = authorOption.value.trim();
-//            // Kiểm tra input không được để trống
-//            if (category === "") {
-//                cateError.innerHTML = "Please choose Category of your blog";
-//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-//                return;
-//            }
-//            if (author === "") {
-//                authorError.innerHTML = "Please choose Author of your blog";
-//                event.preventDefault(); // Ngăn chặn hành động mặc định của button
-//                return;
-//            }
-//            var showRadioChecked = document.getElementById('showRadio').checked;
-//            var hideRadioChecked = document.getElementById('hideRadio').checked;
-//            var yesRadioChecked = document.getElementById('yesRadio').checked;
-//            var noRadioChecked = document.getElementById('noRadio').checked;
-//            // Kiểm tra checkbox không được để trống
-//            if (!showRadioChecked && !hideRadioChecked) {
-//                statusError.innerHTML = 'Please select a Status';
-//                event.preventDefault();
-//                return;
-//            }
-//            if (!yesRadioChecked && !noRadioChecked) {
-//                featureError.innerHTML = 'Please select a Feature';
-//                event.preventDefault();
-//                return;
-//            }
-//
-//            var editorContent = CKEDITOR.instances.content.getData(); // Lấy nội dung của CKEditor
-//            if (!editorContent.trim()) { // Kiểm tra nếu nội dung rỗng (sau khi đã loại bỏ khoảng trắng)
-//                alert("Please fill Content"); // Thông báo lỗi
-//                event.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
-//                return;
-//            }
-//            // Nếu tất cả điều kiện đều đúng, không cần ngăn chặn hành động mặc định của button
-//            
-//        }-->

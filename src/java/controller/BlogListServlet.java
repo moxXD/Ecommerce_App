@@ -69,6 +69,7 @@ public class BlogListServlet extends HttpServlet {
         int page = 1;
         int recordPerPage = 5;
         List<Blog> list = new ArrayList<>();
+        List<Blog> newestBlog = new ArrayList<>();
         List<Setting> setting = new ArrayList<>();
         List<User> user = new ArrayList<>();
         BlogDAO blogDAO = new BlogDAO();
@@ -90,11 +91,13 @@ public class BlogListServlet extends HttpServlet {
             list = blogDAO.getAllBlogPaginationPublic((page - 1) * recordPerPage, recordPerPage, categoryFilter, authorFilter, searchQuery);
             setting = settingDAO.getAllSetting();
             user = blogDAO.getAllBlogAuthor();
+            newestBlog = blogDAO.getNewestPost("public");
         } catch (SQLException ex) {
             Logger.getLogger(BlogListServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
         int noOfrecord = blogDAO.getNumberOfRecord();
         int noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
+        request.setAttribute("newpost", newestBlog);
         request.setAttribute("blogAuthors", user);
         request.setAttribute("blogList", list);
         request.setAttribute("settingList", setting);
