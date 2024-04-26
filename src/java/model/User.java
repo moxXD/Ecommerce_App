@@ -19,9 +19,13 @@ public class User {
         this.fullname = fullname;
     }
 
-    public User(int id, String phone) {
+//    public User(int id, String phone) {
+//        this.id = id;
+//        this.phone = phone;
+//    }
+    public User(int id, String fullname) {
         this.id = id;
-        this.phone = phone;
+        this.fullname = fullname;
     }
 
     public User(int id, String email, String fullname, String phone) {

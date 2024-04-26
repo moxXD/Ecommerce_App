@@ -126,7 +126,7 @@
                                             </c:if>
                                             <c:if test="${not empty userSession}">
                                                 <li>
-                                                    <a href="saleList">Sale</a>
+                                                    <a href="sale/dashboard">Sale</a>
                                                 </li>
                                             </c:if>
                                         </ul>
