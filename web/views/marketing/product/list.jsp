@@ -127,7 +127,7 @@
                         <div class="form-group">
                             <div class="col-md-2" style="float: right; margin-bottom: 1%">
                                 <button type="button" class="btn btn-primary btn-block"
-                                        onclick="redirectToAddProduct()">Add New Blog</button>
+                                        onclick="redirectToAddProduct()">Add New Product</button>
                             </div>
                         </div>
                         <table id="content" class="table user-table">

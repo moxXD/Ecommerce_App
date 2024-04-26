@@ -4,8 +4,7 @@
  */
 package controller.Public;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import dal.CartDAO;
 import dal.ProductDAO;
 import java.io.IOException;
