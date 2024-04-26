@@ -89,6 +89,9 @@
                                                             class="fa fa-lock"></i> Logout</a></li>
                                             </c:if>
                                             <c:if test="${userSession == null}">
+                                                <li><a href="${pageContext.request.contextPath}/cartdetail"><i
+                                                            class="fa fa-shopping-cart"></i>
+                                                        Cart</a></li>
                                                 <li><a href="${pageContext.request.contextPath}/Login"><i
                                                             class="fa fa-lock"></i> Login</a></li>
                                             </c:if>

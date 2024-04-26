@@ -37,92 +37,98 @@
                 <div class="breadcrumbs">
                     <ol class="breadcrumb">
                         <li><a href="home">Home</a></li>
-                        <li class="active">Order List</li>
+                        <li class="active">Profile</li>
                     </ol>
                 </div>
-                <div class="table-responsive cart_info">
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr class="cart_menu">
-                                <td>Order ID</td>
-                                <td>Order</td>
-                                <td>Order Time</td>
-                                <td>Order Total Bill</td>
-                                <td>Status</td>
-                                <td>Action</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${requestScope.orderlist}" var="order">
-                                <tr>
-                                    <td>
-                                        <h5>${order.id}</h5>
-                                    </td>
-                                    <td>
-                                        <h4>${order.orderspec}</h4>
-                                    </td>
-                                    <td>
-                                        <fmt:formatDate value="${order.createtime}" pattern="HH:mm dd-MM-yyyy" />
-                                    </td>
-                                    <fmt:formatNumber value="${order.totalamount}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
-                                    <c:set var="labelClass" value="label label-success inline m-t-15"/>
-                                    <c:set var="color" value="#3af23a"/> <!-- Mặc định là màu xanh lá -->
-                                    <c:choose>
-                                        <c:when test="${order.status == 'cancel'}">
-                                            <c:set var="labelClass" value="label label-danger inline m-t-15"/>
-                                            <c:set var="color" value="#f23a3a"/> <!-- Màu đỏ -->
-                                        </c:when>
-                                        <c:when test="${order.status == 'submitted'}">
-                                            <c:set var="labelClass" value="label label-warning inline m-t-15"/>
-                                            <c:set var="color" value="#f3b73a"/> <!-- Màu vàng cam -->
-                                        </c:when>
-                                    </c:choose>
-                                    <td>
-                                        <h4 style="color: ${color}">${formattedPrice}</h4>
-                                    </td>
-                                    <td>
-                                        <span class="${labelClass}">${order.status}</span>
-                                    </td>
-                                    <td>
-                                        <a href="orderdetail?orderID=${order.id}">View</a>
-                                    </td>
+                <div class="row">
+                    <!-- sidebar.jsp -->
+                    <div class="col-md-3 ">
+                        <%@include file="sidebar.jsp" %>
+                    </div>
+                    <div class="table-responsive cart_info col-md-9">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr class="cart_menu">
+                                    <td>Order ID</td>
+                                    <td>Order</td>
+                                    <td>Order Time</td>
+                                    <td>Order Total Bill</td>
+                                    <td>Status</td>
+                                    <td>Action</td>
                                 </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${requestScope.orderlist}" var="order">
+                                    <tr>
+                                        <td>
+                                            <h5>${order.id}</h5>
+                                        </td>
+                                        <td>
+                                            <h4>${order.orderspec}</h4>
+                                        </td>
+                                        <td>
+                                            <fmt:formatDate value="${order.createtime}" pattern="HH:mm dd-MM-yyyy" />
+                                        </td>
+                                        <fmt:formatNumber value="${order.totalamount}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
+                                        <c:set var="labelClass" value="label label-success inline m-t-15"/>
+                                        <c:set var="color" value="#3af23a"/> <!-- Mặc định là màu xanh lá -->
+                                        <c:choose>
+                                            <c:when test="${order.status == 'cancel'}">
+                                                <c:set var="labelClass" value="label label-danger inline m-t-15"/>
+                                                <c:set var="color" value="#f23a3a"/> <!-- Màu đỏ -->
+                                            </c:when>
+                                            <c:when test="${order.status == 'submitted'}">
+                                                <c:set var="labelClass" value="label label-warning inline m-t-15"/>
+                                                <c:set var="color" value="#f3b73a"/> <!-- Màu vàng cam -->
+                                            </c:when>
+                                        </c:choose>
+                                        <td>
+                                            <h4 style="color: ${color}">${formattedPrice}</h4>
+                                        </td>
+                                        <td>
+                                            <span class="${labelClass}">${order.status}</span>
+                                        </td>
+                                        <td>
+                                            <a href="orderdetail?orderID=${order.id}">View</a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation" class="row">
+                            <ul class="pagination">
+                                <!--next page-->
+                                <c:if test="${currentPage > 1}">
+                                    <li >
+                                        <a href="orderlist?page=${currentPage - 1}" aria-label="Previous">
+                                            <i class="fa fa-arrow-left"></i>
+                                        </a>
+                                    </li>
+                                </c:if>
+                                <!--list of pages-->
+                                <c:forEach begin="1" end="${noOfPage}" var="i">
+                                    <c:choose>
+                                        <c:when test="${currentPage eq i}">
+                                            <li class="active"><span>${i}</span></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                            <li><a href="orderlist?page=${i}">${i}</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                <!--prev page-->
+                                <c:if test="${currentPage < noOfPage}">
+                                    <li >
+                                        <a href="orderlist?page=${currentPage + 1}"  >
+                                            <i class="fa fa-arrow-right" ></i>
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </ul>  
+                        </nav>
+                    </div>
                 </div>
-                <!-- Pagination -->
-                <nav aria-label="Page navigation" class="row">
-                    <ul class="pagination">
-                        <!--next page-->
-                        <c:if test="${currentPage > 1}">
-                            <li >
-                                <a href="orderlist?page=${currentPage - 1}" aria-label="Previous">
-                                    <i class="fa fa-arrow-left"></i>
-                                </a>
-                            </li>
-                        </c:if>
-                        <!--list of pages-->
-                        <c:forEach begin="1" end="${noOfPage}" var="i">
-                            <c:choose>
-                                <c:when test="${currentPage eq i}">
-                                    <li class="active"><span>${i}</span></li>
-                                        </c:when>
-                                        <c:otherwise>
-                                    <li><a href="orderlist?page=${i}">${i}</a></li>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-                        <!--prev page-->
-                        <c:if test="${currentPage < noOfPage}">
-                            <li >
-                                <a href="orderlist?page=${currentPage + 1}"  >
-                                    <i class="fa fa-arrow-right" ></i>
-                                </a>
-                            </li>
-                        </c:if>
-                    </ul>  
-                </nav>
             </div>
         </section> 
         <%@include  file="../../layout/footer.jsp" %>
@@ -130,22 +136,8 @@
             function redirectToProductList() {
                 window.location.href = 'productlist';
             }
-            let redirectToCheckOut = () => {
-                // Kiểm tra xem có thông tin người dùng trong HttpSession hay không
-            <%-- Assume "userSession" is the attribute name storing user information in the session --%>
-            <% if (session.getAttribute("userSession") != null) { %>
-                // Nếu có, chuyển hướng đến trang thanh toán
-                window.location.href = 'cartcompletion';
-            <% } else { %>
-                // Nếu không, hiển thị thông báo cảnh báo và yêu cầu người dùng đăng nhập
-                alert('Please login to proceed to checkout!');
-                // Sau đó, chuyển hướng người dùng đến trang đăng nhập
-                window.location.href = 'Login'; // Thay 'login' bằng URL của trang đăng nhập thực tế
-            <% } %>
-
-            }
-
         </script>
+        
         <!-- Bootstrap JS and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

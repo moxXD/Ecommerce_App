@@ -1,10 +1,13 @@
-package controller.Public;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-import dal.CartDAO;
+package controller.Public;
+
+import controller.Customer.OrderDetailsServlet;
+import controller.Customer.OrderListServlet;
+import dal.OrderDAO;
+import dal.OrderItemDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,19 +16,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
-import model.Cart;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Order;
+import model.OrderItem;
 import model.User;
 
 /**
  *
  * @author Duc Le
  */
-@WebServlet(urlPatterns = {"/cartdetail"})
-public class CartDetailServlet extends HttpServlet {
-
-    CartDAO cDao = new CartDAO();
+@WebServlet(name = "CartFinalServlet", urlPatterns = {"/cartcompletion"})
+public class CartCompletion extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +49,10 @@ public class CartDetailServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CartDetailServlet</title>");
+            out.println("<title>Servlet CartFinalServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CartDetailServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CartFinalServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,19 +70,28 @@ public class CartDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("userSession");
-        Map<String, Cart> cartMap = new HashMap<>();
-        if (u != null) {
-            cartMap = cDao.getCartByUserId(u.getId()); 
-        } else {
-            cartMap = (Map<String, Cart>) session.getAttribute("cart");
-        }
-        // Lấy giỏ hàng từ session
+        OrderDAO orderDAO = new OrderDAO();
+        OrderItemDAO orderitemDAO = new OrderItemDAO();
+        Order order = null;
+        List<OrderItem> orderitem = new ArrayList<>();
+        int orderID = 0;
+        Double totalbill = null;
+        String orderID_raw = request.getParameter("orderID");
+        if (orderID_raw != null && !orderID_raw.isEmpty()) {
+            orderID = Integer.parseInt(orderID_raw);
+            try {
+                totalbill = orderitemDAO.getTotalBillsByID(orderID);
+                orderitem = orderitemDAO.getOrderItemByID(orderID);
+                order = orderDAO.getOrderByID(orderID);
 
-        // Đặt giỏ hàng vào thuộc tính của request để truy cập trong JSP
-        request.setAttribute("cartMap", cartMap);
-        request.getRequestDispatcher("cartdetail.jsp").forward(request, response);
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderDetailsServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        request.setAttribute("totalbill", totalbill);
+        request.setAttribute("orderitem", orderitem);
+        request.setAttribute("orderdetail", order);
+        request.getRequestDispatcher("cartcompletion.jsp").forward(request, response);
     }
 
     /**
@@ -91,27 +105,7 @@ public class CartDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        User u = (User) session.getAttribute("userSession");
-        String productId = request.getParameter("productId");
-        int id;
-        if (u != null) {
-            id = Integer.parseInt(productId);
-//            System.out.println("product id: "+id);
-            cDao.deleteCartByProductId(id, u.getId());
-            response.sendRedirect("cartdetail");
-        } else {
-
-            Map<String, Cart> cartMap = (Map<String, Cart>) session.getAttribute("cart");
-
-            if (cartMap != null && cartMap.containsKey(productId)) {
-                cartMap.remove(productId);
-
-                session.setAttribute("cart", cartMap);
-            }
-            response.sendRedirect("cartdetail");
-        }
-
+        processRequest(request, response);
     }
 
     /**

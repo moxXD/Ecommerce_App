@@ -82,18 +82,18 @@ public class Login extends HttpServlet {
         String pass = request.getParameter("pass");
         String name = request.getParameter("name");
         String enpass = Encode.toSHA1(pass);
-        User check = ud.getUserByEmail(mail);
+        User check = ud.getUserByEmail(mail); // check email not exist
         User u = ud.getUser(mail, enpass);
 
         if (check == null) {
-            session.setAttribute("wrong", "You must register in system");
+            session.setAttribute("wrong", "The account does not exist. Please sign up to continue!!");
             request.getRequestDispatcher("authen/login.jsp").forward(request, response);
             return;
         } else if (check.isStatus() == false) {
             session.setAttribute("wrong", "Your account is locked!!");
             request.getRequestDispatcher("authen/login.jsp").forward(request, response);
         } else if (u == null) {
-            session.setAttribute("wrong", "Login again!");
+            session.setAttribute("wrong", "The email or password is incorrect");
             request.getRequestDispatcher("authen/login.jsp").forward(request, response);
             return;
         } else if (u != null) {

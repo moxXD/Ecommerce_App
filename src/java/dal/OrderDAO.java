@@ -56,7 +56,7 @@ public class OrderDAO {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             if (o.getCustomer() == null) {
-                stm.setInt(1, 0);
+                stm.setNull(1, 0);
             } else {
                 stm.setInt(1, o.getCustomer().getId());
             }

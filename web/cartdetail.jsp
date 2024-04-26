@@ -102,8 +102,11 @@
                 </div>
                 <div class="container" >
                     <button class="btn btn-info" onclick="redirectToProductList()">Continue Shopping</button>
-                    <button class="btn btn-danger" type="button" onclick="redirectToCheckOut()"
-                            ${empty requestScope.cartMap    ?"disabled":""}>Check Out</button>
+                    <button class="btn btn-danger" type="button" 
+                            onclick="redirectToCheckOut()"
+                            ${empty requestScope.cartMap    ?"disabled":""}>
+                        Check Out</button>
+
                 </div>
             </div>
         </section> <!--/#cart_items-->
@@ -113,17 +116,9 @@
                 window.location.href = 'productlist';
             }
             let redirectToCheckOut = () => {
-                // Kiểm tra xem có thông tin người dùng trong HttpSession hay không
-            <%-- Assume "userSession" is the attribute name storing user information in the session --%>
-            <% if (session.getAttribute("userSession") != null) { %>
-                // Nếu có, chuyển hướng đến trang thanh toán
                 window.location.href = 'cartcompletion';
-            <% } else { %>
-                // Nếu không, hiển thị thông báo cảnh báo và yêu cầu người dùng đăng nhập
-                alert('Please login to proceed to checkout!');
-                // Sau đó, chuyển hướng người dùng đến trang đăng nhập
-                window.location.href = 'Login'; // Thay 'login' bằng URL của trang đăng nhập thực tế
-            <% } %>
+
+
 
             }
             function updateTotal(input, price, productId) {

@@ -116,7 +116,7 @@ public class SaleDAO {
         if (status != null && status.equalsIgnoreCase("submitted")) {
             sql += " and `order`.status like 'submitted' ";
         }
-        if (status != null && status.equalsIgnoreCase("success")) {
+        if (status != null  && status.equalsIgnoreCase("success")) {
             sql += " and `order`.status NOT IN ('submitted', 'cancel') ";
         }
         if (ordersaler != null && !ordersaler.isEmpty()) {
