@@ -127,6 +127,8 @@
                                     <li><a href="marketing/salelist">Sale</a></li>
                             
                                         <li><a href="admin/dashboard">Admin</a></li>
+                                        
+                                        <li><a href="marketing/sliderlist">Marketing</a></li>
                                     
                                 </ul>
                             </div>

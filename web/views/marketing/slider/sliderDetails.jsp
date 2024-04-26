@@ -186,7 +186,8 @@
                                                     <input type="submit" class="btn btn-primary btn-block" id="saveButton">
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <button type="button" class="btn btn-primary btn-block" id="backButton">Back</button>
+                                                    <a href="sliderlist" class="btn btn-primary btn-block" style="text-align: center">Back</a>
+
                                                 </div>
                                             </div>
                                         </div>
