@@ -2,6 +2,8 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html>
 
@@ -129,27 +131,45 @@
                                     <tr>
                                         <th>ID
                                             <a
-                                                href="productlist?page=${currentPage}&sort=id&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                                href="productlist?page=${currentPage}&sort=id&sort=id&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
                                                 <i class="fa fa-sort"></i>
                                         </th>
-                                        <th>Name</th>
-                                        <th>Brand</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Status</th>
-                                        <th>Stock</th>
-                                        <th>Action</th>
+                                        <th>Name<a
+                                                href="productlist?page=${currentPage}&sort=name&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                                <i class="fa fa-sort"></i></th>
+                                        <th>Brand<a
+                                                href="productlist?page=${currentPage}&sort=brand&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                                <i class="fa fa-sort"></i></th></th>
+                                        <th>Category
+                                        <a
+                                                href="productlist?page=${currentPage}&sort=category&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                                <i class="fa fa-sort"></i></th></th>
+                                        <th>Price
+                                        <a
+                                                href="productlist?page=${currentPage}&sort=price&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                                <i class="fa fa-sort"></i></th></th>
+                                        <th>Status
+                                        <a
+                                                href="productlist?page=${currentPage}&sort=status&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                                <i class="fa fa-sort"></i></th></th>
+                                        <th>Stock
+                                        <a
+                                                href="productlist?page=${currentPage}&sort=stock&order=${not sortOrder}&q=${param.q}&filCate=${param.filCate}&filBrand=${param.filBrand}&filstatus=${param.filstatus}">
+                                                <i class="fa fa-sort"></i></th></th>
+                                        <th>Action
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <c:forEach items="${listProduct}" var="p">
                                         <c:set var="id" value="${p.id}" />
+                                        <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ" var="formattedPrice" />
                                         <tr>
                                             <td>${id}</td>
                                             <td>${p.name}</td>
                                             <td>${p.brand.value}</td>
                                             <td>${p.category.value}</td>
-                                            <td>${p.price}</td>
+                                            <td>${formattedPrice}</td>
                                             <td><form action="productlist" method="post">
                                                     <input type="hidden" name="productID" value="${id}">
                                                     <input type="hidden" name="status"
