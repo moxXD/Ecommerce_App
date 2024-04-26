@@ -122,8 +122,8 @@
                                         <hr class="my-4">
                                         <div class="post-meta">
                                             <ul>
-                                                <li><i class="fa fa-cog"></i> ${u.categoryName}</li>
-                                                <li><i class="fa fa-user"></i> ${u.authorName}</li>
+                                                <li><i class="fa fa-cog"></i><a href="blogslist?filcate=${u.categoryName}">${u.categoryName}</a></li>
+                                                <li><i class="fa fa-user"></i><a href="blogslist?filauthor=${u.authorName}">${u.authorName}</a></li>
                                             </ul>
                                         </div>
                                         <!--<p>${u.sumary}</p>-->
