@@ -192,10 +192,10 @@
                                                 <div class="error-msg">${err}</div>
                                             </c:if>
                                             <div class="row" style="margin-bottom: 5%">
-                                                <div class="col-md-3" style="${param.action.equals("add") ? "display: none;": "" }">
+                                                <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
                                                     <button type="submit" class="btn btn-primary btn-block" id="addButton"  onclick="validateInputs(event)">Add</button>
                                                 </div>
-                                                <div class="col-md-3" style="${param.action.equals("update") ? "display: none;": "" }">
+                                                <div class="col-md-3" style="${param.action.equals("add") ? "display: none;": "" }">
                                                     <button type="submit" class="btn btn-primary btn-block" id="saveButton" onclick="validateInputs(event)">Save</button>
                                                 </div>
                                                 <div class="col-md-3">
