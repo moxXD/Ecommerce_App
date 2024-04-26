@@ -40,7 +40,7 @@
         <body class="skin-black">
             <!-- header logo: style can be found in header.less -->
             <header class="header">
-                <a href="dashboard" class="logo">
+                <a href="${pageContext.request.contextPath}/home" class="logo">
                     Sale
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->

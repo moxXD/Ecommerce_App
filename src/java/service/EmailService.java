@@ -2,6 +2,7 @@
 package service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.websocket.Session;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -12,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
+
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
