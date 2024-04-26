@@ -4,6 +4,9 @@
  */
 package controller.Public;
 
+import com.sun.istack.internal.logging.Logger;
+import dal.CartDAO;
+import dal.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,7 +16,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.logging.Level;
 import model.Cart;
+import model.Product;
+import model.User;
 
 /**
  *
@@ -21,7 +27,8 @@ import model.Cart;
  */
 @WebServlet(name = "UpdateCartServlet", urlPatterns = {"/updatecart"})
 public class UpdateCartServlet extends HttpServlet {
-
+    CartDAO cDao=new CartDAO();
+    ProductDAO pDao=new ProductDAO();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -75,28 +82,20 @@ public class UpdateCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("userSession");
+
         String productId = request.getParameter("productId");
-        String action = request.getParameter("action");
-        if (action != null && !action.isEmpty()) {
-
-            // Lấy giỏ hàng từ session
-            Map<String, Cart> cartMap = (Map<String, Cart>) session.getAttribute("cart");
-
-            // Kiểm tra nếu giỏ hàng tồn tại và sản phẩm cần xóa có trong giỏ hàng
-            if (cartMap != null && cartMap.containsKey(productId)) {
-                // Xóa sản phẩm khỏi giỏ hàng
-                cartMap.remove(productId);
-
-                // Cập nhật giỏ hàng trong session
-                session.setAttribute("cart", cartMap);
-            }
+        String quantity_raw = request.getParameter("quantity");
+        int quantity = 0;
+        try {
+            quantity = Integer.parseInt(quantity_raw);
+        } catch (Exception e) {
+            java.util.logging.Logger.getLogger(UpdateCartServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+        if (u != null) {
+            Product p=pDao.getProductById(Integer.parseInt(productId));
+            cDao.updateCartQuantity(p, u.getId(), quantity);
         } else {
-            String quantity_raw = request.getParameter("quantity");
-            int quantity = 0;
-            try {
-                quantity = Integer.parseInt(quantity_raw);
-            } catch (Exception e) {
-            }
             // Lấy giỏ hàng từ session
             Map<String, Cart> cartMap = (Map<String, Cart>) session.getAttribute("cart");
 
@@ -106,6 +105,7 @@ public class UpdateCartServlet extends HttpServlet {
                 cartMap.get(productId).setQuantity(quantity);
                 // Cập nhật giỏ hàng trong session
                 session.setAttribute("cart", cartMap);
+
             }
         }
 

@@ -4,8 +4,7 @@
  */
 package model;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -15,10 +14,20 @@ public class Cart {
 
     private int id, quantity;
     private User user;
+    private List<Product> pList;
     private Product product;
     private double total;
 
     public Cart() {
+    }
+
+    public Cart(int id, int quantity, User user, List<Product> pList, Product product, double total) {
+        this.id = id;
+        this.quantity = quantity;
+        this.user = user;
+        this.pList = pList;
+        this.product = product;
+        this.total = total;
     }
 
     public Cart(int id, int quantity, User user, Product product) {
@@ -37,6 +46,14 @@ public class Cart {
     @Override
     public String toString() {
         return "Cart{" + "id=" + id + ", quantity=" + quantity + ", user=" + user + ", product=" + product + '}';
+    }
+
+    public List<Product> getpList() {
+        return pList;
+    }
+
+    public void setpList(List<Product> pList) {
+        this.pList = pList;
     }
 
     public int getId() {

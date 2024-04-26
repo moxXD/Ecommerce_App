@@ -246,7 +246,53 @@ public class ProductDAO extends DBContext {
         }
         return false;
     }
-
+    // get product stock by stock id
+    public int getProductStock(int id){
+        int stock=0;
+        String sql="SELECT "+PRODUCT_STOCK+" FROM "+PRODUCT_TABLE+ " WHERE "+PRODUCT_ID+" =?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs=stm.executeQuery();
+            while(rs.next()){
+                stock=rs.getInt(PRODUCT_STOCK);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return stock;
+    }
+    // update stock after order 
+    public void updateProductStock(int quantity,int id){
+        String sql="UPDATE "+PRODUCT_TABLE + " SET "+PRODUCT_STOCK +"=? WHERE "+PRODUCT_ID+"=?;";
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            int stock=new ProductDAO().getProductStock(id);
+            stm.setInt(1, stock-quantity);
+            stm.setInt(2, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
     public List<Product> getAllProductList(int offset, int limit, int cateId, int brandId,
             String status, String sortParam, boolean order, String search) {
         List<Product> list = new ArrayList<>();

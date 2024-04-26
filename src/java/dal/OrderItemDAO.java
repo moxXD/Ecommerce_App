@@ -50,8 +50,8 @@ public class OrderItemDAO {
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
-//            System.out.println("orderID:" + orderId);
-//            System.out.println("=========");
+            System.out.println("orderID:" + orderId);
+            System.out.println("=========");
 
             stm.setInt(1, orderId);
             int id = 0;
