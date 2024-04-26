@@ -25,8 +25,6 @@ import model.User;
  */
 public class Authorization implements Filter {
 
-    private static final String LOGIN = "/Login";
-    private static final String ERROR401 = "/404.jsp";
     private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
@@ -89,7 +87,8 @@ public class Authorization implements Filter {
 	respOut.println("<P><B>This has been appended by an intrusive filter.</B>");
          */
     }
-
+public static final String LOGIN = "/Login";
+public static final String ERROR404 = "/404.jsp";
     /**
      *
      * @param request The servlet request we are processing
@@ -119,58 +118,24 @@ public class Authorization implements Filter {
                     if (user.getSetting().getId() == 1) {
                         chain.doFilter(request, response);
                     } else {
-                        res.sendRedirect(req.getContextPath() + ERROR401);
+                        res.sendRedirect(req.getContextPath() + ERROR404);
                     }
                 } else if (url.contains("marketing")) {
                     if (user.getSetting().getId() == 5) {
                         chain.doFilter(request, response);
                     } else {
-                        res.sendRedirect(req.getContextPath() + ERROR401);
+                        res.sendRedirect(req.getContextPath() + ERROR404);
                     }
                 } else {
                     if (user.getSetting().getId() == 2 || user.getSetting().getId() == 3) {
                         chain.doFilter(request, response);
                     } else {
-                        res.sendRedirect(req.getContextPath() + ERROR401);
+                        res.sendRedirect(req.getContextPath() + ERROR404);
                     }
                 }
             } else {
                 res.sendRedirect(req.getContextPath() + LOGIN);
             }
-//        } else if (url.contains("user?action=history")) {
-//            if (user != null) {
-//                if (user.getRole().getRole_id() == 2) {
-//                    filterChain.doFilter(servletRequest, servletResponse);
-//                } else {
-//                    response.sendRedirect(request.getContextPath() + ERROR401);
-//                }
-//            } else {
-//                res.sendRedirect(req.getContextPath() + LOGIN);
-//            }
-//        } else if (url.contains("doctor?action=myfeedback") || url.contains("doctor?action=mypatient")
-//                || url.contains("doctor?action=myappointment") || url.contains("doctor?action=detailpatient")) {
-//            if (user != null) {
-//                if (user.getRole().getRole_id() == 3) {
-//                    filterChain.doFilter(servletRequest, servletResponse);
-//                } else {
-//                    response.sendRedirect(request.getContextPath() + ERROR401);
-//                }
-//            } else {
-//                response.sendRedirect(request.getContextPath() + LOGIN);
-//            }
-//        } else if (url.contains("book") || url.contains("rate")) {
-//            if (user != null) {
-//                if (user.getRole().getRole_id() == 2) {
-//                    filterChain.doFilter(servletRequest, servletResponse);
-//                } else {
-//                    response.sendRedirect(request.getContextPath() + ERROR401);
-//                }
-//            } else {
-//                response.sendRedirect(request.getContextPath() + LOGIN);
-//            }
-//        } else {
-//            filterChain.doFilter(servletRequest, servletResponse);
-//        }
         }
         Throwable problem = null;
         try {

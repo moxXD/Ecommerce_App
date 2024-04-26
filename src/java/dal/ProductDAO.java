@@ -144,8 +144,8 @@ public class ProductDAO extends DBContext {
         String sql = "SELECT\n"
                 + "p.id,\n"
                 + "    p.name,\n"
-                + "    pc.value AS category,\n"
-                + "    b.value AS brand,\n"
+                + "    pc.id AS category,\n"
+                + "    b.id AS brand,\n"
                 + "    p.price,\n"
                 + "    p.description,\n"
                 + "    p.specification,p.status,\n"
@@ -168,9 +168,9 @@ public class ProductDAO extends DBContext {
                 Product product = new Product();
                 product.setId(rs.getInt("id"));
                 product.setName(rs.getString("name"));
-                product.setCate(new Category(rs.getString("category")));
+                product.setCate(new Category(rs.getInt("category")));
                 product.setBrand(new Brand(
-                        rs.getString("brand")));
+                        rs.getInt("brand")));
                 product.setPrice(rs.getFloat("price"));
                 product.setDescription(rs.getString("description"));
                 product.setSpecification(rs.getString("specification"));

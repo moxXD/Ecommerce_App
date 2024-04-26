@@ -103,7 +103,11 @@
                                 <i class="fa fa-gear"></i> <span>Settings</span>
                             </a>
                         </li>
-
+<li>
+                            <a href="ContactList">
+                                <i class="fa fa-gear"></i> <span>Contacts</span>
+                            </a>
+                        </li>
                     </ul>
                 </section>
                 <!-- /.sidebar -->

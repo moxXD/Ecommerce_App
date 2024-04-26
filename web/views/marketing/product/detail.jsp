@@ -130,7 +130,7 @@
                                             <div class="row" style="margin-bottom: 5%; margin-top: 3%">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="title">Name:</label>
+                                                        <label for="title">Name:</label> ${p.categoryProductId}
                                                         <input name="title" type="text" class="form-control" id="title" value="${p.name}">
                                                         <span id="titleError" class="error-msg"></span>
                                                     </div>

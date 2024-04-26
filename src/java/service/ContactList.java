@@ -22,7 +22,7 @@ import model.Setting;
  *
  * @author Admin
  */
-@WebServlet(name = "ContactList", urlPatterns = {"/ContactList"})
+@WebServlet(name = "ContactList", urlPatterns = {"/admin/ContactList"})
 public class ContactList extends HttpServlet {
 
     /**
@@ -113,7 +113,7 @@ public class ContactList extends HttpServlet {
         request.setAttribute("noOfPage", noOfPage);
         request.setAttribute("listContact", listContact);
         request.setAttribute("sortOrder", sortOrder);
-        request.getRequestDispatcher("views/admin/contactList.jsp").forward(request, response);
+        request.getRequestDispatcher("../views/admin/contactList.jsp").forward(request, response);
     }
 
     /**
