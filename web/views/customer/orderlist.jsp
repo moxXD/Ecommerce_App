@@ -91,6 +91,38 @@
                         </tbody>
                     </table>
                 </div>
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="row">
+                    <ul class="pagination">
+                        <!--next page-->
+                        <c:if test="${currentPage > 1}">
+                            <li >
+                                <a href="orderlist?page=${currentPage - 1}" aria-label="Previous">
+                                    <i class="fa fa-arrow-left"></i>
+                                </a>
+                            </li>
+                        </c:if>
+                        <!--list of pages-->
+                        <c:forEach begin="1" end="${noOfPage}" var="i">
+                            <c:choose>
+                                <c:when test="${currentPage eq i}">
+                                    <li class="active"><span>${i}</span></li>
+                                        </c:when>
+                                        <c:otherwise>
+                                    <li><a href="orderlist?page=${i}">${i}</a></li>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        <!--prev page-->
+                        <c:if test="${currentPage < noOfPage}">
+                            <li >
+                                <a href="orderlist?page=${currentPage + 1}"  >
+                                    <i class="fa fa-arrow-right" ></i>
+                                </a>
+                            </li>
+                        </c:if>
+                    </ul>  
+                </nav>
             </div>
         </section> 
         <%@include  file="../../layout/footer.jsp" %>

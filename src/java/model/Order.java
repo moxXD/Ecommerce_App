@@ -148,8 +148,8 @@ public class Order {
             int mobile, String status, Date update_at) {
         this.id = id;
         this.user_id = user_id;
-        this.createAt = create_at;
-        this.name = fullname;
+        this.createAt = createAt;
+        this.name = name;
         this.sale_id = sale_id;
         this.address = address;
         this.email = email;

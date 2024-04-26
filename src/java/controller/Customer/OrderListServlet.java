@@ -69,10 +69,21 @@ public class OrderListServlet extends HttpServlet {
             throws ServletException, IOException {
 //        processRequest(request, response);
         OrderDAO orderDAO = new OrderDAO();
+        int page = 1;
+        int recordPerPage = 6;
+        String page_raw = request.getParameter("page");
+// parse integer
+        if (page_raw != null && !page_raw.isEmpty()) {
+            try {
+                page = Integer.parseInt(page_raw);
+            } catch (NumberFormatException e) {
+                Logger.getLogger(OrderListServlet.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
         List<Order> order = new ArrayList<>();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("userSession");
-        int userID = 0;
+        int userID = 0, noOfPage=0;
 //        try {
 //                order = orderDAO.getOrderByUser(userID);
 //            } catch (SQLException ex) {
@@ -81,12 +92,17 @@ public class OrderListServlet extends HttpServlet {
         if (user != null) {
             userID = user.getId();
             try {
-                order = orderDAO.getOrderByUser(userID);
+                order = orderDAO.getOrderByUser(userID, (page - 1) * recordPerPage,
+                        recordPerPage);
+                int noOfrecord = orderDAO.getNumberOfRecord();
+                noOfPage = (int) Math.ceil(noOfrecord * 1.0 / recordPerPage);
             } catch (SQLException ex) {
                 Logger.getLogger(OrderListServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         request.setAttribute("orderlist", order);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("noOfPage", noOfPage);
         request.getRequestDispatcher("../views/customer/orderlist.jsp").forward(request, response);
     }
 

@@ -322,7 +322,7 @@ public class SettingDAO extends DBContext {
 
     public List<Setting> getAllSettingTypeContact() {
         List<Setting> lst = new ArrayList<>();
-        String sql = "SELECT * FROM swp391_g1_v5.setting\n"
+        String sql = "SELECT * FROM swp391_g1_v1.setting\n"
                 + "where type like '%contact%'";
         try {
             conn = context.getConnection();

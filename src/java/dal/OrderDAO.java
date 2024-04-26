@@ -85,9 +85,9 @@ public class OrderDAO {
         }
     }
 
-    public List<Order> getOrderByUser(int userid) throws SQLException {
+    public List<Order> getOrderByUser(int userid, int offset, int limit) throws SQLException {
         List<Order> list = new ArrayList<>();
-        String sql = "SELECT \n"
+        String sql = "SELECT SQL_CALC_FOUND_ROWS\n"
                 + "    o.id,\n"
                 + "    o.create_at,\n"
                 + "    o.status,\n"
@@ -110,12 +110,14 @@ public class OrderDAO {
                 + "  WHERE o.user_id = ?\n"
                 + " GROUP BY \n"
                 + "    o.id, o.user_id, o.create_at, o.fullname, o.sale_id, o.address, o.email, o.status \n"
-                + " ORDER BY o.create_at DESC;";
+                + " ORDER BY o.create_at DESC LIMIT ?,?;";
         try {
 
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setInt(1, userid);
+            stm.setInt(2, offset);
+            stm.setInt(3, limit);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -126,10 +128,19 @@ public class OrderDAO {
                 Order u = new Order(id, createTime, status, orderspec, totalbill);
                 list.add(u);
             }
+            rs = stm.executeQuery("SELECT FOUND_ROWS()"); // get total number of row found while execute query
+            if (rs.next()) {
+                this.noOfrecord = rs.getInt(1);
+            }
         } catch (SQLException e) {
             Logger.getLogger(SaleDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return list;
+    }
+    private int noOfrecord;
+
+    public int getNumberOfRecord() {
+        return noOfrecord;
     }
 
     public Order getOrderByID(int orderID) throws SQLException {

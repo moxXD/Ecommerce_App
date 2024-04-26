@@ -55,7 +55,7 @@
         </style>
     </head>
     <body>
-        <%@include file="../layout/header.jsp" %>
+        <%@include file="../admin/layout/header.jsp" %>
 
 
         <div class="wrapper row-offcanvas row-offcanvas-left">
@@ -88,6 +88,11 @@
                         <li class="active">
                             <a href="settinglist">
                                 <i class="fa fa-gear"></i> <span>Settings</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="${pageContext.request.contextPath}/home" >
+                                <i class="fa fa-arrow-left"></i> <span>Home</span>
                             </a>
                         </li>
                     </ul>
@@ -250,7 +255,7 @@
 
 
 
-        <%@include file="../layout/footer.jsp" %>
+        <%@include file="../admin/layout/footer.jsp" %>
         <script>
             function redirectToSettingDetail(action) {
                 // Chuyển hướng đến trang settingdetail với tham số action=add

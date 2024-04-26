@@ -67,7 +67,7 @@ public class Profile extends HttpServlet {
         User us = (User) session.getAttribute("userSession");
         User ur = (User) session.getAttribute("user_register");
         if (us == null && ur == null) {
-            request.getRequestDispatcher("404.html").forward(request, response);
+            response.sendRedirect("Login");
         }
         session.setAttribute("us", us);
         session.setAttribute("ur", ur);
