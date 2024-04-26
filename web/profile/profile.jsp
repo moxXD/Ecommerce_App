@@ -18,7 +18,7 @@
                 Account settings
             </h4>
             <div class="card overflow-hidden">
-                <div class="row no-gutters row-bordered row-border-light">
+                <div class="row no-gutters row-bordered row-bordered">
                     <div class="col-md-3 pt-0">
                         <div class="list-group list-group-flush account-settings-links">
                             <a class="list-group-item list-group-item-action active" data-toggle="list"

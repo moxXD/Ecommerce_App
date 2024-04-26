@@ -66,13 +66,13 @@ public class Profile extends HttpServlet {
 
         User us = (User) session.getAttribute("userSession");
         User ur = (User) session.getAttribute("user_register");
-        if (us == null && ur == null) {
+        if (us == null) {
             response.sendRedirect("Login");
+        } else {
+            session.setAttribute("us", us);
+            session.setAttribute("ur", ur);
+            request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
         }
-        session.setAttribute("us", us);
-        session.setAttribute("ur", ur);
-        request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
-
     }
 
     /**
