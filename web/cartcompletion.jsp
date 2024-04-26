@@ -235,9 +235,11 @@
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
+                var response = xhr.responseText;
+                window.location.href='cartfinal?orderID='+response;
             // Xử lý phản hồi từ server nếu cần
-            var alertElement = document.getElementById('toastInfo');
-            alertElement.style.display = 'block';
+//            var alertElement = document.getElementById('toastInfo');
+//            alertElement.style.display = 'block';
             }
             }
             xhr.send("name=" + name + "&phone=" + phone +
