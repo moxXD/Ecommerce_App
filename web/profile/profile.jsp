@@ -23,7 +23,6 @@
                         <div class="list-group list-group-flush account-settings-links">
                             <a class="list-group-item list-group-item-action active" data-toggle="list"
                                href="#account-general">General</a>
-                            <c:if test="${us.status eq true}">
                                 <a class="list-group-item list-group-item-action" data-toggle="list"
                                    href="#account-change-password">Change password</a>
                                 <a class="list-group-item list-group-item-action" data-toggle="list"
@@ -33,8 +32,7 @@
                                 <a class="list-group-item list-group-item-action" data-toggle="list"
                                    href="#account-connections">Connections</a>
                                 <a class="list-group-item list-group-item-action" data-toggle="list"
-                                   href="#account-notifications">Notifications</a>
-                            </c:if>
+                                   href="#account-notifications">Notifications</a>                       
                         </div>
                     </div>
                     <div class="col-md-9">
@@ -54,6 +52,8 @@
                                         </div>
                                     </div>
                                 </c:if>
+                                <p style="color: green">  ${status}</p>  
+                                <p style="color: red">  ${falsePass}</p>  
                                 <hr class="border-light m-0">
                                 <div class="card-body">
                                     <div class="form-group">
@@ -64,7 +64,7 @@
                                         <label class="form-label">E-mail</label>
                                         <input type="text" class="form-control mb-1" value="${us.email}" disabled >
 
-                                        
+
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Company</label>
@@ -74,6 +74,7 @@
                             </div>
 
                             <div class="tab-pane fade" id="account-change-password">
+
                                 <form action="ChangePassword" method="post">
                                     <div class="card-body pb-2">
                                         <div class="form-group">
@@ -89,7 +90,7 @@
                                             <input type="password" name="rePass" class="form-control">
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary">Change Password</button>
+                                    <button class="btn btn-primary" >Change Password</button>
                                 </form>
                             </div>
                             ${falsePass}
@@ -254,6 +255,7 @@
                 </div>
             </div>
             <div class="text-right mt-3">
+                <button type="button" ><a href="home">Home page</a></button>&nbsp;
                 <button type="button" class="btn btn-primary">Save changes</button>&nbsp;
                 <button type="button" class="btn btn-default">Cancel</button>
             </div>
@@ -262,8 +264,18 @@
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript">
-
-        </script>
-    </body>
+            <script type="text/javascript">
+        function confirmSubmit() {
+                    if (confirm("Change Password successful")) {
+            document.getElementById("myForm").submit();
+            return true;
+            } else {
+            return false;
+            }
+            }
+            
+            </script>
+    </script>
+</body>
 
 </html>

@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Product;
 import model.Setting;
 
@@ -22,7 +24,7 @@ import model.Setting;
  *
  * @author Admin
  */
-@WebServlet(name="ProductList", urlPatterns={"/marketing/productlist"})
+@WebServlet(name = "ProductList", urlPatterns = {"/marketing/productlist"})
 public class ProductList extends HttpServlet {
 
     ProductDAO pd = new ProductDAO();
@@ -95,7 +97,7 @@ public class ProductList extends HttpServlet {
                 statusFilter = "0";
             }
         }
-        if (page_raw != null ) {
+        if (page_raw != null) {
             try {
                 page = Integer.parseInt(page_raw);
             } catch (Exception e) {
@@ -116,9 +118,9 @@ public class ProductList extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        
-        System.out.println("cate: "+cateId);
-                System.out.println("bramd: "+brandId);
+
+        System.out.println("cate: " + cateId);
+        System.out.println("bramd: " + brandId);
 
         // get pagination product list
         listProduct = pd.getProductListWithFilter((page - 1) * recordPerPage,
@@ -140,7 +142,7 @@ public class ProductList extends HttpServlet {
         request.setAttribute("roleList", st);
         request.setAttribute("sortOrder", sortOrder);
         request.getRequestDispatcher("../views/marketing/product/list.jsp").forward(request, response);
-    } 
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -153,7 +155,16 @@ public class ProductList extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ProductDAO pd = new ProductDAO();
+        String id_raw = request.getParameter("productID");
+          try {
+            boolean status = Boolean.parseBoolean(request.getParameter("status"));
+            int id = Integer.parseInt(id_raw);
+            pd.updateProductStatus(id, !status);
+            response.sendRedirect("productlist");
+        } catch (NumberFormatException e) {
+            Logger.getLogger(ProductList.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
     /**

@@ -15,6 +15,10 @@ public class Category {
     private int order;
     private boolean status;
 
+    public Category(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Category{" + "id=" + id + ", type=" + type + ", value=" + value + ", order=" + order + ", status=" + status + '}';
