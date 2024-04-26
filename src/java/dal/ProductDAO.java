@@ -671,7 +671,7 @@ public class ProductDAO extends DBContext {
     public List<Product> getNewestProduct(String manage) throws SQLException {
         List<Product> list = new ArrayList<>();
         String sql = "SELECT * FROM `swp391_g1_v1`.`product`\n";
-        if (manage != null || !manage.isEmpty()) {
+        if (manage != null) {
             sql += "WHERE status = true\n";
         }
         sql += "ORDER BY product.create_at DESC LIMIT 6;";

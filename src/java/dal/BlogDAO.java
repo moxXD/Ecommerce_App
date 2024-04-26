@@ -502,7 +502,7 @@ public class BlogDAO extends DBContext {
     public List<Blog> getNewestPost(String manage) throws SQLException {
         List<Blog> list = new ArrayList<>();
         String sql = "SELECT * FROM `swp391_g1_v1`.`blog` ";
-        if(manage != null || !manage.isEmpty()){
+        if(manage != null ){
             sql += " WHERE status = true ";
         }
         sql += " ORDER BY blog.createdtime DESC LIMIT 5;"; // pagination

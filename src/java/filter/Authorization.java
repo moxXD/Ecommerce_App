@@ -142,7 +142,6 @@ public static final String ERROR404 = "/404.jsp";
                         return;
                     }
                 }
-                return;
             } else {
                 res.sendRedirect(req.getContextPath() + LOGIN);
                 return;
