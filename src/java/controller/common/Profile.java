@@ -71,7 +71,7 @@ public class Profile extends HttpServlet {
         } else {
             session.setAttribute("us", us);
             session.setAttribute("ur", ur);
-            request.getRequestDispatcher("profile/profile.jsp").forward(request, response);
+            request.getRequestDispatcher("views/profile.jsp").forward(request, response);
         }
     }
 

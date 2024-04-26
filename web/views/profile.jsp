@@ -160,16 +160,13 @@
                                 <a class="list-group-item list-group-item-action" data-toggle="list"
                                    href="#account-info">Info</a>
                                 <a class="list-group-item list-group-item-action" data-toggle="list"
-                                   href="#account-social-links">Social links</a>
-                                <a class="list-group-item list-group-item-action" data-toggle="list"
-                                   href="#account-connections">Connections</a>
-                                <a class="list-group-item list-group-item-action" data-toggle="list"
-                                   href="#account-notifications">Notifications</a>                       
+                                   href="#order-history">Orders History</a>
+                                                 
                             </div>
                         </div>
                         <div class="col-md-9">
                             <div class="tab-content">
-                                <div class="tab-pane fade active show" id="account-general">
+                                <div class="tab-pane  active show" id="account-general">
                                     <c:if test="${us.status eq true}">
                                         <div class="card-body media align-items-center">
                                             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
@@ -205,7 +202,7 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade" id="account-change-password">
+                                <div class="tab-pane " id="account-change-password">
 
                                     <form action="ChangePassword" method="post">
                                         <div class="card-body pb-2">
@@ -226,7 +223,7 @@
                                     </form>
                                 </div>
                                 ${falsePass}
-                                <div class="tab-pane fade" id="account-info">
+                                <div class="tab-pane " id="account-info">
                                     <div class="card-body pb-2">
                                         <div class="form-group">
                                             <label class="form-label">Bio</label>
@@ -261,7 +258,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="account-social-links">
+                                <div class="tab-pane " id="order-history">
                                     <div class="card-body pb-2">
                                         <div class="form-group">
                                             <label class="form-label">Twitter</label>
@@ -285,7 +282,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="account-connections">
+                                <div class="tab-pane " id="account-connections">
                                     <div class="card-body">
                                         <button type="button" class="btn btn-twitter">Connect to
                                             <strong>Twitter</strong></button>
@@ -312,92 +309,19 @@
                                             <strong>Instagram</strong></button>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="account-notifications">
-                                    <div class="card-body pb-2">
-                                        <h6 class="mb-4">Activity</h6>
-                                        <div class="form-group">
-                                            <label class="switcher">
-                                                <input type="checkbox" class="switcher-input" checked>
-                                                <span class="switcher-indicator">
-                                                    <span class="switcher-yes"></span>
-                                                    <span class="switcher-no"></span>
-                                                </span>
-                                                <span class="switcher-label">Email me when someone comments on my article</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="switcher">
-                                                <input type="checkbox" class="switcher-input" checked>
-                                                <span class="switcher-indicator">
-                                                    <span class="switcher-yes"></span>
-                                                    <span class="switcher-no"></span>
-                                                </span>
-                                                <span class="switcher-label">Email me when someone answers on my forum
-                                                    thread</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="switcher">
-                                                <input type="checkbox" class="switcher-input">
-                                                <span class="switcher-indicator">
-                                                    <span class="switcher-yes"></span>
-                                                    <span class="switcher-no"></span>
-                                                </span>
-                                                <span class="switcher-label">Email me when someone follows me</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <hr class="border-light m-0">
-                                    <div class="card-body pb-2">
-                                        <h6 class="mb-4">Application</h6>
-                                        <div class="form-group">
-                                            <label class="switcher">
-                                                <input type="checkbox" class="switcher-input" checked>
-                                                <span class="switcher-indicator">
-                                                    <span class="switcher-yes"></span>
-                                                    <span class="switcher-no"></span>
-                                                </span>
-                                                <span class="switcher-label">News and announcements</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="switcher">
-                                                <input type="checkbox" class="switcher-input">
-                                                <span class="switcher-indicator">
-                                                    <span class="switcher-yes"></span>
-                                                    <span class="switcher-no"></span>
-                                                </span>
-                                                <span class="switcher-label">Weekly product updates</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="switcher">
-                                                <input type="checkbox" class="switcher-input" checked>
-                                                <span class="switcher-indicator">
-                                                    <span class="switcher-yes"></span>
-                                                    <span class="switcher-no"></span>
-                                                </span>
-                                                <span class="switcher-label">Weekly blog digest</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="text-right mt-3">
-                    <button type="button" ><a href="home">Home page</a></button>&nbsp;
-                    <button type="button" class="btn btn-primary">Save changes</button>&nbsp;
+                    <button type="button" class="btn btn-default">Save changes</button>&nbsp;
                     <button type="button" class="btn btn-default">Cancel</button>
                 </div>
             </div>
         </section>
         <%@include file="../layout/footer.jsp" %>
         <script type="text/javascript">
-            function redirectToProductList() {
-                window.location.href = 'productlist';
-            }
+            
             let redirectToCheckOut = () => {
                 // Kiểm tra xem có thông tin người dùng trong HttpSession hay không
             <%-- Assume "userSession" is the attribute name storing user information in the session --%>
