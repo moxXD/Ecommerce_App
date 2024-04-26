@@ -70,51 +70,7 @@
         <%@include file="../admin/layout/header.jsp" %>
         <div class="wrapper row-offcanvas row-offcanvas-left">
             <!-- Left side column. contains the logo and sidebar -->
-            <aside class="left-side sidebar-offcanvas">
-                <!-- sidebar: style can be found in sidebar.less -->
-                <section class="sidebar">
-                    <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
-                                 class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>Hello, Jane</p>
-
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-                        </div>
-                    </div>
-                    <ul class="sidebar-menu">
-                        <li class="active">
-                            <a href="dashboard">
-                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="userlist">
-                                <i class="fa fa-users"></i> <span>User List</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="settinglist">
-                                <i class="fa fa-gear"></i> <span>Settings</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ContactList">
-                                <i class="fa fa-gear"></i> <span>Contacts</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="${pageContext.request.contextPath}/home" >
-                                <i class="fa fa-arrow-left"></i> <span>Home</span>
-                            </a>
-                        </li>
-                    </ul>
-                </section>
-                <!-- /.sidebar -->
-            </aside>
+            <%@include file="layout/sidebar.jsp" %>
             <aside class="right-side">
                 <form action="dashboard" id="postFilterForm" method="get">
                     <c:set var="nu" value="${requestScope.nuser}" />

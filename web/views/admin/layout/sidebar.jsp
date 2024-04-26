@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.User" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -48,10 +50,13 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="${pageContext.request.contextPath}/admin/img/26115.jpg" class="img-circle" alt="User Image" />
+                        <img src="${pageContext.request.contextPath}/img/26115.jpg" class="img-circle" alt="User Image" />
                     </div>
+                    <%
+                        User user=(User)session.getAttribute("userSession");
+                    %>
                     <div class="pull-left info">
-                        <p>Hello, Jane</p>
+                        <p><%= user.getFullname() %></p>
 
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
@@ -68,7 +73,7 @@
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
-                    <li class="active">
+                    <li class="">
                         <a href="dashboard">
                             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                         </a>
@@ -78,29 +83,44 @@
                             <i class="fa fa-users"></i> <span>User List</span>
                         </a>
                     </li>
-                    <!--                    <li>
-                                            <a href="userdetail.jsp">
-                                                <i class="fa fa-user"></i> <span>User Detail</span>
-                                            </a>
-                                        </li>-->
                     <li>
-                        <a href="/admin/settinglist.jsp">
+                        <a href="settinglist">
                             <i class="fa fa-gear"></i> <span>Settings</span>
                         </a>
                     </li>
-
-                    <!--                        <li>
-                                                <a href="simple.html">
-                                                    <i class="fa fa-glass"></i> <span>Simple tables</span>
-                                                </a>
-                                            </li>-->
-
+                    <li>
+                        <a href="ContactList">
+                            <i class="fa fa-gear"></i> <span>Contact List</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="${pageContext.request.contextPath}/home" >
+                            <i class="fa fa-arrow-left"></i> <span>Home</span>
+                        </a>
+                    </li>
                 </ul>
             </section>
             <!-- /.sidebar -->
         </aside>
-        
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Lấy phần đầu của URL hiện tại
+                var currentPath = window.location.pathname;
+
+                // Lặp qua các tab và so sánh phần đầu của href với phần đầu của URL hiện tại
+                var tabs = document.querySelectorAll('.sidebar-menu a');
+                tabs.forEach(function (tab) {
+                    var tabHref = tab.getAttribute('href');
+                    if (currentPath.includes(tabHref)) {
+                        console.log(currentPath);
+                        console.log(tabHref);
+
+                        tab.parentElement.classList.add('active');
+                    }
+                });
+            });
+        </script>
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <script src="../js/jquery.min.js" type="text/javascript"></script>
@@ -131,18 +151,18 @@
 
         <!-- Director for demo purposes -->
         <script type="text/javascript">
-    $('input').on('ifChecked', function (event) {
-        // var element = $(this).parent().find('input:checkbox:first');
-        // element.parent().parent().parent().addClass('highlight');
-        $(this).parents('li').addClass("task-done");
-        console.log('ok');
-    });
-    $('input').on('ifUnchecked', function (event) {
-        // var element = $(this).parent().find('input:checkbox:first');
-        // element.parent().parent().parent().removeClass('highlight');
-        $(this).parents('li').removeClass("task-done");
-        console.log('not');
-    });
+            $('input').on('ifChecked', function (event) {
+                // var element = $(this).parent().find('input:checkbox:first');
+                // element.parent().parent().parent().addClass('highlight');
+                $(this).parents('li').addClass("task-done");
+                console.log('ok');
+            });
+            $('input').on('ifUnchecked', function (event) {
+                // var element = $(this).parent().find('input:checkbox:first');
+                // element.parent().parent().parent().removeClass('highlight');
+                $(this).parents('li').removeClass("task-done");
+                console.log('not');
+            });
 
         </script>
         <script>

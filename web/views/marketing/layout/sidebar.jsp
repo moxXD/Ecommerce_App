@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.User" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -45,16 +47,21 @@
         <section class="sidebar">
             <!-- Sidebar user panel -->
             <div class="user-panel">
+                <%
+                        User u=(User)session.getAttribute("userSession");
+                        
+                %>
                 <div class="pull-left image">
-                    <img src="${pageContext.request.contextPath}/views/img/26115.jpg"
+                    <img src="../../img/26115.jpg"
                          class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p>Hello, Thanh</p>
+
+                    <p><%= u.getFullname() %></p>
                 </div>
             </div>  
             <ul class="sidebar-menu">
-                <li>
+                <li class="">
                     <a href="dashboard">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
@@ -64,12 +71,12 @@
                         <i class="fa fa-tasks"></i> <span>Blog List</span>
                     </a>
                 </li>
-                <li>
+                <li class="">
                     <a href="productlist">
                         <i class="fa fa-shopping-cart"></i> <span>Product List</span>
                     </a>
                 </li>
-                <li>
+                <li class="">
                     <a href="sliderlist">
                         <i class="fa fa-list"></i> <span>Slider List</span>
                     </a>
@@ -125,6 +132,24 @@
                 console.log('not');
             });
 
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Lấy phần đầu của URL hiện tại
+                var currentPath = window.location.pathname;
+
+                // Lặp qua các tab và so sánh phần đầu của href với phần đầu của URL hiện tại
+                var tabs = document.querySelectorAll('.sidebar-menu a');
+                tabs.forEach(function (tab) {
+                    var tabHref = tab.getAttribute('href');
+                    if (currentPath.includes(tabHref)) {
+                        console.log(currentPath);
+                        console.log(tabHref);
+
+                        tab.parentElement.classList.add('active');
+                    }
+                });
+            });
         </script>
         <script>
             $('#noti-box').slimScroll({
