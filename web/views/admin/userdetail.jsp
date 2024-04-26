@@ -107,11 +107,11 @@
                                 <i class="fa fa-users"></i> <span>User List</span>
                             </a>
                         </li>
-                        <!--                    <li>
-                                    <a href="userdetail.jsp">
-                                        <i class="fa fa-user"></i> <span>User Detail</span>
-                                    </a>
-                                </li>-->
+                        <li>
+                            <a href="ContactList">
+                                <i class="fa fa-gear"></i> <span>Contacts</span>
+                            </a>
+                        </li>
                         <li>
                             <a href="settinglist">
                                 <i class="fa fa-gear"></i> <span>Settings</span>

@@ -153,7 +153,11 @@
                                                         <i class="fa fa-gear"></i> <span>Settings</span>
                                                     </a>
                                                 </li>-->
-
+                        <li class="">
+                            <a href="${pageContext.request.contextPath}/home" >
+                                <i class="fa fa-arrow-left"></i> <span>Home</span>
+                            </a>
+                        </li>
                     </ul>
                 </section>
                 <!-- /.sidebar -->

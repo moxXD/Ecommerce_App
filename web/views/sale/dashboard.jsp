@@ -86,6 +86,11 @@
                                 <i class="fa fa-truck"></i> <span>Order List</span>
                             </a>
                         </li>
+                        <li class="">
+                            <a href="${pageContext.request.contextPath}/home" >
+                                <i class="fa fa-arrow-left"></i> <span>Home</span>
+                            </a>
+                        </li>
                     </ul>
                 </section>
                 <!-- /.sidebar -->

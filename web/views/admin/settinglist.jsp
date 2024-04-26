@@ -89,7 +89,8 @@
                             <a href="settinglist">
                                 <i class="fa fa-gear"></i> <span>Settings</span>
                             </a>
-                        </li><li>
+                        </li>
+                        <li>
                             <a href="ContactList">
                                 <i class="fa fa-gear"></i> <span>Contacts</span>
                             </a>
