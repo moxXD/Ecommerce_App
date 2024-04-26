@@ -4,6 +4,7 @@
  */
 package controller.Public;
 
+import dal.CartDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 import model.Cart;
 import model.User;
@@ -22,6 +24,8 @@ import model.User;
  */
 @WebServlet(name = "CartContactServlet", urlPatterns = {"/cartcompletion"})
 public class CartCompletionServlet extends HttpServlet {
+
+    CartDAO cDao = new CartDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,16 +70,14 @@ public class CartCompletionServlet extends HttpServlet {
         // send user data thru request
 
         HttpSession session = request.getSession();
-        // Lấy giỏ hàng từ session
-        Map<String, Cart> cartMap = (Map<String, Cart>) session.getAttribute("cart");
-
-        User u = null;
-        try {
-            u = (User) session.getAttribute("userSession");
-        } catch (Exception e) {
-
+        User u = (User) session.getAttribute("userSession");
+        Map<String, Cart> cartMap = new HashMap<>();
+        if (u != null) {
+            cartMap = cDao.getCartByUserId(u.getId());
+        } else {
+            cartMap = (Map<String, Cart>) session.getAttribute("cart");
         }
-        
+
         // Đặt giỏ hàng vào thuộc tính của request để truy cập trong JSP
         request.setAttribute("cartMap", cartMap);
         request.setAttribute("user", u);

@@ -19,7 +19,7 @@
                 padding: 50px;
             }
             .cart-container{
-                padding:0 18% 0 18%;
+                padding:0 10% 0 10%;
             }
             .error-msg {
                 color: red;
@@ -62,8 +62,8 @@
                                             <a href=""><img style="width: 100px;height: 100px" src="<c:url value='/uploads/${entry.value.product.imageUrl}'/>" alt=""></a>
                                         </td>
                                         <td class="cart_description">
-                                            <h4 style="margin-left: 30px"><a href="productdetail?id=${entry.value.product.id}">${entry.value.product.name}</a></h4>
-                                            <p style="margin-left: 30px">Product ID: ${entry.key}</p>
+                                            <h4 style="margin-left: 20%"><a href="productdetail?id=${entry.value.product.id}">${entry.value.product.name}</a></h4>
+                                            <p style="margin-left: 20%">Category: ${entry.value.product.category.value}</p>
                                         </td>
                                         <td class="cart_price">
                                             <p>${formattedPrice}</p>                                       
@@ -130,7 +130,7 @@
                     <div class="form-group col-md-6">
                         <label for="name">Full name</label>
                         <input type="name" class="form-control" id="formName"
-                               aria-describedby="nameHelp" placeholder="Enter email" value="${u.fullname}">
+                               aria-describedby="nameHelp" placeholder="Enter full name" value="${u.fullname}">
                         <span  id="nameError"  class="error-msg "></span>
 
                     </div>
@@ -146,13 +146,13 @@
                         <label class="form-check-label" for="gender">Gender</label></br>
                         <!--<div class="col-md-3">-->
                         <input type="radio" class="form-check-input"
-                               ${u.gender?"checked":""}
+                               ${u.gender?"checked":""} checked
                                id="male" name="formGender" value="male">
                         <label class="form-check-label" for="Male">Male</label>
                         <!--</div>-->
                         <!--<div class="col-md-3">-->
                         <input type="radio" class="form-check-input"
-                               ${u.gender?"checked":""}
+                               ${u.gender?"":"checked"}
                                id="female" name="formGender" value="female">
                         <label class="form-check-label" for="female">Female</label>
                         <!--</div>-->
@@ -170,21 +170,22 @@
                         <label for="address">Address</label>
                         <input type="ddress" class="form-control " id="formAddress"
                                placeholder="Enter address"
-                               ${u.address}>
+                               value="${u.address}">
                         <span  id="addressError" class="error-msg "></span>
 
                     </div>
                     <div class="form-check col-md-12">
-                        <input type="radio" class="form-check-input" id="cod" name="formPayment" value="cod"> 
+                        <input type="radio" class="form-check-input" id="cod"
+                               checked name="formPayment" value="cod"> 
                         <label class="form-check-label" for="cod">COD</label>
                         <input type="radio" class="form-check-input" id="qr" name="formPayment" value="qr">
                         <label class="form-check-label" for="qr">QR bank transfer</label>
                         <span  id="paymentError" class="error-msg "></span>
                     </div>
                     <div class="col-md-12">
-<!--                        <div class="spinner-border text-warning" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>-->
+                        <!--                        <div class="spinner-border text-warning" role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>-->
 
                         <span  id="errorMsg" class="error-msg "></span>
 
@@ -195,10 +196,12 @@
                                     class="btn btn-block btn-primary "
                                     onclick="handleSubmitForm()"
                                     >Submit</button>
+                            
                             <button type="button" class="btn btn-block btn-danger "
                                     onclick="redirectBack()"
                                     >back</button>
                         </div>
+                       
                         <div class="col-md-3"></div>
                     </div>
                 </div>
