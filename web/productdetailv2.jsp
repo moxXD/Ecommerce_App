@@ -70,7 +70,6 @@
                                                         <span>Not on sale</span>
                                                     </c:otherwise>
                                                 </c:choose>
-
                                             </span>
                                             <input type="hidden" name="productId" value="${d.id}"/>
                                             <button type="submit" class="btn btn-danger ">

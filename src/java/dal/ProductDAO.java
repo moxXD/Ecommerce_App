@@ -201,7 +201,7 @@ public class ProductDAO extends DBContext {
             + "            \"WHERE \" +\n"
             + "            \"    p.id = ?";
 
-   public boolean updateProduct(int productId, String name, int categoryId, int brandId, double price,
+    public boolean updateProduct(int productId, String name, int categoryId, int brandId, double price,
             String description, String specification, boolean status, int stock, String imageUrl) {
         String sql = "UPDATE `swp391_g1_v1`.`product`\n"
                 + "SET\n"
@@ -213,7 +213,7 @@ public class ProductDAO extends DBContext {
                 + "`specification` = ?,\n"
                 + "`imageurl` = ?,\n"
                 + "`status` = ?,\n"
-                + "`stock` = ?\n"  // Removed comma here
+                + "`stock` = ?\n" // Removed comma here
                 + "WHERE `id` = ?;"; // Removed quotes around '?'
         try {
             conn = context.getConnection();
@@ -244,6 +244,77 @@ public class ProductDAO extends DBContext {
         return false;
     }
 
+    public List<Product> getAllProductList(int offset, int limit, int cateId, int brandId,
+            String status, String sortParam, boolean order, String search) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "SQL_CALC_FOUND_ROWS * \n"
+                + "FROM " + PRODUCT_TABLE
+                + " WHERE 1=1 ";
+        if (cateId != 0) {
+            sql += " AND " + PRODUCT_CATEGORY_ID + "=?";
+        }
+        if (brandId != 0) {
+            sql += " AND " + PRODUCT_BRAND_ID + "=?";
+        }
+        if (search != null && !search.isEmpty()) {
+            sql += " AND " + PRODUCT_NAME + " LIKE ?  ";
+        }
+        if (status != null && !status.isEmpty()) {
+
+        }
+        // add sort condition to query
+        sql += (sortParam != null && !sortParam.isEmpty() ? " ORDER BY `" + sortParam
+                + (order ? "` ASC" : "` DESC") : "") + " LIMIT ?, ?;";
+
+        try {
+            conn = context.getConnection();
+            PreparedStatement stm = conn.prepareStatement(sql);
+            int index = 1;
+
+            if (cateId != 0) {
+                stm.setInt(index++, cateId);
+            }
+            if (brandId != 0) {
+                stm.setInt(index++, brandId);
+            }
+            if (status != null && !status.isEmpty()) {
+                stm.setString(index++, status);
+            }
+            if (search != null && !search.isEmpty()) {
+                String likeParam = "%" + search + "%";
+                stm.setString(index++, likeParam);
+            }
+            stm.setInt(index++, offset);
+            stm.setInt(index++, limit);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Product p = new Product(
+                        rs.getInt(PRODUCT_ID),
+                        rs.getString(PRODUCT_NAME),
+                        rs.getInt(PRODUCT_BRAND_ID),
+                        rs.getInt(PRODUCT_CATEGORY_ID),
+                        rs.getDouble(PRODUCT_PRICE),
+                        rs.getString(PRODUCT_DESCRIPTION),
+                        rs.getString(PRODUCT_SPECIFICATION),
+                        rs.getString(PRODUCT_IMAGE_URL),
+                        rs.getBoolean(PRODUCT_STATUS),
+                        rs.getInt(PRODUCT_STOCK));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+        return list;
+    }
 
     public ArrayList<Product> getListProduct() {
         String sql = "SELECT\n"
@@ -596,7 +667,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getNewestProduct() throws SQLException {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM `swp391_g1_v1`.`product` ORDER BY product.create_at DESC LIMIT 5;"; 
+        String sql = "SELECT * FROM `swp391_g1_v1`.`product` ORDER BY product.create_at DESC LIMIT 5;";
         try {
             conn = context.getConnection();
             PreparedStatement stm = conn.prepareStatement(sql);
