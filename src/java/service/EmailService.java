@@ -1,8 +1,10 @@
 
 package service;
 
+import dal.SettingDAO;
+import dal.UserDAO;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.websocket.Session;
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -13,13 +15,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
-
+import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import model.Setting;
 import model.Cart;
 import model.Product;
 import model.User;
+import org.apache.tomcat.util.codec.binary.Base64;
+import utility.Encode;
+
 
 /**
  *
